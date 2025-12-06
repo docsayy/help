@@ -1,575 +1,322 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Anemia Assessment Tool — Enhanced</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Anemia Assessment Tool</title>
+
 <style>
-  :root{
-    --bg1: #e3f2fd;
-    --bg2: #e0f7fa;
-    --card: rgba(255,255,255,0.95);
-    --primary: #0288d1;
-    --primary-700: #0277bd;
-    --accent: #6a1b9a;
-    --success: #43a047;
-    --muted: #607d8b;
-  }
+    body {
+        font-family: Arial, sans-serif;
+        background: linear-gradient(135deg, #e3f2fd, #e0f7fa);
+        margin: 0;
+        padding: 20px;
+    }
 
-  /* Dark mode variables */
-  .dark {
-    --bg1: #071226;
-    --bg2: #0b2a3b;
-    --card: rgba(9,17,22,0.8);
-    --primary: #2196f3;
-    --primary-700: #1e88e5;
-    --accent: #9c27b0;
-    --success: #66bb6a;
-    --muted: #90a4ae;
-    color: #e6f0f6;
-  }
+    h1 {
+        text-align: center;
+        color: #003d66;
+        margin-bottom: 20px;
+        font-size: 26px;
+    }
 
-  html,body { height:100%; margin:0; font-family: Inter, "Helvetica Neue", Arial, sans-serif; background: linear-gradient(135deg,var(--bg1),var(--bg2)); }
-  .wrap { max-width: 980px; margin: 18px auto; padding: 18px; }
-  header { display:flex; gap:12px; align-items:center; justify-content:space-between; margin-bottom:12px; }
-  h1 { margin:0; font-size:20px; color:var(--primary); }
-  .controls { display:flex; gap:8px; align-items:center; }
+    .container {
+        max-width: 900px;
+        margin: auto;
+        background: #ffffffee;
+        padding: 25px 30px;
+        border-radius: 15px;
+        box-shadow: 0px 8px 20px rgba(0,0,0,0.15);
+        backdrop-filter: blur(4px);
+    }
 
-  .card {
-    background: var(--card);
-    border-radius:14px;
-    padding:18px;
-    box-shadow: 0 8px 24px rgba(6,24,44,0.12);
-    backdrop-filter: blur(6px);
-  }
+    .grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 20px;
+    }
 
-  .grid {
-    display:grid;
-    grid-template-columns: repeat(auto-fit,minmax(220px,1fr));
-    gap:14px;
-  }
+    label {
+        font-weight: 600;
+        color: #004d66;
+    }
 
-  label { display:block; font-weight:600; color:var(--muted); font-size:13px; margin-bottom:6px; }
-  input[type="number"], input[type="text"] {
-    width:100%;
-    padding:10px;
-    border-radius:8px;
-    border:1px solid rgba(96,125,139,0.18);
-    background: rgba(245,250,255,0.8);
-    font-size:14px;
-    box-sizing:border-box;
-    color: inherit;
-  }
+    input {
+        width: 100%;
+        padding: 10px;
+        margin-top: 6px;
+        border-radius: 8px;
+        border: 1px solid #b0bec5;
+        background: #f1f8ff;
+    }
 
-  .row { display:flex; gap:12px; }
-  .full { grid-column: 1 / -1; }
+    button {
+        margin-top: 25px;
+        width: 100%;
+        padding: 14px;
+        background-color: #0288d1;
+        border: none;
+        color: white;
+        font-size: 18px;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: 0.2s;
+    }
 
-  .btn {
-    padding:12px 14px;
-    background:var(--primary);
-    color:white;
-    border:none;
-    border-radius:10px;
-    cursor:pointer;
-    font-weight:700;
-    letter-spacing:0.2px;
-  }
-  .btn:hover{ background:var(--primary-700); }
+    button:hover {
+        background-color: #0277bd;
+    }
 
-  .small {
-    padding:8px 10px;
-    font-size:13px;
-    border-radius:8px;
-  }
+    .result, .emr-box {
+        margin-top: 25px;
+        padding: 20px;
+        background-color: #e8f5e9;
+        border-left: 6px solid #43a047;
+        border-radius: 8px;
+        font-size: 15px;
+    }
 
-  .result {
-    margin-top:14px;
-    padding:16px;
-    border-radius:10px;
-    background: rgba(232,245,233,0.95);
-    border-left:6px solid var(--success);
-    font-size:14px;
-  }
+    .emr-box {
+        background-color: #f1f8e9;
+        border-left: 6px solid #558b2f;
+    }
 
-  .muted { color:var(--muted); font-size:13px; }
-  pre { background:transparent; border:none; padding:0; margin:0; white-space:pre-wrap; font-size:14px; }
+    .copy-btn {
+        margin-top: 10px;
+        background: #6a1b9a;
+        font-size: 14px;
+        padding: 10px;
+        border-radius: 6px;
+    }
 
-  .emr-box {
-    margin-top:14px;
-    padding:14px;
-    border-radius:10px;
-    background: linear-gradient(to right, rgba(241,248,255,0.7), rgba(241,250,238,0.7));
-    border-left:6px solid #558b2f;
-  }
+    .copy-btn:hover {
+        background: #4a148c;
+    }
 
-  .flex-between { display:flex; justify-content:space-between; align-items:center; gap:8px; }
+    /* Floating Home Button */
+    .home-btn {
+        position: fixed;
+        top: 15px;
+        right: 15px;
+        background: #0288d1;
+        color: white;
+        padding: 10px 18px;
+        border-radius: 8px;
+        text-decoration: none;
+        font-weight: bold;
+        font-size: 15px;
+        box-shadow: 0px 4px 10px rgba(0,0,0,0.25);
+        transition: 0.2s;
+        z-index: 999;
+    }
 
-  /* informational chips */
-  .chip { padding:8px 10px; border-radius:999px; background:rgba(2,136,209,0.12); color:var(--primary); font-weight:600; font-size:13px; display:inline-block; }
-  .hint { font-size:13px; color:var(--muted); }
-
-  /* responsive tweaks */
-  @media (max-width:520px){
-    header { flex-direction:column; align-items:flex-start; gap:8px; }
-    .controls { width:100%; justify-content:space-between; }
-  }
-
-  /* small table for summary */
-  table.summary { width:100%; border-collapse:collapse; margin-top:10px; font-size:13px; }
-  table.summary td, table.summary th { padding:6px 8px; border-bottom:1px dashed rgba(96,125,139,0.08); text-align:left; vertical-align:top; }
-
-  /* danger/warning boxes */
-  .warn { background: #fff8e1; border-left:6px solid #ffa000; padding:10px; border-radius:8px; }
-  .info { background: #e3f2fd; border-left:6px solid #0288d1; padding:10px; border-radius:8px; }
-
-  /* toggle switch */
-  .toggle {
-    display:inline-flex; align-items:center; gap:8px; cursor:pointer;
-  }
-  .switch {
-    width:46px; height:26px; background:#cfd8dc; border-radius:999px; position:relative; padding:3px; box-sizing:border-box;
-  }
-  .knob { width:20px; height:20px; background:white; border-radius:50%; position:absolute; left:3px; top:3px; transition:0.18s; box-shadow:0 2px 6px rgba(0,0,0,0.12); }
-  .switch.on { background: #333; }
-  .switch.on .knob { left:23px; }
-
+    .home-btn:hover {
+        background: #0277bd;
+    }
 </style>
 </head>
+
 <body>
-<div id="page" class="wrap">
 
-  <header>
-    <div>
-      <h1>Anemia Assessment Tool — Enhanced</h1>
-      <div class="muted">RPI • Iron panel interpretation • Severity & transfusion guidance • Dark mode</div>
-    </div>
+<a href="index.html" class="home-btn">Home</a>
 
-    <div class="controls">
-      <div class="toggle" title="Toggle dark mode" onclick="toggleDark()">
-        <div id="switch" class="switch" aria-hidden="true"><div class="knob"></div></div>
-        <span class="hint" id="dmLabel">Dark mode</span>
-      </div>
-      <button class="small" onclick="clearAll()">Reset</button>
-    </div>
-  </header>
+<h1>Anemia Assessment Tool</h1>
 
-  <section class="card">
+<div class="container">
+
     <div class="grid">
-      <div>
-        <label>Hemoglobin (g/dL)</label>
-        <input id="hb" type="number" step="0.1" placeholder="e.g. 9.8">
-      </div>
-
-      <div>
-        <label>Hematocrit (%)</label>
-        <input id="hct" type="number" step="0.1" placeholder="e.g. 30.2">
-      </div>
-
-      <div>
-        <label>MCV (fL)</label>
-        <input id="mcv" type="number" step="0.1" placeholder="e.g. 78">
-      </div>
-
-      <div>
-        <label>Reticulocyte (%)</label>
-        <input id="retic" type="number" step="0.1" placeholder="e.g. 1.8">
-      </div>
-
-      <div>
-        <label>Ferritin (ng/mL)</label>
-        <input id="ferritin" type="number" step="0.1" placeholder="e.g. 12">
-      </div>
-
-      <div>
-        <label>Serum Iron (µg/dL)</label>
-        <input id="iron" type="number" step="0.1" placeholder="e.g. 22">
-      </div>
-
-      <div>
-        <label>TIBC (µg/dL)</label>
-        <input id="tibc" type="number" step="0.1" placeholder="optional — for TSAT">
-      </div>
-
-      <div>
-        <label>Transferrin (mg/dL)</label>
-        <input id="transferrin" type="number" step="0.1" placeholder="optional">
-      </div>
-
-      <div>
-        <label>LDH (U/L)</label>
-        <input id="ldh" type="number" step="0.1" placeholder="for hemolysis workup">
-      </div>
-
-      <div>
-        <label>Haptoglobin (mg/dL)</label>
-        <input id="haptoglobin" type="number" step="0.1" placeholder="for hemolysis">
-      </div>
-
-      <div>
-        <label>Vitamin B12 (pg/mL)</label>
-        <input id="b12" type="number" step="0.1" placeholder="e.g. 180">
-      </div>
-
-      <div>
-        <label>Folate (ng/mL)</label>
-        <input id="folate" type="number" step="0.1" placeholder="e.g. 3.2">
-      </div>
-
-      <div>
-        <label>CRP (mg/L)</label>
-        <input id="crp" type="number" step="0.1" placeholder="optional">
-      </div>
-
-      <div>
-        <label>ESR (mm/hr)</label>
-        <input id="esr" type="number" step="0.1" placeholder="optional">
-      </div>
-
-      <div>
-        <label>TSH (µIU/mL)</label>
-        <input id="tsh" type="number" step="0.01" placeholder="optional">
-      </div>
-
-      <div class="full">
-        <div class="row">
-          <button id="assessBtn" class="btn" onclick="assessAnemia()">Assess</button>
-          <button class="small" onclick="calcRPIOnly()">Calc RPI only</button>
-        </div>
-        <div class="muted" style="margin-top:8px;">
-          <strong>Notes:</strong> RPI = retic% × (Hct / 45) ÷ maturation factor.<br>
-          Maturation factor: Hct ≥40 →1; 30–39 →1.5; 20–29 →2.0; &lt;20 →2.5.
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Results -->
-  <section id="out" class="card" style="margin-top:12px; display:none;">
-    <div class="flex-between">
-      <div class="chip">Interpretation</div>
-      <div class="hint">Copy the EMR block below for notes</div>
+        <div><label>Hemoglobin (g/dL)</label><input type="number" id="hb" step="0.1"></div>
+        <div><label>Hematocrit (%)</label><input type="number" id="hct" step="0.1"></div>
+        <div><label>MCV (fL)</label><input type="number" id="mcv" step="0.1"></div>
+        <div><label>Ferritin (ng/mL)</label><input type="number" id="ferritin" step="0.1"></div>
+        <div><label>Iron (µg/dL)</label><input type="number" id="iron" step="0.1"></div>
+        <div><label>TIBC (µg/dL)</label><input type="number" id="tibc" step="0.1"></div>
+        <div><label>Transferrin Saturation (%)</label><input type="number" id="tsat" step="0.1"></div>
+        <div><label>LDH (U/L)</label><input type="number" id="ldh" step="0.1"></div>
+        <div><label>Reticulocyte Count (%)</label><input type="number" id="retic" step="0.1"></div>
+        <div><label>Haptoglobin (mg/dL)</label><input type="number" id="haptoglobin" step="0.1"></div>
+        <div><label>Vitamin B12 (pg/mL)</label><input type="number" id="b12" step="0.1"></div>
+        <div><label>Folate (ng/mL)</label><input type="number" id="folate" step="0.1"></div>
+        <div><label>CRP (mg/L)</label><input type="number" id="crp" step="0.1"></div>
+        <div><label>ESR (mm/hr)</label><input type="number" id="esr" step="0.1"></div>
+        <div><label>TSH (µIU/mL)</label><input type="number" id="tsh" step="0.01"></div>
     </div>
 
-    <div id="summaryArea" style="margin-top:12px;">
-      <!-- dynamic content -->
+    <button onclick="assessAnemia()">Assess</button>
+
+    <div id="result" class="result" style="display:none;"></div>
+
+    <div id="emrBox" class="emr-box" style="display:none;">
+        <h3>Assessment & Plan (Copy-Ready)</h3>
+        <pre id="emrText" style="white-space:pre-wrap; font-size:15px;"></pre>
+        <button class="copy-btn" onclick="copyEMR()">Copy to Clipboard</button>
     </div>
-
-    <div id="detailed" style="margin-top:12px;"></div>
-
-    <table class="summary" id="summaryTable" style="margin-top:12px;"></table>
-
-    <div id="transfusion" style="margin-top:12px;"></div>
-
-    <div id="rpiBox" style="margin-top:12px;"></div>
-  </section>
-
-  <!-- EMR box -->
-  <section id="emr" class="emr-box" style="display:none;">
-    <div class="flex-between">
-      <strong>Assessment & Plan — EMR-ready</strong>
-      <div>
-        <button class="small" onclick="copyEMR()">Copy to clipboard</button>
-      </div>
-    </div>
-    <pre id="emrText" style="margin-top:10px;"></pre>
-  </section>
 
 </div>
 
 <script>
-  // Dark mode toggle
-  const page = document.getElementById('page');
-  const switchEl = document.getElementById('switch');
-  const dmLabel = document.getElementById('dmLabel');
-  function toggleDark(){
-    const on = page.classList.toggle('dark');
-    if(on){
-      switchEl.classList.add('on');
-      dmLabel.textContent = 'Dark: ON';
-    } else {
-      switchEl.classList.remove('on');
-      dmLabel.textContent = 'Dark mode';
-    }
-  }
+function assessAnemia() {
 
-  function clearAll(){
-    const els = document.querySelectorAll('input');
-    els.forEach(i => i.value = '');
-    document.getElementById('out').style.display = 'none';
-    document.getElementById('emr').style.display = 'none';
-  }
+    const hb = parseFloat(document.getElementById('hb').value);
+    const hct = parseFloat(document.getElementById('hct').value);
+    const mcv = parseFloat(document.getElementById('mcv').value);
+    const ferritin = parseFloat(document.getElementById('ferritin').value);
+    const iron = parseFloat(document.getElementById('iron').value);
+    const tibc = parseFloat(document.getElementById('tibc').value);
+    const tsat = parseFloat(document.getElementById('tsat').value);
+    const ldh = parseFloat(document.getElementById('ldh').value);
+    const retic = parseFloat(document.getElementById('retic').value);
+    const haptoglobin = parseFloat(document.getElementById('haptoglobin').value);
+    const b12 = parseFloat(document.getElementById('b12').value);
+    const folate = parseFloat(document.getElementById('folate').value);
 
-  function safeNum(id){ const v=parseFloat(document.getElementById(id).value); return isNaN(v)?null:v; }
+    let resultText = "";
+    let warnings = [];
+    let assessment = [];
+    let plan = [];
+    let mixed = false;
 
-  // RPI calculation
-  function computeRPI(retic, hct){
-    if(retic === null || hct === null) return null;
-    let factor = 1.0;
-    if(hct >= 40) factor = 1.0;
-    else if(hct >= 30) factor = 1.5;
-    else if(hct >= 20) factor = 2.0;
-    else factor = 2.5;
-    const rpi = (retic * (hct / 45)) / factor;
-    return { rpi: +rpi.toFixed(2), factor };
-  }
+    // -----------------------------
+    //  HEMOGLOBIN
+    // -----------------------------
+    if (!isNaN(hb)) {
+        if (hb < 13) {
+            resultText += `<strong>Anemia detected</strong> — Hb ${hb} g/dL<br>`;
+            assessment.push(`Anemia (Hb ${hb} g/dL)`);
 
-  // Interpret TSAT and iron panel
-  function interpretIronPanel(iron, tibc, ferritin){
-    // TSAT if both iron and tibc present
-    let tsat = null;
-    let tsatText = '';
-    if(iron !== null && tibc !== null && tibc !== 0){
-      tsat = (iron / tibc) * 100;
-      tsat = +tsat.toFixed(1);
-      tsatText = `TSAT ${tsat}%`;
-    }
+            // Severity
+            if (hb < 7) assessment.push("Severe anemia");
+            else if (hb < 8) assessment.push("Moderate anemia");
+            else assessment.push("Mild anemia");
 
-    let interpretation = [];
+            // Transfusion thresholds
+            if (hb < 7) plan.push("Consider transfusion (Hb <7).");
+            else if (hb < 8) plan.push("Consider transfusion if symptomatic or cardiac history.");
+        } else {
+            resultText += `<strong>Hb normal:</strong> ${hb} g/dL<br>`;
+            assessment.push("No anemia.");
+        }
+    } else warnings.push("Hemoglobin missing.");
 
-    // Using common rules (concise):
-    // Iron deficiency: low ferritin (<30) or low TSAT (<20) + low iron
-    if(ferritin !== null){
-      if(ferritin < 30){
-        interpretation.push('Ferritin low → likely iron deficiency (stores depleted).');
-      } else if(ferritin >= 100){
-        interpretation.push('Ferritin high → inflammation/chronic disease or iron replete (interpret with CRP).');
-      } else {
-        interpretation.push('Ferritin borderline/normal — interpret with TSAT and clinical context.');
-      }
-    } else {
-      interpretation.push('Ferritin not provided — consider ordering to assess iron stores.');
+    // -----------------------------
+    //  MCV Classification
+    // -----------------------------
+    if (!isNaN(mcv)) {
+        if (mcv < 80) {
+            resultText += "Microcytic anemia pattern.<br>";
+            assessment.push("Microcytic anemia");
+        }
+        else if (mcv > 100) {
+            resultText += "Macrocytic anemia pattern.<br>";
+            assessment.push("Macrocytic anemia");
+        }
+        else {
+            resultText += "Normocytic anemia pattern.<br>";
+            assessment.push("Normocytic anemia");
+        }
     }
 
-    if(tsat !== null){
-      if(tsat < 20) interpretation.push('TSAT low (<20%) → supports iron deficiency or functional iron deficiency.');
-      else if(tsat >= 20 && tsat <= 50) interpretation.push('TSAT within typical range.');
-      else interpretation.push('TSAT high (>50%) → consider iron overload or lab issue.');
-    } else {
-      interpretation.push('TSAT not calculable (need TIBC and serum iron).');
+    // -----------------------------
+    //  Iron Studies Interpretation
+    // -----------------------------
+    if (!isNaN(ferritin) && !isNaN(iron) && !isNaN(tibc)) {
+
+        if (ferritin < 30 && tsat < 20) {
+            resultText += "Iron deficiency anemia.<br>";
+            plan.push("Start oral iron therapy.");
+        }
+        else if (ferritin > 100 && tsat < 20) {
+            resultText += "Anemia of chronic disease pattern.<br>";
+            plan.push("Evaluate for inflammatory/chronic illness.");
+        }
+        else if (ferritin < 30 && mcv > 100) {
+            mixed = true;
+        }
     }
 
-    return { tsat, tsatText, interpretation };
-  }
-
-  // Severity grading
-  function severityGrade(hb){
-    if(hb === null) return { level: 'Unknown', note: 'Hb missing' };
-    if(hb >= 10) return { level: 'Mild', note: 'Usually outpatient management depending on cause and symptoms.' };
-    if(hb >= 8) return { level: 'Moderate', note: 'May need closer follow-up; treat underlying cause.' };
-    return { level: 'Severe', note: 'Consider urgent evaluation; transfusion may be indicated depending on clinical picture.' };
-  }
-
-  // Transfusion guidance (concise widely used thresholds)
-  function transfusionGuidance(hb, symptomatic=false, cardiacDisease=false, activeBleeding=false){
-    let lines = [];
-    lines.push('General guidance (adapt to patient):');
-    lines.push('• Transfusion threshold in stable, non-cardiac patients: typically Hb < 7 g/dL.');
-    lines.push('• Consider Hb < 8 g/dL for patients with acute coronary syndrome, symptomatic anemia, or significant comorbidity.');
-    lines.push('• In active bleeding or hemodynamic instability, manage per bleeding protocol—transfuse based on clinical status and labs.');
-    if(symptomatic) lines.push('Note: patient symptomatic — lower threshold for transfusion.');
-    if(cardiacDisease) lines.push('Note: known cardiac disease — consider higher transfusion threshold (e.g., Hb < 8).');
-    return lines;
-  }
-
-  // Main assess function
-  function assessAnemia(){
-    const hb = safeNum('hb');
-    const hct = safeNum('hct');
-    const mcv = safeNum('mcv');
-    const retic = safeNum('retic');
-    const ferritin = safeNum('ferritin');
-    const iron = safeNum('iron');
-    const tibc = safeNum('tibc');
-    const transferrin = safeNum('transferrin');
-    const ldh = safeNum('ldh');
-    const haptoglobin = safeNum('haptoglobin');
-    const b12 = safeNum('b12');
-    const folate = safeNum('folate');
-
-    const out = document.getElementById('out');
-    const emrBox = document.getElementById('emr');
-    const summaryArea = document.getElementById('summaryArea');
-    const detailed = document.getElementById('detailed');
-    const summaryTable = document.getElementById('summaryTable');
-    const transfusionDiv = document.getElementById('transfusion');
-    const rpiBox = document.getElementById('rpiBox');
-
-    out.style.display = 'block';
-    emrBox.style.display = 'block';
-
-    // Clear previous contents
-    summaryArea.innerHTML = '';
-    detailed.innerHTML = '';
-    summaryTable.innerHTML = '';
-    transfusionDiv.innerHTML = '';
-    rpiBox.innerHTML = '';
-
-    // Basic Hb message
-    let basicMsg = '';
-    if(hb === null) basicMsg = '<div class="warn">Hemoglobin missing — cannot grade anemia severity.</div>';
-    else if(hb < 13) basicMsg = `<div class="warn"><strong>Anemia:</strong> Hb ${hb} g/dL</div>`;
-    else basicMsg = `<div class="info"><strong>Hb normal:</strong> ${hb} g/dL</div>`;
-    summaryArea.innerHTML = basicMsg;
-
-    // Severity
-    const sev = severityGrade(hb);
-    detailed.innerHTML += `<div style="margin-top:8px;"><strong>Severity:</strong> ${sev.level} — <span class="muted">${sev.note}</span></div>`;
-
-    // RPI
-    const rpiObj = computeRPI(retic, hct);
-    if(rpiObj){
-      const rpiInterpret = rpiObj.rpi >= 2 ? 'Appropriate marrow response (regenerative)' : 'Low marrow response (hypoproliferative) — consider iron deficiency, marrow disorder, or renal disease.';
-      rpiBox.innerHTML = `<div><strong>Reticulocyte Production Index (RPI):</strong> ${rpiObj.rpi} (maturation factor ${rpiObj.factor}) — ${rpiInterpret}</div>`;
-    } else {
-      rpiBox.innerHTML = `<div class="muted">RPI not calculated (need reticulocyte % and hematocrit).</div>`;
+    if (mixed) {
+        resultText += "<strong>Mixed iron deficiency + macrocytic process suspected.</strong><br>";
+        assessment.push("Mixed anemia");
+        plan.push("Check B12, folate, reticulocyte count.");
     }
 
-    // MCV pattern
-    let mcvTxt = '';
-    if(mcv !== null){
-      if(mcv < 80) mcvTxt = 'Microcytic pattern — consider iron deficiency, thalassemia trait, chronic disease.';
-      else if(mcv > 100) mcvTxt = 'Macrocytic pattern — consider B12/folate deficiency, liver disease, alcohol, drugs.';
-      else mcvTxt = 'Normocytic pattern — consider anemia of chronic disease, hemolysis, acute blood loss.';
-      detailed.innerHTML += `<div style="margin-top:8px;"><strong>MCV:</strong> ${mcv} fL — ${mcvTxt}</div>`;
-    } else {
-      detailed.innerHTML += `<div class="muted" style="margin-top:8px;">MCV not provided.</div>`;
+    // -----------------------------
+    //  Macrocytic Causes
+    // -----------------------------
+    if (!isNaN(mcv) && mcv > 100) {
+        if (!isNaN(b12) && b12 < 200) {
+            resultText += "Vitamin B12 deficiency.<br>";
+            plan.push("Start B12 replacement.");
+        }
+        if (!isNaN(folate) && folate < 4) {
+            resultText += "Folate deficiency.<br>";
+            plan.push("Start folate supplementation.");
+        }
     }
 
-    // Iron panel interpretation
-    const ironInterp = interpretIronPanel(iron, tibc, ferritin);
-    let ipHtml = `<div style="margin-top:10px;"><strong>Iron panel:</strong>`;
-    if(iron !== null) ipHtml += ` Serum iron ${iron} µg/dL;`; else ipHtml += ' Serum iron N/A;';
-    if(tibc !== null) ipHtml += ` TIBC ${tibc} µg/dL;`; else ipHtml += ' TIBC N/A;';
-    if(ironInterp.tsat !== null) ipHtml += ` ${ironInterp.tsatText};`;
-    if(ferritin !== null) ipHtml += ` Ferritin ${ferritin} ng/mL;`;
-    ipHtml += '</div><ul style="margin-top:6px;">';
-    ironInterp.interpretation.forEach(line => ipHtml += `<li>${line}</li>`);
-    ipHtml += '</ul>';
-    detailed.innerHTML += ipHtml;
-
-    // Hemolysis hints
-    if(ldh !== null || haptoglobin !== null){
-      detailed.innerHTML += `<div style="margin-top:8px;"><strong>Hemolysis labs:</strong> `;
-      if(ldh !== null) detailed.innerHTML += `LDH ${ldh} U/L; `;
-      if(haptoglobin !== null) detailed.innerHTML += `Haptoglobin ${haptoglobin} mg/dL; `;
-      detailed.innerHTML += `</div>`;
-    } else {
-      detailed.innerHTML += `<div class="muted" style="margin-top:8px;">Hemolysis labs (LDH/haptoglobin) not provided; consider if hemolysis suspected.</div>`;
+    // -----------------------------
+    //  Hemolysis Pattern
+    // -----------------------------
+    if (!isNaN(ldh) && !isNaN(haptoglobin)) {
+        if (ldh > 250 && haptoglobin < 30) {
+            resultText += "Hemolysis pattern.<br>";
+            assessment.push("Possible hemolysis");
+            plan.push("Obtain peripheral smear & bilirubin.");
+        }
     }
 
-    // B12/folate check
-    if(b12 !== null || folate !== null){
-      let btxt = `<div style="margin-top:8px;"><strong>Macrocytics labs:</strong> `;
-      if(b12 !== null) btxt += `B12 ${b12} pg/mL; `;
-      if(folate !== null) btxt += `Folate ${folate} ng/mL; `;
-      btxt += '</div>';
-      detailed.innerHTML += btxt;
+    // -----------------------------
+    //  Reticulocyte Production Index (RPI)
+    // -----------------------------
+    if (!isNaN(retic) && !isNaN(hct)) {
+        let rpi = (retic * (hct / 45)).toFixed(2);
+        resultText += `RPI: ${rpi}<br>`;
+
+        if (rpi < 2) {
+            assessment.push("Hypoproliferative anemia");
+            plan.push("Consider bone marrow suppression or chronic disease.");
+        } else {
+            assessment.push("Hyperproliferative anemia");
+        }
     }
 
-    // Build summary table (compact)
-    let rows = [
-      ['Hb', hb===null?'N/A':hb + ' g/dL'],
-      ['Hct', hct===null?'N/A':hct + ' %'],
-      ['MCV', mcv===null?'N/A':mcv + ' fL'],
-      ['RPI', rpiObj? rpiObj.rpi : 'N/A'],
-      ['Ferritin', ferritin===null?'N/A': ferritin + ' ng/mL'],
-      ['Iron', iron===null?'N/A': iron + ' µg/dL'],
-      ['TIBC', tibc===null?'N/A': tibc + ' µg/dL'],
-      ['TSAT', ironInterp.tsat===null? 'N/A' : ironInterp.tsat + '%']
-    ];
-    let tableHtml = '<tr><th>Parameter</th><th>Value</th></tr>';
-    rows.forEach(r => tableHtml += `<tr><td>${r[0]}</td><td>${r[1]}</td></tr>`);
-    summaryTable.innerHTML = tableHtml;
-
-    // Transfusion guidance
-    const transfLines = transfusionGuidance(hb);
-    let tHtml = '<div style="margin-top:10px;"><strong>Transfusion guidance (general):</strong><ul>';
-    transfLines.forEach(s => tHtml += `<li>${s}</li>`);
-    tHtml += '</ul></div>';
-    transfusionDiv.innerHTML = tHtml;
-
-    // EMR text generation
-    let emr = '';
-    // Assessment
-    emr += 'Assessment:\n';
-    if(hb!==null) emr += `• Anemia — Hb ${hb} g/dL (${sev.level}).\n`;
-    else emr += '• Hemoglobin not provided — anemia assessment incomplete.\n';
-
-    if(mcv!==null) emr += `• RBC size: ${mcv < 80 ? 'Microcytic' : (mcv > 100 ? 'Macrocytic' : 'Normocytic')} (MCV ${mcv} fL).\n`;
-    if(rpiObj) emr += `• RPI ${rpiObj.rpi} (maturation factor ${rpiObj.factor}) — ${rpiObj.rpi >= 2 ? 'regenerative' : 'hypoproliferative'}.\n`;
-
-    // Iron panel summary
-    emr += '\nPlan:\n';
-    // Iron-specific
-    if(ferritin !== null && ferritin < 30){
-      emr += '• Likely iron deficiency (low ferritin) — start oral iron (ferrous sulfate 325 mg PO TID or equivalent) and arrange follow-up iron studies in 4–8 weeks; counsel on GI side effects and vitamin C coadministration as appropriate.\n';
-    } else if(ironInterp.tsat !== null && ironInterp.tsat < 20){
-      emr += '• Low TSAT (<20%) — supports iron deficiency/functional iron deficiency; check ferritin and consider iron therapy depending on clinical context.\n';
-    } else if(ferritin !== null && ferritin >= 100 && ironInterp.tsat !== null && ironInterp.tsat < 20){
-      emr += '• Ferritin elevated with low TSAT — consider anemia of chronic disease / functional iron deficiency; evaluate inflammation and underlying disease.\n';
-    } else {
-      emr += '• Iron studies inconclusive — order ferritin and TIBC/TSAT if not done.\n';
+    // -----------------------------
+    //  Missing Labs
+    // -----------------------------
+    if (warnings.length > 0) {
+        resultText += "<br><strong>Missing labs:</strong><ul>";
+        warnings.forEach(w => resultText += `<li>${w}</li>`);
+        resultText += "</ul>";
     }
 
-    // Macrocytic actions
-    if(mcv !== null && mcv > 100){
-      if(b12 !== null && b12 < 200) emr += '• B12 low — start B12 replacement (IM or high-dose PO) and monitor response.\n';
-      else emr += '• Evaluate vitamin B12 and folate levels; consider empiric replacement if clinically indicated.\n';
+    // -----------------------------
+    //  Display Result
+    // -----------------------------
+    document.getElementById("result").innerHTML = resultText;
+    document.getElementById("result").style.display = "block";
+
+    // -----------------------------
+    //  EMR OUTPUT
+    // -----------------------------
+    let emrText = "Assessment:\n";
+    assessment.forEach(a => emrText += `• ${a}\n`);
+
+    emrText += "\nPlan:\n";
+    plan.forEach(p => emrText += `• ${p}\n`);
+
+    if (warnings.length > 0) {
+        emrText += "\nAdditional Notes:\n";
+        warnings.forEach(w => emrText += `• ${w}\n`);
     }
 
-    // Hemolysis
-    if(ldh !== null || haptoglobin !== null || (rpiObj && rpiObj.rpi >= 2)){
-      emr += '• If hemolysis suspected: check LDH, haptoglobin, peripheral smear, and direct antiglobulin test (DAT).\n';
-    } else {
-      emr += '• If no hemolysis suspected and RPI low: consider bone marrow suppression, renal disease, or inflammatory causes — assess accordingly.\n';
-    }
+    document.getElementById("emrText").textContent = emrText;
+    document.getElementById("emrBox").style.display = "block";
+}
 
-    // Severity & transfusion
-    emr += `\n• Severity: ${sev.level}. ${sev.note}\n`;
-    emr += '• Transfusion guidance: follow institutional protocols. Generally: transfuse if Hb <7 g/dL in stable patients; consider higher threshold (e.g., <8 g/dL) if symptomatic or cardiac disease.\n';
-
-    // Missing labs
-    let miss = [];
-    if(hb===null) miss.push('Hemoglobin');
-    if(hct===null) miss.push('Hematocrit');
-    if(mcv===null) miss.push('MCV');
-    if(retic===null) miss.push('Reticulocyte %');
-    if(ferritin===null) miss.push('Ferritin');
-    if(iron===null) miss.push('Serum iron');
-    if(tibc===null) miss.push('TIBC');
-    if(miss.length>0) emr += `\nAdditional orders / tests: ${miss.join(', ')}.\n`;
-
-    // Footer note
-    emr += '\n(Recommendations are suggestions; apply clinical judgment and local transfusion/investigation protocols.)\n';
-
-    document.getElementById('emrText').textContent = emr;
-  }
-
-  // simple RPI only helper
-  function calcRPIOnly(){
-    const retic = safeNum('retic');
-    const hct = safeNum('hct');
-    const box = document.getElementById('out');
-    const rpiBox = document.getElementById('rpiBox');
-    if(retic===null || hct===null){
-      alert('Need both reticulocyte% and hematocrit to calculate RPI.');
-      return;
-    }
-    const obj = computeRPI(retic,hct);
-    box.style.display='block';
-    rpiBox.innerHTML = `<div><strong>RPI:</strong> ${obj.rpi} (factor ${obj.factor}) — ${obj.rpi>=2? 'regenerative':'hypoproliferative'}</div>`;
-  }
-
-  // copy EMR
-  function copyEMR(){
-    const txt = document.getElementById('emrText').textContent;
-    navigator.clipboard.writeText(txt).then(()=> {
-      alert('EMR text copied to clipboard.');
-    }, ()=> {
-      alert('Copy failed — select and copy manually.');
-    });
-  }
-
+function copyEMR() {
+    navigator.clipboard.writeText(document.getElementById("emrText").textContent);
+}
 </script>
+
 </body>
 </html>
