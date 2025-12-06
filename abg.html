@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>DKA Rapid Assessment & Orders Helper</title>
+
+<style>
+/* ---------- LIGHT THEME (Modern Medical Soft Blue) ---------- */
+:root{
+    --bg1:#e3f2fd;
+    --bg2:#e0f7fa;
+    --card:#ffffffee;
+    --accent:#0288d1;
+    --muted:#546e7a;
+    --success:#2e7d32;
+    --danger:#c62828;
+    --warn:#f9a825;
+    --border:#cfd8dc;
+    --glass:rgba(255,255,255,0.7);
+    --radius:12px;
+}
+
+/* ---------- GLOBAL ---------- */
+html,body {
+    margin:0;
+    padding:0;
+    font-family: Inter, system-ui, Arial;
+    background: linear-gradient(135deg, var(--bg1), var(--bg2));
+    color:#0f1f29;
+    min-height:100%;
+}
+
+h1 { margin:0; font-size:22px; color:#01579b; }
+
+.container{
+    max-width:1100px;
+    margin:20px auto;
+    padding:10px;
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:18px;
+}
+
+/* Responsive for smaller screens */
+@media(max-width:900px){
+    .container { grid-template-columns:1fr; }
+}
+
+.card{
+    background:var(--card);
+    border-radius:var(--radius);
+    padding:16px;
+    border:1px solid var(--border);
+    box-shadow:0px 6px 18px rgba(0,0,0,0.1);
+}
+
+/* ---------- FORMS ---------- */
+label{
+    display:block;
+    font-size:13px;
+    color:var(--muted);
+    margin-bottom:4px;
+    margin-top:6px;
+}
+
+input, select, textarea{
+    width:100%;
+    padding:10px;
+    border-radius:8px;
+    border:1px solid var(--border);
+    background:white;
+    box-sizing:border-box;
+    font-size:14px;
+    color:#0f1f29;
+}
+
+.grid {
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:12px;
+}
+
+@media(max-width:500px){
+    .grid { grid-template-columns:1fr; }
+}
+
+.checkbox-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:10px;
+}
+
+.btn{
+    background:var(--accent);
+    color:white;
+    padding:10px 14px;
+    border:none;
+    border-radius:8px;
+    cursor:pointer;
+    font-weight:600;
+    box-shadow:0 2px 6px rgba(0,0,0,0.15);
+}
+.btn:hover{ background:#0277bd; }
+
+.btn.secondary{
+    background:#eceff1;
+    color:#37474f;
+}
+.btn.secondary:hover{
+    background:#cfd8dc;
+}
+
+.output{
+    margin-top:12px;
+    padding:14px;
+    border-radius:10px;
+    background:#f1f8e9;
+    border-left:5px solid var(--success);
+}
+
+.flag{
+    padding:6px 10px;
+    border-radius:6px;
+    font-weight:600;
+    font-size:13px;
+    margin:4px 0;
+    display:inline-block;
+}
+.flag.danger{background:#ffebee;color:var(--danger);}
+.flag.warn{background:#fff8e1;color:var(--warn);}
+.flag.ok{background:#e8f5e9;color:var(--success);}
+
+pre{
+    white-space:pre-wrap;
+    font-size:14px;
+}
+
+/* ---------- FLOATING HOME BUTTON ---------- */
+.home-btn {
+    position: fixed;
+    top: 15px;
+    right: 15px;
+    background: var(--accent);
+    color: white;
+    padding: 10px 18px;
+    border-radius: 10px;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 15px;
+    box-shadow: 0px 4px 12px rgba(0,0,0,0.20);
+    transition: 0.2s;
+    z-index: 999;
+}
+.home-btn:hover { background:#0277bd; }
+
+.copy-row{display:flex;gap:10px;margin-top:8px;}
+</style>
+</head>
+
+<body>
+
+<a href="index.html" class="home-btn">Home</a>
+
+<div class="container">
+
+<!-- INPUTS -->
+<div class="card">
+<h1>DKA Quick Input</h1>
+<div class="small" style="color:var(--muted)">Enter labs & current treatments. Weight helps calculate U/hr from U/kg/hr.</div>
+
+<hr style="border:none;border-top:1px solid var(--border);margin:12px 0">
+
+<div class="grid">
+    <div>
+        <label>Patient weight (kg)</label>
+        <input id="weight" type="number" step="0.1">
+    </div>
+    <div>
+        <label>Blood glucose (mg/dL)</label>
+        <input id="glucose" type="number">
+    </div>
+</div>
+
+<div class="grid">
+    <div>
+        <label>pH</label>
+        <input id="ph" type="number" step="0.01">
+    </div>
+    <div>
+        <label>HCO₃⁻ (mEq/L)</label>
+        <input id="hco3" type="number" step="0.1">
+    </div>
+</div>
+
+<div class="grid">
+    <div>
+        <label>Sodium (Na⁺)</label>
+        <input id="na" type="number" step="0.1">
+    </div>
+    <div>
+        <label>Chloride (Cl⁻)</label>
+        <input id="cl" type="number" step="0.1">
+    </div>
+</div>
+
+<div class="grid">
+    <div>
+        <label>Potassium (K⁺)</label>
+        <input id="k" type="number" step="0.1">
+    </div>
+    <div>
+        <label>Phosphate (mg/dL)</label>
+        <input id="phos" type="number" step="0.1">
+    </div>
+</div>
+
+<label>Serum ketones (BHB, mmol/L)</label>
+<input id="ketones" type="number" step="0.01">
+
+<div class="grid">
+    <div>
+        <label>Anion gap (lab reported)</label>
+        <input id="ag_given" type="number" step="0.1">
+    </div>
+    <div>
+        <label>Albumin (for AG correction)</label>
+        <input id="albumin" type="number" step="0.1">
+    </div>
+</div>
+
+<hr style="border:none;border-top:1px solid var(--border);margin:12px 0">
+
+<h3 style="margin:0 0 8px 0;color:#01579b">Current Therapies</h3>
+
+<label>Insulin infusion</label>
+<select id="insulin_select">
+    <option value="no">No insulin</option>
+    <option value="0.1">0.1 U/kg/hr</option>
+    <option value="0.5">0.5 U/kg/hr</option>
+</select>
+
+<label style="margin-top:10px">IV Fluids</label>
+<div class="checkbox-grid">
+    <label><input id="iv_ns" type="checkbox"> Normal Saline (NS)</label>
+    <label><input id="iv_lr" type="checkbox"> Lactated Ringer's (LR)</label>
+    <label><input id="iv_d5" type="checkbox"> Dextrose-containing</label>
+    <label><input id="iv_045" type="checkbox"> 0.45% Sodium Chloride</label>
+    <label><input id="iv_bicarb" type="checkbox"> Bicarbonate Infusion</label>
+</div>
+
+<div class="grid" style="margin-top:14px">
+    <button id="assessBtn" class="btn">Assess & Suggest</button>
+    <button id="resetBtn" class="btn secondary">Reset</button>
+</div>
+
+</div>
+
+<!-- RESULTS -->
+<div class="card">
+
+<h1 style="font-size:20px">Assessment & Actions</h1>
+
+<div id="summary" class="output" style="margin-top:12px">
+<strong>Summary (copy-paste)</strong>
+<pre id="emrText">No assessment yet.</pre>
+<div class="copy-row">
+    <button id="copyEmr" class="btn">Copy EMR summary</button>
+</div>
+</div>
+
+<div id="orders" class="output" style="margin-top:18px">
+<strong>Recommended Orders (editable)</strong>
+<pre id="ordersPre">No recommendations yet.</pre>
+<div class="copy-row">
+    <button id="copyOrders" class="btn">Copy Orders</button>
+    <button id="printBtn" class="btn secondary">Print</button>
+</div>
+</div>
+
+<div style="margin-top:12px;font-size:12px;color:var(--muted)">
+Guidance: Add dextrose when glucose ≤250 mg/dL while continuing insulin.  
+Delay insulin if K <3.3 mmol/L.  
+Bicarbonate only if pH <6.9.
+</div>
+
+</div>
+</div>
+
+<script>
+function safeNum(v){ const n=parseFloat(v); return Number.isFinite(n)?n:null }
+function fmt(n,d=1){ return n===null?'—':Number(n).toFixed(d) }
+const el=id=>document.getElementById(id);
+
+/* ------------ MAIN ENGINE ------------ */
+function assess(){
+    const weight = safeNum(el('weight').value);
+    const glucose = safeNum(el('glucose').value);
+    const ph = safeNum(el('ph').value);
+    const hco3 = safeNum(el('hco3').value);
+    const na = safeNum(el('na').value);
+    const cl = safeNum(el('cl').value);
+    const k = safeNum(el('k').value);
+    const phos = safeNum(el('phos').value);
+    const ket = safeNum(el('ketones').value);
+    const ag_given = safeNum(el('ag_given').value);
+    const albumin = safeNum(el('albumin').value);
+
+    const insulin_choice = el('insulin_select').value;
+
+    const iv_ns = el('iv_ns').checked;
+    const iv_lr = el('iv_lr').checked;
+    const iv_d5 = el('iv_d5').checked;
+    const iv_045 = el('iv_045').checked;
+    const iv_bicarb = el('iv_bicarb').checked;
+
+    let calcAG = null;
+    if(na!==null && cl!==null && hco3!==null)
+        calcAG = +(na - (cl + hco3)).toFixed(1);
+
+    let corrAG = null;
+    if(calcAG!==null && albumin!==null)
+        corrAG = +(calcAG + 2.5*(4.4 - albumin)).toFixed(1);
+
+    const hypergly = glucose>=250;
+    const ket_pos = ket>0.6;
+    const acidotic = (ph<7.3)||(hco3<18);
+    const hagma = calcAG>12 && acidotic;
+
+    let severity="Not classic DKA";
+    let altSuggest="";
+    if(hypergly && ket_pos && hagma){
+        if(ph>=7.25) severity="Mild DKA";
+        else if(ph>=7.00) severity="Moderate DKA";
+        else severity="Severe DKA";
+    } else {
+        altSuggest="• Consider other causes: lactic acidosis, alcoholic ketosis, starvation ketosis, sepsis.";
+    }
+
+    let summary="";
+    let warnings=[];
+
+    /* Flags */
+    const flags=[];
+    if(k===null) flags.push("K missing — check before insulin.");
+    else if(k<3.3) flags.push("K <3.3 — replace BEFORE insulin.");
+    else if(k<3.5) flags.push("K 3.3–3.5 — replace before/with insulin.");
+    else if(k>5.5) flags.push("K >5.5 — check ECG & hold K.");
+
+    if(ph<6.9) flags.push("pH <6.9 — consider bicarbonate in ICU.");
+
+    if(flags.length) summary += flags.map(f=>"• "+f).join("\n") + "\n";
+
+    summary += `Assessment: ${severity}\n`;
+    summary += `Glucose ${fmt(glucose)}, pH ${fmt(ph,2)}, HCO3 ${fmt(hco3)}, K ${fmt(k)}, Phos ${fmt(phos)}, BHB ${fmt(ket,2)}\n`;
+
+    if(calcAG!==null)
+        summary += `AG ${calcAG}${corrAG?(" (corr "+corrAG+")"):""}${ag_given?(" | Lab: "+ag_given):""}\n`;
+    if(altSuggest) summary += altSuggest;
+
+    el('emrText').innerText = summary;
+
+    /* Orders */
+    const rec=[];
+    if(k===null) rec.push("STAT K & BMP — cannot start insulin.");
+    else if(k<3.3) rec.push("Hold insulin; give KCl 20–40 mEq/hr; monitor q1h.");
+    else if(k<3.5) rec.push("Give KCl 20–30 mEq/hr; start insulin once K ≥3.3.");
+
+    if(severity.includes("DKA")){
+        if(k>=3.3){
+            if(insulin_choice==="no"){
+                if(weight!==null)
+                    rec.push(`Start insulin 0.1 U/kg/hr (≈ ${(weight*0.1).toFixed(2)} U/hr).`);
+                else
+                    rec.push("Start insulin 0.1 U/kg/hr.");
+            } else {
+                if(weight!==null)
+                    rec.push(`Continue insulin ${insulin_choice} U/kg/hr (≈ ${(weight*parseFloat(insulin_choice)).toFixed(2)} U/hr).`);
+                else
+                    rec.push(`Continue insulin ${insulin_choice} U/kg/hr.`);
+            }
+        }
+
+        if(glucose<=250)
+            rec.push("Add D5-containing fluids (D5NS or D5½NS). Keep BG 150–200 while clearing ketones.");
+    }
+
+    if(iv_bicarb)
+        rec.push("Bicarbonate infusion present — verify indication & ICU involvement.");
+
+    if(phos!==null && phos<1.0)
+        rec.push("Replace phosphate (K-phos) urgently.");
+    else if(phos!==null && phos<2.0)
+        rec.push("Mild hypophosphatemia — consider replacement.");
+
+    rec.push("BMP q2–4h, glucose q1h, K q1–2h.");
+    rec.push("Administer basal insulin 2–4h before stopping drip once AG is closed.");
+
+    el('ordersPre').innerText = rec.map(r=>"• "+r).join("\n");
+}
+
+/* BUTTONS */
+document.getElementById('assessBtn').onclick = assess;
+document.getElementById('resetBtn').onclick = ()=>location.reload();
+document.getElementById('copyEmr').onclick = ()=>navigator.clipboard.writeText(el('emrText').innerText);
+document.getElementById('copyOrders').onclick = ()=>navigator.clipboard.writeText(el('ordersPre').innerText);
+document.getElementById('printBtn').onclick = ()=>window.print();
+</script>
+
+</body>
+</html>
