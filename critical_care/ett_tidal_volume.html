@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ETT Depth & Tidal Volume Calculator – Critical Care</title>
+
+<style>
+:root {
+    --bg: #e0f7fa;
+    --card: #ffffff;
+    --accent: #00838f;
+    --accent-soft: #b2ebf2;
+    --muted: #546e7a;
+    --radius: 14px;
+}
+body {
+    margin:0;
+    font-family:system-ui,sans-serif;
+    background:radial-gradient(circle at top,#b2ebf2 0,#e0f7fa 40%,#e0f2f1 100%);
+}
+header {
+    background:linear-gradient(90deg,#00acc1,#00838f);
+    padding:16px;
+    color:white;
+    display:flex;
+    justify-content:space-between;
+    flex-wrap:wrap;
+}
+header h1 { margin:0; font-size:1.25rem; }
+.nav-buttons a {
+    margin-left:6px;
+    text-decoration:none;
+    padding:6px 10px;
+    border-radius:999px;
+    border:1px solid rgba(255,255,255,0.8);
+    color:white;
+    font-size:.9rem;
+}
+main {
+    max-width:900px;
+    margin:20px auto;
+    padding:0 12px;
+}
+.card {
+    background:var(--card);
+    padding:18px;
+    margin-bottom:18px;
+    border-radius:var(--radius);
+    box-shadow:0 8px 24px rgba(0,0,0,0.1);
+}
+h2 {
+    margin:0 0 8px;
+    color:#004d5a;
+    font-size:1.2rem;
+}
+.subtitle {
+    color:var(--muted);
+    margin-bottom:12px;
+}
+label {
+    display:block;
+    margin-bottom:6px;
+    font-size:.9rem;
+    color:#37474f;
+}
+input,select {
+    width:100%;
+    padding:10px;
+    border-radius:10px;
+    border:1px solid #cfd8dc;
+}
+.grid-2 {
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+    gap:12px;
+}
+.btn-primary {
+    background:var(--accent);
+    color:white;
+    border:none;
+    border-radius:999px;
+    padding:12px;
+    width:100%;
+    margin-top:12px;
+    font-weight:600;
+    cursor:pointer;
+}
+.plan-box {
+    background:#f0ffff;
+    padding:14px;
+    border-radius:12px;
+    border:1px dashed var(--accent);
+    white-space:pre-line;
+}
+.copy-btn {
+    margin-top:10px;
+    padding:10px 16px;
+    border-radius:999px;
+    border:none;
+    background:#eceff1;
+    cursor:pointer;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <h1>📏 ETT Depth & Tidal Volume Tool</h1>
+    <div class="nav-buttons">
+        <a href="../home.html">🏠 Home</a>
+        <a href="../critical_care.html">⬅ Critical Care</a>
+    </div>
+</header>
+
+<main>
+
+<div class="card">
+    <h2>Patient Inputs</h2>
+    <p class="subtitle">Height-based PBW, Vt options, and ETT depth recommendation</p>
+
+    <div class="grid-2">
+
+        <div>
+            <label>Gender</label>
+            <select id="gender">
+                <option value="">Select...</option>
+                <option value="male">Male</option>
+                <option value="female">Female</option>
+            </select>
+        </div>
+
+        <div>
+            <label>Height (cm)</label>
+            <input type="number" id="height" placeholder="e.g. 170">
+        </div>
+
+    </div>
+
+    <button class="btn-primary" onclick="calculateETT()">Calculate</button>
+
+</div>
+
+<div class="card" id="results" style="display:none;">
+    <h2>Recommended Values</h2>
+    <div id="plan" class="plan-box"></div>
+    <button class="copy-btn" onclick="copyPlan()">📋 Copy Plan</button>
+</div>
+
+</main>
+
+<script>
+let lastPlan = "";
+
+function PBW(gender, height) {
+    if (!gender || !height) return null;
+    return gender === "male"
+        ? 50 + 0.91 * (height - 152.4)
+        : 45.5 + 0.91 * (height - 152.4);
+}
+
+function calculateETT() {
+    const gender = document.getElementById("gender").value;
+    const height = parseFloat(document.getElementById("height").value);
+
+    let plan = "";
+
+    if (!gender || isNaN(height)) {
+        plan = "Please enter gender and height.";
+        display(plan);
+        return;
+    }
+
+    const pbw = PBW(gender, height);
+
+    // Tidal volumes
+    const vt4 = pbw * 4;
+    const vt6 = pbw * 6;
+    const vt8 = pbw * 8;
+
+    // ETT size
+    let ettSize = gender === "male" ? "7.5–8.0 mm" : "7.0–7.5 mm";
+
+    // Depth
+    let depth = gender === "male" ? 23 : 21;
+
+    // Height adjustment
+    if (height < 155) depth -= 1;
+    if (height > 185) depth += 1;
+
+    plan += "PREDICTED BODY WEIGHT (PBW)\n";
+    plan += pbw.toFixed(1) + " kg\n\n";
+
+    plan += "TIDAL VOLUME RECOMMENDATIONS\n";
+    plan += "• 4 mL/kg (severe ARDS): " + vt4.toFixed(0) + " mL\n";
+    plan += "• 6 mL/kg (ARDSnet): " + vt6.toFixed(0) + " mL\n";
+    plan += "• 8 mL/kg (normal lungs): " + vt8.toFixed(0) + " mL\n\n";
+
+    plan += "ETT SIZE\n";
+    plan += "• " + ettSize + "\n\n";
+
+    plan += "ETT DEPTH (at teeth)\n";
+    plan += "• " + depth + " cm\n";
+    plan += "• Based on 21/23 rule with height adjustment\n\n";
+
+    lastPlan = plan;
+    display(plan);
+}
+
+function display(text) {
+    document.getElementById("plan").innerText = text;
+    document.getElementById("results").style.display = "block";
+}
+
+function copyPlan() {
+    navigator.clipboard.writeText(lastPlan)
+        .then(() => alert("Plan copied!"))
+        .catch(() => alert("Unable to copy"));
+}
+</script>
+
+</body>
+</html>
