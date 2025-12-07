@@ -1,1 +1,315 @@
-HF
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>NYHA Class Helper – Cardiology</title>
+<style>
+:root{
+  --bg:#020617;
+  --card:#0b1120;
+  --accent:#f97316;
+  --accent-soft:rgba(249,115,22,0.16);
+  --muted:#9ca3af;
+  --border:rgba(148,163,184,0.35);
+  --radius:16px;
+  --pad:14px;
+  color-scheme:dark;
+}
+*{box-sizing:border-box;}
+body{
+  margin:0;
+  min-height:100vh;
+  background:
+    radial-gradient(circle at top,rgba(248,113,22,0.22),transparent 50%),
+    radial-gradient(circle at bottom,#020617,#020617 55%);
+  font-family:system-ui,Segoe UI,Roboto,Arial;
+  color:#e5e7eb;
+  display:flex;
+  justify-content:center;
+  padding:14px;
+}
+main{width:100%;max-width:850px;}
+header{margin-bottom:14px;}
+h1{
+  margin:0 0 4px;
+  font-size:1.6rem;
+  display:flex;
+  gap:10px;
+  align-items:center;
+}
+h1 .icon{font-size:1.6rem;}
+header p{margin:0;font-size:0.88rem;color:var(--muted);}
+.tag-row{margin-top:6px;display:flex;flex-wrap:wrap;gap:6px;}
+.tag{
+  font-size:0.75rem;
+  padding:3px 7px;
+  border-radius:999px;
+  border:1px solid rgba(148,163,184,0.5);
+  color:var(--muted);
+  background:rgba(15,23,42,0.9);
+}
+.card{
+  background:linear-gradient(135deg,rgba(15,23,42,0.96),rgba(15,23,42,0.99));
+  border:1px solid var(--border);
+  padding:var(--pad);
+  border-radius:var(--radius);
+  box-shadow:0 18px 35px rgba(0,0,0,0.7);
+  position:relative;
+  overflow:hidden;
+  margin-bottom:14px;
+}
+.card::before{
+  content:"";
+  position:absolute;
+  inset:-45%;
+  background:
+    radial-gradient(circle at 0 0,rgba(248,113,113,0.16),transparent 55%),
+    radial-gradient(circle at 100% 100%,rgba(249,115,22,0.22),transparent 55%);
+  opacity:.7;
+  pointer-events:none;
+}
+.card-inner{position:relative;z-index:1;}
+h2{
+  margin:0 0 4px;
+  font-size:1.1rem;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+.badge{
+  font-size:.7rem;
+  padding:3px 7px;
+  border-radius:999px;
+  background:var(--accent-soft);
+  color:#fed7aa;
+  border:1px solid rgba(248,250,252,.1);
+}
+.subtitle{font-size:.85rem;color:var(--muted);margin:0 0 6px;}
+form{display:grid;gap:10px;}
+.q{
+  background:rgba(15,23,42,0.9);
+  border:1px solid rgba(148,163,184,0.45);
+  padding:10px;
+  border-radius:12px;
+}
+.q label{display:flex;justify-content:space-between;font-size:.88rem;}
+.q select{
+  background:rgba(15,23,42,0.9);
+  border:1px solid rgba(148,163,184,0.45);
+  color:#e5e7eb;
+  padding:6px;
+  border-radius:8px;
+}
+button{
+  border-radius:999px;
+  border:none;
+  padding:8px 15px;
+  font-size:.85rem;
+  font-weight:600;
+  cursor:pointer;
+  background:radial-gradient(circle at 0 0,#fed7aa,#fb923c 40%,#ea580c 100%);
+  color:#111827;
+  box-shadow:0 10px 26px rgba(248,113,22,.55);
+}
+button.secondary{
+  background:transparent;
+  color:#e5e7eb;
+  border:1px solid rgba(148,163,184,.6);
+  box-shadow:none;
+}
+.result .block{
+  background:rgba(15,23,42,0.92);
+  border:1px solid rgba(148,163,184,0.45);
+  padding:12px;
+  border-radius:12px;
+  margin-bottom:10px;
+}
+.block-title{
+  font-weight:700;
+  margin-bottom:4px;
+  font-size:.95rem;
+}
+footer{
+  margin-top:10px;
+  font-size:.75rem;
+  color:var(--muted);
+}
+</style>
+</head>
+<body>
+
+<main>
+
+<header>
+  <h1><span class="icon">🚶‍♂️</span> NYHA Class Helper</h1>
+  <p>Determines NYHA class (I–IV) based on symptoms & activity limitations.</p>
+  <div class="tag-row">
+    <span class="tag">Cardiology</span>
+    <span class="tag">Heart failure</span>
+    <span class="tag">Dark mode</span>
+  </div>
+</header>
+
+<!-- INPUT CARD -->
+<div class="card">
+  <div class="card-inner">
+    <h2>Patient Symptoms <span class="badge">Inputs</span></h2>
+    <p class="subtitle">Choose the best description for each question.</p>
+
+    <form id="nyha-form">
+
+      <div class="q">
+        <label>
+          Symptoms at rest?
+          <select id="rest">
+            <option value="no" selected>No</option>
+            <option value="yes">Yes (dyspnea/fatigue at rest)</option>
+          </select>
+        </label>
+      </div>
+
+      <div class="q">
+        <label>
+          Symptoms with minimal activity? (ADLs, dressing)
+          <select id="minimal">
+            <option value="no" selected>No</option>
+            <option value="yes">Yes (mild exertion)</option>
+          </select>
+        </label>
+      </div>
+
+      <div class="q">
+        <label>
+          Symptoms with ordinary activity? (walking around home)
+          <select id="ordinary">
+            <option value="no" selected>No</option>
+            <option value="yes">Yes (ordinary activity)</option>
+          </select>
+        </label>
+      </div>
+
+      <div class="q">
+        <label>
+          Symptoms with more-than-ordinary activity?
+          <select id="more">
+            <option value="no" selected>No</option>
+            <option value="yes">Yes (stairs, fast walking)</option>
+          </select>
+        </label>
+      </div>
+
+      <div class="q">
+        <label>
+          Completely asymptomatic?
+          <select id="asx">
+            <option value="no" selected>No</option>
+            <option value="yes">Yes (no limitation)</option>
+          </select>
+        </label>
+      </div>
+
+      <div style="display:flex;gap:10px;margin-top:8px;">
+        <button type="submit">Determine NYHA Class</button>
+        <button type="button" class="secondary" id="reset">Reset</button>
+      </div>
+
+    </form>
+  </div>
+</div>
+
+<!-- OUTPUT -->
+<div class="card">
+  <div class="card-inner">
+    <h2>Your NYHA Classification <span class="badge">Output</span></h2>
+
+    <div id="result" class="result">
+      <div class="block">
+        <div class="block-title">Awaiting input…</div>
+        <div>Fill symptoms above and click “Determine NYHA Class”.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer>
+Educational support only — confirm with clinical judgement & HF guidelines.
+</footer>
+
+</main>
+
+<script>
+document.getElementById("nyha-form").addEventListener("submit",function(e){
+  e.preventDefault();
+
+  const rest = document.getElementById("rest").value;
+  const minimal = document.getElementById("minimal").value;
+  const ordinary = document.getElementById("ordinary").value;
+  const more = document.getElementById("more").value;
+  const asx = document.getElementById("asx").value;
+
+  let resultHTML = "";
+
+  /* -------------------------------
+     Classification Logic
+     ------------------------------- */
+
+  if (rest === "yes") {
+    resultHTML = `
+      <div class="block">
+        <div class="block-title">NYHA Class IV</div>
+        <div>Symptoms at rest. Marked limitation. Unable to carry out any physical activity without symptoms.</div>
+      </div>`;
+  }
+  else if (minimal === "yes") {
+    resultHTML = `
+      <div class="block">
+        <div class="block-title">NYHA Class III</div>
+        <div>Symptoms with minimal exertion. Marked limitation of activity but comfortable at rest.</div>
+      </div>`;
+  }
+  else if (ordinary === "yes") {
+    resultHTML = `
+      <div class="block">
+        <div class="block-title">NYHA Class II</div>
+        <div>Symptoms with ordinary activity. Slight limitation of physical activity.</div>
+      </div>`;
+  }
+  else if (more === "yes") {
+    resultHTML = `
+      <div class="block">
+        <div class="block-title">NYHA Class I–II Borderline</div>
+        <div>No symptoms with ordinary activity but symptoms with more strenuous exertion. Often classified as low-end Class II.</div>
+      </div>`;
+  }
+  else if (asx === "yes") {
+    resultHTML = `
+      <div class="block">
+        <div class="block-title">NYHA Class I</div>
+        <div>No limitation of physical activity. Ordinary activity does not cause symptoms.</div>
+      </div>`;
+  }
+  else {
+    resultHTML = `
+      <div class="block">
+        <div class="block-title">Unable to classify</div>
+        <div>Please refine symptoms — classification depends on exertion thresholds.</div>
+      </div>`;
+  }
+
+  document.getElementById("result").innerHTML = resultHTML;
+});
+
+/* RESET */
+document.getElementById("reset").addEventListener("click",()=>{
+  document.getElementById("nyha-form").reset();
+  document.getElementById("result").innerHTML = `
+    <div class="block">
+      <div class="block-title">Awaiting input…</div>
+      <div>Fill symptoms above and click “Determine NYHA Class”.</div>
+    </div>`;
+});
+</script>
+
+</body>
+</html>
