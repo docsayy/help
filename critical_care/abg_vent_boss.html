@@ -1,0 +1,944 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ABG/Vent Adjustment Helper – Critical Care</title>
+<style>
+:root {
+    --bg:#e0f7fa;
+    --card:#ffffff;
+    --accent:#00838f;
+    --accent-soft:#b2ebf2;
+    --muted:#546e7a;
+    --danger:#d32f2f;
+    --radius:14px;
+}
+* { box-sizing:border-box; }
+body {
+    margin:0;
+    font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+    background:radial-gradient(circle at top,#b2ebf2 0,#e0f7fa 40%,#e0f2f1 100%);
+    color:#102a43;
+}
+header {
+    padding:16px;
+    display:flex;
+    justify-content:space-between;
+    flex-wrap:wrap;
+    gap:8px;
+    background:linear-gradient(90deg,#00acc1,#00838f);
+    color:white;
+}
+header h1 {
+    margin:0;
+    font-size:1.25rem;
+    display:flex;
+    align-items:center;
+    gap:8px;
+}
+.nav-buttons {
+    display:flex;
+    flex-wrap:wrap;
+    gap:6px;
+}
+.nav-buttons a {
+    text-decoration:none;
+    padding:6px 10px;
+    border-radius:999px;
+    border:1px solid rgba(255,255,255,0.8);
+    color:white;
+    font-size:0.9rem;
+}
+main {
+    max-width:960px;
+    margin:16px auto 32px;
+    padding:0 12px;
+}
+.card {
+    background:var(--card);
+    padding:18px;
+    border-radius:var(--radius);
+    margin-bottom:16px;
+    box-shadow:0 8px 24px rgba(0,76,92,0.18);
+}
+h2 {
+    margin:0 0 6px;
+    font-size:1.15rem;
+    color:#004d5a;
+}
+.subtitle {
+    margin:0 0 12px;
+    font-size:0.9rem;
+    color:var(--muted);
+}
+.chip {
+    display:inline-flex;
+    align-items:center;
+    padding:3px 9px;
+    border-radius:999px;
+    font-size:0.75rem;
+    background:var(--accent-soft);
+    color:#004d40;
+    font-weight:600;
+}
+.title-row {
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    flex-wrap:wrap;
+    gap:8px;
+}
+
+/* Stepper */
+.stepper {
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:8px;
+    margin-bottom:14px;
+}
+.step-pill {
+    text-align:center;
+    padding:6px 4px;
+    border-radius:999px;
+    font-size:0.8rem;
+    background:rgba(255,255,255,0.8);
+    border:1px solid rgba(0,0,0,0.05);
+    color:var(--muted);
+}
+.step-pill.active {
+    background:var(--accent);
+    color:white;
+    font-weight:600;
+}
+
+/* Inputs */
+label {
+    display:block;
+    font-size:0.85rem;
+    margin-bottom:4px;
+    color:#37474f;
+}
+input[type="number"],
+select {
+    width:100%;
+    padding:10px 12px;
+    border-radius:10px;
+    border:1px solid #cfd8dc;
+    font-size:0.9rem;
+    background:#f9feff;
+}
+input[type="number"]:focus,
+select:focus {
+    outline:none;
+    border-color:var(--accent);
+    box-shadow:0 0 0 2px rgba(0,131,143,0.18);
+    background:#ffffff;
+}
+.grid-2 {
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(160px,1fr));
+    gap:12px;
+}
+.section-label {
+    margin:10px 0 4px;
+    font-size:0.85rem;
+    font-weight:600;
+    color:#37474f;
+}
+.helper-text {
+    font-size:0.8rem;
+    color:var(--muted);
+    margin-top:4px;
+}
+
+/* Buttons */
+.buttons-row {
+    display:flex;
+    justify-content:space-between;
+    flex-wrap:wrap;
+    gap:8px;
+    margin-top:12px;
+}
+.buttons-right {
+    display:flex;
+    gap:8px;
+    flex-wrap:wrap;
+}
+button {
+    border-radius:999px;
+    border:none;
+    padding:10px 18px;
+    font-size:0.9rem;
+    font-weight:600;
+    cursor:pointer;
+    display:inline-flex;
+    align-items:center;
+    gap:6px;
+    white-space:nowrap;
+}
+.btn-secondary {
+    background:#eceff1;
+    color:#37474f;
+}
+.btn-primary {
+    background:var(--accent);
+    color:white;
+    box-shadow:0 4px 10px rgba(0,131,143,0.4);
+}
+.btn-primary:hover { background:#006978; }
+
+.hidden { display:none; }
+
+/* Results */
+.results-main {
+    border-left:4px solid var(--accent);
+}
+.plan-box {
+    background:#f5fdfd;
+    border-radius:12px;
+    border:1px dashed #b2ebf2;
+    padding:10px 12px;
+    font-size:0.86rem;
+    white-space:pre-line;
+    color:#37474f;
+    max-height:260px;
+    overflow-y:auto;
+}
+.results-section-title {
+    font-size:0.95rem;
+    font-weight:600;
+    margin:10px 0 4px;
+    color:#37474f;
+}
+.results-list {
+    margin:4px 0 0;
+    padding-left:18px;
+    font-size:0.87rem;
+    color:#455a64;
+}
+.results-list li { margin-bottom:3px; }
+
+.badge-primary-type {
+    background:#e0f2f1;
+    color:#004d40;
+    padding:4px 10px;
+    border-radius:999px;
+    font-size:0.9rem;
+    font-weight:600;
+    display:inline-flex;
+    align-items:center;
+    gap:6px;
+}
+
+@media (max-width:600px){
+    header { flex-direction:column; align-items:flex-start; }
+    .buttons-row { flex-direction:column; }
+    .buttons-right { width:100%; justify-content:space-between; }
+    .buttons-right button { flex:1; justify-content:center; }
+}
+</style>
+</head>
+<body>
+
+<header>
+    <h1>🫁 ABG/Vent Adjustment Helper</h1>
+    <div class="nav-buttons">
+        <a href="../home.html">🏠 Home</a>
+        <a href="../critical_care.html">⬅ Critical Care</a>
+    </div>
+</header>
+
+<main>
+    <div class="card">
+        <div class="title-row">
+            <h2>Gas & Vent Tuning Wizard</h2>
+            <span class="chip">ABG/VBG • Vent Changes • ICU Mode A</span>
+        </div>
+        <p class="subtitle">
+            Stepwise tool: enter blood gas, current ventilator settings, and clinical context. It suggests structured changes to RR,
+            tidal volume, PEEP, FiO₂, and mode, with ARDS/COPD/Neuro/Metabolic logic. Decision support only – you are the final call.
+        </p>
+
+        <div class="stepper">
+            <div class="step-pill active" id="step-pill-1">1 • Gas</div>
+            <div class="step-pill" id="step-pill-2">2 • Vent Settings</div>
+            <div class="step-pill" id="step-pill-3">3 • Context</div>
+            <div class="step-pill" id="step-pill-4">4 • Recommendations</div>
+        </div>
+    </div>
+
+    <!-- STEP 1 -->
+    <div class="card" id="step-1">
+        <div class="title-row">
+            <h2>Step 1 – ABG / VBG Values</h2>
+        </div>
+        <p class="subtitle">Enter the most recent gas. VBG is acceptable; pCO₂ is treated numerically.</p>
+
+        <div class="grid-2">
+            <div>
+                <label for="gasType">Type</label>
+                <select id="gasType">
+                    <option value="">Select...</option>
+                    <option value="abg">ABG</option>
+                    <option value="vbg">VBG</option>
+                </select>
+            </div>
+            <div>
+                <label for="ph">pH</label>
+                <input type="number" step="0.01" id="ph" placeholder="e.g. 7.18">
+            </div>
+            <div>
+                <label for="pco2">pCO₂ (mmHg)</label>
+                <input type="number" id="pco2" placeholder="e.g. 55">
+            </div>
+            <div>
+                <label for="hco3">HCO₃ (mEq/L)</label>
+                <input type="number" id="hco3" placeholder="e.g. 18">
+            </div>
+            <div>
+                <label for="pao2">PaO₂ (mmHg, ABG)</label>
+                <input type="number" id="pao2" placeholder="e.g. 60">
+            </div>
+            <div>
+                <label for="spo2">SpO₂ (%)</label>
+                <input type="number" id="spo2" placeholder="e.g. 88">
+            </div>
+            <div>
+                <label for="fio2Gas">FiO₂ at time of gas (%)</label>
+                <input type="number" id="fio2Gas" placeholder="e.g. 80">
+            </div>
+        </div>
+
+        <p class="helper-text">
+            Primary disorder logic (resp vs metabolic) and Winter’s formula are applied when possible.
+        </p>
+
+        <div class="buttons-row">
+            <span></span>
+            <div class="buttons-right">
+                <button class="btn-primary" onclick="goToStep(2)">Next: Vent Settings ➜</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- STEP 2 -->
+    <div class="card hidden" id="step-2">
+        <div class="title-row">
+            <h2>Step 2 – Current Vent Settings & PBW</h2>
+        </div>
+        <p class="subtitle">Enter current ventilator settings and body size to check Vt safety, driving pressure, and minute ventilation.</p>
+
+        <div class="grid-2">
+            <div>
+                <label for="ventMode">Mode</label>
+                <select id="ventMode">
+                    <option value="">Select...</option>
+                    <option value="acvc">AC/VC (Volume Control)</option>
+                    <option value="acpc">AC/PC (Pressure Control)</option>
+                    <option value="prvc">PRVC / VC+</option>
+                    <option value="simv">SIMV</option>
+                </select>
+            </div>
+            <div>
+                <label for="rr">Set RR (breaths/min)</label>
+                <input type="number" id="rr" placeholder="e.g. 16">
+            </div>
+            <div>
+                <label for="vt">Tidal Volume (mL)</label>
+                <input type="number" id="vt" placeholder="e.g. 450">
+            </div>
+            <div>
+                <label for="fio2Vent">FiO₂ (%)</label>
+                <input type="number" id="fio2Vent" placeholder="e.g. 80">
+            </div>
+            <div>
+                <label for="peepVent">PEEP (cmH₂O)</label>
+                <input type="number" id="peepVent" placeholder="e.g. 8">
+            </div>
+            <div>
+                <label for="pplat">Plateau pressure (cmH₂O, if known)</label>
+                <input type="number" id="pplat" placeholder="e.g. 28">
+            </div>
+            <div>
+                <label for="map">MAP (mmHg, optional)</label>
+                <input type="number" id="map" placeholder="e.g. 60">
+            </div>
+            <div>
+                <label for="gender">Gender (for PBW)</label>
+                <select id="gender">
+                    <option value="">Select...</option>
+                    <option value="male">Male</option>
+                    <option value="female">Female</option>
+                </select>
+            </div>
+            <div>
+                <label for="height">Height (cm)</label>
+                <input type="number" id="height" placeholder="e.g. 170">
+            </div>
+        </div>
+
+        <p class="helper-text">
+            PBW → Vt targets (ARDS 4–6, typical 6–8 mL/kg). Driving pressure = Pplat – PEEP if both entered.
+        </p>
+
+        <div class="buttons-row">
+            <button class="btn-secondary" onclick="goToStep(1)">⬅ Back</button>
+            <div class="buttons-right">
+                <button class="btn-primary" onclick="goToStep(3)">Next: Clinical Context ➜</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- STEP 3 -->
+    <div class="card hidden" id="step-3">
+        <div class="title-row">
+            <h2>Step 3 – Clinical Context</h2>
+        </div>
+        <p class="subtitle">
+            Context sets targets for PaCO₂, SpO₂, Vt range, PEEP strategy, and adjuncts (permissive hypercapnia, proning, etc.).
+        </p>
+
+        <div class="grid-2">
+            <div>
+                <label for="scenario">Primary Clinical Scenario</label>
+                <select id="scenario">
+                    <option value="">Select...</option>
+                    <option value="ards">ARDS / severe hypoxemia</option>
+                    <option value="copd">COPD / Asthma</option>
+                    <option value="neuro">Neuro / ICP concern / post-ROSC</option>
+                    <option value="metabolic">Metabolic acidosis (DKA, lactic, etc.)</option>
+                    <option value="shock">Shock (non-ARDS)</option>
+                    <option value="general">General hypoxemic respiratory failure</option>
+                </select>
+            </div>
+        </div>
+
+        <p class="helper-text">
+            ICU Mode A: includes ARDS proning/NMBA/ECMO flags, COPD auto-PEEP warnings, neuro CO₂ tight control, and shock–PEEP interaction.
+        </p>
+
+        <div class="buttons-row">
+            <button class="btn-secondary" onclick="goToStep(2)">⬅ Back</button>
+            <div class="buttons-right">
+                <button class="btn-primary" onclick="computeVentPlan()">Generate Recommendations ➜</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- STEP 4 / RESULTS -->
+    <div class="card hidden results-main" id="step-4">
+        <div class="title-row">
+            <h2>Step 4 – Vent Adjustment Recommendations</h2>
+            <span class="chip">Summary & Copy Plan</span>
+        </div>
+
+        <div id="results-summary"></div>
+
+        <div class="buttons-row">
+            <button class="btn-secondary" onclick="goToStep(3)">⬅ Back</button>
+            <div class="buttons-right">
+                <button class="btn-secondary" onclick="resetWizard()">Reset Wizard</button>
+                <button class="btn-primary" onclick="copyPlan()">📋 Copy Plan</button>
+            </div>
+        </div>
+    </div>
+</main>
+
+<script>
+let lastPlanText = "";
+
+// Navigation
+function goToStep(step) {
+    for (let i = 1; i <= 4; i++) {
+        const card = document.getElementById("step-" + i);
+        const pill = document.getElementById("step-pill-" + i);
+        if (card) card.classList.add("hidden");
+        if (pill) pill.classList.remove("active");
+    }
+    const current = document.getElementById("step-" + step);
+    const pillCurrent = document.getElementById("step-pill-" + step);
+    if (current) current.classList.remove("hidden");
+    if (pillCurrent) pillCurrent.classList.add("active");
+    window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+function readNumber(id) {
+    const el = document.getElementById(id);
+    if (!el) return null;
+    const v = parseFloat(el.value);
+    return isNaN(v) ? null : v;
+}
+
+function calcPBW(gender, height) {
+    if (!gender || !height) return null;
+    if (gender === "male") return 50 + 0.91 * (height - 152.4);
+    return 45.5 + 0.91 * (height - 152.4);
+}
+
+function classifyPrimaryDisorder(ph, pco2, hco3) {
+    if (ph === null || pco2 === null || hco3 === null) return "Insufficient data to classify primary disorder.";
+
+    let desc = "";
+    if (ph < 7.35) {
+        if (pco2 > 45 && hco3 >= 22) desc = "Primary respiratory acidosis.";
+        else if (hco3 < 22 && pco2 <= 45) desc = "Primary metabolic acidosis.";
+        else desc = "Mixed or unclear acidosis (both CO₂ and HCO₃ abnormal).";
+    } else if (ph > 7.45) {
+        if (pco2 < 35 && hco3 >= 22) desc = "Primary respiratory alkalosis.";
+        else if (hco3 > 26 && pco2 >= 35) desc = "Primary metabolic alkalosis.";
+        else desc = "Mixed or unclear alkalosis.";
+    } else {
+        desc = "Near-normal pH – possible compensated disorder or normal acid-base status.";
+    }
+    return desc;
+}
+
+function computeVentPlan() {
+    // Gas
+    const gasType = document.getElementById("gasType").value;
+    const ph = readNumber("ph");
+    const pco2 = readNumber("pco2");
+    const hco3 = readNumber("hco3");
+    const pao2 = readNumber("pao2");
+    const spo2 = readNumber("spo2");
+    const fio2Gas = readNumber("fio2Gas");
+
+    // Vent
+    const mode = document.getElementById("ventMode").value;
+    const rr = readNumber("rr");
+    const vt = readNumber("vt");
+    const fio2 = readNumber("fio2Vent");
+    const peep = readNumber("peepVent");
+    const pplat = readNumber("pplat");
+    const map = readNumber("map");
+    const gender = document.getElementById("gender").value;
+    const height = readNumber("height");
+
+    const scenario = document.getElementById("scenario").value;
+
+    const pbw = calcPBW(gender, height);
+
+    let planLines = [];
+    let rationale = [];
+    let changes = [];
+    let adjuncts = [];
+    let safetyFlags = [];
+
+    // --- Baseline summary ---
+    planLines.push("ABG/Vent Summary:");
+    planLines.push("• Gas type: " + (gasType || "not specified"));
+    planLines.push("• pH: " + (ph !== null ? ph.toFixed(2) : "not provided"));
+    planLines.push("• pCO₂: " + (pco2 !== null ? pco2.toFixed(1) + " mmHg" : "not provided"));
+    planLines.push("• HCO₃: " + (hco3 !== null ? hco3.toFixed(1) + " mEq/L" : "not provided"));
+    planLines.push("• PaO₂: " + (pao2 !== null ? pao2.toFixed(1) + " mmHg" : "not provided"));
+    planLines.push("• SpO₂: " + (spo2 !== null ? spo2.toFixed(0) + "%" : "not provided"));
+    planLines.push("• FiO₂ at gas: " + (fio2Gas !== null ? fio2Gas.toFixed(0) + "%" : "not provided"));
+    planLines.push("• Mode: " + (mode || "not specified"));
+    planLines.push("• RR: " + (rr !== null ? rr + " /min" : "not specified"));
+    planLines.push("• Vt: " + (vt !== null ? vt + " mL" : "not specified"));
+    planLines.push("• FiO₂ (current): " + (fio2 !== null ? fio2 + "%" : "not specified"));
+    planLines.push("• PEEP (current): " + (peep !== null ? peep + " cmH₂O" : "not specified"));
+    planLines.push("• Pplat: " + (pplat !== null ? pplat + " cmH₂O" : "not provided"));
+    planLines.push("• MAP: " + (map !== null ? map + " mmHg" : "not provided"));
+    planLines.push("");
+
+    // --- Acid-base classification ---
+    const primaryDisorder = classifyPrimaryDisorder(ph, pco2, hco3);
+    planLines.push("Primary acid-base interpretation:");
+    planLines.push("• " + primaryDisorder);
+    planLines.push("");
+
+    // --- P/F ratio & ARDS severity ---
+    let pfr = null;
+    if (pao2 !== null && fio2Gas !== null && fio2Gas > 0) {
+        pfr = pao2 / (fio2Gas / 100);
+        planLines.push("P/F ratio (at time of gas): " + pfr.toFixed(0));
+        if (scenario === "ards") {
+            if (pfr <= 100) {
+                rationale.push("Severe ARDS physiology (P/F ≤ 100).");
+                adjuncts.push("Severe ARDS: consider prone positioning, neuromuscular blockade, and ECMO consultation if available.");
+            } else if (pfr <= 200) {
+                rationale.push("Moderate ARDS physiology (P/F 101–200).");
+                adjuncts.push("Moderate ARDS: low Vt 4–6 mL/kg, PEEP ladder, and consider proning if trajectory worsens.");
+            } else if (pfr <= 300) {
+                rationale.push("Mild ARDS physiology (P/F 201–300).");
+            }
+        }
+        planLines.push("");
+    }
+
+    // --- PBW, Vt safety, minute ventilation, driving pressure ---
+    let vtTargetMin = null;
+    let vtTargetMax = null;
+    let vtRecommended = null;
+
+    if (pbw !== null) {
+        if (scenario === "ards") {
+            vtTargetMin = pbw * 4;
+            vtTargetMax = pbw * 6;
+            vtRecommended = pbw * 6;
+            rationale.push("ARDS → target 4–6 mL/kg PBW tidal volumes.");
+        } else if (scenario === "shock") {
+            vtTargetMin = pbw * 6;
+            vtTargetMax = pbw * 7;
+            vtRecommended = pbw * 6.5;
+            rationale.push("Shock → moderate tidal volume (6–7 mL/kg PBW) to balance CO₂ control and hemodynamics.");
+        } else {
+            vtTargetMin = pbw * 6;
+            vtTargetMax = pbw * 8;
+            vtRecommended = pbw * 7;
+            rationale.push("General targets: 6–8 mL/kg PBW, adjust lower for lung-protective strategy.");
+        }
+
+        planLines.push("PBW: " + pbw.toFixed(1) + " kg");
+        planLines.push("Tidal volume targets:");
+        planLines.push("• Lower bound: " + vtTargetMin.toFixed(0) + " mL");
+        planLines.push("• Upper bound: " + vtTargetMax.toFixed(0) + " mL");
+
+        if (vt !== null) {
+            if (vt > vtTargetMax + 20) {
+                changes.push("Reduce tidal volume from " + vt.toFixed(0) + " → ~" + vtRecommended.toFixed(0) + " mL.");
+                rationale.push("Current Vt above safe PBW range – risk of volutrauma and barotrauma.");
+            } else if (vt < vtTargetMin - 20) {
+                changes.push("Consider increasing tidal volume towards " + vtRecommended.toFixed(0) + " mL if not in ultra-protective ARDS strategy.");
+                rationale.push("Very low Vt may contribute to severe hypercapnia unless intentional.");
+            } else {
+                rationale.push("Vt appears within acceptable PBW range.");
+            }
+        }
+    } else {
+        rationale.push("PBW not available – cannot precisely assess Vt safety.");
+    }
+
+    // Minute ventilation
+    if (rr !== null && vt !== null) {
+        const ve = (rr * vt) / 1000; // L/min
+        planLines.push("");
+        planLines.push("Minute ventilation:");
+        planLines.push("• V̇E = RR × Vt ≈ " + ve.toFixed(1) + " L/min.");
+    }
+
+    // Driving pressure
+    if (pplat !== null && peep !== null) {
+        const driving = pplat - peep;
+        planLines.push("Driving pressure:");
+        planLines.push("• ΔP = Pplat – PEEP = " + driving.toFixed(1) + " cmH₂O.");
+        if (pplat > 30) {
+            safetyFlags.push("Pplat > 30 cmH₂O – reduce Vt if possible and ensure no patient-ventilator dyssynchrony.");
+        }
+        if (driving > 15) {
+            safetyFlags.push("Driving pressure > 15 cmH₂O – high risk of VILI, consider decreasing Vt and optimizing PEEP.");
+        }
+    } else {
+        planLines.push("Driving pressure: not available (need both Pplat and PEEP).");
+    }
+    planLines.push("");
+
+    // --- CO₂ / RR logic ---
+    let goalCO2 = null;
+    let metabolicAcidosis = false;
+    let winterLow = null, winterHigh = null, winterMid = null;
+
+    if (ph !== null && hco3 !== null && ph < 7.35 && hco3 < 18) {
+        metabolicAcidosis = true;
+        winterMid = 1.5 * hco3 + 8;
+        winterLow = winterMid - 2;
+        winterHigh = winterMid + 2;
+        goalCO2 = winterMid;
+        rationale.push("Metabolic acidosis: Winter’s expected pCO₂ ≈ " + winterMid.toFixed(1) + " (range " + winterLow.toFixed(1) + "–" + winterHigh.toFixed(1) + ").");
+    } else if (scenario === "copd") {
+        goalCO2 = 50;
+        rationale.push("COPD/asthma: permissive hypercapnia; aim pCO₂ ~50–60 mmHg if pH ≥ 7.20.");
+    } else if (scenario === "neuro") {
+        goalCO2 = 40;
+        rationale.push("Neuro/ICP: aim PaCO₂ 35–40. Avoid prolonged hyperventilation unless herniation.");
+    } else {
+        goalCO2 = 40;
+        rationale.push("Default CO₂ goal ~40 mmHg if no strong reason to tolerate hypercapnia.");
+    }
+
+    if (pco2 !== null && rr !== null && goalCO2 !== null && pco2 > 0 && goalCO2 > 0) {
+        const rawNewRR = rr * (pco2 / goalCO2);
+        let newRR = Math.round(rawNewRR);
+
+        if (newRR < 8) newRR = 8;
+        if (newRR > 35) newRR = 35;
+
+        if (Math.abs(newRR - rr) >= 2) {
+            if (newRR > rr) {
+                changes.push("Increase RR from " + rr + " → " + newRR + " breaths/min to improve CO₂ clearance.");
+            } else if (newRR < rr) {
+                changes.push("Decrease RR from " + rr + " → " + newRR + " breaths/min to avoid over-ventilation.");
+            }
+        } else {
+            rationale.push("Current RR already close to calculated CO₂ target.");
+        }
+
+        if (metabolicAcidosis) {
+            rationale.push("Do NOT normalize pCO₂ to 40 in metabolic acidosis – preserve respiratory compensation.");
+            if (ph !== null && ph < 7.10) {
+                safetyFlags.push("Severe acidosis (pH < 7.10) – ensure adequate minute ventilation and address underlying cause urgently (e.g., DKA, lactic acidosis, sepsis).");
+            }
+            adjuncts.push("If DKA: prioritize fluids and insulin; ventilation should match Winter’s predicted pCO₂ rather than normalize it.");
+        }
+    } else {
+        rationale.push("Insufficient data (RR / pCO₂) to recommend precise RR changes.");
+    }
+
+    // COPD auto-PEEP suspicion
+    if (scenario === "copd" && rr !== null && pco2 !== null && ph !== null) {
+        if (rr >= 24 && pco2 > goalCO2 && ph < 7.35) {
+            safetyFlags.push("COPD with high RR, elevated CO₂, and acidosis → suspect dynamic hyperinflation / auto-PEEP.");
+            adjuncts.push("COPD: decrease RR, increase inspiratory flow, and allow long expiratory time (I:E 1:3–1:5). Consider external PEEP 0–5 cmH₂O.");
+        }
+    }
+
+    // --- Oxygenation / PEEP & FiO2 ---
+    let lowOxy = false;
+    let highOxy = false;
+    let targetSpO2Low = (scenario === "copd") ? 88 : 92;
+    let targetSpO2High = (scenario === "copd") ? 92 : 96;
+
+    if ((spo2 !== null && spo2 < targetSpO2Low) || (pao2 !== null && pao2 < 60)) {
+        lowOxy = true;
+    }
+    if (spo2 !== null && spo2 > targetSpO2High && fio2 !== null && fio2 > 60) {
+        highOxy = true;
+    }
+
+    if (lowOxy && fio2 !== null && peep !== null) {
+        if (scenario === "ards") {
+            // ARDSNet-like ladder
+            if (fio2 < 60) {
+                changes.push("Increase FiO₂ from " + fio2.toFixed(0) + "% → 60–80% for hypoxemia.");
+            }
+            let newPeep = peep;
+            if (fio2 >= 60 && peep < 10) newPeep = 10;
+            else if (fio2 >= 80 && peep < 12) newPeep = 12;
+            else if (fio2 >= 80 && peep >= 12 && peep < 15) newPeep = 15;
+
+            if (newPeep > peep) {
+                changes.push("Increase PEEP from " + peep.toFixed(0) + " → " + newPeep.toFixed(0) + " cmH₂O (ARDS higher PEEP strategy).");
+            }
+
+            rationale.push("ARDS + hypoxemia → use PEEP/FiO₂ ladder and consider prone positioning if P/F remains poor.");
+
+            if (pfr !== null && pfr <= 150 && peep >= 10 && fio2 >= 60) {
+                adjuncts.push("P/F ≤150 on PEEP ≥10 & FiO₂ ≥60% → consider early proning.");
+            }
+            if (pfr !== null && pfr <= 120 && fio2 >= 80) {
+                adjuncts.push("Severe ARDS (P/F ≤120 with high FiO₂) → consider short course of neuromuscular blockade for ventilator synchrony.");
+            }
+            if (pfr !== null && pfr < 80) {
+                adjuncts.push("Refractory severe ARDS (P/F <80) → consider ECMO consultation if available.");
+            }
+        } else {
+            // Non-ARDS hypoxemia
+            if (fio2 < 60) {
+                changes.push("Increase FiO₂ from " + fio2.toFixed(0) + "% → 60–100% for hypoxemia.");
+            } else {
+                let newPeep = peep + 2;
+                if (newPeep > 15) newPeep = 15;
+                if (newPeep > peep) {
+                    changes.push("Increase PEEP from " + peep.toFixed(0) + " → " + newPeep.toFixed(0) + " cmH₂O to improve oxygenation.");
+                }
+            }
+            rationale.push("Hypoxemia detected → escalate FiO₂, then PEEP as needed, watching hemodynamics.");
+        }
+    } else if (highOxy && fio2 !== null) {
+        const newFiO2 = Math.max(40, fio2 - 10);
+        if (newFiO2 < fio2) {
+            changes.push("Wean FiO₂ from " + fio2.toFixed(0) + "% → ~" + newFiO2.toFixed(0) + "% while maintaining target SpO₂.");
+            rationale.push("SpO₂ high on high FiO₂ → reduce oxygen to limit oxygen toxicity.");
+        }
+    }
+
+    if (!lowOxy && !highOxy && (spo2 !== null || pao2 !== null)) {
+        rationale.push("Oxygenation appears acceptable – avoid unnecessary FiO₂/PEEP changes; reassess trends.");
+    }
+
+    // Shock & PEEP interaction
+    if (scenario === "shock" && peep !== null && map !== null) {
+        if (map < 65 && peep >= 10 && fio2 !== null && fio2 <= 60) {
+            changes.push("In shock with hypotension and high PEEP → consider cautiously decreasing PEEP by 2 cmH₂O while monitoring oxygenation and blood pressure.");
+            rationale.push("High PEEP can worsen preload and cardiac output in shock.");
+        }
+    }
+
+    // Neuro / post-ROSC oxygen/CO₂ notes
+    if (scenario === "neuro") {
+        if (spo2 !== null && spo2 < 94 && fio2 !== null && fio2 < 100) {
+            changes.push("For neuro/post-ROSC, increase FiO₂ to keep SpO₂ ≥94% (avoid hypoxia).");
+        }
+        adjuncts.push("Neuro/post-ROSC: maintain PaCO₂ ~35–40 and avoid profound hypocapnia or hypercapnia.");
+    }
+
+    // --- Mode-specific suggestions ---
+    if (mode === "simv") {
+        safetyFlags.push("SIMV mode in acute respiratory failure → consider switching to full support mode (AC/VC or AC/PC).");
+    }
+    if (scenario === "ards" && (mode === "simv" || mode === "")) {
+        adjuncts.push("ARDS: prefer AC/VC or pressure-controlled mode with strict low Vt and monitoring of plateau/drive pressures.");
+    }
+    if (mode === "prvc") {
+        adjuncts.push("PRVC: if pressures are high or Vt dropping, reassess target Vt and consider AC/PC or AC/VC with direct Vt & pressure control.");
+    }
+
+    // --- Scenario-specific notes ---
+    switch (scenario) {
+        case "copd":
+            rationale.push("COPD/asthma: low RR, high inspiratory flow, and long expiratory time (I:E 1:3–1:5) to prevent air trapping.");
+            break;
+        case "metabolic":
+            rationale.push("Metabolic acidosis: ventilation supports pH but definitive treatment is correcting the underlying process (DKA, shock, sepsis, renal failure).");
+            break;
+        default:
+            break;
+    }
+
+    if (changes.length === 0) {
+        changes.push("No major automated changes identified – consider small incremental adjustments and reassess gas and ventilator waveforms.");
+    }
+
+    // --- Build final plan text (grouped) ---
+    planLines.push("RECOMMENDED VENT ADJUSTMENTS (GROUPED)");
+
+    // Ventilation changes (RR & Vt)
+    planLines.push("• Ventilation (CO₂ / pH / minute ventilation):");
+    const ventChanges = changes.filter(c =>
+        c.toLowerCase().includes("rr") ||
+        c.toLowerCase().includes("tidal volume") ||
+        c.toLowerCase().includes("ventilation")
+    );
+    if (ventChanges.length === 0) {
+        planLines.push("  - No specific RR/Vt changes mandated by tool.");
+    } else {
+        ventChanges.forEach(c => planLines.push("  - " + c));
+    }
+
+    // Oxygenation changes (FiO2/PEEP)
+    planLines.push("• Oxygenation (FiO₂ / PEEP):");
+    const oxyChanges = changes.filter(c =>
+        c.toLowerCase().includes("fio₂") ||
+        c.toLowerCase().includes("fiO₂".toLowerCase()) ||
+        c.toLowerCase().includes("peep")
+    );
+    const uniqueOxy = oxyChanges.filter(c => ventChanges.indexOf(c) === -1);
+    if (uniqueOxy.length === 0) {
+        planLines.push("  - No specific FiO₂/PEEP change mandated by tool.");
+    } else {
+        uniqueOxy.forEach(c => planLines.push("  - " + c));
+    }
+
+    // Other changes
+    const otherChanges = changes.filter(c => ventChanges.indexOf(c) === -1 && oxyChanges.indexOf(c) === -1);
+    if (otherChanges.length > 0) {
+        planLines.push("• Mode / Other adjustments:");
+        otherChanges.forEach(c => planLines.push("  - " + c));
+    }
+
+    // Safety & flags
+    if (safetyFlags.length > 0) {
+        planLines.push("");
+        planLines.push("SAFETY FLAGS:");
+        safetyFlags.forEach(s => planLines.push("• " + s));
+    }
+
+    // Adjuncts (prone, NMBA, ECMO, COPD tricks, etc.)
+    if (adjuncts.length > 0) {
+        planLines.push("");
+        planLines.push("ADJUNCTS & STRATEGY CONSIDERATIONS:");
+        adjuncts.forEach(a => planLines.push("• " + a));
+    }
+
+    // Rationale
+    planLines.push("");
+    planLines.push("KEY RATIONALE / NOTES:");
+    rationale.forEach(r => planLines.push("• " + r));
+
+    lastPlanText = planLines.join("\n");
+
+    // Build HTML for summary view
+    let rationaleHtml = "<ul class='results-list'>";
+    rationale.forEach(r => rationaleHtml += "<li>" + r + "</li>");
+    rationaleHtml += "</ul>";
+
+    let changesHtml = "<ul class='results-list'>";
+    changes.forEach(c => changesHtml += "<li>" + c + "</li>");
+    changesHtml += "</ul>";
+
+    let safetyHtml = "";
+    if (safetyFlags.length > 0) {
+        safetyHtml += "<div class='results-section-title'>Safety flags</div><ul class='results-list'>";
+        safetyFlags.forEach(s => safetyHtml += "<li>" + s + "</li>");
+        safetyHtml += "</ul>";
+    }
+
+    let adjunctsHtml = "";
+    if (adjuncts.length > 0) {
+        adjunctsHtml += "<div class='results-section-title'>Adjuncts & strategy</div><ul class='results-list'>";
+        adjuncts.forEach(a => adjunctsHtml += "<li>" + a + "</li>");
+        adjunctsHtml += "</ul>";
+    }
+
+    const resultsDiv = document.getElementById("results-summary");
+    resultsDiv.innerHTML =
+        "<div class='results-section-title'>Suggested vent changes</div>" +
+        "<div class='badge-primary-type'>Scenario: " + (scenario || "not specified") + " • ICU Mode A</div>" +
+        "<div class='results-section-title'>Change summary</div>" +
+        changesHtml +
+        safetyHtml +
+        adjunctsHtml +
+        "<div class='results-section-title'>Why these changes?</div>" +
+        rationaleHtml +
+        "<div class='results-section-title'>Full plan (editable then copy)</div>" +
+        "<div class='plan-box' id='plan-box'>" +
+        lastPlanText.replace(/\n/g,"<br>") +
+        "</div>" +
+        "<p class='helper-text'>Decision support only – always integrate with your bedside exam, ventilator waveforms, plateau pressures, hemodynamics, and your local protocols.</p>";
+
+    goToStep(4);
+}
+
+function copyPlan() {
+    if (!lastPlanText) {
+        alert("No plan to copy yet. Generate a plan first.");
+        return;
+    }
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(lastPlanText)
+            .then(() => alert("Vent plan copied to clipboard."))
+            .catch(() => fallbackCopy());
+    } else {
+        fallbackCopy();
+    }
+}
+
+function fallbackCopy() {
+    const temp = document.createElement("textarea");
+    temp.value = lastPlanText;
+    document.body.appendChild(temp);
+    temp.select();
+    try {
+        document.execCommand("copy");
+        alert("Vent plan copied to clipboard.");
+    } catch (e) {
+        alert("Could not copy automatically. Please select and copy manually.");
+    }
+    document.body.removeChild(temp);
+}
+
+function resetWizard() {
+    const inputs = document.querySelectorAll("input[type='number']");
+    inputs.forEach(i => i.value = "");
+    const selects = document.querySelectorAll("select");
+    selects.forEach(s => s.value = "");
+    lastPlanText = "";
+    document.getElementById("results-summary").innerHTML = "";
+    goToStep(1);
+}
+</script>
+
+</body>
+</html>
