@@ -1,0 +1,713 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Endocrine Emergencies Triage Tool</title>
+<style>
+:root {
+    --primary: #9b5de5;
+    --secondary: #f7c948;
+    --bg1: #fdf7ff;
+    --bg2: #f3eaff;
+    --card-bg: #ffffff;
+    --text: #3a2a4c;
+    --radius: 14px;
+}
+
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: linear-gradient(135deg, var(--bg1), var(--bg2));
+    padding: 20px;
+    color: var(--text);
+}
+
+h1 {
+    text-align: center;
+    color: var(--primary);
+    font-size: 28px;
+    margin-bottom: 18px;
+}
+
+.card {
+    background: var(--card-bg);
+    border-radius: var(--radius);
+    padding: 18px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    max-width: 800px;
+    margin: 0 auto 22px auto;
+}
+
+.section-title {
+    font-size: 18px;
+    font-weight: bold;
+    color: var(--primary);
+    margin-top: 16px;
+    margin-bottom: 8px;
+}
+
+label {
+    font-weight: bold;
+    display: block;
+    margin-top: 10px;
+}
+
+input, select {
+    width: 100%;
+    padding: 9px;
+    border-radius: var(--radius);
+    border: 1px solid #ccc;
+    margin-top: 4px;
+    font-size: 14px;
+}
+
+.grid-2 {
+    display: grid;
+    grid-template-columns: repeat(auto-fit,minmax(160px,1fr));
+    gap: 10px 12px;
+}
+
+.checkbox-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 12px;
+    margin-top: 6px;
+}
+
+.checkbox-group label {
+    font-weight: normal;
+    display: flex;
+    align-items: center;
+    font-size: 14px;
+}
+
+button {
+    width: 100%;
+    padding: 14px;
+    margin-top: 18px;
+    background: var(--primary);
+    color: white;
+    font-size: 16px;
+    border: none;
+    border-radius: var(--radius);
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+button:hover {
+    background: #8649d6;
+}
+
+h2 {
+    color: var(--primary);
+    margin-top: 18px;
+}
+
+.output {
+    white-space: pre-line;
+    padding: 12px;
+    background: #fff7e6;
+    border-left: 5px solid var(--secondary);
+    border-radius: var(--radius);
+    margin-top: 8px;
+    font-size: 14px;
+}
+
+.nav-buttons {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 22px;
+}
+
+.nav-buttons a {
+    text-decoration: none;
+    background: var(--secondary);
+    padding: 10px 16px;
+    border-radius: var(--radius);
+    color: #5b440b;
+    font-weight: bold;
+    box-shadow: 0 3px 6px rgba(0,0,0,0.15);
+    font-size: 14px;
+}
+
+.disclaimer {
+    font-size: 12px;
+    color: #6b5b7a;
+    margin-bottom: 8px;
+}
+</style>
+</head>
+<body>
+
+<h1>Endocrine Emergencies Triage Tool</h1>
+
+<div class="card">
+    <div class="disclaimer">
+        Educational decision-support only. Does not replace clinical judgment, bedside assessment, or local protocols.
+    </div>
+
+    <div class="section-title">Vitals & Mental Status</div>
+    <div class="grid-2">
+        <div>
+            <label>Temperature (°C)</label>
+            <input id="temp" type="number" step="0.1">
+        </div>
+        <div>
+            <label>Heart rate (bpm)</label>
+            <input id="hr" type="number">
+        </div>
+        <div>
+            <label>Systolic BP (mmHg)</label>
+            <input id="sbp" type="number">
+        </div>
+        <div>
+            <label>Respiratory rate (/min)</label>
+            <input id="rr" type="number">
+        </div>
+        <div>
+            <label>O₂ saturation (%)</label>
+            <input id="sat" type="number">
+        </div>
+        <div>
+            <label>Mental status</label>
+            <select id="mental">
+                <option value="alert">Alert / oriented</option>
+                <option value="mild">Mild confusion / lethargy</option>
+                <option value="mod">Moderate confusion / agitation</option>
+                <option value="sev">Severe confusion / stupor</option>
+                <option value="coma">Coma / unresponsive / seizures</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="section-title">Key Labs</div>
+    <div class="grid-2">
+        <div>
+            <label>Glucose (mg/dL)</label>
+            <input id="glucose" type="number">
+        </div>
+        <div>
+            <label>Sodium (mEq/L)</label>
+            <input id="na" type="number">
+        </div>
+        <div>
+            <label>Potassium (mEq/L)</label>
+            <input id="k" type="number" step="0.1">
+        </div>
+        <div>
+            <label>Calcium total (mg/dL)</label>
+            <input id="ca" type="number" step="0.1">
+        </div>
+        <div>
+            <label>Ionized Ca (mmol/L, optional)</label>
+            <input id="ica" type="number" step="0.01">
+        </div>
+        <div>
+            <label>Cortisol (µg/dL, optional)</label>
+            <input id="cortisol" type="number" step="0.1">
+        </div>
+        <div>
+            <label>Serum osmolality (mOsm/kg, optional)</label>
+            <input id="osm" type="number">
+        </div>
+        <div>
+            <label>Creatinine (mg/dL, optional)</label>
+            <input id="cr" type="number" step="0.1">
+        </div>
+        <div>
+            <label>TSH (optional)</label>
+            <input id="tsh" type="number" step="0.01">
+        </div>
+        <div>
+            <label>Free T4 (optional)</label>
+            <input id="ft4" type="number" step="0.01">
+        </div>
+    </div>
+
+    <div class="section-title">Symptoms & Signs</div>
+    <div class="checkbox-group">
+        <label><input type="checkbox" id="sym_nausea"> Nausea / vomiting</label>
+        <label><input type="checkbox" id="sym_abdpain"> Abdominal pain</label>
+        <label><input type="checkbox" id="sym_polyuria"> Polyuria / polydipsia</label>
+        <label><input type="checkbox" id="sym_dehydration"> Clinical dehydration</label>
+        <label><input type="checkbox" id="sym_weightloss"> Weight loss</label>
+        <label><input type="checkbox" id="sym_confusion"> Confusion / delirium</label>
+        <label><input type="checkbox" id="sym_seizure"> Seizure</label>
+        <label><input type="checkbox" id="sym_hypotension"> Dizziness / syncope</label>
+        <label><input type="checkbox" id="sym_tetany"> Tetany / carpopedal spasm</label>
+        <label><input type="checkbox" id="sym_paresth"> Perioral / distal paresthesias</label>
+        <label><input type="checkbox" id="sym_headache"> Sudden severe headache</label>
+        <label><input type="checkbox" id="sym_vision"> Visual loss / diplopia</label>
+        <label><input type="checkbox" id="sym_fever"> Fever / rigors</label>
+        <label><input type="checkbox" id="sym_palpit"> Palpitations</label>
+    </div>
+
+    <div class="section-title">History & Context</div>
+    <div class="checkbox-group">
+        <label><input type="checkbox" id="hx_diabetes"> Known diabetes</label>
+        <label><input type="checkbox" id="hx_ai"> Known adrenal insufficiency</label>
+        <label><input type="checkbox" id="hx_pituitary"> Known pituitary adenoma / disease</label>
+        <label><input type="checkbox" id="hx_cancer"> Known malignancy</label>
+        <label><input type="checkbox" id="hx_recent_surg"> Recent surgery / major procedure</label>
+        <label><input type="checkbox" id="hx_infection"> Suspected / confirmed infection</label>
+        <label><input type="checkbox" id="hx_steroid_stop"> Recent abrupt steroid withdrawal</label>
+        <label><input type="checkbox" id="hx_pp"> Recent postpartum</label>
+    </div>
+
+    <div class="section-title">Medications</div>
+    <div class="checkbox-group">
+        <label><input type="checkbox" id="med_insulin"> Insulin therapy</label>
+        <label><input type="checkbox" id="med_sulf"> Sulfonylurea / secretagogue</label>
+        <label><input type="checkbox" id="med_steroids"> Chronic steroids</label>
+        <label><input type="checkbox" id="med_diuretic"> Diuretics</label>
+        <label><input type="checkbox" id="med_bisphos"> Bisphosphonate / antiresorptive</label>
+        <label><input type="checkbox" id="med_thyroid"> Thyroid hormone</label>
+        <label><input type="checkbox" id="med_antithyroid"> Antithyroid drugs</label>
+        <label><input type="checkbox" id="med_calcimimetic"> Calcimimetic (e.g., cinacalcet)</label>
+    </div>
+
+    <button onclick="assessEmergencies()">Assess Endocrine Emergencies</button>
+
+    <h2>Most Concerning Endocrine Emergency</h2>
+    <div id="primaryEmergency" class="output"></div>
+
+    <h2>Detailed Emergency Assessment & Management</h2>
+    <div id="emergencyDetails" class="output"></div>
+
+    <h2>Copy to Clipboard</h2>
+    <button onclick="copyEndoPlan()">Copy Full Plan</button>
+    <div id="copytext" class="output"></div>
+
+    <div class="nav-buttons">
+        <a href="index.html">Home</a>
+        <a href="endocrine.html">Back to Endocrine</a>
+    </div>
+</div>
+
+<script>
+function num(id) {
+    const v = document.getElementById(id).value;
+    const n = parseFloat(v);
+    return isNaN(n) ? null : n;
+}
+function checked(id) {
+    return document.getElementById(id).checked;
+}
+
+function assessEmergencies() {
+    // Collect core data
+    const temp = num("temp");
+    const hr = num("hr");
+    const sbp = num("sbp");
+    const rr = num("rr");
+    const sat = num("sat");
+    const mental = document.getElementById("mental").value;
+
+    const glucose = num("glucose");
+    const na = num("na");
+    const k = num("k");
+    const ca = num("ca");
+    const ica = num("ica");
+    const cortisol = num("cortisol");
+    const osm = num("osm");
+    const cr = num("cr");
+    const tsh = num("tsh");
+    const ft4 = num("ft4");
+
+    // Symptoms
+    const symNausea = checked("sym_nausea");
+    const symAbd = checked("sym_abdpain");
+    const symPolyuria = checked("sym_polyuria");
+    const symDehydration = checked("sym_dehydration");
+    const symWeightLoss = checked("sym_weightloss");
+    const symConfusion = checked("sym_confusion");
+    const symSeizure = checked("sym_seizure");
+    const symHypotension = checked("sym_hypotension");
+    const symTetany = checked("sym_tetany");
+    const symParesth = checked("sym_paresth");
+    const symHeadache = checked("sym_headache");
+    const symVision = checked("sym_vision");
+    const symFever = checked("sym_fever");
+    const symPalpit = checked("sym_palpit");
+
+    // History
+    const hxDM = checked("hx_diabetes");
+    const hxAI = checked("hx_ai");
+    const hxPit = checked("hx_pituitary");
+    const hxCancer = checked("hx_cancer");
+    const hxSurg = checked("hx_recent_surg");
+    const hxInfect = checked("hx_infection");
+    const hxSteroidStop = checked("hx_steroid_stop");
+    const hxPP = checked("hx_pp");
+
+    // Meds
+    const medInsulin = checked("med_insulin");
+    const medSulf = checked("med_sulf");
+    const medSteroids = checked("med_steroids");
+    const medDiuretic = checked("med_diuretic");
+    const medBisphos = checked("med_bisphos");
+    const medThyroid = checked("med_thyroid");
+    const medAntiThyroid = checked("med_antithyroid");
+    const medCalcimimetic = checked("med_calcimimetic");
+
+    const hypotension = sbp !== null && sbp < 90;
+    const shocky = hypotension || symHypotension || (sat !== null && sat < 90) || (mental === "sev" || mental === "coma");
+
+    let emergencies = [];
+
+    // 1) Adrenal crisis
+    (function() {
+        let score = 0;
+        let reasons = [];
+
+        if (hxAI || hxSteroidStop || medSteroids) { score += 3; reasons.push("Known or suspected adrenal insufficiency / recent steroid withdrawal."); }
+        if (hypotension) { score += 3; reasons.push("Hypotension / possible shock."); }
+        if (na !== null && na < 130) { score += 2; reasons.push("Hyponatremia."); }
+        if (k !== null && k > 5.0) { score += 2; reasons.push("Hyperkalemia."); }
+        if (glucose !== null && glucose < 70) { score += 1; reasons.push("Hypoglycemia."); }
+        if (symAbd || symNausea) { score += 1; reasons.push("Abdominal pain / GI symptoms."); }
+        if (symConfusion || mental === "sev" || mental === "coma") { score += 1; reasons.push("Altered mental status."); }
+        if (cortisol !== null && cortisol < 3) { score += 3; reasons.push("Very low cortisol."); }
+
+        if (score >= 5) {
+            let mgmt = [];
+            mgmt.push("• Treat as adrenal crisis if clinically suspected – do not delay steroids while awaiting labs.");
+            mgmt.push("• Give stress-dose glucocorticoids (e.g., hydrocortisone 100 mg IV bolus, then 50–100 mg IV q6–8h) per local protocol.");
+            mgmt.push("• Aggressive IV fluids: isotonic crystalloid (NS or balanced crystalloid) with close monitoring; consider dextrose-containing fluids if hypoglycemic.");
+            mgmt.push("• Check glucose, electrolytes (Na, K), cortisol, ACTH, and other pituitary hormones, but do not delay treatment.");
+            mgmt.push("• Identify and treat precipitating factors (infection, surgery, trauma, withdrawal of steroids).");
+            mgmt.push("• Admit to monitored setting or ICU if hypotensive, confused, or requiring vasopressors.");
+
+            emergencies.push({
+                name: "Adrenal crisis",
+                score: score,
+                summary: "High concern for adrenal crisis based on hemodynamics and biochemical pattern.",
+                reasons: reasons,
+                management: mgmt
+            });
+        }
+    })();
+
+    // 2) Severe hypoglycemia
+    (function() {
+        if (glucose === null) return;
+
+        let score = 0;
+        let reasons = [];
+
+        if (glucose < 40) { score += 4; reasons.push("Glucose <40 mg/dL."); }
+        else if (glucose < 54) { score += 3; reasons.push("Glucose <54 mg/dL."); }
+        else if (glucose < 70) { score += 1; reasons.push("Glucose 54–69 mg/dL."); }
+
+        if (symConfusion || symSeizure || mental === "sev" || mental === "coma") {
+            score += 2; reasons.push("Neuroglycopenic symptoms (confusion, seizure, coma).");
+        }
+        if (medInsulin || medSulf || hxDM) {
+            score += 2; reasons.push("Diabetes and/or insulin/secretagogue use.");
+        }
+
+        if (score >= 4) {
+            let mgmt = [];
+            mgmt.push("• Treat immediately: give rapid-acting IV dextrose (e.g., D50W 25 g IV) or D10 infusion depending on protocol.");
+            mgmt.push("• If no IV access, give IM/SC glucagon.");
+            mgmt.push("• Recheck glucose frequently (every 15 minutes until stable); repeat dextrose as needed.");
+            mgmt.push("• Once awake and able to swallow, give complex carbohydrates plus longer-acting nutrition.");
+            mgmt.push("• Identify underlying cause: insulin dosing error, missed meals, renal dysfunction, sepsis, adrenal insufficiency, medication interactions.");
+            mgmt.push("• Admit or observe if severe, recurrent, or associated with sulfonylureas or long-acting insulin.");
+
+            emergencies.push({
+                name: "Severe hypoglycemia",
+                score: score,
+                summary: "Severe hypoglycemia with neuroglycopenic features requires immediate reversal.",
+                reasons: reasons,
+                management: mgmt
+            });
+        }
+    })();
+
+    // 3) Severe hyperglycemia (non-DKA/HHS or mixed)
+    (function() {
+        if (glucose === null) return;
+
+        let score = 0;
+        let reasons = [];
+
+        if (glucose >= 600) { score += 3; reasons.push("Glucose ≥600 mg/dL."); }
+        else if (glucose >= 400) { score += 2; reasons.push("Glucose 400–599 mg/dL."); }
+
+        if (symPolyuria || symDehydration || symWeightLoss) {
+            score += 1; reasons.push("Dehydration / osmotic symptoms.");
+        }
+        if (osm !== null && osm > 320) {
+            score += 2; reasons.push("Serum osmolality >320 mOsm/kg.");
+        }
+        if (shocky) {
+            score += 1; reasons.push("Hemodynamic instability / altered mental status.");
+        }
+
+        if (score >= 4) {
+            let mgmt = [];
+            mgmt.push("• Very high glucose with hyperosmolar features – consider HHS or mixed DKA/HHS.");
+            mgmt.push("• Start isotonic IV fluids (e.g., NS or balanced crystalloid) with frequent reassessment of volume and electrolytes.");
+            mgmt.push("• Check full metabolic panel, ketones/β-hydroxybutyrate, blood gas, and serum osmolality.");
+            mgmt.push("• If DKA or HHS criteria met, follow your dedicated DKA/HHS tool for insulin and fluid strategy.");
+            mgmt.push("• Monitor glucose, electrolytes (especially Na, K), and mental status closely; admit to monitored setting/ICU if unstable.");
+
+            emergencies.push({
+                name: "Severe hyperglycemia / possible HHS",
+                score: score,
+                summary: "Severe hyperglycemia with osmotic symptoms – evaluate for HHS or mixed DKA/HHS.",
+                reasons: reasons,
+                management: mgmt
+            });
+        }
+    })();
+
+    // 4) Severe hypercalcemia
+    (function() {
+        if (ca === null && ica === null) return;
+
+        let score = 0;
+        let reasons = [];
+
+        if (ca !== null) {
+            if (ca >= 14) { score += 4; reasons.push("Total calcium ≥14 mg/dL."); }
+            else if (ca >= 12) { score += 2; reasons.push("Total calcium 12–13.9 mg/dL."); }
+        }
+        if (ica !== null) {
+            if (ica >= 1.5) { score += 4; reasons.push("Ionized Ca ≥1.5 mmol/L."); }
+            else if (ica >= 1.35) { score += 2; reasons.push("Ionized Ca 1.35–1.49 mmol/L."); }
+        }
+
+        if (symConfusion || symSeizure || mental === "sev" || mental === "coma") {
+            score += 2; reasons.push("Neurologic symptoms / altered mental status.");
+        }
+        if (symDehydration) {
+            score += 1; reasons.push("Clinical dehydration.");
+        }
+        if (hxCancer) {
+            score += 1; reasons.push("Known malignancy (concern for malignant hypercalcemia).");
+        }
+        if (cr !== null && cr > 1.5) {
+            score += 1; reasons.push("Renal impairment.");
+        }
+
+        if (score >= 4) {
+            let mgmt = [];
+            mgmt.push("• Treat as severe hypercalcemia – especially if Ca ≥14 mg/dL or patient symptomatic.");
+            mgmt.push("• Aggressive IV isotonic fluids (e.g., NS) to restore intravascular volume; consider loop diuretics after rehydration if volume overloaded.");
+            mgmt.push("• Consider IV bisphosphonate (e.g., zoledronic acid) or denosumab depending on renal function and local protocol.");
+            mgmt.push("• Consider calcitonin for more rapid but short-lived calcium reduction.");
+            mgmt.push("• Treat underlying cause: malignancy, hyperparathyroidism, vitamin D intoxication, granulomatous disease, medications.");
+            mgmt.push("• Monitor Ca, creatinine, electrolytes, and fluid status closely; ICU-level monitoring if significantly symptomatic or unstable.");
+
+            emergencies.push({
+                name: "Severe hypercalcemia",
+                score: score,
+                summary: "Marked hypercalcemia with systemic symptoms – requires prompt volume resuscitation and Ca-lowering therapy.",
+                reasons: reasons,
+                management: mgmt
+            });
+        }
+    })();
+
+    // 5) Severe hypocalcemia
+    (function() {
+        if (ca === null && ica === null) return;
+
+        let score = 0;
+        let reasons = [];
+
+        if (ca !== null && ca <= 7.0) {
+            score += 3; reasons.push("Total calcium ≤7.0 mg/dL.");
+        }
+        if (ica !== null && ica <= 0.9) {
+            score += 3; reasons.push("Ionized Ca ≤0.9 mmol/L.");
+        }
+
+        if (symTetany || symParesth) {
+            score += 2; reasons.push("Tetany / paresthesias suggest neuromuscular irritability.");
+        }
+        if (symSeizure || mental === "coma") {
+            score += 2; reasons.push("Seizures / severe neurologic involvement.");
+        }
+        if (symPalpit) {
+            score += 1; reasons.push("Palpitations – concern for QT prolongation / arrhythmia.");
+        }
+
+        if (score >= 4) {
+            let mgmt = [];
+            mgmt.push("• Treat as severe symptomatic hypocalcemia if neurologic or cardiac symptoms present.");
+            mgmt.push("• Give IV calcium (e.g., calcium gluconate) per local protocol with cardiac monitoring.");
+            mgmt.push("• Check and correct magnesium, as hypomagnesemia can impair correction of hypocalcemia.");
+            mgmt.push("• Review recent neck surgery, parathyroidectomy, pancreatitis, massive transfusion, and medications (calcimimetics, bisphosphonates).");
+            mgmt.push("• Monitor ECG (QT interval) and repeat calcium measurement frequently.");
+            mgmt.push("• Consider continuous infusion for persistent hypocalcemia and coordinate with endocrine/ICU teams.");
+
+            emergencies.push({
+                name: "Severe hypocalcemia",
+                score: score,
+                summary: "Significant biochemical hypocalcemia with neuromuscular or cardiac risk.",
+                reasons: reasons,
+                management: mgmt
+            });
+        }
+    })();
+
+    // 6) Pituitary apoplexy
+    (function() {
+        let score = 0;
+        let reasons = [];
+
+        if (symHeadache) { score += 2; reasons.push("Sudden severe headache."); }
+        if (symVision) { score += 2; reasons.push("Visual loss / diplopia."); }
+        if (hxPit) { score += 2; reasons.push("Known pituitary adenoma / disease."); }
+        if (hypotension || symHypotension) { score += 1; reasons.push("Hypotension – possible acute hypopituitarism / adrenal crisis."); }
+        if (symNausea || symAbd) { score += 1; reasons.push("Nausea/vomiting."); }
+        if (hxSurg || hxPP) { score += 1; reasons.push("Recent surgery or postpartum state (consider Sheehan)."); }
+
+        if (score >= 4) {
+            let mgmt = [];
+            mgmt.push("• Suspect pituitary apoplexy in patient with sudden severe headache, visual symptoms, and hemodynamic instability.");
+            mgmt.push("• Urgent MRI of the pituitary / brain as available; involve neurosurgery and endocrinology early.");
+            mgmt.push("• Empiric stress-dose steroids (e.g., hydrocortisone 100 mg IV) if adrenal insufficiency is suspected – do not delay for labs.");
+            mgmt.push("• Monitor visual fields, cranial nerves, and mental status closely.");
+            mgmt.push("• Assess full pituitary axis (cortisol, TSH/FT4, prolactin, gonadotropins, sodium) once patient is stabilized.");
+            mgmt.push("• Disposition: ICU or high-acuity setting in most cases.");
+
+            emergencies.push({
+                name: "Pituitary apoplexy / acute hypopituitarism",
+                score: score,
+                summary: "Concerning for pituitary apoplexy or acute pituitary failure with potential adrenal crisis.",
+                reasons: reasons,
+                management: mgmt
+            });
+        }
+    })();
+
+    // 7) DKA/HHS quick flag (points you to your dedicated tool)
+    (function() {
+        if (glucose === null) return;
+        let score = 0;
+        let reasons = [];
+
+        if (glucose >= 250) { score += 1; reasons.push("Marked hyperglycemia."); }
+        if (symPolyuria || symDehydration) { score += 1; reasons.push("Osmotic symptoms / dehydration."); }
+        if (osm !== null && osm > 320) { score += 2; reasons.push("Hyperosmolar state (osm >320)."); }
+        if (hxDM) { score += 1; reasons.push("Known diabetes."); }
+
+        if (score >= 3) {
+            let mgmt = [];
+            mgmt.push("• Pattern suggests possible DKA/HHS physiology – confirm with AG, ketones (β-hydroxybutyrate), and blood gas.");
+            mgmt.push("• Use your dedicated DKA/HHS tool for detailed fluid, insulin, and electrolyte protocol.");
+            mgmt.push("• Monitor for cerebral edema risk, especially during correction of hyperosmolar states.");
+            emergencies.push({
+                name: "Possible DKA / HHS physiology",
+                score: score,
+                summary: "Hyperglycemic crisis pattern – use DKA/HHS tool for full management.",
+                reasons: reasons,
+                management: mgmt
+            });
+        }
+    })();
+
+    // 8) Thyroid storm / myxedema brief flags
+    (function() {
+        // Thyroid storm-ish
+        let stormScore = 0;
+        let stormReasons = [];
+
+        if (temp !== null && temp >= 38.5) { stormScore += 2; stormReasons.push("Fever."); }
+        if (hr !== null && hr >= 120) { stormScore += 2; stormReasons.push("Marked tachycardia."); }
+        if (symPalpit) { stormScore += 1; stormReasons.push("Palpitations / hyperadrenergic signs."); }
+        if (symConfusion || symSeizure) { stormScore += 1; stormReasons.push("CNS involvement."); }
+        if (symNausea || symAbd) { stormScore += 1; stormReasons.push("GI symptoms."); }
+        if (tsh !== null && tsh < 0.1 && ft4 !== null && ft4 > 1.8) {
+            stormScore += 2; stormReasons.push("Overt thyrotoxicosis pattern.");
+        }
+
+        if (stormScore >= 4) {
+            let mgmt = [];
+            mgmt.push("• Concerning for severe thyrotoxicosis / possible thyroid storm.");
+            mgmt.push("• Initiate beta-blockade if not contraindicated (e.g., propranolol) and obtain endocrine consultation.");
+            mgmt.push("• Follow your thyroid storm (Burch–Wartofsky) tool for detailed scoring and treatment sequence (thionamide → iodine → steroids, etc.).");
+            emergencies.push({
+                name: "Severe thyrotoxicosis / possible thyroid storm",
+                score: stormScore,
+                summary: "Clinical pattern suggests possible thyroid storm – confirm with scoring tool and treat emergently.",
+                reasons: stormReasons,
+                management: mgmt
+            });
+        }
+
+        // Myxedema-like
+        let myxScore = 0;
+        let myxReasons = [];
+
+        if (temp !== null && temp < 35) { myxScore += 2; myxReasons.push("Hypothermia."); }
+        if (hr !== null && hr < 60) { myxScore += 1; myxReasons.push("Bradycardia."); }
+        if (na !== null && na < 130) { myxScore += 1; myxReasons.push("Hyponatremia."); }
+        if (symConfusion || mental === "sev" || mental === "coma") { myxScore += 2; myxReasons.push("Altered mental status."); }
+        if (tsh !== null && ft4 !== null && tsh > 10 && ft4 < 0.8) {
+            myxScore += 2; myxReasons.push("Overt hypothyroidism pattern.");
+        }
+
+        if (myxScore >= 4) {
+            let mgmt = [];
+            mgmt.push("• Concerning for decompensated hypothyroidism / possible myxedema coma.");
+            mgmt.push("• Support airway, breathing, circulation; passive rewarming; treat precipitating illness.");
+            mgmt.push("• Give empiric stress-dose steroids and follow your myxedema coma tool for IV thyroid hormone strategy.");
+            emergencies.push({
+                name: "Severe hypothyroidism / possible myxedema coma",
+                score: myxScore,
+                summary: "Pattern suggests severe hypothyroid decompensation – treat urgently and use dedicated myxedema tool.",
+                reasons: myxReasons,
+                management: mgmt
+            });
+        }
+    })();
+
+    // If nothing
+    if (emergencies.length === 0) {
+        const msg = "No specific endocrine emergency strongly flagged based on current inputs.\n\n" +
+                    "Continue full clinical assessment for sepsis, cardiogenic shock, neurologic emergencies, and non-endocrine causes.\n" +
+                    "Recheck labs, review medications, and monitor vitals and mental status closely.";
+        document.getElementById("primaryEmergency").innerText = "No clear endocrine emergency detected.";
+        document.getElementById("emergencyDetails").innerText = msg;
+        document.getElementById("copytext").innerText = msg;
+        return;
+    }
+
+    // Sort by score (highest first)
+    emergencies.sort((a, b) => b.score - a.score);
+    const primary = emergencies[0];
+
+    const primaryText = primary.name + " — highest concern based on scoring.\n" +
+                        "Summary: " + primary.summary;
+
+    let details = "";
+    emergencies.forEach((e, idx) => {
+        details += (idx > 0 ? "\n\n" : "") +
+            "=== " + e.name + " ===\n" +
+            "Why suspected:\n- " + e.reasons.join("\n- ") +
+            "\n\nManagement suggestions:\n" +
+            e.management.join("\n");
+    });
+
+    const copy = "Most concerning endocrine emergency:\n" + primaryText +
+                 "\n\nDetailed endocrine emergency assessment:\n" + details;
+
+    document.getElementById("primaryEmergency").innerText = primaryText;
+    document.getElementById("emergencyDetails").innerText = details;
+    document.getElementById("copytext").innerText = copy;
+}
+
+function copyEndoPlan() {
+    navigator.clipboard.writeText(document.getElementById("copytext").innerText);
+    alert("Copied!");
+}
+</script>
+
+</body>
+</html>
