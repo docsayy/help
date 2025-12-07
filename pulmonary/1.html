@@ -1,0 +1,1062 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pulmonary – ABG / VBG Interpreter</title>
+<style>
+    :root {
+        --bg: #f3fbfd;
+        --card: #ffffff;
+        --accent: #0284c7; /* pulmonary blue */
+        --accent-soft: #e0f2fe;
+        --muted: #6b7280;
+        --danger: #b91c1c;
+        --success: #15803d;
+        --border: #dbeafe;
+        --shadow: 0 14px 30px rgba(15, 23, 42, 0.12);
+        --radius-lg: 18px;
+        --radius-md: 12px;
+        --pad: 14px;
+    }
+
+    * {
+        box-sizing: border-box;
+    }
+
+    body {
+        margin: 0;
+        font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        background: radial-gradient(circle at top left, #e0f2fe, #f9fafb 40%, #e0f2fe 100%);
+        min-height: 100vh;
+        color: #0f172a;
+        padding: 16px;
+        display: flex;
+        justify-content: center;
+    }
+
+    .app-shell {
+        width: 100%;
+        max-width: 980px;
+    }
+
+    header {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        margin-bottom: 18px;
+    }
+
+    .nav-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+
+    .nav-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 8px 12px;
+        border-radius: 999px;
+        border: 1px solid rgba(148, 163, 184, 0.5);
+        background: rgba(255, 255, 255, 0.85);
+        color: #0f172a;
+        text-decoration: none;
+        font-size: 0.85rem;
+        font-weight: 500;
+        box-shadow: 0 1px 3px rgba(15, 23, 42, 0.08);
+        backdrop-filter: blur(6px);
+    }
+
+    .nav-btn span.icon {
+        font-size: 1.1rem;
+    }
+
+    .nav-btn:hover {
+        background: #eff6ff;
+    }
+
+    .title-row {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        flex-wrap: wrap;
+    }
+
+    .icon-pill {
+        width: 40px;
+        height: 40px;
+        border-radius: 999px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        background: linear-gradient(135deg, #0ea5e9, #22c55e);
+        box-shadow: 0 10px 18px rgba(37, 99, 235, 0.25);
+        color: white;
+        font-size: 1.4rem;
+    }
+
+    h1 {
+        font-size: 1.5rem;
+        margin: 0;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+    }
+
+    .badge {
+        font-size: 0.75rem;
+        padding: 2px 8px;
+        border-radius: 999px;
+        background: #e0f2fe;
+        color: #0369a1;
+        border: 1px solid #bae6fd;
+        font-weight: 500;
+    }
+
+    .subtitle {
+        font-size: 0.9rem;
+        color: var(--muted);
+        max-width: 640px;
+    }
+
+    main {
+        display: grid;
+        grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+        gap: 18px;
+    }
+
+    @media (max-width: 780px) {
+        main {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    .card {
+        background: rgba(255, 255, 255, 0.96);
+        padding: 16px;
+        border-radius: var(--radius-lg);
+        box-shadow: var(--shadow);
+        border: 1px solid rgba(148, 163, 184, 0.25);
+    }
+
+    h2 {
+        margin-top: 0;
+        font-size: 1.1rem;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    h2 span.small {
+        font-size: 0.8rem;
+        font-weight: 500;
+        color: var(--muted);
+    }
+
+    .form-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 10px 12px;
+    }
+
+    @media (max-width: 520px) {
+        .form-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    .field {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+    }
+
+    label {
+        font-size: 0.8rem;
+        font-weight: 600;
+        color: #0f172a;
+        display: flex;
+        justify-content: space-between;
+        align-items: baseline;
+    }
+
+    label span.hint {
+        font-weight: 400;
+        color: var(--muted);
+        font-size: 0.72rem;
+    }
+
+    input[type="number"],
+    select {
+        padding: 7px 9px;
+        border-radius: var(--radius-md);
+        border: 1px solid #cbd5f5;
+        font-size: 0.9rem;
+        outline: none;
+        background: #f9fafb;
+        transition: border-color 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+    }
+
+    input[type="number"]:focus,
+    select:focus {
+        border-color: var(--accent);
+        box-shadow: 0 0 0 1px rgba(56, 189, 248, 0.35);
+        background: #ffffff;
+    }
+
+    input::placeholder {
+        color: #cbd5e1;
+    }
+
+    .section-label {
+        margin-top: 6px;
+        margin-bottom: 4px;
+        font-size: 0.8rem;
+        font-weight: 600;
+        color: #0f172a;
+    }
+
+    .chip-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+        margin-bottom: 8px;
+    }
+
+    .chip {
+        font-size: 0.7rem;
+        padding: 3px 8px;
+        border-radius: 999px;
+        background: #eff6ff;
+        color: #1d4ed8;
+        border: 1px solid #bfdbfe;
+    }
+
+    .btn-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-top: 10px;
+        align-items: center;
+    }
+
+    .primary-btn {
+        border: none;
+        outline: none;
+        cursor: pointer;
+        padding: 9px 16px;
+        border-radius: 999px;
+        background: linear-gradient(135deg, #0284c7, #22c55e);
+        color: white;
+        font-size: 0.9rem;
+        font-weight: 600;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        box-shadow: 0 10px 18px rgba(34, 197, 94, 0.35);
+    }
+
+    .primary-btn span.icon {
+        font-size: 1.1rem;
+    }
+
+    .secondary-btn {
+        border-radius: 999px;
+        border: 1px solid #cbd5e1;
+        background: #f9fafb;
+        font-size: 0.8rem;
+        padding: 7px 12px;
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+    }
+
+    .secondary-btn span.icon {
+        font-size: 1rem;
+    }
+
+    .secondary-btn:hover {
+        background: #e5f3ff;
+    }
+
+    .error-text {
+        font-size: 0.78rem;
+        color: var(--danger);
+        margin-top: 4px;
+        min-height: 1em;
+    }
+
+    /* Right panel */
+    .summary-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: baseline;
+        gap: 6px;
+    }
+
+    .status-pill {
+        padding: 3px 9px;
+        border-radius: 999px;
+        font-size: 0.75rem;
+        font-weight: 600;
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+    }
+
+    .status-neutral {
+        background: #f9fafb;
+        border: 1px solid #e5e7eb;
+        color: #4b5563;
+    }
+
+    .status-good {
+        background: #dcfce7;
+        border: 1px solid #bbf7d0;
+        color: #166534;
+    }
+
+    .status-bad {
+        background: #fee2e2;
+        border: 1px solid #fecaca;
+        color: #991b1b;
+    }
+
+    .summary-main {
+        margin-top: 8px;
+        padding: 10px;
+        border-radius: var(--radius-md);
+        background: #f0f9ff;
+        border: 1px dashed #bae6fd;
+        font-size: 0.85rem;
+    }
+
+    .summary-main strong {
+        color: #0f172a;
+    }
+
+    .section-block {
+        margin-top: 10px;
+        padding-top: 8px;
+        border-top: 1px solid #e5e7eb;
+    }
+
+    .section-block h3 {
+        margin: 0 0 4px;
+        font-size: 0.9rem;
+    }
+
+    .section-block p,
+    .section-block ul {
+        margin: 0;
+        font-size: 0.8rem;
+        color: #4b5563;
+    }
+
+    .section-block ul {
+        padding-left: 18px;
+    }
+
+    .section-block li + li {
+        margin-top: 2px;
+    }
+
+    .pill-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+        margin-top: 4px;
+        margin-bottom: 4px;
+    }
+
+    .pill {
+        font-size: 0.7rem;
+        padding: 2px 8px;
+        border-radius: 999px;
+        background: #eef2ff;
+        color: #4338ca;
+    }
+
+    .pill.warn {
+        background: #fef3c7;
+        color: #92400e;
+    }
+
+    .pill.bad {
+        background: #fee2e2;
+        color: #b91c1c;
+    }
+
+    .pill.good {
+        background: #dcfce7;
+        color: #166534;
+    }
+
+    .copy-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-top: 10px;
+        align-items: center;
+    }
+
+    .copy-msg {
+        font-size: 0.78rem;
+        color: #16a34a;
+        min-height: 1em;
+    }
+
+    /* Hidden textarea for clipboard */
+    #clipboardPayload {
+        position: fixed;
+        opacity: 0;
+        pointer-events: none;
+        height: 0;
+        width: 0;
+        left: -9999px;
+    }
+
+    .tiny-note {
+        margin-top: 8px;
+        font-size: 0.7rem;
+        color: #9ca3af;
+    }
+</style>
+</head>
+<body>
+<div class="app-shell">
+    <header>
+        <div class="nav-row">
+            <a href="../index.html" class="nav-btn">
+                <span class="icon">🏠</span>
+                <span>Home</span>
+            </a>
+            <a href="../pulmonary.html" class="nav-btn">
+                <span class="icon">🫁</span>
+                <span>Back to Pulmonary</span>
+            </a>
+        </div>
+        <div class="title-row">
+            <div class="icon-pill">🫁</div>
+            <div>
+                <h1>ABG / VBG Interpreter <span class="badge">Pulmonary</span></h1>
+                <p class="subtitle">
+                    Quick acid–base classification, compensation check, and oxygenation summary.
+                    Designed for offline use – numbers in, structured assessment out.
+                </p>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <!-- LEFT: INPUTS -->
+        <section class="card">
+            <h2>
+                Inputs
+                <span class="small">ABG or VBG values</span>
+            </h2>
+
+            <div class="chip-row">
+                <span class="chip">Minimum required: pH, PaCO₂, HCO₃⁻</span>
+                <span class="chip">Optional: PaO₂ &amp; FiO₂ for oxygenation</span>
+            </div>
+
+            <form id="abgForm" novalidate>
+                <div class="form-grid">
+                    <div class="field">
+                        <label for="sampleType">
+                            Sample type
+                            <span class="hint">ABG vs VBG</span>
+                        </label>
+                        <select id="sampleType">
+                            <option value="arterial">Arterial</option>
+                            <option value="venous">Venous</option>
+                            <option value="unknown">Not specified</option>
+                        </select>
+                    </div>
+
+                    <div class="field">
+                        <label for="pH">
+                            pH
+                            <span class="hint">e.g. 7.25</span>
+                        </label>
+                        <input type="number" id="pH" step="0.01" min="6.6" max="7.8" placeholder="7.25">
+                    </div>
+
+                    <div class="field">
+                        <label for="pco2">
+                            PaCO₂ (mmHg)
+                            <span class="hint">e.g. 55</span>
+                        </label>
+                        <input type="number" id="pco2" step="0.1" min="10" max="120" placeholder="40">
+                    </div>
+
+                    <div class="field">
+                        <label for="hco3">
+                            HCO₃⁻ (mEq/L)
+                            <span class="hint">e.g. 18</span>
+                        </label>
+                        <input type="number" id="hco3" step="0.1" min="5" max="50" placeholder="24">
+                    </div>
+
+                    <div class="field">
+                        <label for="po2">
+                            PaO₂ (mmHg)
+                            <span class="hint">optional</span>
+                        </label>
+                        <input type="number" id="po2" step="1" min="20" max="600" placeholder="80">
+                    </div>
+
+                    <div class="field">
+                        <label for="fio2">
+                            FiO₂ (%)
+                            <span class="hint">e.g. 21, 40</span>
+                        </label>
+                        <input type="number" id="fio2" step="1" min="21" max="100" placeholder="21">
+                    </div>
+                </div>
+
+                <div class="section-label">Options</div>
+                <div class="chip-row">
+                    <span class="chip">Assumes “normal” HCO₃⁻ ≈ 24</span>
+                    <span class="chip">Uses standard bedside compensation rules</span>
+                </div>
+
+                <div class="btn-row">
+                    <button type="button" class="primary-btn" id="analyzeBtn">
+                        <span class="icon">🧠</span>
+                        <span>Analyze ABG</span>
+                    </button>
+                    <button type="button" class="secondary-btn" id="clearBtn">
+                        <span class="icon">🧹</span>
+                        <span>Clear</span>
+                    </button>
+                </div>
+
+                <div id="errorBox" class="error-text"></div>
+            </form>
+        </section>
+
+        <!-- RIGHT: OUTPUT -->
+        <section class="card">
+            <div class="summary-header">
+                <h2>Assessment &amp; Plan</h2>
+                <span id="statusPill" class="status-pill status-neutral">
+                    <span>ℹ️</span> Waiting for input
+                </span>
+            </div>
+
+            <div id="summaryMain" class="summary-main">
+                <strong>No analysis yet.</strong>
+                <div>Enter pH, PaCO₂, and HCO₃⁻, then click <em>Analyze ABG</em> to generate a structured interpretation.</div>
+            </div>
+
+            <div class="section-block">
+                <h3>1. Acid–Base Interpretation</h3>
+                <div id="acidBaseSummary">
+                    <p>
+                        Primary disorder, compensation status, and possible mixed picture will appear here.
+                    </p>
+                </div>
+            </div>
+
+            <div class="section-block">
+                <h3>2. Oxygenation (if provided)</h3>
+                <div id="oxygenSummary">
+                    <p>
+                        PaO₂ level and PaO₂/FiO₂ ratio (if FiO₂ given) will be summarized here.
+                    </p>
+                </div>
+            </div>
+
+            <div class="section-block">
+                <h3>3. Quick Management Considerations (high-level)</h3>
+                <div id="treatmentSummary">
+                    <ul>
+                        <li>Correct underlying cause (e.g., sepsis, COPD exacerbation, over-ventilation).</li>
+                        <li>Confirm values and units; correlate with patient’s exam and trajectory.</li>
+                        <li>Use this as a decision support helper, not a replacement for clinical judgment.</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="section-block">
+                <h3>Key Numbers</h3>
+                <div id="keyNumbers">
+                    <p>Will list pH, PaCO₂, HCO₃⁻, PaO₂, FiO₂, and expected compensation when available.</p>
+                </div>
+            </div>
+
+            <div class="copy-row">
+                <button type="button" class="secondary-btn" id="copyBtn">
+                    <span class="icon">📋</span>
+                    <span>Copy Assessment &amp; Plan</span>
+                </button>
+                <span id="copyMsg" class="copy-msg"></span>
+            </div>
+
+            <p class="tiny-note">
+                Educational decision support only. Always confirm calculations and apply clinical judgment, local protocols,
+                and senior/consultant input as needed.
+            </p>
+        </section>
+    </main>
+
+    <textarea id="clipboardPayload"></textarea>
+</div>
+
+<script>
+(function() {
+    const pHInput = document.getElementById('pH');
+    const pco2Input = document.getElementById('pco2');
+    const hco3Input = document.getElementById('hco3');
+    const po2Input = document.getElementById('po2');
+    const fio2Input = document.getElementById('fio2');
+    const sampleTypeSelect = document.getElementById('sampleType');
+
+    const errorBox = document.getElementById('errorBox');
+    const statusPill = document.getElementById('statusPill');
+    const summaryMain = document.getElementById('summaryMain');
+    const acidBaseSummary = document.getElementById('acidBaseSummary');
+    const oxygenSummary = document.getElementById('oxygenSummary');
+    const treatmentSummary = document.getElementById('treatmentSummary');
+    const keyNumbers = document.getElementById('keyNumbers');
+    const copyMsg = document.getElementById('copyMsg');
+    const clipboardPayload = document.getElementById('clipboardPayload');
+
+    const analyzeBtn = document.getElementById('analyzeBtn');
+    const clearBtn = document.getElementById('clearBtn');
+    const copyBtn = document.getElementById('copyBtn');
+
+    function setStatus(type, text) {
+        statusPill.className = 'status-pill status-' + type;
+        statusPill.innerHTML = (type === 'good' ? '✅ ' : type === 'bad' ? '⚠️ ' : 'ℹ️ ') + text;
+    }
+
+    function round(value, digits) {
+        const factor = Math.pow(10, digits || 1);
+        return Math.round(value * factor) / factor;
+    }
+
+    function interpretAcidBase(pH, pco2, hco3) {
+        const result = {
+            primary: 'Unable to classify',
+            details: [],
+            mixed: false,
+            severityLabel: '',
+            status: 'neutral',
+            keyLines: []
+        };
+
+        const acidemia = pH < 7.35;
+        const alkalemia = pH > 7.45;
+
+        // Determine likely primary process
+        let primary = '';
+        if (acidemia) {
+            if (hco3 < 22 && pco2 <= 45) {
+                primary = 'Metabolic acidosis';
+            } else if (pco2 > 45 && hco3 >= 22) {
+                primary = 'Respiratory acidosis';
+            } else if (pco2 > 45 && hco3 < 22) {
+                primary = 'Combined metabolic and respiratory acidosis (mixed)';
+            }
+        } else if (alkalemia) {
+            if (hco3 > 26 && pco2 <= 40) {
+                primary = 'Metabolic alkalosis';
+            } else if (pco2 < 35 && hco3 <= 26) {
+                primary = 'Respiratory alkalosis';
+            } else if (pco2 < 35 && hco3 > 26) {
+                primary = 'Combined metabolic and respiratory alkalosis (mixed)';
+            }
+        } else {
+            // near-normal pH
+            if (pco2 > 45 && hco3 > 26) {
+                primary = 'Chronic respiratory acidosis with metabolic compensation (near-normal pH)';
+            } else if (pco2 < 35 && hco3 < 22) {
+                primary = 'Chronic respiratory alkalosis with metabolic compensation (near-normal pH)';
+            } else if ((pco2 > 45 && hco3 < 22) || (pco2 < 35 && hco3 > 26)) {
+                primary = 'Mixed acid–base disorder with near-normal pH';
+            } else {
+                primary = 'No clear primary disorder (pH near normal; subtle or mixed patterns possible)';
+            }
+        }
+
+        result.primary = primary;
+
+        // Severity of pH derangement
+        if (pH < 7.25 || pH > 7.55) {
+            result.severityLabel = 'Marked pH derangement';
+            result.status = 'bad';
+        } else if (pH < 7.30 || pH > 7.50) {
+            result.severityLabel = 'Moderate pH derangement';
+            result.status = 'bad';
+        } else if (pH >= 7.35 && pH <= 7.45) {
+            result.severityLabel = 'pH near physiological range';
+            result.status = 'good';
+        } else {
+            result.severityLabel = 'Mild pH derangement';
+            result.status = 'neutral';
+        }
+
+        // Compensation checks
+        const details = [];
+
+        // Metabolic acidosis – Winter's formula
+        if (primary.startsWith('Metabolic acidosis')) {
+            const expectedPaCO2 = 1.5 * hco3 + 8;
+            const low = expectedPaCO2 - 2;
+            const high = expectedPaCO2 + 2;
+            result.keyLines.push(
+                `Winter’s expected PaCO₂ ≈ 1.5 × HCO₃⁻ + 8 → ${round(expectedPaCO2, 1)} mmHg (range ${round(low, 1)}–${round(high, 1)})`
+            );
+            if (pco2 >= low && pco2 <= high) {
+                details.push('Respiratory compensation appears appropriate for metabolic acidosis.');
+            } else if (pco2 > high) {
+                details.push('PaCO₂ is higher than expected → concurrent respiratory acidosis suspected.');
+                result.mixed = true;
+            } else if (pco2 < low) {
+                details.push('PaCO₂ is lower than expected → concurrent respiratory alkalosis suspected.');
+                result.mixed = true;
+            }
+        }
+
+        // Metabolic alkalosis
+        if (primary.startsWith('Metabolic alkalosis')) {
+            const expectedPaCO2 = 0.7 * hco3 + 20;
+            const low = expectedPaCO2 - 5;
+            const high = expectedPaCO2 + 5;
+            result.keyLines.push(
+                `Expected PaCO₂ in metabolic alkalosis ≈ 0.7 × HCO₃⁻ + 20 → ${round(expectedPaCO2, 1)} mmHg (±5)`
+            );
+            if (pco2 >= low && pco2 <= high) {
+                details.push('Respiratory compensation appears appropriate for metabolic alkalosis.');
+            } else if (pco2 > high) {
+                details.push('PaCO₂ higher than expected → superimposed respiratory acidosis possible.');
+                result.mixed = true;
+            } else if (pco2 < low) {
+                details.push('PaCO₂ lower than expected → superimposed respiratory alkalosis possible.');
+                result.mixed = true;
+            }
+        }
+
+        // Respiratory acidosis
+        if (primary.includes('Respiratory acidosis')) {
+            const deltaCO2 = pco2 - 40;
+            if (deltaCO2 > 0) {
+                const expectedAcute = 24 + (deltaCO2 / 10) * 1;
+                const expectedChronic = 24 + (deltaCO2 / 10) * 3.5;
+                const distAcute = Math.abs(hco3 - expectedAcute);
+                const distChronic = Math.abs(hco3 - expectedChronic);
+
+                result.keyLines.push(
+                    `Expected HCO₃⁻ (acute) ≈ 24 + 1 × ΔPaCO₂/10 → ${round(expectedAcute, 1)} mEq/L`
+                );
+                result.keyLines.push(
+                    `Expected HCO₃⁻ (chronic) ≈ 24 + 3.5 × ΔPaCO₂/10 → ${round(expectedChronic, 1)} mEq/L`
+                );
+
+                if (distAcute <= 3 && distAcute < distChronic) {
+                    details.push('Pattern is more consistent with acute respiratory acidosis with appropriate renal compensation.');
+                } else if (distChronic <= 3 && distChronic < distAcute) {
+                    details.push('Pattern is more consistent with chronic respiratory acidosis with metabolic compensation.');
+                } else {
+                    details.push('HCO₃⁻ is not near typical acute or chronic expectations → mixed metabolic process suspected.');
+                    result.mixed = true;
+                }
+            }
+        }
+
+        // Respiratory alkalosis
+        if (primary.includes('Respiratory alkalosis')) {
+            const deltaCO2 = 40 - pco2;
+            if (deltaCO2 > 0) {
+                const expectedAcute = 24 - (deltaCO2 / 10) * 2;
+                const expectedChronic = 24 - (deltaCO2 / 10) * 4;
+                const distAcute = Math.abs(hco3 - expectedAcute);
+                const distChronic = Math.abs(hco3 - expectedChronic);
+
+                result.keyLines.push(
+                    `Expected HCO₃⁻ (acute) ≈ 24 − 2 × ΔPaCO₂/10 → ${round(expectedAcute, 1)} mEq/L`
+                );
+                result.keyLines.push(
+                    `Expected HCO₃⁻ (chronic) ≈ 24 − 4 × ΔPaCO₂/10 → ${round(expectedChronic, 1)} mEq/L`
+                );
+
+                if (distAcute <= 3 && distAcute < distChronic) {
+                    details.push('Pattern is more consistent with acute respiratory alkalosis.');
+                } else if (distChronic <= 3 && distChronic < distAcute) {
+                    details.push('Pattern is more consistent with chronic respiratory alkalosis with renal adaptation.');
+                } else {
+                    details.push('HCO₃⁻ is not near typical acute or chronic expectations → mixed metabolic process suspected.');
+                    result.mixed = true;
+                }
+            }
+        }
+
+        if (!details.length) {
+            details.push('Standard compensation rules are limited or inconclusive for this pattern. Consider mixed or chronic processes and correlate clinically.');
+        }
+
+        result.details = details;
+        return result;
+    }
+
+    function interpretOxygenation(po2, fio2) {
+        if (!po2 && !fio2) {
+            return {
+                html: '<p>No PaO₂/FiO₂ data provided.</p>',
+                lines: []
+            };
+        }
+
+        const lines = [];
+        let htmlParts = [];
+
+        if (po2) {
+            let category = '';
+            let pillClass = 'pill';
+            if (po2 >= 80) {
+                category = 'PaO₂ within or near normal range (on room air).';
+                pillClass += ' good';
+            } else if (po2 >= 60) {
+                category = 'Mild hypoxemia.';
+                pillClass += ' warn';
+            } else if (po2 >= 40) {
+                category = 'Moderate hypoxemia.';
+                pillClass += ' bad';
+            } else {
+                category = 'Severe hypoxemia – urgent assessment of oxygenation and ventilation.';
+                pillClass += ' bad';
+            }
+            htmlParts.push(`<div class="pill-row"><span class="${pillClass}">PaO₂ ${round(po2,1)} mmHg – ${category}</span></div>`);
+            lines.push(`PaO₂ ${round(po2,1)} mmHg → ${category}`);
+        }
+
+        if (po2 && fio2) {
+            const fio2Frac = fio2 / 100;
+            const pfr = po2 / fio2Frac;
+            let ardsLabel = '';
+            let pillClass = 'pill';
+            if (pfr > 300) {
+                ardsLabel = 'PaO₂/FiO₂ > 300 – not in ARDS range (oxygenation acceptable for FiO₂ entered).';
+                pillClass += ' good';
+            } else if (pfr > 200) {
+                ardsLabel = 'Mild ARDS-range hypoxemia (200–300).';
+                pillClass += ' warn';
+            } else if (pfr >= 100) {
+                ardsLabel = 'Moderate ARDS-range hypoxemia (100–200).';
+                pillClass += ' bad';
+            } else {
+                ardsLabel = 'Severe ARDS-range hypoxemia (<100).';
+                pillClass += ' bad';
+            }
+            htmlParts.push(`<div class="pill-row"><span class="${pillClass}">PaO₂/FiO₂ ≈ ${Math.round(pfr)} – ${ardsLabel}</span></div>`);
+            lines.push(`PaO₂/FiO₂ ≈ ${Math.round(pfr)} → ${ardsLabel}`);
+        } else if (fio2 && !po2) {
+            lines.push(`FiO₂ set at ${fio2}% (PaO₂ not provided).`);
+        }
+
+        if (!htmlParts.length) {
+            htmlParts.push('<p>Oxygenation data incomplete.</p>');
+        }
+
+        return {
+            html: htmlParts.join(''),
+            lines
+        };
+    }
+
+    function buildTreatmentSuggestions(primary, mixed, sampleType) {
+        const items = [];
+
+        if (primary.includes('Metabolic acidosis')) {
+            items.push('Confirm metabolic acidosis with serial gases, lactate/ketones, and basic metabolic panel; correct underlying driver (e.g., shock, renal failure, toxins).');
+        } else if (primary.includes('Metabolic alkalosis')) {
+            items.push('Review diuretics, vomiting, NG losses, and volume status; consider chloride and volume repletion when appropriate.');
+        } else if (primary.includes('Respiratory acidosis')) {
+            items.push('Assess for hypoventilation (COPD, sedation, neuromuscular disease) and optimize ventilation (airway, bronchodilators, non-invasive/invasive support as clinically indicated).');
+        } else if (primary.includes('Respiratory alkalosis')) {
+            items.push('Look for pain, anxiety, sepsis, pregnancy, or salicylate toxicity; treat the underlying cause rather than the pH alone.');
+        } else {
+            items.push('Pattern is subtle or mixed – integrate with history, exam, vitals, and trending labs.');
+        }
+
+        if (mixed) {
+            items.push('Mixed acid–base features present → consider broad differential (e.g., sepsis + chronic lung disease, toxin exposures, combined shock states).');
+        }
+
+        if (sampleType === 'venous') {
+            items.push('Venous sample: confirm key decisions with an arterial gas if results are unexpected or borderline.');
+        }
+
+        items.push('Always correlate this tool’s output with bedside assessment, hemodynamics, lactate, and organ function.');
+
+        const html = '<ul>' + items.map(li => `<li>${li}</li>`).join('') + '</ul>';
+        return { html, lines: items };
+    }
+
+    function handleAnalyze() {
+        copyMsg.textContent = '';
+        errorBox.textContent = '';
+
+        const pH = parseFloat(pHInput.value);
+        const pco2 = parseFloat(pco2Input.value);
+        const hco3 = parseFloat(hco3Input.value);
+        const po2 = parseFloat(po2Input.value);
+        const fio2 = parseFloat(fio2Input.value);
+        const sampleType = sampleTypeSelect.value;
+
+        if (isNaN(pH) || isNaN(pco2) || isNaN(hco3)) {
+            errorBox.textContent = 'Please enter at least pH, PaCO₂, and HCO₃⁻.';
+            setStatus('neutral', 'Incomplete input');
+            return;
+        }
+
+        const acidBase = interpretAcidBase(pH, pco2, hco3);
+        const oxygen = interpretOxygenation(isNaN(po2) ? null : po2, isNaN(fio2) ? null : fio2);
+        const treatment = buildTreatmentSuggestions(acidBase.primary, acidBase.mixed, sampleType);
+
+        // Summary main
+        const sampleLabel =
+            sampleType === 'arterial' ? 'Arterial sample' :
+            sampleType === 'venous' ? 'Venous sample' :
+            'Sample type not specified';
+
+        let summaryText = `<strong>${acidBase.primary}</strong>`;
+        summaryText += ` (${sampleLabel}; pH ${round(pH,2)}, PaCO₂ ${round(pco2,1)} mmHg, HCO₃⁻ ${round(hco3,1)} mEq/L).<br>`;
+        summaryText += acidBase.severityLabel;
+
+        summaryMain.innerHTML = summaryText;
+
+        // Status pill
+        if (acidBase.status === 'good') {
+            setStatus('good', 'Pattern looks compensated / near normal pH');
+        } else if (acidBase.status === 'bad') {
+            setStatus('bad', 'Significant acid–base derangement');
+        } else {
+            setStatus('neutral', 'Acid–base abnormality detected');
+        }
+
+        // Acid–base details
+        const abLines = [];
+        abLines.push(`<p><strong>Primary interpretation:</strong> ${acidBase.primary}</p>`);
+        if (acidBase.mixed) {
+            abLines.push('<div class="pill-row"><span class="pill bad">Mixed acid–base disorder suspected</span></div>');
+        } else {
+            abLines.push('<div class="pill-row"><span class="pill">Single primary disorder with expected/near-expected compensation</span></div>');
+        }
+        abLines.push('<ul>' + acidBase.details.map(d => `<li>${d}</li>`).join('') + '</ul>');
+        acidBaseSummary.innerHTML = abLines.join('');
+
+        // Oxygenation
+        oxygenSummary.innerHTML = oxygen.html;
+
+        // Treatment suggestions
+        treatmentSummary.innerHTML = treatment.html;
+
+        // Key numbers
+        const kn = [];
+        kn.push(`<p><strong>Entered values:</strong> pH ${round(pH,2)}, PaCO₂ ${round(pco2,1)} mmHg, HCO₃⁻ ${round(hco3,1)} mEq/L${isNaN(po2) ? '' : `, PaO₂ ${round(po2,1)} mmHg`}${isNaN(fio2) ? '' : `, FiO₂ ${round(fio2,0)}%`}</p>`);
+        if (acidBase.keyLines.length) {
+            kn.push('<ul>' + acidBase.keyLines.map(k => `<li>${k}</li>`).join('') + '</ul>');
+        }
+        keyNumbers.innerHTML = kn.join('');
+
+        // Build clipboard text
+        const clipLines = [];
+        clipLines.push('ABG / VBG INTERPRETATION');
+        clipLines.push(`Sample: ${sampleLabel}`);
+        clipLines.push(`pH ${round(pH,2)}, PaCO₂ ${round(pco2,1)} mmHg, HCO₃⁻ ${round(hco3,1)} mEq/L`);
+        if (!isNaN(po2)) clipLines.push(`PaO₂ ${round(po2,1)} mmHg`);
+        if (!isNaN(fio2)) clipLines.push(`FiO₂ ${round(fio2,0)}%`);
+
+        clipLines.push('');
+        clipLines.push('Summary: ' + acidBase.primary + ' – ' + acidBase.severityLabel + (acidBase.mixed ? ' (mixed features suspected).' : '.'));
+
+        if (oxygen.lines.length) {
+            clipLines.push('');
+            clipLines.push('Oxygenation:');
+            oxygen.lines.forEach(l => clipLines.push('- ' + l));
+        }
+
+        clipLines.push('');
+        clipLines.push('Key calculations:');
+        if (acidBase.keyLines.length) {
+            acidBase.keyLines.forEach(l => clipLines.push('- ' + l));
+        } else {
+            clipLines.push('- Standard bedside compensation formulas applied (no specific calculation highlighted).');
+        }
+
+        clipLines.push('');
+        clipLines.push('Management considerations (high-level, not orders):');
+        treatment.lines.forEach(l => clipLines.push('- ' + l));
+
+        clipLines.push('');
+        clipLines.push('Note: Educational decision support only; confirm all results and treat based on full clinical context.');
+
+        clipboardPayload.value = clipLines.join('\n');
+    }
+
+    function handleClear() {
+        pHInput.value = '';
+        pco2Input.value = '';
+        hco3Input.value = '';
+        po2Input.value = '';
+        fio2Input.value = '';
+        sampleTypeSelect.value = 'arterial';
+
+        errorBox.textContent = '';
+        copyMsg.textContent = '';
+        clipboardPayload.value = '';
+
+        setStatus('neutral', 'Waiting for input');
+        summaryMain.innerHTML =
+            '<strong>No analysis yet.</strong><div>Enter pH, PaCO₂, and HCO₃⁻, then click <em>Analyze ABG</em> to generate a structured interpretation.</div>';
+        acidBaseSummary.innerHTML =
+            '<p>Primary disorder, compensation status, and possible mixed picture will appear here.</p>';
+        oxygenSummary.innerHTML =
+            '<p>PaO₂ level and PaO₂/FiO₂ ratio (if FiO₂ given) will be summarized here.</p>';
+        treatmentSummary.innerHTML =
+            '<ul><li>Correct underlying cause (e.g., sepsis, COPD exacerbation, over-ventilation).</li><li>Confirm values and units; correlate with patient’s exam and trajectory.</li><li>Use this as a decision support helper, not a replacement for clinical judgment.</li></ul>';
+        keyNumbers.innerHTML =
+            '<p>Will list pH, PaCO₂, HCO₃⁻, PaO₂, FiO₂, and expected compensation when available.</p>';
+    }
+
+    async function handleCopy() {
+        copyMsg.textContent = '';
+        const text = clipboardPayload.value.trim();
+        if (!text) {
+            copyMsg.textContent = 'Nothing to copy yet – analyze an ABG first.';
+            copyMsg.style.color = '#b91c1c';
+            return;
+        }
+
+        try {
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                await navigator.clipboard.writeText(text);
+            } else {
+                clipboardPayload.style.display = 'block';
+                clipboardPayload.select();
+                document.execCommand('copy');
+                clipboardPayload.style.display = 'none';
+            }
+            copyMsg.textContent = 'Assessment & plan copied to clipboard.';
+            copyMsg.style.color = '#16a34a';
+        } catch (err) {
+            console.error(err);
+            copyMsg.textContent = 'Could not copy automatically – you can still select and copy manually.';
+            copyMsg.style.color = '#b91c1c';
+        }
+    }
+
+    analyzeBtn.addEventListener('click', handleAnalyze);
+    clearBtn.addEventListener('click', handleClear);
+    copyBtn.addEventListener('click', handleCopy);
+})();
+</script>
+</body>
+</html>
