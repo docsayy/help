@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Pulmonary Tools</title>
+
+<style>
+:root{
+  --bg1:#e0f2f1;
+  --bg2:#e0f7fa;
+  --card:#ffffffee;
+  --accent:#00897b;
+  --accent2:#00695c;
+  --muted:#546e7a;
+  --border:#b2dfdb;
+  --radius:16px;
+}
+
+body{margin:0;font-family:Inter,Arial,sans-serif;
+background:linear-gradient(135deg,var(--bg1),var(--bg2));}
+.home-btn{position:fixed;top:15px;right:15px;background:var(--accent);
+color:white;padding:10px 18px;border-radius:10px;font-weight:700;text-decoration:none;
+box-shadow:0 4px 12px rgba(0,0,0,0.2);}
+.home-btn:hover{background:var(--accent2);}
+header{text-align:center;padding:32px 12px;}
+header .icon{font-size:45px;}
+header h1{margin:10px 0;color:var(--accent2);}
+header p{color:var(--muted);}
+.grid{max-width:1100px;margin:0 auto;padding:20px;
+display:grid;gap:20px;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));}
+.card{background:var(--card);padding:22px;border-radius:var(--radius);
+border:1px solid var(--border);box-shadow:0 4px 14px rgba(0,0,0,0.12);}
+.card h2{margin:0;color:var(--accent2);}
+.card p{margin:8px 0;color:var(--muted);}
+.btn{background:var(--accent);color:white;padding:10px 14px;
+text-decoration:none;border-radius:10px;font-weight:600;}
+.btn:hover{background:var(--accent2);}
+</style>
+</head>
+
+<body>
+<a class="home-btn" href="index.html">Home</a>
+
+<header>
+  <div class="icon">🫁</div>
+  <h1>Pulmonary Tools</h1>
+  <p>Respiratory severity scores and VTE evaluation.</p>
+</header>
+
+<div class="grid">
+
+  <div class="card">
+    <h2>PSI (Future)</h2>
+    <p>Pneumonia Severity Index.</p>
+    <a class="btn" href="#">Coming Soon</a>
+  </div>
+
+  <div class="card">
+    <h2>PERC Rule (Future)</h2>
+    <p>PE risk exclusion rule.</p>
+    <a class="btn" href="#">Coming Soon</a>
+  </div>
+
+  <div class="card">
+    <h2>Respiratory Failure Tools (Future)</h2>
+    <p>Oxygenation, ABG, ventilatory failure checks.</p>
+    <a class="btn" href="#">Coming Soon</a>
+  </div>
+
+</div>
+
+</body>
+</html>
