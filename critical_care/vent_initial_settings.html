@@ -1,1 +1,274 @@
-vent_initial_settings.html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Initial Vent Settings – Critical Care</title>
+<style>
+:root {
+    --bg:#e0f7fa;
+    --card:#ffffff;
+    --accent:#00838f;
+    --muted:#546e7a;
+    --radius:14px;
+}
+*{box-sizing:border-box;}
+body{
+    margin:0;
+    font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+    background:radial-gradient(circle at top,#b2ebf2 0,#e0f7fa 40%,#e0f2f1 100%);
+}
+header{
+    background:linear-gradient(90deg,#00acc1,#00838f);
+    color:white;
+    padding:16px;
+    display:flex;
+    justify-content:space-between;
+    flex-wrap:wrap;
+    gap:8px;
+}
+header h1{margin:0;font-size:1.25rem;}
+.nav-buttons a{
+    text-decoration:none;
+    color:white;
+    padding:6px 10px;
+    border-radius:999px;
+    border:1px solid rgba(255,255,255,0.8);
+    font-size:.9rem;
+    margin-left:6px;
+}
+main{max-width:900px;margin:20px auto 32px;padding:0 12px;}
+.card{
+    background:var(--card);
+    padding:18px;
+    border-radius:var(--radius);
+    margin-bottom:18px;
+    box-shadow:0 8px 24px rgba(0,0,0,0.1);
+}
+h2{margin:0 0 6px;color:#004d5a;font-size:1.15rem;}
+.subtitle{margin:0 0 12px;font-size:.9rem;color:var(--muted);}
+label{display:block;margin-bottom:4px;font-size:.85rem;color:#37474f;}
+select,input{
+    width:100%;
+    padding:10px 12px;
+    border-radius:10px;
+    border:1px solid #cfd8dc;
+    font-size:.9rem;
+    background:#f9feff;
+}
+.grid-2{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px;}
+.btn-primary{
+    margin-top:12px;
+    width:100%;
+    border:none;
+    border-radius:999px;
+    padding:12px;
+    font-weight:600;
+    background:#00838f;
+    color:white;
+    cursor:pointer;
+}
+.plan-box{
+    background:#f1ffff;
+    border-radius:12px;
+    border:1px dashed #b2ebf2;
+    padding:12px;
+    white-space:pre-line;
+    font-size:.9rem;
+    color:#37474f;
+}
+.copy-btn{
+    margin-top:10px;
+    padding:10px 16px;
+    border-radius:999px;
+    border:none;
+    background:#eceff1;
+    cursor:pointer;
+}
+.helper-text{font-size:.8rem;color:var(--muted);margin-top:4px;}
+</style>
+</head>
+<body>
+
+<header>
+    <h1>🫁 Initial Vent Settings Helper</h1>
+    <div class="nav-buttons">
+        <a href="../home.html">🏠 Home</a>
+        <a href="../critical_care.html">⬅ Critical Care</a>
+    </div>
+</header>
+
+<main>
+
+<div class="card">
+    <h2>Patient & Scenario</h2>
+    <p class="subtitle">Generate starting ventilator settings for a newly intubated patient.</p>
+    <div class="grid-2">
+        <div>
+            <label>Clinical scenario</label>
+            <select id="scenario">
+                <option value="">Select...</option>
+                <option value="general">General hypoxemic / postop</option>
+                <option value="ards">ARDS / severe pneumonia</option>
+                <option value="copd">COPD / Asthma</option>
+                <option value="neuro">Neuro / ICP / post-ROSC</option>
+                <option value="metabolic">Metabolic acidosis (DKA, lactic)</option>
+                <option value="shock">Shock (septic/cardiogenic/etc.)</option>
+            </select>
+        </div>
+        <div>
+            <label>Gender (for PBW)</label>
+            <select id="gender">
+                <option value="">Select...</option>
+                <option value="male">Male</option>
+                <option value="female">Female</option>
+            </select>
+        </div>
+        <div>
+            <label>Height (cm)</label>
+            <input type="number" id="height" placeholder="e.g. 170">
+        </div>
+        <div>
+            <label>Hemodynamic status</label>
+            <select id="hemo">
+                <option value="">Select...</option>
+                <option value="stable">Stable</option>
+                <option value="borderline">Borderline (MAP ~60–65)</option>
+                <option value="unstable">Unstable (on vasopressors / MAP <60)</option>
+            </select>
+        </div>
+        <div>
+            <label>Crash / severe hypoxemia intubation?</label>
+            <select id="crash">
+                <option value="">Select...</option>
+                <option value="no">No</option>
+                <option value="yes">Yes (SpO₂ very low, emergent)</option>
+            </select>
+        </div>
+    </div>
+    <p class="helper-text">
+        PBW will be used for tidal volume. Fine-tune later with your ABG/Vent tools.
+    </p>
+    <button class="btn-primary" onclick="makePlan()">Generate Initial Settings</button>
+</div>
+
+<div class="card" id="results" style="display:none;">
+    <h2>Suggested Initial Settings</h2>
+    <div class="plan-box" id="plan"></div>
+    <button class="copy-btn" onclick="copyPlan()">📋 Copy Plan</button>
+</div>
+
+</main>
+
+<script>
+let lastPlan="";
+
+function pbwCalc(gender,height){
+    if(!gender||!height) return null;
+    if(gender==="male") return 50+0.91*(height-152.4);
+    return 45.5+0.91*(height-152.4);
+}
+
+function makePlan(){
+    const scenario=document.getElementById("scenario").value;
+    const gender=document.getElementById("gender").value;
+    const height=parseFloat(document.getElementById("height").value);
+    const hemo=document.getElementById("hemo").value;
+    const crash=document.getElementById("crash").value;
+
+    let plan="";
+    if(!scenario||!gender||isNaN(height)){
+        plan="Please select scenario, gender, and height.\n";
+        show(plan);
+        return;
+    }
+
+    const pbw=pbwCalc(gender,height);
+    let vtMlKgMin, vtMlKgMax, rr, peep, fio2, mode="AC/VC", ie="1:2", flow="60–80 L/min";
+
+    if(crash==="yes"){
+        fio2=100;
+    } else {
+        fio2=(scenario==="neuro")?40:60;
+    }
+
+    switch(scenario){
+        case "ards":
+            vtMlKgMin=4; vtMlKgMax=6; rr=24; peep=8;
+            mode="AC/VC or AC/PC (lung protective)";
+            break;
+        case "copd":
+            vtMlKgMin=6; vtMlKgMax=8; rr=10; peep=5;
+            ie="1:3–1:4"; flow="80–100 L/min";
+            break;
+        case "neuro":
+            vtMlKgMin=6; vtMlKgMax=8; rr=16; peep=5;
+            break;
+        case "metabolic":
+            vtMlKgMin=6; vtMlKgMax=8; rr=22; peep=5;
+            break;
+        case "shock":
+            vtMlKgMin=6; vtMlKgMax=7; rr=18; peep=5;
+            break;
+        default: // general
+            vtMlKgMin=6; vtMlKgMax=8; rr=16; peep=5;
+    }
+
+    // hemodynamics adjust PEEP
+    if(hemo==="unstable" && peep>5) peep=5;
+
+    const vtMin=Math.round(pbw*vtMlKgMin);
+    const vtMax=Math.round(pbw*vtMlKgMax);
+    const vtMid=Math.round(pbw*(vtMlKgMin+vtMlKgMax)/2);
+
+    plan+="PATIENT DATA\n";
+    plan+="• Scenario: "+scenario+"\n";
+    plan+="• PBW: "+pbw.toFixed(1)+" kg\n";
+    plan+="• Hemodynamics: "+(hemo||"not specified")+"\n";
+    plan+="• Crash intubation: "+(crash||"not specified")+"\n\n";
+
+    plan+="INITIAL VENT SETTINGS (SUGGESTED START)\n";
+    plan+="• Mode: "+mode+"\n";
+    plan+="• Tidal volume: "+vtMid+" mL ("+vtMlKgMin+"–"+vtMlKgMax+" mL/kg PBW range)\n";
+    plan+="• RR: "+rr+" breaths/min\n";
+    plan+="• FiO₂: "+fio2+"%\n";
+    plan+="• PEEP: "+peep+" cmH₂O\n";
+    plan+="• I:E ratio: "+ie+"\n";
+    plan+="• Inspiratory flow: "+flow+"\n\n";
+
+    plan+="SCENARIO-BASED NOTES\n";
+    if(scenario==="ards"){
+        plan+="• ARDS: low Vt, monitor plateau pressure, consider early proning if very hypoxemic.\n";
+    } else if(scenario==="copd"){
+        plan+="• COPD/asthma: prioritize long expiration (low RR, high flow) and monitor for auto-PEEP.\n";
+    } else if(scenario==="neuro"){
+        plan+="• Neuro/ICP: avoid extremes of PaCO₂; aim 35–40 mmHg; avoid high PEEP if ICP concern.\n";
+    } else if(scenario==="metabolic"){
+        plan+="• Metabolic acidosis: allow compensatory hyperventilation; do not force PaCO₂ to 40.\n";
+    } else if(scenario==="shock"){
+        plan+="• Shock: avoid excessive PEEP; prioritize perfusion while maintaining adequate oxygenation.\n";
+    }
+
+    plan+="\nNEXT STEPS\n";
+    plan+="• Check ABG/VBG in 20–30 minutes and use your ABG/Vent helper to fine-tune.\n";
+    plan+="• Measure plateau pressure and adjust Vt/PEEP accordingly.\n";
+
+    lastPlan=plan;
+    show(plan);
+}
+
+function show(text){
+    document.getElementById("plan").innerText=text;
+    document.getElementById("results").style.display="block";
+}
+
+function copyPlan(){
+    if(!lastPlan){alert("No plan to copy.");return;}
+    navigator.clipboard.writeText(lastPlan)
+        .then(()=>alert("Plan copied!"))
+        .catch(()=>alert("Copy failed."));
+}
+</script>
+
+</body>
+</html>
