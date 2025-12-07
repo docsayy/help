@@ -1,1 +1,263 @@
-weaning_rsbi.html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Weaning & RSBI Tool – Critical Care</title>
+<style>
+:root{
+    --bg:#e0f7fa;
+    --card:#ffffff;
+    --accent:#00838f;
+    --muted:#546e7a;
+    --radius:14px;
+}
+body{
+    margin:0;
+    font-family:system-ui,sans-serif;
+    background:radial-gradient(circle,#b2ebf2,#e0f7fa);
+}
+header{
+    background:linear-gradient(90deg,#00acc1,#00838f);
+    color:white;
+    padding:16px;
+    display:flex;
+    justify-content:space-between;
+    flex-wrap:wrap;
+}
+header h1{margin:0;font-size:1.25rem;}
+.nav-buttons a{
+    text-decoration:none;color:white;
+    padding:6px 10px;border-radius:999px;
+    border:1px solid rgba(255,255,255,0.8);
+    margin-left:6px;font-size:.9rem;
+}
+main{max-width:900px;margin:20px auto 32px;padding:0 12px;}
+.card{
+    background:var(--card);
+    padding:18px;
+    border-radius:var(--radius);
+    margin-bottom:18px;
+    box-shadow:0 8px 24px rgba(0,0,0,0.1);
+}
+h2{margin:0 0 6px;color:#004d5a;font-size:1.15rem;}
+.subtitle{margin:0 0 12px;font-size:.9rem;color:var(--muted);}
+label{display:block;margin-bottom:4px;font-size:.85rem;color:#37474f;}
+input,select{
+    width:100%;padding:10px;border-radius:10px;
+    border:1px solid #cfd8dc;background:#f9feff;
+}
+.grid-2{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px;}
+.btn-primary{
+    width:100%;margin-top:12px;padding:12px;
+    border-radius:999px;border:none;background:#00838f;
+    color:white;font-weight:600;cursor:pointer;
+}
+.plan-box{
+    background:#f1ffff;border-radius:12px;
+    border:1px dashed #b2ebf2;padding:12px;
+    white-space:pre-line;font-size:.9rem;color:#37474f;
+}
+.copy-btn{
+    margin-top:10px;padding:10px 16px;border:none;
+    border-radius:999px;background:#eceff1;cursor:pointer;
+}
+.helper-text{font-size:.8rem;color:var(--muted);margin-top:4px;}
+</style>
+</head>
+<body>
+
+<header>
+    <h1>🫁 Weaning & RSBI Tool</h1>
+    <div class="nav-buttons">
+        <a href="../home.html">🏠 Home</a>
+        <a href="../critical_care.html">⬅ Critical Care</a>
+    </div>
+</header>
+
+<main>
+
+<div class="card">
+    <h2>Inputs</h2>
+    <p class="subtitle">Check readiness, calculate RSBI, and get extubation suggestions.</p>
+
+    <div class="grid-2">
+        <div>
+            <label>Respiratory rate (RR, breaths/min)</label>
+            <input type="number" id="rr" placeholder="e.g. 18">
+        </div>
+        <div>
+            <label>Tidal volume (mL, on SBT or current)</label>
+            <input type="number" id="vt" placeholder="e.g. 400">
+        </div>
+        <div>
+            <label>FiO₂ (%)</label>
+            <input type="number" id="fio2" placeholder="e.g. 40">
+        </div>
+        <div>
+            <label>PEEP (cmH₂O)</label>
+            <input type="number" id="peep" placeholder="e.g. 5">
+        </div>
+        <div>
+            <label>SpO₂ (%)</label>
+            <input type="number" id="spo2" placeholder="e.g. 94">
+        </div>
+        <div>
+            <label>pH (optional)</label>
+            <input type="number" step="0.01" id="ph" placeholder="e.g. 7.38">
+        </div>
+        <div>
+            <label>MAP (mmHg)</label>
+            <input type="number" id="map" placeholder="e.g. 70">
+        </div>
+        <div>
+            <label>On vasopressors?</label>
+            <select id="pressors">
+                <option value="">Select...</option>
+                <option value="no">No</option>
+                <option value="low">Low-dose stable</option>
+                <option value="high">High-dose / unstable</option>
+            </select>
+        </div>
+        <div>
+            <label>Mental status</label>
+            <select id="mental">
+                <option value="">Select...</option>
+                <option value="follows">Awake, follows commands</option>
+                <option value="awake">Awake but not consistently following</option>
+                <option value="drowsy">Drowsy</option>
+            </select>
+        </div>
+        <div>
+            <label>Secretions / cough</label>
+            <select id="secretions">
+                <option value="">Select...</option>
+                <option value="minimal">Minimal, good cough</option>
+                <option value="moderate">Moderate, manageable</option>
+                <option value="heavy">Heavy secretions / weak cough</option>
+            </select>
+        </div>
+        <div>
+            <label>Cuff leak (if relevant)</label>
+            <select id="cuffleak">
+                <option value="">Select...</option>
+                <option value="present">Present / adequate</option>
+                <option value="reduced">Reduced / questionably present</option>
+                <option value="notchecked">Not checked</option>
+            </select>
+        </div>
+    </div>
+
+    <p class="helper-text">
+        RSBI = RR / (Vt in liters). RSBI &lt; 105 is generally favorable, but clinical context matters.
+    </p>
+
+    <button class="btn-primary" onclick="calcWeaning()">Assess Weaning & Extubation</button>
+</div>
+
+<div class="card" id="results" style="display:none;">
+    <h2>Weaning Assessment</h2>
+    <div class="plan-box" id="plan"></div>
+    <button class="copy-btn" onclick="copyPlan()">📋 Copy Plan</button>
+</div>
+
+</main>
+
+<script>
+let lastPlan="";
+
+function calcWeaning(){
+    const rr=parseFloat(document.getElementById("rr").value);
+    const vt=parseFloat(document.getElementById("vt").value);
+    const fio2=parseFloat(document.getElementById("fio2").value);
+    const peep=parseFloat(document.getElementById("peep").value);
+    const spo2=parseFloat(document.getElementById("spo2").value);
+    const ph=parseFloat(document.getElementById("ph").value);
+    const map=parseFloat(document.getElementById("map").value);
+    const pressors=document.getElementById("pressors").value;
+    const mental=document.getElementById("mental").value;
+    const secretions=document.getElementById("secretions").value;
+    const cuffleak=document.getElementById("cuffleak").value;
+
+    let plan="";
+
+    if(isNaN(rr)||isNaN(vt)){
+        plan="Please enter at least RR and Vt to calculate RSBI.";
+        show(plan);
+        return;
+    }
+
+    const vtL=vt/1000;
+    const rsbi=rr/vtL;
+
+    plan+="RSBI\n";
+    plan+="• RR: "+rr+" /min\n";
+    plan+="• Vt: "+vt+" mL ("+vtL.toFixed(2)+" L)\n";
+    plan+="• RSBI = RR / Vt(L) ≈ "+rsbi.toFixed(1)+"\n\n";
+
+    if(rsbi<80) plan+="RSBI interpretation: Very favorable (well below 105).\n\n";
+    else if(rsbi<=105) plan+="RSBI interpretation: Borderline but acceptable (≤105).\n\n";
+    else plan+="RSBI interpretation: UNFAVORABLE (>105) – high risk of weaning failure.\n\n";
+
+    // Readiness
+    plan+="READINESS CHECKLIST\n";
+
+    if(!isNaN(fio2)) plan+="• FiO₂: "+fio2+"% "+(fio2<=40?"(OK ≤40%)":"(High; prefer ≤40–50%)")+"\n";
+    if(!isNaN(peep)) plan+="• PEEP: "+peep+" cmH₂O "+(peep<=5?"(OK ≤5)":"(High; prefer ≤5–8)")+"\n";
+    if(!isNaN(spo2)) plan+="• SpO₂: "+spo2+"% "+(spo2>=92?"(OK)":"(Borderline/Low)")+"\n";
+    if(!isNaN(ph)) plan+="• pH: "+ph.toFixed(2)+" "+(ph>=7.30?"(OK)":"(Acidemia)")+"\n";
+    if(!isNaN(map)) plan+="• MAP: "+map+" mmHg\n";
+    if(pressors) plan+="• Vasopressors: "+pressors+"\n";
+    if(mental) plan+="• Mental status: "+mental+"\n";
+    if(secretions) plan+="• Secretions: "+secretions+"\n";
+    if(cuffleak) plan+="• Cuff leak: "+cuffleak+"\n";
+
+    plan+="\nEXTUBATION / SBT SUGGESTION\n";
+
+    let ready=true;
+
+    if(rsbi>105) ready=false;
+    if(!isNaN(fio2) && fio2>50) ready=false;
+    if(!isNaN(peep) && peep>8) ready=false;
+    if(!isNaN(spo2) && spo2<90) ready=false;
+    if(!isNaN(ph) && ph<7.30) ready=false;
+    if(!isNaN(map) && map<65) ready=false;
+    if(pressors==="high") ready=false;
+    if(mental==="drowsy") ready=false;
+    if(secretions==="heavy") ready=false;
+
+    if(ready){
+        plan+="• Patient appears reasonably ready for an SBT and possible extubation, if airway is safe and team agrees.\n";
+    } else {
+        plan+="• Patient does NOT meet ideal weaning/extubation criteria.\n";
+        plan+="• Consider optimizing oxygenation, hemodynamics, secretions, mental status, and repeating SBT later.\n";
+    }
+
+    if(cuffleak==="reduced"){
+        plan+="• Reduced cuff leak: consider steroids and caution with extubation due to possible airway edema.\n";
+    }
+
+    plan+="\nPOST-EXTUBATION PLAN IDEAS\n";
+    plan+="• Low-risk: nasal cannula or simple mask.\n";
+    plan+="• Moderate risk: HFNC or NIV support immediately after extubation.\n";
+    plan+="• High risk (borderline gas): plan for early HFNC/NIV and close monitoring.\n";
+
+    lastPlan=plan;
+    show(plan);
+}
+
+function show(text){
+    document.getElementById("plan").innerText=text;
+    document.getElementById("results").style.display="block";
+}
+
+function copyPlan(){
+    if(!lastPlan){alert("No plan to copy.");return;}
+    navigator.clipboard.writeText(lastPlan)
+        .then(()=>alert("Plan copied!"))
+        .catch(()=>alert("Copy failed."));
+}
+</script>
+
+</body>
+</html>
