@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Platelet Disorders Helper</title>
+
+<style>
+    :root {
+        --primary: #7b1fa2;        /* hematology theme */
+        --primary-dark: #4a148c;
+        --bg1: #f6f2f9;
+        --bg2: #ffffff;
+        --text-dark: #2c003e;
+        --card-shadow: rgba(0,0,0,0.15);
+        --radius: 14px;
+    }
+
+    body {
+        margin: 0;
+        padding: 20px;
+        font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
+        background: linear-gradient(135deg, var(--bg1), #fafafa);
+    }
+
+    h1 {
+        text-align: center;
+        color: var(--primary-dark);
+        font-size: 26px;
+        margin-top: 40px;
+        margin-bottom: 10px;
+    }
+
+    .subtitle {
+        text-align: center;
+        color: #5f4375;
+        font-size: 14px;
+        margin-bottom: 20px;
+    }
+
+    /* Floating nav buttons */
+    .nav-btn {
+        position: fixed;
+        top: 15px;
+        padding: 8px 16px;
+        border-radius: 10px;
+        font-weight: 600;
+        font-size: 14px;
+        text-decoration: none;
+        color: #fff;
+        background: var(--primary);
+        box-shadow: 0 4px 10px rgba(0,0,0,0.25);
+        transition: 0.2s;
+        z-index: 1000;
+    }
+    .nav-btn:hover { background: var(--primary-dark); }
+
+    .nav-left { left: 15px; }
+    .nav-right { right: 15px; }
+
+    /* Main card */
+    .container {
+        max-width: 960px;
+        margin: 0 auto;
+        background: var(--bg2);
+        padding: 26px 22px 28px;
+        border-radius: var(--radius);
+        box-shadow: 0 8px 22px var(--card-shadow);
+    }
+
+    .section-title {
+        font-weight: 700;
+        color: var(--text-dark);
+        margin-bottom: 8px;
+        margin-top: 16px;
+        font-size: 16px;
+    }
+
+    .grid {
+        display: grid;
+        gap: 16px;
+        grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+        margin-bottom: 10px;
+    }
+
+    label {
+        font-weight: 600;
+        color: var(--text-dark);
+        font-size: 14px;
+    }
+
+    input, select {
+        width: 100%;
+        padding: 9px 10px;
+        margin-top: 5px;
+        border-radius: 10px;
+        border: 1px solid #c7b8d9;
+        background: #faf7ff;
+        font-size: 14px;
+    }
+
+    /* Button */
+    button {
+        margin-top: 20px;
+        width: 100%;
+        padding: 14px;
+        background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+        border: none;
+        color: white;
+        font-size: 17px;
+        border-radius: 12px;
+        cursor: pointer;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+        transition: 0.2s;
+    }
+    button:hover { transform: scale(1.02); }
+
+    /* Results */
+    .result {
+        margin-top: 22px;
+        padding: 18px;
+        background: #f3e5f5;
+        border-left: 6px solid var(--primary);
+        border-radius: 10px;
+        font-size: 14px;
+        line-height: 1.5;
+    }
+
+    .emr-box {
+        margin-top: 20px;
+        padding: 18px;
+        background: #ede7f6;
+        border-left: 6px solid var(--primary-dark);
+        border-radius: 10px;
+        font-size: 14px;
+    }
+
+    .copy-btn {
+        margin-top: 10px;
+        padding: 9px;
+        width: 100%;
+        border-radius: 8px;
+        border: none;
+        background: var(--primary-dark);
+        color: #fff;
+        font-size: 14px;
+        cursor: pointer;
+    }
+
+    @media (max-width: 480px) {
+        body { padding: 14px; }
+        h1 { font-size: 22px; margin-top: 50px; }
+    }
+</style>
+</head>
+
+<body>
+
+<a href="hematology.html" class="nav-btn nav-left">← Hematology</a>
+<a href="index.html" class="nav-btn nav-right">Home</a>
+
+<h1>🩸 Platelet Disorders Helper</h1>
+<div class="subtitle">
+    Quick triage of thrombocytopenia / thrombocytosis with red flag patterns and copy-ready A&P.
+</div>
+
+<div class="container">
+
+    <div class="section-title">Platelet & CBC</div>
+    <div class="grid">
+        <div>
+            <label>Current Platelet Count (K/µL)</label>
+            <input type="number" id="plt" step="1" />
+        </div>
+        <div>
+            <label>Prior Platelet Count (K/µL)</label>
+            <input type="number" id="plt_prior" step="1" />
+        </div>
+        <div>
+            <label>WBC (K/µL)</label>
+            <input type="number" id="wbc" step="0.1" />
+        </div>
+        <div>
+            <label>Hemoglobin (g/dL)</label>
+            <input type="number" id="hb" step="0.1" />
+        </div>
+    </div>
+
+    <div class="section-title">Organ Injury / Coagulation (for DIC / TTP patterns)</div>
+    <div class="grid">
+        <div>
+            <label>Creatinine (mg/dL)</label>
+            <input type="number" id="cr" step="0.1" />
+        </div>
+        <div>
+            <label>LDH (U/L)</label>
+            <input type="number" id="ldh" step="1" />
+        </div>
+        <div>
+            <label>INR</label>
+            <input type="number" id="inr" step="0.1" />
+        </div>
+        <div>
+            <label>Fibrinogen (mg/dL)</label>
+            <input type="number" id="fibrinogen" step="1" />
+        </div>
+        <div>
+            <label>D-dimer (optional, ng/mL FEU)</label>
+            <input type="number" id="ddimer" step="1" />
+        </div>
+    </div>
+
+    <div class="section-title">Clinical Context</div>
+    <div class="grid">
+        <div>
+            <label>Recent heparin exposure (past 5–10 days)</label>
+            <select id="heparin">
+                <option value="">-- Select --</option>
+                <option value="yes">Yes</option>
+                <option value="no">No / unsure</option>
+            </select>
+        </div>
+        <div>
+            <label>Active infection / sepsis</label>
+            <select id="sepsis">
+                <option value="">-- Select --</option>
+                <option value="yes">Yes</option>
+                <option value="no">No / unsure</option>
+            </select>
+        </div>
+        <div>
+            <label>Known chronic liver disease / portal HTN</label>
+            <select id="liver">
+                <option value="">-- Select --</option>
+                <option value="yes">Yes</option>
+                <option value="no">No / unsure</option>
+            </select>
+        </div>
+        <div>
+            <label>Splenomegaly on exam / imaging</label>
+            <select id="spleen">
+                <option value="">-- Select --</option>
+                <option value="yes">Yes</option>
+                <option value="no">No / unknown</option>
+            </select>
+        </div>
+        <div>
+            <label>Recent chemo / myelosuppressive drugs</label>
+            <select id="chemo">
+                <option value="">-- Select --</option>
+                <option value="yes">Yes</option>
+                <option value="no">No / unsure</option>
+            </select>
+        </div>
+        <div>
+            <label>Neurologic symptoms (AMS, focal deficits)</label>
+            <select id="neuro">
+                <option value="">-- Select --</option>
+                <option value="yes">Yes</option>
+                <option value="no">No / unsure</option>
+            </select>
+        </div>
+        <div>
+            <label>Active malignancy</label>
+            <select id="cancer">
+                <option value="">-- Select --</option>
+                <option value="yes">Yes</option>
+                <option value="no">No / unsure</option>
+            </select>
+        </div>
+        <div>
+            <label>Pregnancy</label>
+            <select id="preg">
+                <option value="">-- Select --</option>
+                <option value="yes">Yes</option>
+                <option value="no">No / N/A</option>
+            </select>
+        </div>
+    </div>
+
+    <button onclick="assessPlatelets()">Assess Platelets</button>
+
+    <div id="result" class="result" style="display:none;"></div>
+
+    <div id="emrBox" class="emr-box" style="display:none;">
+        <h3>Assessment & Plan (Copy-Ready)</h3>
+        <pre id="emrText" style="white-space:pre-wrap;"></pre>
+        <button class="copy-btn" onclick="copyEMR()">Copy to Clipboard</button>
+    </div>
+</div>
+
+<script>
+function num(id) {
+    const v = parseFloat(document.getElementById(id).value);
+    return isNaN(v) ? null : v;
+}
+function yn(id) {
+    const v = document.getElementById(id).value;
+    if (!v) return null;
+    return v === "yes";
+}
+
+function assessPlatelets() {
+    const plt       = num("plt");
+    const pltPrior  = num("plt_prior");
+    const wbc       = num("wbc");
+    const hb        = num("hb");
+    const cr        = num("cr");
+    const ldh       = num("ldh");
+    const inr       = num("inr");
+    const fib       = num("fibrinogen");
+    const ddimer    = num("ddimer");
+
+    const heparin   = yn("heparin");
+    const sepsis    = yn("sepsis");
+    const liver     = yn("liver");
+    const spleen    = yn("spleen");
+    const chemo     = yn("chemo");
+    const neuro     = yn("neuro");
+    const cancer    = yn("cancer");
+    const preg      = yn("preg");
+
+    let out = "";
+    let A = [];
+    let P = [];
+    let missing = [];
+
+    /* 1) Platelet severity and category */
+    if (plt === null) {
+        missing.push("Current platelet count");
+    } else {
+        if (plt < 10) {
+            out += "<b>Critical thrombocytopenia</b> (Plt <10 K/µL).<br>";
+            A.push(`Critical thrombocytopenia (Plt ${plt} K/µL)`);
+            P.push("Urgent platelet transfusion if active bleeding or very high risk; hematology consult.");
+        } else if (plt < 30) {
+            out += "<b>Severe thrombocytopenia</b> (10–29 K/µL).<br>";
+            A.push(`Severe thrombocytopenia (Plt ${plt} K/µL)`);
+            P.push("Avoid IM injections and high-risk procedures; platelet transfusion if bleeding or before urgent procedures.");
+        } else if (plt < 50) {
+            out += "<b>Moderate thrombocytopenia</b> (30–49 K/µL).<br>";
+            A.push(`Moderate thrombocytopenia (Plt ${plt} K/µL)`);
+            P.push("Avoid elective high-risk procedures; consider transfusion if bleeding.");
+        } else if (plt < 150) {
+            out += "<b>Mild thrombocytopenia</b> (50–149 K/µL).<br>";
+            A.push(`Mild thrombocytopenia (Plt ${plt} K/µL)`);
+        } else if (plt > 450) {
+            out += "<b>Thrombocytosis</b> (Plt >450 K/µL).<br>";
+            A.push(`Thrombocytosis (Plt ${plt} K/µL)`);
+        } else {
+            out += `Platelet count in normal range (${plt} K/µL).<br>`;
+        }
+    }
+
+    /* 2) Rapid % drop (HIT / acute processes) */
+    if (plt !== null && pltPrior !== null && pltPrior > 0) {
+        const dropPct = ((pltPrior - plt) / pltPrior) * 100;
+        const dropStr = dropPct.toFixed(0);
+        out += `Platelet change vs prior: <b>${dropStr}%</b> drop.<br>`;
+        if (dropPct >= 50) {
+            A.push(`Acute >50% platelet fall from ${pltPrior} → ${plt} K/µL`);
+            P.push("Evaluate for HIT if on heparin, sepsis, DIC, or drug-induced thrombocytopenia.");
+        }
+    }
+
+    /* 3) Marrow vs peripheral patterns (using WBC / Hb / chemo) */
+    if (wbc !== null && hb !== null) {
+        if (plt !== null && plt < 150 && wbc < 4 && hb < 10) {
+            A.push("Pancytopenia pattern – possible marrow failure / infiltration.");
+            P.push("Consider bone marrow suppression, leukemia/MDS, or aplastic anemia; hematology consult and consider bone marrow biopsy.");
+        }
+    }
+    if (chemo === true && plt !== null && plt < 150) {
+        A.push("Thrombocytopenia in setting of recent chemo – likely marrow suppression.");
+        P.push("Review chemo timing; supportive care, transfuse per thresholds, discuss with oncology.");
+    }
+
+    /* 4) DIC-like pattern: low Plt + ↑INR + low fibrinogen + ↑D-dimer */
+    if (plt !== null && inr !== null && fib !== null) {
+        if (plt < 100 && inr > 1.5 && fib < 150 && (ddimer === null || ddimer > 500)) {
+            A.push("Coagulopathy pattern concerning for DIC.");
+            out += "Labs suggest <b>DIC pattern</b> (thrombocytopenia + ↑INR + low fibrinogen).<br>";
+            P.push("Search for underlying trigger (sepsis, trauma, malignancy, obstetric complication); consider DIC workup and manage coagulopathy (platelets, cryo, FFP) guided by bleeding and procedures.");
+        }
+    }
+
+    /* 5) TTP-like pattern: thrombocytopenia + MAHA signs + renal / neuro */
+    if (plt !== null && plt < 100 && ldh !== null && ldh > 250) {
+        if ((cr !== null && cr > 1.5) || neuro === true) {
+            A.push("Thrombocytopenia with MAHA/organ injury – concern for TTP/HUS.");
+            out += "Combination of thrombocytopenia + ↑LDH + organ involvement is concerning for <b>TMA (e.g., TTP/HUS)</b>.<br>";
+            P.push("Urgent hematology consult; consider TTP workup and plasma exchange if clinically indicated. Avoid prophylactic platelet transfusion unless life-threatening bleeding.");
+        }
+    }
+
+    /* 6) HIT signal: >50% drop + heparin exposure */
+    if (heparin === true && plt !== null && pltPrior !== null && pltPrior > 0) {
+        const dropPct = ((pltPrior - plt) / pltPrior) * 100;
+        if (dropPct >= 50 && plt < 150) {
+            A.push("High suspicion for HIT (heparin exposure + >50% platelet fall).");
+            out += "Pattern suggests <b>possible HIT</b> – calculate 4T score and use dedicated HIT tool.<br>";
+            P.push("Stop all heparin, avoid platelet transfusion unless life-threatening bleed; consider non-heparin anticoagulant and send HIT testing per local protocol.");
+        }
+    }
+
+    /* 7) Splenic / portal HTN pattern */
+    if (plt !== null && plt < 150 && spleen === true) {
+        A.push("Thrombocytopenia with splenomegaly – splenic sequestration / portal HTN pattern.");
+        P.push("Evaluate for chronic liver disease, portal hypertension, and consider abdominal imaging if not done.");
+    }
+    if (plt !== null && plt < 150 && liver === true) {
+        A.push("Thrombocytopenia in chronic liver disease – likely hypersplenism / reduced thrombopoietin.");
+        P.push("Manage underlying liver disease; consider TPO-RA or platelet transfusion peri-procedurally per hepatology guidance.");
+    }
+
+    /* 8) Thrombocytosis patterns */
+    if (plt !== null && plt > 450) {
+        if (sepsis === true || cancer === true) {
+            A.push("Thrombocytosis likely reactive (infection/inflammation/malignancy).");
+            P.push("Treat underlying inflammatory or malignant process; usually no specific anti-platelet therapy for reactive thrombocytosis.");
+        } else {
+            A.push("Unexplained thrombocytosis – consider myeloproliferative neoplasm.");
+            P.push("Check prior CBC trend; consider iron studies, JAK2/MPL/CALR testing and hematology referral.");
+        }
+    }
+
+    /* 9) Pregnancy-related note */
+    if (preg === true && plt !== null && plt >= 70 && plt < 150) {
+        A.push("Mild gestational thrombocytopenia vs ITP in pregnancy.");
+        P.push("Review timing and trend; involve OB/MFM and hematology for peripartum platelet targets.");
+    }
+
+    /* 10) Generic next steps and missing items */
+    if (plt !== null && plt < 150) {
+        P.push("Review medication list (heparin, antibiotics, antiepileptics, heparinoids, others) for drug-induced thrombocytopenia.");
+        P.push("Consider peripheral smear to look for schistocytes, blasts, or platelet clumping.");
+    }
+
+    if (plt === null) {
+        // already added to missing, just reinforce
+    }
+    if (wbc === null)  missing.push("WBC");
+    if (hb === null)   missing.push("Hemoglobin");
+    if (ldh === null && plt !== null && plt < 150) missing.push("LDH (for hemolysis / TMA)");
+    if (inr === null && plt !== null && plt < 150) missing.push("INR/PT for coagulopathy");
+    if (fib === null && plt !== null && plt < 150) missing.push("Fibrinogen");
+    if (heparin === null && plt !== null) missing.push("History of recent heparin exposure");
+    if (spleen === null && plt !== null && plt < 150) missing.push("Exam/imaging for splenomegaly");
+
+    if (missing.length > 0) {
+        out += "<br><b>Suggested additional data:</b><ul>";
+        missing.forEach(m => out += "<li>" + m + "</li>");
+        out += "</ul>";
+    }
+
+    if (A.length === 0) {
+        A.push("Platelet evaluation – no clear abnormal pattern identified with current data.");
+    }
+
+    /* Build EMR A&P */
+    let emr = "Assessment:\n";
+    A.forEach(a => emr += "• " + a + "\n");
+
+    emr += "\nPlan:\n";
+    if (P.length === 0) {
+        emr += "• Monitor counts and clinical status; complete missing laboratory evaluation.\n";
+    } else {
+        P.forEach(p => emr += "• " + p + "\n");
+    }
+
+    if (missing.length > 0) {
+        emr += "\nSuggested additional data:\n";
+        missing.forEach(m => emr += "• " + m + "\n");
+    }
+
+    document.getElementById("result").innerHTML = out;
+    document.getElementById("result").style.display = "block";
+
+    document.getElementById("emrText").textContent = emr;
+    document.getElementById("emrBox").style.display = "block";
+}
+
+function copyEMR() {
+    navigator.clipboard.writeText(document.getElementById("emrText").textContent);
+}
+</script>
+
+</body>
+</html>
