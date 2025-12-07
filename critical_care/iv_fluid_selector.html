@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IV Fluid Selector – Critical Care</title>
+
+<style>
+:root {
+    --bg: #e0f7fa;
+    --card: #ffffff;
+    --accent: #00838f;
+    --accent-soft: #b2ebf2;
+    --muted: #546e7a;
+    --danger: #d32f2f;
+    --success: #2e7d32;
+    --radius: 14px;
+}
+body {
+    margin: 0;
+    font-family: system-ui, sans-serif;
+    background: radial-gradient(circle at top, #b2ebf2 0, #e0f7fa 40%, #e0f2f1 100%);
+}
+header {
+    padding: 16px;
+    background: linear-gradient(90deg, #00acc1, #00838f);
+    color: white;
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
+header h1 {
+    margin: 0;
+    font-size: 1.25rem;
+}
+.nav-buttons a {
+    text-decoration: none;
+    margin-left: 6px;
+    padding: 6px 10px;
+    font-size: .9rem;
+    border-radius: 999px;
+    color: white;
+    border: 1px solid rgba(255,255,255,0.8);
+}
+main {
+    max-width: 900px;
+    margin: 20px auto;
+    padding: 0 12px;
+}
+.card {
+    background: var(--card);
+    padding: 18px;
+    margin-bottom: 18px;
+    border-radius: var(--radius);
+    box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+}
+h2 {
+    margin: 0;
+    margin-bottom: 8px;
+    font-size: 1.2rem;
+    color: #004d5a;
+}
+.subtitle {
+    color: var(--muted);
+    margin-bottom: 12px;
+}
+label {
+    color: #37474f;
+    font-size: .9rem;
+}
+.grid-2 {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(170px,1fr));
+    gap: 12px;
+}
+select, input[type=number] {
+    width: 100%;
+    padding: 10px;
+    border-radius: 10px;
+    border: 1px solid #cfd8dc;
+}
+.btn-primary {
+    background: var(--accent);
+    color: white;
+    border-radius: 999px;
+    border: none;
+    padding: 12px;
+    width: 100%;
+    margin-top: 12px;
+    font-weight: 600;
+    cursor: pointer;
+}
+.plan-box {
+    background: #f1ffff;
+    padding: 14px;
+    border: 1px dashed var(--accent);
+    border-radius: 10px;
+    white-space: pre-line;
+}
+.copy-btn {
+    background: #eceff1;
+    padding: 10px 16px;
+    border-radius: 999px;
+    border: none;
+    cursor: pointer;
+    margin-top: 8px;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <h1>💧 IV Fluid Selector</h1>
+    <div class="nav-buttons">
+        <a href="../home.html">🏠 Home</a>
+        <a href="../critical_care.html">⬅ Critical Care</a>
+    </div>
+</header>
+
+<main>
+
+    <div class="card">
+        <h2>Fluid Decision Inputs</h2>
+        <p class="subtitle">Enter the patient's values and the clinical context.</p>
+
+        <div class="grid-2">
+
+            <div>
+                <label>pH</label>
+                <input type="number" id="ph" step="0.01" placeholder="e.g. 7.10">
+            </div>
+
+            <div>
+                <label>Sodium (Na)</label>
+                <input type="number" id="na" placeholder="e.g. 120">
+            </div>
+
+            <div>
+                <label>Bicarbonate (HCO₃)</label>
+                <input type="number" id="bicarb" placeholder="e.g. 10">
+            </div>
+
+            <div>
+                <label>Lactate</label>
+                <input type="number" id="lactate" step="0.1" placeholder="e.g. 5.0">
+            </div>
+
+            <div>
+                <label>Creatinine</label>
+                <input type="number" id="creat" step="0.1" placeholder="e.g. 2.0">
+            </div>
+
+            <div>
+                <label>Clinical Scenario</label>
+                <select id="scenario">
+                    <option value="">Select...</option>
+                    <option value="sepsis">Sepsis / Septic Shock</option>
+                    <option value="trauma">Trauma / Hemorrhage</option>
+                    <option value="dka">DKA</option>
+                    <option value="hypercalcemia">Hypercalcemia</option>
+                    <option value="aki">AKI / Renal Failure</option>
+                    <option value="neuro">Neurologic Injury</option>
+                    <option value="general">General Hypovolemia</option>
+                </select>
+            </div>
+        </div>
+
+        <button class="btn-primary" onclick="chooseFluid()">Select Fluid</button>
+    </div>
+
+    <div class="card" id="results" style="display:none;">
+        <h2>Recommended Fluid Strategy</h2>
+        <div id="plan" class="plan-box"></div>
+        <button class="copy-btn" onclick="copyPlan()">📋 Copy Plan</button>
+    </div>
+
+</main>
+
+<script>
+let lastPlan = "";
+
+function chooseFluid() {
+    const ph = parseFloat(document.getElementById("ph").value);
+    const na = parseFloat(document.getElementById("na").value);
+    const bicarb = parseFloat(document.getElementById("bicarb").value);
+    const lactate = parseFloat(document.getElementById("lactate").value);
+    const creat = parseFloat(document.getElementById("creat").value);
+    const scenario = document.getElementById("scenario").value;
+
+    let plan = "IV FLUID STRATEGY\n\n";
+
+    // Default
+    let primary = "Balanced crystalloids (LR or PlasmaLyte)";
+    let rationales = [];
+
+    // **DKA**
+    if (scenario === "dka") {
+        primary = "Normal Saline (NS) initially → then switch to LR or D5-LR based on labs.";
+        rationales.push("DKA often needs NS early for chloride losses and hyperglycemia-driven hyponatremia.");
+        if (!isNaN(na) && na > 150) {
+            primary = "½ Normal Saline (0.45% NaCl)";
+            rationales.push("Corrected Na is high → avoid further Na load.");
+        }
+    }
+
+    // **Sepsis**
+    if (scenario === "sepsis") {
+        primary = "Balanced crystalloids (LR or PlasmaLyte)";
+        rationales.push("LR reduces chloride load and renal vasoconstriction.");
+        if (!isNaN(lactate) && lactate >= 4) {
+            rationales.push("High lactate → aggressive resuscitation required.");
+        }
+    }
+
+    // **Trauma**
+    if (scenario === "trauma") {
+        primary = "Balanced crystalloids (LR preferred)";
+        rationales.push("Avoid NS-induced acidosis in hemorrhagic shock.");
+    }
+
+    // **Hypercalcemia**
+    if (scenario === "hypercalcemia") {
+        primary = "Normal Saline (NS)";
+        rationales.push("NS promotes calciuresis.");
+    }
+
+    // **Renal failure (AKI)**
+    if (scenario === "aki") {
+        primary = "Balanced crystalloids (LR or PlasmaLyte)";
+        rationales.push("Avoid NS due to chloride-induced renal vasoconstriction.");
+    }
+
+    // **Neurologic injury**
+    if (scenario === "neuro") {
+        primary = "Normal Saline (NS)";
+        rationales.push("Avoid hypotonic fluids; avoid LR if worried about cerebral edema.");
+    }
+
+    // pH considerations
+    if (!isNaN(ph) && ph < 7.1) {
+        rationales.push("Severe acidosis → LR preferred over NS to avoid hyperchloremic acidosis.");
+    }
+
+    // Sodium considerations
+    if (!isNaN(na) && na < 120) {
+        rationales.push("Hyponatremia → avoid hypotonic fluids.");
+    }
+    if (!isNaN(na) && na > 150) {
+        primary = "½ NS (0.45%) or D5W (if severe) depending on volume status.";
+        rationales.push("Hypernatremia → avoid NS/LR; consider hypotonic options.");
+    }
+
+    // Lactate interpretation
+    if (!isNaN(lactate) && lactate > 4) {
+        rationales.push("Severe lactic acidosis → requires balanced crystalloid + source control.");
+    }
+
+    // Creatinine
+    if (!isNaN(creat) && creat > 2.0) {
+        rationales.push("Renal dysfunction → avoid excessive chloride load.");
+    }
+
+    // Build plan text
+    plan += "Primary Fluid:\n• " + primary + "\n\n";
+
+    if (rationales.length > 0) {
+        plan += "Why this fluid?\n";
+        rationales.forEach(r => plan += "• " + r + "\n");
+        plan += "\n";
+    }
+
+    plan += "General Rate Suggestions:\n";
+    plan += "• Bolus: 500–1000 mL depending on shock status.\n";
+    plan += "• Maintenance: 100–150 mL/hr if euvolemic.\n";
+    plan += "• Use ultrasound (IVC, LVOT VTI) to titrate fluids.\n";
+
+    lastPlan = plan;
+    document.getElementById("plan").innerText = plan;
+    document.getElementById("results").style.display = "block";
+}
+
+function copyPlan() {
+    navigator.clipboard.writeText(lastPlan)
+        .then(() => alert("Plan Copied!"))
+        .catch(() => alert("Unable to copy"));
+}
+</script>
+
+</body>
+</html>
