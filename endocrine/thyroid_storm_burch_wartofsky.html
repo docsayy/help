@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Thyroid Storm (Burch–Wartofsky) Tool</title>
+<style>
+:root {
+    --primary: #9b5de5;
+    --secondary: #f7c948;
+    --bg1: #fdf7ff;
+    --bg2: #f3eaff;
+    --card-bg: #ffffff;
+    --text: #3a2a4c;
+    --radius: 14px;
+}
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: linear-gradient(135deg, var(--bg1), var(--bg2));
+    padding: 20px;
+    color: var(--text);
+}
+h1 {
+    text-align: center;
+    color: var(--primary);
+    font-size: 26px;
+    margin-bottom: 20px;
+}
+.card {
+    background: var(--card-bg);
+    border-radius: var(--radius);
+    padding: 20px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    max-width: 650px;
+    margin: 0 auto 25px auto;
+}
+label {
+    font-weight: bold;
+    display: block;
+    margin-top: 12px;
+}
+input, select {
+    width: 100%;
+    padding: 9px;
+    border-radius: var(--radius);
+    border: 1px solid #ccc;
+    margin-top: 5px;
+    font-size: 15px;
+}
+button {
+    width: 100%;
+    padding: 14px;
+    margin-top: 20px;
+    background: var(--primary);
+    color: white;
+    font-size: 17px;
+    border: none;
+    border-radius: var(--radius);
+    cursor: pointer;
+    transition: 0.2s;
+}
+button:hover {
+    background: #8649d6;
+}
+h2 {
+    color: var(--primary);
+    margin-top: 20px;
+}
+.output {
+    white-space: pre-line;
+    padding: 12px;
+    background: #fff7e6;
+    border-left: 5px solid var(--secondary);
+    border-radius: var(--radius);
+    margin-top: 8px;
+}
+.nav-buttons {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 25px;
+}
+.nav-buttons a {
+    text-decoration: none;
+    background: var(--secondary);
+    padding: 10px 14px;
+    border-radius: var(--radius);
+    color: #5b440b;
+    font-weight: bold;
+    box-shadow: 0 3px 6px rgba(0,0,0,0.15);
+}
+.disclaimer {
+    font-size: 12px;
+    color: #6b5b7a;
+}
+</style>
+</head>
+<body>
+<h1>Thyroid Storm (Burch–Wartofsky) Tool</h1>
+<div class="card">
+    <div class="disclaimer">
+        Approximate Burch–Wartofsky style scoring for educational use only. Use clinical judgment and local guidelines.
+    </div>
+
+    <label>Temperature (°C)</label>
+    <input id="temp" type="number" step="0.1">
+
+    <label>Heart rate (bpm)</label>
+    <input id="hr" type="number">
+
+    <label>CNS manifestations</label>
+    <select id="cns">
+        <option value="0">Mild or none (anxiety, tremor)</option>
+        <option value="10">Agitated / delirium</option>
+        <option value="20">Psychosis / extreme agitation</option>
+        <option value="30">Seizures / coma</option>
+    </select>
+
+    <label>GI / hepatic manifestations</label>
+    <select id="gi">
+        <option value="0">None / mild</option>
+        <option value="10">Diarrhea / abdominal pain / nausea</option>
+        <option value="20">Jaundice / marked hepatic dysfunction</option>
+    </select>
+
+    <label>Heart failure</label>
+    <select id="hf">
+        <option value="0">None</option>
+        <option value="5">Mild (pedal edema)</option>
+        <option value="10">Moderate (bibasilar rales)</option>
+        <option value="15">Severe (pulmonary edema)</option>
+    </select>
+
+    <label>Atrial fibrillation</label>
+    <select id="afib">
+        <option value="0">No</option>
+        <option value="10">Yes</option>
+    </select>
+
+    <label>Precipitating factor (infection, surgery, trauma, withdrawal of meds, etc.)</label>
+    <select id="precip">
+        <option value="0">No obvious precipitant</option>
+        <option value="10">Definite precipitating event present</option>
+    </select>
+
+    <button onclick="calcStorm()">Calculate Score</button>
+
+    <h2>Score & Interpretation</h2>
+    <div id="score" class="output"></div>
+
+    <h2>Management Priorities</h2>
+    <div id="mgmt" class="output"></div>
+
+    <h2>Copy to Clipboard</h2>
+    <button onclick="copyStorm()">Copy Summary</button>
+    <div id="copytext" class="output"></div>
+
+    <div class="nav-buttons">
+        <a href="index.html">Home</a>
+        <a href="endocrine_emergencies.html">Back to Endocrine</a>
+    </div>
+</div>
+
+<script>
+function getNum(id) {
+    const v = document.getElementById(id).value;
+    const n = parseFloat(v);
+    return isNaN(n) ? null : n;
+}
+
+function calcStorm() {
+    const temp = getNum("temp");
+    const hr = getNum("hr");
+    const cns = parseInt(document.getElementById("cns").value || "0", 10);
+    const gi = parseInt(document.getElementById("gi").value || "0", 10);
+    const hf = parseInt(document.getElementById("hf").value || "0", 10);
+    const afib = parseInt(document.getElementById("afib").value || "0", 10);
+    const precip = parseInt(document.getElementById("precip").value || "0", 10);
+
+    let score = 0;
+
+    // Temperature scoring (approximate)
+    if (temp !== null) {
+        if (temp < 37.2) score += 0;
+        else if (temp < 37.8) score += 5;
+        else if (temp < 38.3) score += 10;
+        else if (temp < 38.9) score += 15;
+        else if (temp < 39.4) score += 20;
+        else if (temp < 40) score += 25;
+        else score += 30;
+    }
+
+    // HR scoring (approximate)
+    if (hr !== null) {
+        if (hr < 90) score += 0;
+        else if (hr < 110) score += 5;
+        else if (hr < 120) score += 10;
+        else if (hr < 130) score += 15;
+        else if (hr < 140) score += 20;
+        else score += 25;
+    }
+
+    // CNS, GI, HF, AF, precipitant
+    score += cns + gi + hf + afib + precip;
+
+    let interp = "";
+    if (score < 25) {
+        interp = "Score " + score + " – thyroid storm unlikely (but monitor closely if severely thyrotoxic).";
+    } else if (score < 45) {
+        interp = "Score " + score + " – impending thyroid storm or severe thyrotoxicosis. Treat aggressively and monitor in high-acuity setting.";
+    } else {
+        interp = "Score " + score + " – highly suggestive of thyroid storm. Requires emergent therapy and ICU-level care.";
+    }
+
+    let mgmt = [];
+    mgmt.push("• Supportive care: airway, oxygen, IV fluids, temperature control (cooling blankets, acetaminophen; avoid salicylates).");
+    mgmt.push("• Beta-blockade (e.g., propranolol or esmolol) unless contraindicated; adjust based on hemodynamics.");
+    mgmt.push("• Thionamide to block new hormone synthesis (e.g., PTU or methimazole) as per local protocol.");
+    mgmt.push("• Iodine (SSKI or Lugol’s) at least 1 hour after thionamide to block hormone release.");
+    mgmt.push("• Glucocorticoids (e.g., hydrocortisone) to reduce T4→T3 conversion and treat possible adrenal insufficiency.");
+    mgmt.push("• Consider bile acid sequestrant (cholestyramine) in refractory cases.");
+    mgmt.push("• Identify and treat precipitating factors (infection, surgery, MI, trauma, med withdrawal).");
+    mgmt.push("• Early endocrinology and ICU consultation.");
+
+    const mgmtText = mgmt.join("\n");
+    const copy = "Thyroid storm score: " + score + "\n" +
+                 interp + "\n\nManagement priorities:\n" + mgmtText;
+
+    document.getElementById("score").innerText = interp;
+    document.getElementById("mgmt").innerText = mgmtText;
+    document.getElementById("copytext").innerText = copy;
+}
+
+function copyStorm() {
+    navigator.clipboard.writeText(document.getElementById("copytext").innerText);
+    alert("Copied!");
+}
+</script>
+</body>
+</html>
