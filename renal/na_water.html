@@ -1,1 +1,410 @@
-renal_na_water.html
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Corrected Sodium & Free Water Deficit</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <style>
+    :root{
+      --bg:#f4f7fb;
+      --card:#ffffff;
+      --accent:#0369a1;
+      --accent-soft:#e0f2fe;
+      --border:#d1d5db;
+      --muted:#6b7280;
+      --danger:#b91c1c;
+      --radius:14px;
+      --pad:14px;
+      --shadow:0 10px 25px rgba(3,105,161,0.10);
+    }
+    *{box-sizing:border-box;}
+    body{
+      margin:0;
+      font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;
+      background:radial-gradient(circle at top left,#e0f2fe,#f4f7fb 40%,#fdfefe 80%);
+      color:#0f172a;
+    }
+    .app{
+      max-width:900px;
+      margin:0 auto;
+      padding:16px 12px 24px;
+    }
+    header{
+      text-align:center;
+      margin-bottom:16px;
+    }
+    header h1{
+      font-size:1.35rem;
+      margin:0;
+    }
+    header p{
+      margin:4px 0 0;
+      font-size:0.85rem;
+      color:var(--muted);
+    }
+    .card{
+      background:var(--card);
+      border-radius:var(--radius);
+      padding:var(--pad);
+      box-shadow:var(--shadow);
+      border:1px solid var(--border);
+      margin-bottom:12px;
+    }
+    h2{
+      margin:0 0 8px;
+      font-size:1rem;
+      display:flex;
+      align-items:center;
+      gap:6px;
+    }
+    .badge{
+      font-size:0.65rem;
+      text-transform:uppercase;
+      letter-spacing:0.08em;
+      background:var(--accent-soft);
+      color:var(--accent);
+      padding:2px 8px;
+      border-radius:999px;
+    }
+    .section-note{
+      font-size:0.75rem;
+      color:var(--muted);
+      margin-bottom:6px;
+    }
+    .field-group{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:8px;
+      margin-bottom:8px;
+    }
+    @media(max-width:600px){
+      .field-group{
+        grid-template-columns:1fr;
+      }
+    }
+    .field{
+      display:flex;
+      flex-direction:column;
+      gap:3px;
+    }
+    label{
+      font-size:0.78rem;
+      color:#0f172a;
+    }
+    label span.hint{
+      color:var(--muted);
+      font-size:0.72rem;
+      font-weight:400;
+    }
+    input, select{
+      border-radius:8px;
+      border:1px solid var(--border);
+      padding:6px 8px;
+      font-size:0.8rem;
+      background:#f9fafb;
+    }
+    input:focus, select:focus{
+      outline:none;
+      border-color:var(--accent);
+      box-shadow:0 0 0 1px rgba(3,105,161,0.25);
+      background:#ffffff;
+    }
+    .inline{
+      display:flex;
+      gap:10px;
+      align-items:center;
+      margin-bottom:6px;
+      flex-wrap:wrap;
+    }
+    .inline label{
+      display:flex;
+      align-items:center;
+      gap:4px;
+      font-size:0.78rem;
+      color:var(--muted);
+    }
+    .inline input[type="checkbox"]{
+      width:auto;
+      padding:0;
+    }
+    .btn-row{
+      margin:10px 0 2px;
+      display:flex;
+      flex-wrap:wrap;
+      gap:8px;
+      justify-content:flex-end;
+    }
+    button{
+      border-radius:999px;
+      border:none;
+      padding:8px 16px;
+      font-size:0.8rem;
+      cursor:pointer;
+      display:inline-flex;
+      gap:6px;
+      align-items:center;
+      transition:transform 0.08s ease, box-shadow 0.08s ease, background 0.1s;
+    }
+    .btn-primary{
+      background:var(--accent);
+      color:white;
+      box-shadow:0 6px 16px rgba(3,105,161,0.30);
+    }
+    .btn-primary:hover{
+      transform:translateY(-1px);
+      box-shadow:0 10px 25px rgba(3,105,161,0.45);
+    }
+    .btn-ghost{
+      background:transparent;
+      color:var(--muted);
+      border:1px solid var(--border);
+    }
+    .btn-ghost:hover{
+      background:#f3f4f6;
+    }
+    .result-block{
+      padding:8px 10px;
+      border-radius:10px;
+      background:#f9fafb;
+      border:1px solid #e5e7eb;
+      font-size:0.8rem;
+      margin-bottom:6px;
+    }
+    .result-title{
+      font-weight:600;
+      margin-bottom:2px;
+    }
+    .pill-row{
+      display:flex;
+      flex-wrap:wrap;
+      gap:6px;
+      margin-top:4px;
+    }
+    .pill{
+      padding:2px 8px;
+      font-size:0.72rem;
+      border-radius:999px;
+      background:var(--accent-soft);
+      color:var(--accent);
+    }
+    .pill-danger{
+      background:#fee2e2;
+      color:var(--danger);
+    }
+    .small{
+      font-size:0.75rem;
+      color:var(--muted);
+    }
+  </style>
+</head>
+<body>
+<div class="app">
+  <header>
+    <h1>Corrected Na & Free Water Deficit</h1>
+    <p>Hyperglycemia correction and simple water deficit estimate (education aid only)</p>
+  </header>
+
+  <div class="card">
+    <h2>
+      Inputs
+      <span class="badge">Patient & Labs</span>
+    </h2>
+    <p class="section-note">
+      Uses Na correction of +1.6 mEq/L for each 100 mg/dL glucose above 100. Free water deficit uses TBW × (Na<sub>measured</sub>/Na<sub>goal</sub> − 1).
+    </p>
+
+    <div class="field-group">
+      <div class="field">
+        <label for="na_measured">Measured serum Na (mEq/L)</label>
+        <input id="na_measured" type="number" step="0.1" />
+      </div>
+      <div class="field">
+        <label for="glucose">Serum glucose (mg/dL)</label>
+        <input id="glucose" type="number" step="1" />
+      </div>
+    </div>
+
+    <div class="field-group">
+      <div class="field">
+        <label for="weight">Weight (kg)</label>
+        <input id="weight" type="number" step="0.1" />
+      </div>
+      <div class="field">
+        <label for="sex">Sex</label>
+        <select id="sex">
+          <option value="male">Male</option>
+          <option value="female">Female</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="inline">
+      <label>
+        <input id="elderly" type="checkbox" />
+        Elderly / frail (use lower TBW fraction)
+      </label>
+    </div>
+
+    <div class="field-group">
+      <div class="field">
+        <label for="na_goal">Target Na (mEq/L) <span class="hint">(default 140)</span></label>
+        <input id="na_goal" type="number" step="0.1" placeholder="140" />
+      </div>
+      <div class="field">
+        <label for="max_correction">Planned Na correction in first 24h (mEq/L)</label>
+        <input id="max_correction" type="number" step="0.1" placeholder="8–10" />
+      </div>
+    </div>
+
+    <div class="btn-row">
+      <button class="btn-ghost" type="button" onclick="resetNaWater()">Clear</button>
+      <button class="btn-primary" type="button" onclick="calcNaWater()">▶︎ Calculate</button>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>
+      Results
+      <span class="badge">Interpretation</span>
+    </h2>
+
+    <div class="result-block">
+      <div class="result-title">Corrected Sodium (hyperglycemia)</div>
+      <div id="na-corrected">No calculation yet.</div>
+      <div class="pill-row" id="na-pill-row"></div>
+    </div>
+
+    <div class="result-block">
+      <div class="result-title">Estimated Total Body Water (TBW)</div>
+      <div id="tbw-result">Enter weight, sex, and elderly/frail status.</div>
+    </div>
+
+    <div class="result-block">
+      <div class="result-title">Estimated Free Water Deficit</div>
+      <div id="water-deficit">No calculation yet.</div>
+      <div class="small" id="water-deficit-note"></div>
+    </div>
+
+    <div class="result-block">
+      <div class="result-title">Approximate Infusion Guidance (24 hours)</div>
+      <div id="rate-suggestion" class="small">
+        Provide a planned Na correction to estimate a rough average volume per 24h. This is not a replacement for clinical judgment.
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+function parseNum(id){
+  const v = parseFloat(document.getElementById(id).value);
+  return isNaN(v) ? null : v;
+}
+function round(v,d=1){
+  if(v === null || isNaN(v)) return null;
+  const f = Math.pow(10,d);
+  return Math.round(v*f)/f;
+}
+
+function calcNaWater(){
+  const naMeasured = parseNum("na_measured");
+  const glucose = parseNum("glucose");
+  const weight = parseNum("weight");
+  const sex = document.getElementById("sex").value;
+  const elderly = document.getElementById("elderly").checked;
+  let naGoal = parseNum("na_goal");
+  const maxCorr = parseNum("max_correction");
+
+  if(naGoal === null) naGoal = 140;
+
+  // Corrected Na: +1.6 mEq/L per 100 mg/dL glucose above 100
+  let correctedNaText = "Need Na and glucose to calculate.";
+  let correctedNa = null;
+  const pillRow = document.getElementById("na-pill-row");
+  pillRow.innerHTML = "";
+
+  if(naMeasured !== null && glucose !== null){
+    const deltaG = Math.max(glucose - 100, 0);
+    const correction = 0.016 * deltaG;
+    correctedNa = naMeasured + correction;
+    correctedNaText = `Corrected Na ≈ ${round(correctedNa,1)} mEq/L (using +1.6 mEq/L per 100 mg/dL glucose above 100).`;
+    const pill = document.createElement("span");
+    pill.className = "pill";
+    pill.textContent = `Corrected Na ${round(correctedNa,1)} mEq/L`;
+    pillRow.appendChild(pill);
+  }
+  document.getElementById("na-corrected").textContent = correctedNaText;
+
+  // TBW estimate
+  let tbwText = "Need weight to estimate TBW.";
+  let tbw = null;
+  if(weight !== null && weight > 0){
+    let frac;
+    if(sex === "male"){
+      frac = elderly ? 0.5 : 0.6;
+    }else{
+      frac = elderly ? 0.45 : 0.5;
+    }
+    tbw = weight * frac;
+    tbwText = `TBW ≈ ${round(tbw,1)} L (fraction ${frac} × ${weight} kg).`;
+  }
+  document.getElementById("tbw-result").textContent = tbwText;
+
+  // Water deficit
+  const wdDiv = document.getElementById("water-deficit");
+  const wdNote = document.getElementById("water-deficit-note");
+  wdDiv.textContent = "No calculation yet.";
+  wdNote.textContent = "";
+
+  if(tbw !== null && naMeasured !== null && naGoal !== null && naGoal > 0){
+    const deficit = tbw * (naMeasured/naGoal - 1);
+    if(deficit <= 0){
+      wdDiv.textContent = `Calculated water deficit is ≤0 L. Na is not above target (Na_measured ${naMeasured}, target ${naGoal}).`;
+    }else{
+      wdDiv.textContent = `Estimated free water deficit ≈ ${round(deficit,1)} L.`;
+      wdNote.textContent =
+        "This is a rough estimate of free water needed to bring Na toward the target. Replace gradually over 24–48h, adjusting for ongoing losses and clinical status.";
+    }
+
+    // Rate suggestion if max correction provided
+    const rateDiv = document.getElementById("rate-suggestion");
+    if(maxCorr !== null && maxCorr > 0){
+      // Very rough: fraction of deficit corresponding to desired change
+      const totalChange = naMeasured - naGoal;
+      if(totalChange > 0){
+        const fraction = Math.min(maxCorr / totalChange, 1);
+        const water24 = deficit * fraction; // L over first 24h
+        rateDiv.textContent =
+          `If planning to lower Na by ~${round(maxCorr,1)} mEq/L in the first 24h (from ${round(naMeasured,1)} toward ${round(naGoal,1)}), ` +
+          `a rough estimate would be to give ~${round(water24,1)} L of free water over 24h (≈ ${round(water24*1000/24,0)} mL/h), ` +
+          `adjusted for ongoing losses and hemodynamics. This is only a crude estimate — use clinical judgment and frequent labs.`;
+      }else{
+        rateDiv.textContent =
+          "Planned Na correction provided but measured Na is not above target. Check targets and labs.";
+      }
+    }else{
+      document.getElementById("rate-suggestion").textContent =
+        "Provide a planned Na correction (e.g., 8–10 mEq/L in 24h) to generate a rough 24h volume estimate. Always individualize therapy based on the full clinical picture and repeat labs.";
+    }
+  }else{
+    document.getElementById("rate-suggestion").textContent =
+      "To estimate water deficit and a rough infusion volume, enter Na, target Na, weight, and an optional planned Na correction for the first 24h.";
+  }
+}
+
+function resetNaWater(){
+  ["na_measured","glucose","weight","na_goal","max_correction"].forEach(id => {
+    document.getElementById(id).value = "";
+  });
+  document.getElementById("sex").value = "male";
+  document.getElementById("elderly").checked = false;
+  document.getElementById("na-corrected").textContent = "No calculation yet.";
+  document.getElementById("na-pill-row").innerHTML = "";
+  document.getElementById("tbw-result").textContent = "Enter weight, sex, and elderly/frail status.";
+  document.getElementById("water-deficit").textContent = "No calculation yet.";
+  document.getElementById("water-deficit-note").textContent = "";
+  document.getElementById("rate-suggestion").textContent =
+    "Provide a planned Na correction to estimate a rough average volume per 24h. This is not a replacement for clinical judgment.";
+}
+</script>
+</body>
+</html>
