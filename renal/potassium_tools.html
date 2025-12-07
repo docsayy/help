@@ -1,1 +1,709 @@
-potassium_tools.html
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Potassium Tools – Hypo & Hyperkalemia</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <style>
+    :root{
+      --bg:#f4f7fb;
+      --card:#ffffff;
+      --accent:#0f766e;
+      --accent-soft:#e0f2f1;
+      --border:#d1d5db;
+      --muted:#6b7280;
+      --danger:#b91c1c;
+      --radius:14px;
+      --pad:14px;
+      --shadow:0 10px 25px rgba(15,118,110,0.10);
+    }
+    *{box-sizing:border-box;}
+    body{
+      margin:0;
+      font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;
+      background:radial-gradient(circle at top left,#e0f2fe,#f4f7fb 40%,#fdfefe 80%);
+      color:#0f172a;
+    }
+    .app{
+      max-width:1100px;
+      margin:0 auto;
+      padding:16px 12px 24px;
+    }
+    header{
+      text-align:center;
+      margin-bottom:16px;
+    }
+    header h1{
+      font-size:1.35rem;
+      margin:0;
+    }
+    header p{
+      margin:4px 0 0;
+      font-size:0.85rem;
+      color:var(--muted);
+    }
+    .grid{
+      display:grid;
+      grid-template-columns:1fr;
+      gap:14px;
+    }
+    @media(min-width:900px){
+      .grid{
+        grid-template-columns:1fr 1fr;
+        align-items:flex-start;
+      }
+    }
+    .card{
+      background:var(--card);
+      border-radius:var(--radius);
+      padding:var(--pad);
+      box-shadow:var(--shadow);
+      border:1px solid var(--border);
+    }
+    h2{
+      margin:0 0 8px;
+      font-size:1rem;
+      display:flex;
+      align-items:center;
+      gap:6px;
+    }
+    .badge{
+      font-size:0.65rem;
+      text-transform:uppercase;
+      letter-spacing:0.08em;
+      background:var(--accent-soft);
+      color:var(--accent);
+      padding:2px 8px;
+      border-radius:999px;
+    }
+    .badge-danger{
+      background:#fee2e2;
+      color:var(--danger);
+    }
+    .section-note{
+      font-size:0.75rem;
+      color:var(--muted);
+      margin-bottom:6px;
+    }
+    .field-group{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:8px;
+      margin-bottom:8px;
+    }
+    @media(max-width:700px){
+      .field-group{
+        grid-template-columns:1fr;
+      }
+    }
+    .field{
+      display:flex;
+      flex-direction:column;
+      gap:3px;
+    }
+    label{
+      font-size:0.78rem;
+      color:#0f172a;
+    }
+    label span.hint{
+      color:var(--muted);
+      font-size:0.72rem;
+      font-weight:400;
+    }
+    input, select{
+      border-radius:8px;
+      border:1px solid var(--border);
+      padding:6px 8px;
+      font-size:0.8rem;
+      background:#f9fafb;
+    }
+    input:focus, select:focus{
+      outline:none;
+      border-color:var(--accent);
+      box-shadow:0 0 0 1px rgba(15,118,110,0.25);
+      background:#ffffff;
+    }
+    .inline{
+      display:flex;
+      gap:10px;
+      align-items:center;
+      margin-bottom:6px;
+      flex-wrap:wrap;
+    }
+    .inline label{
+      display:flex;
+      align-items:center;
+      gap:4px;
+      font-size:0.78rem;
+      color:var(--muted);
+    }
+    .btn-row{
+      margin:10px 0 2px;
+      display:flex;
+      flex-wrap:wrap;
+      gap:8px;
+      justify-content:flex-end;
+    }
+    button{
+      border-radius:999px;
+      border:none;
+      padding:8px 16px;
+      font-size:0.8rem;
+      cursor:pointer;
+      display:inline-flex;
+      gap:6px;
+      align-items:center;
+      transition:transform 0.08s ease, box-shadow 0.08s ease, background 0.1s;
+    }
+    .btn-primary{
+      background:var(--accent);
+      color:white;
+      box-shadow:0 6px 16px rgba(15,118,110,0.30);
+    }
+    .btn-primary:hover{
+      transform:translateY(-1px);
+      box-shadow:0 10px 25px rgba(15,118,110,0.45);
+    }
+    .btn-ghost{
+      background:transparent;
+      color:var(--muted);
+      border:1px solid var(--border);
+    }
+    .btn-ghost:hover{
+      background:#f3f4f6;
+    }
+    .result-block{
+      padding:8px 10px;
+      border-radius:10px;
+      background:#f9fafb;
+      border:1px solid #e5e7eb;
+      font-size:0.8rem;
+      margin-bottom:6px;
+    }
+    .result-title{
+      font-weight:600;
+      margin-bottom:2px;
+    }
+    .pill-row{
+      display:flex;
+      flex-wrap:wrap;
+      gap:6px;
+      margin-top:4px;
+    }
+    .pill{
+      padding:2px 8px;
+      font-size:0.72rem;
+      border-radius:999px;
+      background:var(--accent-soft);
+      color:var(--accent);
+    }
+    .pill-danger{
+      background:#fee2e2;
+      color:var(--danger);
+    }
+    .small{
+      font-size:0.75rem;
+      color:var(--muted);
+    }
+    .copy-status{
+      font-size:0.75rem;
+      color:var(--muted);
+      margin-top:4px;
+    }
+  </style>
+</head>
+<body>
+<div class="app">
+  <header>
+    <h1>Potassium Tools</h1>
+    <p>Hypokalemia workup & replacement · Hyperkalemia emergency actions (education only)</p>
+  </header>
+
+  <div class="grid">
+    <!-- Hypokalemia -->
+    <div class="card">
+      <h2>
+        Hypokalemia
+        <span class="badge">K+ Low</span>
+      </h2>
+      <p class="section-note">
+        Helps differentiate renal vs extrarenal loss and suggests replacement strategy.
+      </p>
+
+      <div class="field-group">
+        <div class="field">
+          <label for="k_hypo">Serum K (mEq/L)</label>
+          <input id="k_hypo" type="number" step="0.1">
+        </div>
+        <div class="field">
+          <label for="mg">Serum Mg (mg/dL) <span class="hint">(if available)</span></label>
+          <input id="mg" type="number" step="0.1">
+        </div>
+      </div>
+
+      <div class="field-group">
+        <div class="field">
+          <label for="uk">Urine K (mEq/L) <span class="hint">(spot)</span></label>
+          <input id="uk" type="number" step="0.1">
+        </div>
+        <div class="field">
+          <label for="ucl">Urine Cl (mEq/L)</label>
+          <input id="ucl" type="number" step="0.1">
+        </div>
+      </div>
+
+      <div class="field-group">
+        <div class="field">
+          <label for="abg">Acid-base state (ABG)</label>
+          <select id="abg">
+            <option value="">Unknown</option>
+            <option value="met-alk">Metabolic alkalosis</option>
+            <option value="met-acid">Metabolic acidosis</option>
+            <option value="normal">Near-normal pH</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="symp_hypo">Clinical severity</label>
+          <select id="symp_hypo">
+            <option value="">Select</option>
+            <option value="mild">Mild / asymptomatic</option>
+            <option value="moderate">Moderate (weakness, cramps)</option>
+            <option value="severe">Severe (arrhythmia, paralysis, respiratory compromise)</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="inline">
+        <label>
+          <input id="diuretic_hypo" type="checkbox">
+          On loop / thiazide diuretics
+        </label>
+        <label>
+          <input id="vomiting" type="checkbox">
+          Vomiting / NG suction
+        </label>
+        <label>
+          <input id="diarrhea" type="checkbox">
+          Diarrhea / GI loss
+        </label>
+      </div>
+
+      <div class="btn-row">
+        <button class="btn-ghost" type="button" onclick="resetHypo()">Clear</button>
+        <button class="btn-primary" type="button" onclick="calcHypo()">▶︎ Calculate</button>
+      </div>
+
+      <div class="result-block">
+        <div class="result-title">Etiology Pattern</div>
+        <div id="etiology_hypo">No calculation yet.</div>
+      </div>
+
+      <div class="result-block">
+        <div class="result-title">Replacement Strategy</div>
+        <ul id="treatment_hypo" class="small" style="padding-left:18px;margin:4px 0 0;"></ul>
+      </div>
+
+      <div class="result-block">
+        <div class="result-title">Copy-ready Summary</div>
+        <div id="summary_hypo" class="small">No summary yet.</div>
+        <button class="btn-ghost" type="button" onclick="copySummary('hypo')">📋 Copy summary</button>
+        <div id="copy-status-hypo" class="copy-status"></div>
+      </div>
+
+      <p class="small">
+        Educational tool only; always individualize dosing based on patient, ECG, and institutional protocols.
+      </p>
+    </div>
+
+    <!-- Hyperkalemia -->
+    <div class="card">
+      <h2>
+        Hyperkalemia
+        <span class="badge badge-danger">K+ High</span>
+      </h2>
+      <p class="section-note">
+        Focuses on stabilization, intracellular shift, and removal. Doses are approximate.
+      </p>
+
+      <div class="field-group">
+        <div class="field">
+          <label for="k_hyper">Serum K (mEq/L)</label>
+          <input id="k_hyper" type="number" step="0.1">
+        </div>
+        <div class="field">
+          <label for="cr_hyper">Serum Cr (mg/dL) <span class="hint">(renal function)</span></label>
+          <input id="cr_hyper" type="number" step="0.1">
+        </div>
+      </div>
+
+      <div class="field-group">
+        <div class="field">
+          <label for="uop_hyper">Urine output</label>
+          <select id="uop_hyper">
+            <option value="">Select</option>
+            <option value="anuric">Anuric / oliguric</option>
+            <option value="adequate">Adequate</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="symp_hyper">Clinical severity</label>
+          <select id="symp_hyper">
+            <option value="">Select</option>
+            <option value="mild">Mild (no ECG changes, K &lt;5.5–6)</option>
+            <option value="moderate">Moderate (K ~6–6.5, nonspecific ECG changes)</option>
+            <option value="severe">Severe (K &gt;6.5, significant ECG changes, symptoms)</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="inline">
+        <label>
+          <input id="ecg_changes" type="checkbox">
+          ECG changes present
+        </label>
+        <label>
+          <input id="ckd_esrd" type="checkbox">
+          Known advanced CKD / ESRD
+        </label>
+      </div>
+
+      <div class="inline">
+        <label>
+          <input id="ace_arb" type="checkbox">
+          On ACEi/ARB
+        </label>
+        <label>
+          <input id="spirono" type="checkbox">
+          On spironolactone / eplerenone
+        </label>
+        <label>
+          <input id="tmp_smx" type="checkbox">
+          On TMP-SMX or other K-raising meds
+        </label>
+      </div>
+
+      <div class="btn-row">
+        <button class="btn-ghost" type="button" onclick="resetHyper()">Clear</button>
+        <button class="btn-primary" type="button" onclick="calcHyper()">▶︎ Calculate</button>
+      </div>
+
+      <div class="result-block">
+        <div class="result-title">Urgency & Etiology</div>
+        <div id="etiology_hyper">No calculation yet.</div>
+        <div class="pill-row" id="pill-row-hyper"></div>
+      </div>
+
+      <div class="result-block">
+        <div class="result-title">Emergency Action Checklist</div>
+        <ul id="treatment_hyper" class="small" style="padding-left:18px;margin:4px 0 0;"></ul>
+      </div>
+
+      <div class="result-block">
+        <div class="result-title">Copy-ready Summary</div>
+        <div id="summary_hyper" class="small">No summary yet.</div>
+        <button class="btn-ghost" type="button" onclick="copySummary('hyper')">📋 Copy summary</button>
+        <div id="copy-status-hyper" class="copy-status"></div>
+      </div>
+
+      <p class="small">
+        For life-threatening hyperkalemia, activate emergency response, follow local protocols strictly, and involve nephrology / ICU early.
+      </p>
+    </div>
+  </div>
+</div>
+
+<script>
+function parseNum(id){
+  const v = parseFloat(document.getElementById(id).value);
+  return isNaN(v) ? null : v;
+}
+function round(v,d=1){
+  if(v===null||isNaN(v)) return null;
+  const f=Math.pow(10,d);
+  return Math.round(v*f)/f;
+}
+
+/* HYPOKALEMIA */
+function calcHypo(){
+  const k = parseNum("k_hypo");
+  const mg = parseNum("mg");
+  const uk = parseNum("uk");
+  const ucl = parseNum("ucl");
+  const abg = document.getElementById("abg").value;
+  const symp = document.getElementById("symp_hypo").value;
+  const diur = document.getElementById("diuretic_hypo").checked;
+  const vom = document.getElementById("vomiting").checked;
+  const diar = document.getElementById("diarrhea").checked;
+
+  const etiDiv = document.getElementById("etiology_hypo");
+  const treatUl = document.getElementById("treatment_hypo");
+  const summaryDiv = document.getElementById("summary_hypo");
+  const copyStatus = document.getElementById("copy-status-hypo");
+
+  treatUl.innerHTML="";
+  copyStatus.textContent="";
+
+  if(k === null){
+    etiDiv.textContent="Need serum K to proceed.";
+    summaryDiv.textContent="No summary – K missing.";
+    return;
+  }
+
+  let severityText = "";
+  if(k >= 3.0 && k < 3.5){
+    severityText = "Mild hypokalemia (K 3.0–3.5 mEq/L).";
+  }else if(k >= 2.5 && k < 3.0){
+    severityText = "Moderate hypokalemia (K 2.5–2.9 mEq/L).";
+  }else if(k < 2.5){
+    severityText = "Severe hypokalemia (K <2.5 mEq/L). High arrhythmia risk.";
+  }else{
+    severityText = "Borderline or normal K; interpret with clinical context.";
+  }
+
+  let eti = [];
+  eti.push(severityText);
+
+  if(uk !== null){
+    if(uk < 20){
+      eti.push("Urine K <20 mEq/L suggests extrarenal K loss (GI losses, poor intake, intracellular shift).");
+    }else{
+      eti.push("Urine K ≥20 mEq/L suggests renal K wasting (diuretics, mineralocorticoid excess, RTA, Bartter/Gitelman).");
+    }
+  }
+
+  if(vom){
+    eti.push("Vomiting/NG suction suggests metabolic alkalosis with low urine Cl; often extrarenal Cl and K loss.");
+  }
+  if(diar){
+    eti.push("Diarrhea suggests GI K loss; consider metabolic acidosis with non-anion-gap pattern.");
+  }
+
+  if(diur){
+    eti.push("Loop/thiazide diuretics promote renal K loss and may cause metabolic alkalosis with elevated urine Cl.");
+  }
+
+  if(abg === "met-alk"){
+    eti.push("Metabolic alkalosis with hypokalemia – consider vomiting, diuretics, hyperaldosteronism, Bartter/Gitelman.");
+  }else if(abg === "met-acid"){
+    eti.push("Metabolic acidosis with hypokalemia – think diarrhea or RTA.");
+  }
+
+  if(uk === null && !vom && !diar && !diur){
+    eti.push("Obtain urine K and Cl to better distinguish renal vs extrarenal loss.");
+  }
+
+  if(mg !== null && mg < 1.8){
+    eti.push("Low Mg will make K repletion difficult; replete Mg concurrently.");
+  }
+
+  etiDiv.textContent = eti.join(" ");
+
+  // Replacement strategy
+  const tx = [];
+  if(k >= 3.0 && k < 3.5 && symp !== "severe"){
+    tx.push("Mild hypokalemia: consider oral KCl (e.g., 20–40 mEq) and address underlying cause; repeat labs.");
+  }else if(k >= 2.5 && k < 3.0 && symp !== "severe"){
+    tx.push("Moderate hypokalemia: oral KCl (e.g., 40–80 mEq in divided doses); if unable to take PO or at higher risk, consider IV with telemetry.");
+  }else if(k < 2.5 || symp === "severe"){
+    tx.push("Severe hypokalemia and/or significant symptoms: IV KCl with continuous ECG monitoring. Typical rates: up to 10 mEq/hr via peripheral line, up to 20 mEq/hr via central line with telemetry (follow local protocol).");
+  }else{
+    tx.push("Adjust replacement based on clinical context, ECG, and institutional guidelines.");
+  }
+
+  if(mg !== null && mg < 1.8){
+    tx.push("Replete magnesium (e.g., IV MgSO₄) to facilitate K correction.");
+  }else{
+    tx.push("Check Mg if not known; replete if low.");
+  }
+
+  if(diur){
+    tx.push("Review need for ongoing diuretics or consider lowering dose / adding K-sparing agent if appropriate.");
+  }
+
+  tx.push("Monitor K frequently (every 2–4h for severe cases) and reassess ECG.");
+
+  tx.forEach(t=>{
+    const li=document.createElement("li");
+    li.textContent=t;
+    treatUl.appendChild(li);
+  });
+
+  const summary = [];
+  summary.push(`Hypokalemia: K ${k} mEq/L.`);
+  if(mg!==null) summary.push(`Mg ${mg} mg/dL.`);
+  if(uk!==null) summary.push(`Urine K ${uk} mEq/L.`);
+  if(ucl!==null) summary.push(`Urine Cl ${ucl} mEq/L.`);
+  summary.push(eti.join(" "));
+  summary.push("Plan: " + tx.join(" "));
+  summaryDiv.textContent = summary.join(" | ");
+}
+
+function resetHypo(){
+  ["k_hypo","mg","uk","ucl"].forEach(id=>document.getElementById(id).value="");
+  ["abg","symp_hypo"].forEach(id=>document.getElementById(id).value="");
+  ["diuretic_hypo","vomiting","diarrhea"].forEach(id=>document.getElementById(id).checked=false);
+  document.getElementById("etiology_hypo").textContent="No calculation yet.";
+  document.getElementById("treatment_hypo").innerHTML="";
+  document.getElementById("summary_hypo").textContent="No summary yet.";
+  document.getElementById("copy-status-hypo").textContent="";
+}
+
+/* HYPERKALEMIA */
+function calcHyper(){
+  const k = parseNum("k_hyper");
+  const cr = parseNum("cr_hyper");
+  const uop = document.getElementById("uop_hyper").value;
+  const symp = document.getElementById("symp_hyper").value;
+  const ecg = document.getElementById("ecg_changes").checked;
+  const ckd = document.getElementById("ckd_esrd").checked;
+  const ace = document.getElementById("ace_arb").checked;
+  const spir = document.getElementById("spirono").checked;
+  const tmp = document.getElementById("tmp_smx").checked;
+
+  const etiDiv = document.getElementById("etiology_hyper");
+  const pillRow = document.getElementById("pill-row-hyper");
+  const treatUl = document.getElementById("treatment_hyper");
+  const summaryDiv = document.getElementById("summary_hyper");
+  const copyStatus = document.getElementById("copy-status-hyper");
+
+  pillRow.innerHTML="";
+  treatUl.innerHTML="";
+  copyStatus.textContent="";
+
+  if(k === null){
+    etiDiv.textContent="Need serum K to proceed.";
+    summaryDiv.textContent="No summary – K missing.";
+    return;
+  }
+
+  // Severity pill
+  const pill = document.createElement("span");
+  pill.className = "pill";
+  let severityText;
+  if(k < 5.5){
+    severityText = "Borderline / mild hyperkalemia.";
+  }else if(k >= 5.5 && k <= 6.0){
+    severityText = "Mild to moderate hyperkalemia.";
+  }else if(k > 6.0 && k <= 6.5){
+    severityText = "Moderate hyperkalemia.";
+  }else{
+    severityText = "Severe hyperkalemia.";
+    pill.classList.add("pill-danger");
+  }
+  pill.textContent = severityText;
+  pillRow.appendChild(pill);
+
+  let eti = [];
+  eti.push(severityText);
+
+  if(cr!==null){
+    eti.push(`Cr ${cr} mg/dL – impaired renal excretion likely if elevated.`);
+  }
+  if(ckd){
+    eti.push("Known CKD/ESRD increases risk for persistent hyperkalemia and may require dialysis.");
+  }
+  if(uop==="anuric"){
+    eti.push("Oliguria/anuria suggests limited renal K excretion; medical therapy alone may not be sufficient.");
+  }
+  if(ace || spir || tmp){
+    eti.push("Medication contributors: " + [
+      ace ? "ACE/ARB" : null,
+      spir ? "MRA (spironolactone/eplerenone)" : null,
+      tmp ? "TMP-SMX/other K-raising meds" : null
+    ].filter(Boolean).join(", ") + ".");
+  }
+
+  if(!ace && !spir && !tmp && !ckd && cr!==null && cr<=1.5){
+    eti.push("Consider acute cell shifts (metabolic acidosis, tissue breakdown, hemolysis) and lab artifact (pseudohyperkalemia).");
+  }
+
+  if(ecg){
+    eti.push("ECG changes present – treat as emergency with immediate membrane stabilization and ICU-level monitoring.");
+  }
+
+  etiDiv.textContent = eti.join(" ");
+
+  // Treatment checklist
+  const tx = [];
+
+  // 1. Stabilize myocardium
+  if(ecg || symp === "severe" || k > 6.5){
+    tx.push("1) Stabilize myocardium: IV calcium gluconate 10% 1–2 g (10–20 mL) over 5–10 minutes, repeat if ECG changes persist. Use calcium chloride via central line if appropriate and per protocol.");
+  }else{
+    tx.push("Consider calcium gluconate if ECG changes or K is markedly elevated; obtain ECG promptly.");
+  }
+
+  // 2. Shift K intracellularly
+  if(k >= 6.0 || symp === "moderate" || symp === "severe"){
+    tx.push("2) Shift K intracellularly:");
+    tx.push("   • IV insulin (e.g., 10 units regular insulin) with dextrose (e.g., 25 g D50W) unless significantly hyperglycemic. Monitor glucose closely.");
+    tx.push("   • Consider nebulized albuterol (10–20 mg) as adjunct if no contraindication.");
+    tx.push("   • If acidotic, consider IV sodium bicarbonate as adjunct (especially in metabolic acidosis), per local protocol.");
+  }else{
+    tx.push("Consider insulin+dextrose and/or beta-agonist for K ≥5.5–6 depending on trend and risk factors.");
+  }
+
+  // 3. Remove K from body
+  const needsDialysis = (ckd || uop === "anuric" || (cr!==null && cr>4));
+  tx.push("3) Remove K from the body:");
+  tx.push("   • Loop diuretics (e.g., IV furosemide) if volume status and renal function allow.");
+  tx.push("   • Potassium binders (e.g., sodium zirconium cyclosilicate, patiromer, or sodium polystyrene sulfonate where appropriate) per local practice.");
+  if(needsDialysis || k > 6.5 || ecg){
+    tx.push("   • Urgent hemodialysis if refractory, in ESRD, severe AKI with anuria, or if medical measures insufficient/contraindicated.");
+  }
+
+  // 4. Stop sources and monitor
+  tx.push("4) Stop exogenous K and K-raising drugs (ACEi/ARB, MRA, TMP-SMX, NSAIDs, K supplements) as appropriate.");
+  tx.push("5) Obtain repeat K and ECG at frequent intervals (e.g., q1–2h initially in severe cases) and titrate therapy.");
+
+  tx.forEach(t=>{
+    const li=document.createElement("li");
+    li.textContent=t;
+    treatUl.appendChild(li);
+  });
+
+  const summary = [];
+  summary.push(`Hyperkalemia: K ${k} mEq/L.`);
+  if(cr!==null) summary.push(`Cr ${cr} mg/dL.`);
+  if(uop) summary.push(`UOP: ${uop}.`);
+  if(ecg) summary.push("ECG changes present.");
+  if(ckd) summary.push("Advanced CKD/ESRD known.");
+  summary.push(eti.join(" "));
+  summary.push("Plan: " + tx.join(" "));
+  summaryDiv.textContent = summary.join(" | ");
+}
+
+function resetHyper(){
+  ["k_hyper","cr_hyper"].forEach(id=>document.getElementById(id).value="");
+  ["uop_hyper","symp_hyper"].forEach(id=>document.getElementById(id).value="");
+  ["ecg_changes","ckd_esrd","ace_arb","spirono","tmp_smx"].forEach(id=>document.getElementById(id).checked=false);
+  document.getElementById("etiology_hyper").textContent="No calculation yet.";
+  document.getElementById("pill-row-hyper").innerHTML="";
+  document.getElementById("treatment_hyper").innerHTML="";
+  document.getElementById("summary_hyper").textContent="No summary yet.";
+  document.getElementById("copy-status-hyper").textContent="";
+}
+
+/* COPY HELPERS */
+function copySummary(which){
+  let text="", statusEl;
+  if(which==="hypo"){
+    text = document.getElementById("summary_hypo").textContent || "";
+    statusEl = document.getElementById("copy-status-hypo");
+  }else{
+    text = document.getElementById("summary_hyper").textContent || "";
+    statusEl = document.getElementById("copy-status-hyper");
+  }
+  if(!navigator.clipboard){
+    statusEl.textContent="Clipboard not available.";
+    return;
+  }
+  navigator.clipboard.writeText(text).then(()=>{
+    statusEl.textContent="Summary copied to clipboard.";
+  }).catch(()=>{
+    statusEl.textContent="Unable to copy.";
+  });
+}
+</script>
+</body>
+</html>
