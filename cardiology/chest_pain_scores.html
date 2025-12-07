@@ -1,0 +1,456 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Chest Pain Risk – HEART & TIMI</title>
+  <style>
+    :root {
+      --bg: #020617;
+      --surface: #020617;
+      --card: #0b1120;
+      --accent: #f97316;
+      --accent-soft: rgba(249,115,22,0.16);
+      --muted: #9ca3af;
+      --border: rgba(148,163,184,0.3);
+      --radius: 16px;
+      --pad: 14px;
+      color-scheme: dark;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: radial-gradient(circle at top, #1f2937 0, #020617 55%);
+      color: #e5e7eb;
+      display: flex;
+      justify-content: center;
+      padding: 14px;
+    }
+    main {
+      width: 100%;
+      max-width: 980px;
+    }
+    header {
+      margin-bottom: 14px;
+    }
+    h1 {
+      font-size: 1.5rem;
+      margin: 0 0 4px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    h1 span.icon {
+      font-size: 1.4rem;
+    }
+    header p {
+      margin: 0;
+      font-size: 0.85rem;
+      color: var(--muted);
+    }
+    .layout {
+      display: grid;
+      gap: 14px;
+    }
+    @media (min-width: 880px) {
+      .layout {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+    .card {
+      background: linear-gradient(135deg, rgba(15,23,42,0.96), rgba(15,23,42,0.99));
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      padding: var(--pad);
+      box-shadow: 0 18px 40px rgba(0,0,0,0.7);
+      position: relative;
+      overflow: hidden;
+    }
+    .card::before {
+      content: "";
+      position: absolute;
+      inset: -40%;
+      background:
+        radial-gradient(circle at 0 0, rgba(248,113,113,0.16), transparent 55%),
+        radial-gradient(circle at 100% 100%, rgba(96,165,250,0.16), transparent 55%);
+      opacity: 0.7;
+      pointer-events: none;
+    }
+    .card-inner {
+      position: relative;
+      z-index: 1;
+    }
+    .card h2 {
+      margin: 0 0 4px;
+      font-size: 1.1rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 6px;
+    }
+    .badge {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      padding: 3px 7px;
+      border-radius: 999px;
+      background: var(--accent-soft);
+      color: #fed7aa;
+      border: 1px solid rgba(248,250,252,0.09);
+      white-space: nowrap;
+    }
+    .subtitle {
+      margin: 0 0 8px;
+      font-size: 0.8rem;
+      color: var(--muted);
+    }
+    form {
+      display: grid;
+      gap: 8px;
+      margin-bottom: 8px;
+    }
+    label {
+      font-size: 0.8rem;
+      display: block;
+      margin-bottom: 2px;
+    }
+    select, input[type="number"] {
+      width: 100%;
+      padding: 6px 8px;
+      border-radius: 9px;
+      border: 1px solid rgba(148,163,184,0.4);
+      background: rgba(15,23,42,0.9);
+      color: #e5e7eb;
+      font-size: 0.85rem;
+    }
+    .field {
+      display: flex;
+      flex-direction: column;
+    }
+    .helper {
+      font-size: 0.72rem;
+      color: var(--muted);
+      margin-top: 2px;
+    }
+    .btn-row {
+      display: flex;
+      justify-content: flex-start;
+      margin-top: 4px;
+    }
+    button {
+      border-radius: 999px;
+      border: none;
+      padding: 7px 13px;
+      font-size: 0.85rem;
+      font-weight: 500;
+      cursor: pointer;
+      background: radial-gradient(circle at 0 0, #fed7aa, #fb923c 40%, #ea580c 100%);
+      color: #111827;
+      box-shadow: 0 10px 25px rgba(248,113,22,0.4);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: transform 0.08s ease, box-shadow 0.08s ease, filter 0.08s ease;
+    }
+    button:hover {
+      transform: translateY(-1px);
+      filter: brightness(1.05);
+      box-shadow: 0 14px 32px rgba(248,113,22,0.55);
+    }
+    .result {
+      margin-top: 6px;
+      padding: 7px 8px;
+      border-radius: 10px;
+      font-size: 0.8rem;
+      background: rgba(15,23,42,0.9);
+      border: 1px solid rgba(148,163,184,0.45);
+    }
+    .result .title {
+      font-weight: 600;
+      margin-bottom: 2px;
+    }
+    .chip-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px;
+      margin-top: 4px;
+    }
+    .chip {
+      font-size: 0.7rem;
+      padding: 2px 6px;
+      border-radius: 999px;
+      border: 1px solid rgba(148,163,184,0.45);
+      color: #e5e7eb;
+    }
+    footer {
+      margin-top: 12px;
+      font-size: 0.72rem;
+      color: var(--muted);
+    }
+    .risk-low { color: #4ade80; }
+    .risk-int { color: #facc15; }
+    .risk-high { color: #f97373; }
+  </style>
+</head>
+<body>
+  <main>
+    <header>
+      <h1><span class="icon">📈</span> Chest Pain Risk – HEART & TIMI</h1>
+      <p>Structured risk scores for undifferentiated chest pain / UA-NSTEMI. For reference, not a replacement for clinical judgement or guidelines.</p>
+    </header>
+
+    <section class="layout">
+      <!-- HEART Score -->
+      <article class="card">
+        <div class="card-inner">
+          <h2>
+            HEART Score
+            <span class="badge">0–10</span>
+          </h2>
+          <p class="subtitle">History, ECG, Age, Risk factors, Troponin – typical ED chest pain risk score.</p>
+
+          <form id="heart-form">
+            <div class="field">
+              <label for="heart-history">History</label>
+              <select id="heart-history">
+                <option value="0">Slightly suspicious (0)</option>
+                <option value="1">Moderately suspicious (1)</option>
+                <option value="2">Highly suspicious (2)</option>
+              </select>
+            </div>
+
+            <div class="field">
+              <label for="heart-ecg">ECG</label>
+              <select id="heart-ecg">
+                <option value="0">Normal (0)</option>
+                <option value="1">Nonspecific repolarization changes (1)</option>
+                <option value="2">Significant ST deviation (2)</option>
+              </select>
+            </div>
+
+            <div class="field">
+              <label for="heart-age">Age (years)</label>
+              <input id="heart-age" type="number" min="16" max="120" value="55" />
+              <div class="helper">
+                &lt;45 → 0 pts, 45–65 → 1 pt, &gt;65 → 2 pts.
+              </div>
+            </div>
+
+            <div class="field">
+              <label for="heart-risk">Risk factors</label>
+              <select id="heart-risk">
+                <option value="0">No known risk factors (0)</option>
+                <option value="1">1–2 risk factors (1)</option>
+                <option value="2">≥3 risk factors or known atherosclerotic disease (2)</option>
+              </select>
+              <div class="helper">
+                RF: HTN, hyperlipidemia, DM, obesity, smoking, family history, known CAD/PAD/CVA.
+              </div>
+            </div>
+
+            <div class="field">
+              <label for="heart-trop">Troponin (relative to ULN)</label>
+              <select id="heart-trop">
+                <option value="0">≤ normal limit (0)</option>
+                <option value="1">1–3× upper limit of normal (1)</option>
+                <option value="2">&gt;3× upper limit of normal (2)</option>
+              </select>
+            </div>
+
+            <div class="btn-row">
+              <button type="submit">
+                <span>Calculate HEART</span>
+              </button>
+            </div>
+          </form>
+
+          <div id="heart-result" class="result" aria-live="polite">
+            <div class="title">Result will appear here.</div>
+            <div>Enter values and tap “Calculate”.</div>
+          </div>
+        </div>
+      </article>
+
+      <!-- TIMI UA/NSTEMI -->
+      <article class="card">
+        <div class="card-inner">
+          <h2>
+            TIMI Risk Score (UA/NSTEMI)
+            <span class="badge">0–7</span>
+          </h2>
+          <p class="subtitle">Classical 14-day risk score for UA / NSTEMI (death, MI, or urgent revasc).</p>
+
+          <form id="timi-form">
+            <div class="field">
+              <label>Check all that apply:</label>
+
+              <label>
+                <input type="checkbox" id="timi-age" />
+                Age ≥ 65 years
+              </label>
+
+              <label>
+                <input type="checkbox" id="timi-rf3" />
+                ≥3 CAD risk factors (FHx, HTN, HLD, DM, current smoker)
+              </label>
+
+              <label>
+                <input type="checkbox" id="timi-cad" />
+                Known CAD (stenosis ≥50%)
+              </label>
+
+              <label>
+                <input type="checkbox" id="timi-asa" />
+                Aspirin use in past 7 days
+              </label>
+
+              <label>
+                <input type="checkbox" id="timi-angina" />
+                ≥2 angina episodes in last 24 hours
+              </label>
+
+              <label>
+                <input type="checkbox" id="timi-st" />
+                ST deviation ≥0.5 mm
+              </label>
+
+              <label>
+                <input type="checkbox" id="timi-marker" />
+                Elevated cardiac marker (troponin, CK-MB)
+              </label>
+            </div>
+
+            <div class="btn-row">
+              <button type="submit">
+                <span>Calculate TIMI</span>
+              </button>
+            </div>
+          </form>
+
+          <div id="timi-result" class="result" aria-live="polite">
+            <div class="title">Result will appear here.</div>
+            <div>Tick applicable items and tap “Calculate”.</div>
+          </div>
+        </div>
+      </article>
+    </section>
+
+    <footer>
+      HEART: 0–3 low, 4–6 intermediate, 7–10 high risk of MACE. TIMI: increasing 14-day risk with scores 0–7. Use with clinical judgement and the latest ACS guidelines (ACC/AHA/ESC) and local pathways.
+    </footer>
+  </main>
+
+  <script>
+    function heartAgePoints(age) {
+      if (isNaN(age)) return 0;
+      if (age < 45) return 0;
+      if (age <= 65) return 1;
+      return 2;
+    }
+
+    function heartCategory(score) {
+      if (score <= 3) {
+        return {
+          label: "Low risk",
+          css: "risk-low",
+          note: "Approx. ~1% short-term MACE; many protocols consider early discharge with close follow-up if no other red flags."
+        };
+      } else if (score <= 6) {
+        return {
+          label: "Intermediate risk",
+          css: "risk-int",
+          note: "Consider observation, serial troponins, and further testing per ACS pathway."
+        };
+      } else {
+        return {
+          label: "High risk",
+          css: "risk-high",
+          note: "High risk of MACE; usually warrants aggressive ACS management and cardiology involvement."
+        };
+      }
+    }
+
+    document.getElementById("heart-form").addEventListener("submit", function (e) {
+      e.preventDefault();
+      const history = Number(document.getElementById("heart-history").value || 0);
+      const ecg = Number(document.getElementById("heart-ecg").value || 0);
+      const age = Number(document.getElementById("heart-age").value || 0);
+      const rf = Number(document.getElementById("heart-risk").value || 0);
+      const trop = Number(document.getElementById("heart-trop").value || 0);
+
+      const agePts = heartAgePoints(age);
+      const total = history + ecg + agePts + rf + trop;
+      const cat = heartCategory(total);
+
+      const box = document.getElementById("heart-result");
+      box.innerHTML = `
+        <div class="title">HEART score: <strong>${total}</strong> / 10</div>
+        <div class="${cat.css}"><strong>${cat.label}</strong></div>
+        <div>${cat.note}</div>
+        <div class="chip-row">
+          <span class="chip">History: ${history}</span>
+          <span class="chip">ECG: ${ecg}</span>
+          <span class="chip">Age: ${agePts}</span>
+          <span class="chip">Risk factors: ${rf}</span>
+          <span class="chip">Troponin: ${trop}</span>
+        </div>
+      `;
+    });
+
+    function timiCategory(score) {
+      if (score <= 2) {
+        return {
+          label: "Low risk",
+          css: "risk-low",
+          note: "Approx. ~5% 14-day risk of death/MI/urgent revascularization in original cohort."
+        };
+      } else if (score <= 4) {
+        return {
+          label: "Intermediate risk",
+          css: "risk-int",
+          note: "Approx. ~13–20% 14-day event risk; consider aggressive medical therapy and early invasive strategy per guideline."
+        };
+      } else {
+        return {
+          label: "High risk",
+          css: "risk-high",
+          note: "Approx. ≥25–40% 14-day event risk; high-risk ACS – usually early invasive strategy and intensive monitoring."
+        };
+      }
+    }
+
+    document.getElementById("timi-form").addEventListener("submit", function (e) {
+      e.preventDefault();
+      const fields = [
+        "timi-age",
+        "timi-rf3",
+        "timi-cad",
+        "timi-asa",
+        "timi-angina",
+        "timi-st",
+        "timi-marker"
+      ];
+      let score = 0;
+      fields.forEach(id => {
+        if (document.getElementById(id).checked) score += 1;
+      });
+      const cat = timiCategory(score);
+      const box = document.getElementById("timi-result");
+      box.innerHTML = `
+        <div class="title">TIMI UA/NSTEMI score: <strong>${score}</strong> / 7</div>
+        <div class="${cat.css}"><strong>${cat.label}</strong></div>
+        <div>${cat.note}</div>
+        <div class="chip-row">
+          ${fields.map(id => {
+            const el = document.getElementById(id);
+            const label = el.parentElement.textContent.trim();
+            return el.checked ? `<span class="chip">${label}</span>` : "";
+          }).join("")}
+        </div>
+      `;
+    });
+  </script>
+</body>
+</html>
