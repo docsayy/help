@@ -1,0 +1,823 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Oxygenation & A–a Gradient / PF Ratio Helper</title>
+<style>
+    :root {
+        --bg: #e0f7fa;
+        --card: #ffffff;
+        --accent: #00838f;
+        --accent-soft: rgba(0, 131, 143, 0.08);
+        --text-main: #0f172a;
+        --muted: #607d8b;
+        --danger: #c62828;
+        --warning: #ef6c00;
+        --success: #2e7d32;
+        --radius: 14px;
+        --shadow: 0 14px 30px rgba(15, 23, 42, 0.12);
+        --pad: 14px;
+    }
+
+    * {
+        box-sizing: border-box;
+    }
+
+    body {
+        margin: 0;
+        min-height: 100vh;
+        font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        background: radial-gradient(circle at top left, #e0f7fa 0, #f1f5f9 40%, #e3f2fd 100%);
+        color: var(--text-main);
+        padding: 16px;
+        display: flex;
+        justify-content: center;
+    }
+
+    .app-container {
+        width: 100%;
+        max-width: 960px;
+        background: linear-gradient(135deg, rgba(255,255,255,0.9), rgba(236, 253, 245, 0.9));
+        border-radius: 20px;
+        box-shadow: var(--shadow);
+        padding: 18px;
+        backdrop-filter: blur(10px);
+    }
+
+    header {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        gap: 8px;
+        align-items: center;
+        margin-bottom: 14px;
+    }
+
+    .nav-buttons {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+
+    .nav-btn {
+        border: none;
+        border-radius: 999px;
+        padding: 6px 12px;
+        font-size: 0.85rem;
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        background: rgba(255,255,255,0.9);
+        color: var(--accent);
+        box-shadow: 0 2px 6px rgba(15,23,42,0.08);
+        text-decoration: none;
+    }
+
+    .nav-btn span.icon {
+        font-size: 1rem;
+    }
+
+    h1 {
+        font-size: 1.3rem;
+        margin: 0;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    h1 span.icon {
+        font-size: 1.3rem;
+    }
+
+    .subtitle {
+        font-size: 0.85rem;
+        color: var(--muted);
+        margin-top: 2px;
+    }
+
+    .grid {
+        display: grid;
+        grid-template-columns: minmax(0, 1.1fr) minmax(0, 1.1fr);
+        gap: 14px;
+    }
+
+    @media (max-width: 780px) {
+        .grid {
+            grid-template-columns: minmax(0, 1fr);
+        }
+    }
+
+    .card {
+        background: var(--card);
+        border-radius: var(--radius);
+        padding: var(--pad);
+        box-shadow: 0 6px 18px rgba(15, 23, 42, 0.06);
+        border: 1px solid rgba(148, 163, 184, 0.15);
+    }
+
+    .card-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: baseline;
+        margin-bottom: 8px;
+    }
+
+    .card-title {
+        font-size: 0.95rem;
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+    }
+
+    .pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 2px 8px;
+        border-radius: 999px;
+        font-size: 0.75rem;
+        background: var(--accent-soft);
+        color: var(--accent);
+    }
+
+    .inputs-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 8px;
+    }
+
+    @media (max-width: 600px) {
+        .inputs-grid {
+            grid-template-columns: minmax(0, 1fr);
+        }
+    }
+
+    label {
+        font-size: 0.8rem;
+        color: var(--muted);
+        display: block;
+        margin-bottom: 3px;
+    }
+
+    .input-group {
+        display: flex;
+        flex-direction: column;
+        gap: 3px;
+    }
+
+    input[type="number"] {
+        width: 100%;
+        border-radius: 10px;
+        border: 1px solid rgba(148, 163, 184, 0.7);
+        padding: 7px 9px;
+        font-size: 0.9rem;
+        outline: none;
+        background: linear-gradient(135deg, #f9fafb, #edf2f7);
+    }
+
+    input[type="number"]:focus {
+        border-color: var(--accent);
+        box-shadow: 0 0 0 1px rgba(0, 131, 143, 0.35);
+    }
+
+    .unit {
+        font-size: 0.7rem;
+        color: var(--muted);
+    }
+
+    .hint {
+        font-size: 0.7rem;
+        color: var(--muted);
+    }
+
+    .btn-row {
+        margin-top: 10px;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+
+    .btn-primary {
+        border-radius: 999px;
+        border: none;
+        padding: 8px 16px;
+        background: linear-gradient(135deg, #00acc1, #00838f);
+        color: #ffffff;
+        font-weight: 600;
+        font-size: 0.9rem;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        cursor: pointer;
+        box-shadow: 0 10px 20px rgba(0, 131, 143, 0.35);
+    }
+
+    .btn-secondary {
+        border-radius: 999px;
+        border: 1px solid rgba(148, 163, 184, 0.6);
+        padding: 8px 14px;
+        background: #ffffff;
+        color: var(--muted);
+        font-size: 0.85rem;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        cursor: pointer;
+    }
+
+    .btn-primary:active,
+    .btn-secondary:active {
+        transform: translateY(1px);
+        box-shadow: none;
+    }
+
+    .results-badge-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+        margin-bottom: 6px;
+    }
+
+    .badge {
+        font-size: 0.75rem;
+        border-radius: 999px;
+        padding: 2px 8px;
+        background: rgba(148, 163, 184, 0.12);
+        color: var(--muted);
+    }
+
+    .badge-good {
+        background: rgba(46, 125, 50, 0.1);
+        color: var(--success);
+    }
+
+    .badge-warning {
+        background: rgba(239, 108, 0, 0.1);
+        color: var(--warning);
+    }
+
+    .badge-danger {
+        background: rgba(198, 40, 40, 0.1);
+        color: var(--danger);
+    }
+
+    .result-line {
+        font-size: 0.85rem;
+        margin-bottom: 4px;
+    }
+
+    .result-line strong {
+        font-weight: 600;
+    }
+
+    .section-label {
+        font-size: 0.75rem;
+        font-weight: 600;
+        color: var(--muted);
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        margin-top: 6px;
+        margin-bottom: 4px;
+    }
+
+    .interpretation-text {
+        font-size: 0.8rem;
+        line-height: 1.3;
+        color: var(--text-main);
+    }
+
+    .interpretation-text ul {
+        padding-left: 18px;
+        margin: 4px 0;
+    }
+
+    .interpretation-text li {
+        margin-bottom: 2px;
+    }
+
+    .textarea-wrapper {
+        margin-top: 6px;
+    }
+
+    textarea {
+        width: 100%;
+        min-height: 110px;
+        resize: vertical;
+        border-radius: 10px;
+        border: 1px solid rgba(148, 163, 184, 0.7);
+        padding: 8px 9px;
+        font-size: 0.8rem;
+        font-family: inherit;
+        background: #f9fafb;
+    }
+
+    textarea:focus {
+        outline: none;
+        border-color: var(--accent);
+        box-shadow: 0 0 0 1px rgba(0, 131, 143, 0.35);
+    }
+
+    .small-note {
+        font-size: 0.7rem;
+        color: var(--muted);
+        margin-top: 4px;
+    }
+
+    .error-text {
+        font-size: 0.8rem;
+        color: var(--danger);
+        margin-top: 4px;
+    }
+</style>
+</head>
+<body>
+<div class="app-container">
+    <header>
+        <div>
+            <h1><span class="icon">🌬️</span>Oxygenation & A–a Gradient Helper</h1>
+            <div class="subtitle">
+                PAO₂, A–a gradient, PF ratio, and hypoxemia mechanism summary (bedside use, not a guideline).
+            </div>
+        </div>
+        <div class="nav-buttons">
+            <a href="../pulmonary.html" class="nav-btn">
+                <span class="icon">↩️</span><span>Back to Pulmonary</span>
+            </a>
+            <a href="../index.html" class="nav-btn">
+                <span class="icon">🏠</span><span>Home</span>
+            </a>
+        </div>
+    </header>
+
+    <div class="grid">
+        <!-- INPUTS -->
+        <section class="card">
+            <div class="card-header">
+                <div class="card-title">
+                    <span>Inputs</span>
+                    <span class="pill">ABG + basic demographics</span>
+                </div>
+            </div>
+
+            <div class="inputs-grid">
+                <div class="input-group">
+                    <label for="age">Age (years)</label>
+                    <input type="number" id="age" min="0" step="1" placeholder="e.g. 60">
+                    <div class="unit">Used for expected A–a gradient (≈ age/4 + 4)</div>
+                </div>
+
+                <div class="input-group">
+                    <label for="fio2">FiO₂ (%)</label>
+                    <input type="number" id="fio2" min="21" max="100" step="1" placeholder="e.g. 40">
+                    <div class="unit">Room air ≈ 21%</div>
+                </div>
+
+                <div class="input-group">
+                    <label for="pao2">PaO₂ (mmHg)</label>
+                    <input type="number" id="pao2" min="20" step="1" placeholder="e.g. 70">
+                </div>
+
+                <div class="input-group">
+                    <label for="paco2">PaCO₂ (mmHg)</label>
+                    <input type="number" id="paco2" min="10" step="1" placeholder="e.g. 40">
+                </div>
+
+                <div class="input-group">
+                    <label for="pb">Barometric Pressure PB (mmHg) <span class="unit">(optional)</span></label>
+                    <input type="number" id="pb" step="1" placeholder="Default 760">
+                    <div class="hint">Use 760 mmHg at sea level if unsure.</div>
+                </div>
+
+                <div class="input-group">
+                    <label for="spo2">SpO₂ (%) <span class="unit">(optional)</span></label>
+                    <input type="number" id="spo2" min="50" max="100" step="1" placeholder="e.g. 92">
+                    <div class="hint">Helps contextualize hypoxemia vs pulse oximetry.</div>
+                </div>
+            </div>
+
+            <div class="btn-row">
+                <button type="button" class="btn-primary" id="btn-calc">
+                    <span>Calculate Oxygenation</span> <span>➜</span>
+                </button>
+                <button type="button" class="btn-secondary" id="btn-quick">
+                    <span>Fill typical values</span>
+                </button>
+            </div>
+            <div id="error" class="error-text" style="display:none;"></div>
+        </section>
+
+        <!-- RESULTS -->
+        <section class="card">
+            <div class="card-header">
+                <div class="card-title">
+                    <span>Results & Interpretation</span>
+                    <span class="pill">Automatically updated</span>
+                </div>
+            </div>
+
+            <div class="results-badge-row" id="badge-row">
+                <!-- dynamic badges -->
+            </div>
+
+            <div id="result-lines">
+                <div class="result-line"><strong>PAO₂:</strong> –</div>
+                <div class="result-line"><strong>A–a Gradient:</strong> –</div>
+                <div class="result-line"><strong>Expected A–a:</strong> –</div>
+                <div class="result-line"><strong>PF Ratio (PaO₂/FiO₂):</strong> –</div>
+                <div class="result-line"><strong>“5× FiO₂” rule:</strong> –</div>
+            </div>
+
+            <div class="section-label">Mechanism & Severity (educational)</div>
+            <div class="interpretation-text" id="interpretation">
+                Enter values on the left and click <strong>Calculate Oxygenation</strong> to see A–a gradient,
+                PF ratio, and a brief interpretation of hypoxemia and likely mechanism.
+            </div>
+        </section>
+    </div>
+
+    <!-- ASSESSMENT / PLAN -->
+    <section class="card" style="margin-top: 14px;">
+        <div class="card-header">
+            <div class="card-title">
+                Assessment & Plan Snippet
+            </div>
+            <button type="button" class="btn-secondary" id="btn-copy">
+                <span>Copy to clipboard</span>
+            </button>
+        </div>
+        <div class="textarea-wrapper">
+            <textarea id="assessment" placeholder="After calculation, a structured assessment & plan snippet will be generated here. You can edit it and then copy-paste into your note."></textarea>
+        </div>
+        <div class="small-note">
+            Generated text is for documentation support only — always integrate with full clinical context
+            (hemodynamics, CXR/CT, PEEP, ventilator settings, trend of gases, etc.).
+        </div>
+    </section>
+</div>
+
+<script>
+(function () {
+    const pbDefault = 760;
+    const PH2O = 47;
+    const R = 0.8;
+
+    const ageInput = document.getElementById('age');
+    const fio2Input = document.getElementById('fio2');
+    const pao2Input = document.getElementById('pao2');
+    const paco2Input = document.getElementById('paco2');
+    const pbInput   = document.getElementById('pb');
+    const spo2Input = document.getElementById('spo2');
+
+    const btnCalc  = document.getElementById('btn-calc');
+    const btnQuick = document.getElementById('btn-quick');
+    const errorBox = document.getElementById('error');
+
+    const resultLines = document.getElementById('result-lines');
+    const badgeRow    = document.getElementById('badge-row');
+    const interpBox   = document.getElementById('interpretation');
+    const assessmentBox = document.getElementById('assessment');
+    const btnCopy = document.getElementById('btn-copy');
+
+    function format(num, digits) {
+        if (num === null || isNaN(num)) return '–';
+        return Number(num).toFixed(digits);
+    }
+
+    function classifyAa(aa, expectedAa) {
+        if (aa === null || isNaN(aa)) return { text: 'A–a: –', class: '' };
+
+        let severity = '';
+        if (aa <= 10) severity = 'normal (young adult on room air)';
+        else if (expectedAa && aa <= expectedAa + 5) severity = 'near expected for age';
+        else if (aa <= 30) severity = 'mildly elevated';
+        else if (aa <= 60) severity = 'moderately elevated';
+        else severity = 'markedly elevated';
+
+        return {
+            text: `A–a ~ ${format(aa, 1)} mmHg — ${severity}`,
+            class: aa <= (expectedAa || 15) ? 'badge-good'
+                  : aa <= (expectedAa ? expectedAa + 30 : 40) ? 'badge-warning'
+                  : 'badge-danger'
+        };
+    }
+
+    function classifyPf(pf) {
+        if (pf === null || isNaN(pf)) return { text: 'PF ratio: –', class: '' };
+
+        let text, cls;
+        if (pf >= 300) {
+            text = `PF ${Math.round(pf)} — no ARDS range (if clinical picture suggests).`;
+            cls  = 'badge-good';
+        } else if (pf >= 200) {
+            text = `PF ${Math.round(pf)} — mild hypoxemic respiratory failure / mild ARDS range.`;
+            cls  = 'badge-warning';
+        } else if (pf >= 100) {
+            text = `PF ${Math.round(pf)} — moderate ARDS range (if PEEP ≥5 and bilateral opacities).`;
+            cls  = 'badge-warning';
+        } else {
+            text = `PF ${Math.round(pf)} — severe ARDS range (if PEEP ≥5 and bilateral opacities).`;
+            cls  = 'badge-danger';
+        }
+        return { text, class: cls };
+    }
+
+    function fiveTimesRule(fio2Percent, pao2) {
+        if (!fio2Percent || !pao2) return null;
+        const expectedPaO2 = 5 * fio2Percent;
+        const diff = pao2 - expectedPaO2;
+        let comment;
+
+        if (diff >= -10 && diff <= 10) {
+            comment = 'PaO₂ roughly matches “5× FiO₂” bedside rule.';
+        } else if (pao2 < expectedPaO2) {
+            comment = 'PaO₂ lower than “5× FiO₂” — significant gas exchange impairment likely.';
+        } else {
+            comment = 'PaO₂ above “5× FiO₂” rule (or patient on low FiO₂ with good oxygenation).';
+        }
+
+        return {
+            expected: expectedPaO2,
+            diff: diff,
+            comment: comment
+        };
+    }
+
+    function buildInterpretation(paO2, fiO2, spo2, aa, expectedAa, pf) {
+        if (!paO2 || !fiO2 || !pf || isNaN(pf)) {
+            return 'Insufficient data to interpret. Please enter at least FiO₂, PaO₂ and PaCO₂, then recalculate.';
+        }
+
+        const hypoxemia = paO2 < 60 ? 'Yes (PaO₂ < 60 mmHg)' :
+                          paO2 < 80 ? 'Borderline (PaO₂ 60–80 mmHg)' :
+                                      'No (PaO₂ ≥ 80 mmHg)';
+
+        let mechanisms = [];
+        let summaryPoints = [];
+
+        const aaDiff = expectedAa ? aa - expectedAa : null;
+        const aaElevated = aa && ( (!expectedAa && aa > 15) || (expectedAa && aa > expectedAa + 5) );
+
+        if (!aa || isNaN(aa)) {
+            mechanisms.push('A–a gradient not available; cannot distinguish shunt/V–Q mismatch from pure hypoventilation.');
+        } else {
+            if (!aaElevated) {
+                mechanisms.push('Normal / near-normal A–a: hypoxemia (if present) is more consistent with alveolar hypoventilation or low inspired FiO₂.');
+            } else {
+                mechanisms.push('Elevated A–a: suggests intrapulmonary gas exchange problem (V–Q mismatch, shunt, or diffusion limitation).');
+            }
+        }
+
+        if (pf < 300) {
+            mechanisms.push('PF ratio < 300: hypoxemic respiratory failure pattern — consider ARDS if bilateral opacities and non-cardiogenic edema are present.');
+        }
+
+        if (spo2) {
+            if (spo2 < 90) {
+                summaryPoints.push(`SpO₂ ${spo2}% — clinically significant desaturation.`);
+            } else if (spo2 < 94) {
+                summaryPoints.push(`SpO₂ ${spo2}% — borderline saturation; trend and clinical context important.`);
+            } else {
+                summaryPoints.push(`SpO₂ ${spo2}% — acceptable saturation in many settings (depending on goal).`);
+            }
+        }
+
+        summaryPoints.push(`Hypoxemia: ${hypoxemia}.`);
+        if (aa && !isNaN(aa)) {
+            if (!expectedAa) {
+                summaryPoints.push(`A–a gradient is ${format(aa,1)} mmHg.`);
+            } else {
+                summaryPoints.push(`A–a gradient ${format(aa,1)} mmHg (expected ≈ ${format(expectedAa,1)} for age).`);
+            }
+        }
+        summaryPoints.push(`PF ratio ≈ ${Math.round(pf)}.`);
+
+        const treatmentIdeas = [
+            'Adjust FiO₂ and titrate to target SpO₂ / PaO₂.',
+            'Evaluate CXR/CT for focal vs diffuse process.',
+            'If elevated A–a: think pneumonia, ARDS, atelectasis, pulmonary edema, PE, etc.',
+            'If normal A–a but hypoxemic: consider hypoventilation (opioids, neuromuscular weakness, CNS depression) or low FiO₂.',
+            'Integrate with hemodynamics, lactate, and overall respiratory mechanics (work of breathing, PEEP, plateau pressure).'
+        ];
+
+        return `
+            <div class="interpretation-text">
+                <ul>
+                    ${summaryPoints.map(s => `<li>${s}</li>`).join('')}
+                </ul>
+                <div class="section-label">Likely physiologic pattern</div>
+                <ul>
+                    ${mechanisms.map(m => `<li>${m}</li>`).join('')}
+                </ul>
+                <div class="section-label">Things to consider (not exhaustive)</div>
+                <ul>
+                    ${treatmentIdeas.map(t => `<li>${t}</li>`).join('')}
+                </ul>
+                <div class="small-note">
+                    This is an educational aid. Always integrate full clinical picture, local protocols,
+                    and senior/consultant input.
+                </div>
+            </div>
+        `;
+    }
+
+    function buildAssessmentSnippet(params) {
+        const {
+            age, fio2Percent, pao2, paco2, pb,
+            pao2_alv, aa, expectedAa, pf, fiveRule
+        } = params;
+
+        let lines = [];
+        lines.push('Oxygenation assessment:');
+
+        let line1 = `On FiO₂ ${fio2Percent ? fio2Percent + '%' : '–'}, PaO₂ ${pao2 ? pao2 + ' mmHg' : '–'}, PaCO₂ ${paco2 ? paco2 + ' mmHg' : '–'}.`;
+        if (age) {
+            line1 += ` Age ≈ ${age} yrs.`;
+        }
+        lines.push(line1);
+
+        let aaText = 'A–a gradient: not fully interpretable (missing data).';
+        if (aa && !isNaN(aa)) {
+            if (expectedAa) {
+                aaText = `A–a gradient ≈ ${format(aa,1)} mmHg (expected ≈ ${format(expectedAa,1)} mmHg for age).`;
+            } else {
+                aaText = `A–a gradient ≈ ${format(aa,1)} mmHg (age not provided; normal usually ≤10–15 mmHg on room air in young adults).`;
+            }
+        }
+        lines.push(aaText);
+
+        if (pf && !isNaN(pf)) {
+            let pfDesc;
+            if (pf >= 300) pfDesc = 'no clear ARDS-range hypoxemia';
+            else if (pf >= 200) pfDesc = 'mild ARDS-range hypoxemia (if PEEP ≥5 and bilateral opacities)';
+            else if (pf >= 100) pfDesc = 'moderate ARDS-range hypoxemia (if PEEP ≥5 and bilateral opacities)';
+            else pfDesc = 'severe ARDS-range hypoxemia (if PEEP ≥5 and bilateral opacities)';
+
+            lines.push(`PF ratio ≈ ${Math.round(pf)} (${pfDesc}).`);
+        }
+
+        if (fiveRule) {
+            lines.push(`“5× FiO₂” check: expected PaO₂ ≈ ${Math.round(fiveRule.expected)} mmHg; actual PaO₂ is ${Math.round(pao2)} mmHg (${fiveRule.comment}).`);
+        }
+
+        lines.push('');
+        lines.push('Plan (adjust to patient):');
+        lines.push('- Titrate FiO₂ to achieve appropriate SpO₂ / PaO₂ goals (e.g., ≥ 88–92% in most COPD, ≥ 92–94% otherwise, per local practice).');
+        lines.push('- Reassess work of breathing and ventilatory mechanics; consider need for NIV vs invasive ventilation if tiring or worsening gas exchange.');
+        lines.push('- Evaluate imaging (CXR/CT) for focal consolidation, pulmonary edema, atelectasis, or ARDS pattern; treat underlying cause (pneumonia, edema, PE, etc.).');
+        lines.push('- Optimize PEEP, recruitment, and fluid status as appropriate; discuss with ICU/respiratory therapy for advanced ventilator strategies.');
+        lines.push('- Trend ABGs/venous gases and clinical status; escalate care if worsening hypoxemia or hemodynamic instability.');
+
+        return lines.join('\n');
+    }
+
+    function calculate() {
+        errorBox.style.display = 'none';
+        errorBox.textContent = '';
+
+        const age = ageInput.value ? parseFloat(ageInput.value) : null;
+        const fio2Percent = fio2Input.value ? parseFloat(fio2Input.value) : null;
+        const pao2 = pao2Input.value ? parseFloat(pao2Input.value) : null;
+        const paco2 = paco2Input.value ? parseFloat(paco2Input.value) : null;
+        const pb = pbInput.value ? parseFloat(pbInput.value) : pbDefault;
+        const spo2 = spo2Input.value ? parseFloat(spo2Input.value) : null;
+
+        if (!fio2Percent || !pao2 || !paco2) {
+            errorBox.textContent = 'Please enter at least FiO₂ (%), PaO₂ and PaCO₂ to calculate oxygenation.';
+            errorBox.style.display = 'block';
+        }
+
+        if (!fio2Percent || !pao2 || !paco2) {
+            // still show partial results as "–"
+        }
+
+        const fio2 = fio2Percent ? fio2Percent / 100 : null;
+
+        let pao2_alv = null;
+        let aa = null;
+        let expectedAa = null;
+        let pf = null;
+
+        if (fio2 && paco2) {
+            pao2_alv = fio2 * (pb - PH2O) - (paco2 / R);
+        }
+
+        if (pao2_alv && pao2) {
+            aa = pao2_alv - pao2;
+        }
+
+        if (age) {
+            expectedAa = age / 4 + 4;
+        }
+
+        if (fio2 && pao2) {
+            pf = pao2 / fio2;
+        }
+
+        // Update basic result lines
+        resultLines.innerHTML = `
+            <div class="result-line"><strong>PAO₂ (alveolar):</strong> ${pao2_alv ? format(pao2_alv, 1) + ' mmHg' : '–'}</div>
+            <div class="result-line"><strong>A–a Gradient:</strong> ${aa ? format(aa, 1) + ' mmHg' : '–'}</div>
+            <div class="result-line"><strong>Expected A–a:</strong> ${expectedAa ? format(expectedAa, 1) + ' mmHg' : (age ? '–' : 'Age not provided')}</div>
+            <div class="result-line"><strong>PF Ratio (PaO₂/FiO₂):</strong> ${pf ? Math.round(pf) : '–'}</div>
+        `;
+
+        // 5x FiO2 rule
+        const rule = fio2Percent && pao2 ? fiveTimesRule(fio2Percent, pao2) : null;
+        const ruleLine = rule
+            ? `Expected PaO₂ ≈ ${Math.round(rule.expected)} mmHg by “5× FiO₂” rule; actual PaO₂ = ${Math.round(pao2)} mmHg.`
+            : 'Need FiO₂ (%) and PaO₂ to use “5× FiO₂” bedside rule.';
+        resultLines.innerHTML += `
+            <div class="result-line"><strong>“5× FiO₂” rule:</strong> ${ruleLine}</div>
+        `;
+
+        // badges
+        badgeRow.innerHTML = '';
+        const aaClass = classifyAa(aa, expectedAa);
+        const pfClass = classifyPf(pf);
+
+        if (aaClass.text !== 'A–a: –') {
+            const span = document.createElement('span');
+            span.className = 'badge ' + aaClass.class;
+            span.textContent = aaClass.text;
+            badgeRow.appendChild(span);
+        }
+
+        if (pfClass.text !== 'PF ratio: –') {
+            const span = document.createElement('span');
+            span.className = 'badge ' + pfClass.class;
+            span.textContent = pfClass.text;
+            badgeRow.appendChild(span);
+        }
+
+        // Interpretation
+        interpBox.innerHTML = buildInterpretation(pao2, fio2, spo2, aa, expectedAa, pf);
+
+        // Assessment snippet
+        assessmentBox.value = buildAssessmentSnippet({
+            age,
+            fio2Percent,
+            pao2,
+            paco2,
+            pb,
+            pao2_alv,
+            aa,
+            expectedAa,
+            pf,
+            fiveRule: rule
+        });
+    }
+
+    btnCalc.addEventListener('click', calculate);
+
+    btnQuick.addEventListener('click', function () {
+        if (!fio2Input.value) fio2Input.value = 40;
+        if (!pao2Input.value) pao2Input.value = 70;
+        if (!paco2Input.value) paco2Input.value = 40;
+        if (!ageInput.value) ageInput.value = 60;
+        if (!spo2Input.value) spo2Input.value = 92;
+        if (!pbInput.value) pbInput.value = pbDefault;
+        calculate();
+    });
+
+    btnCopy.addEventListener('click', function () {
+        const text = assessmentBox.value || '';
+        if (!text.trim()) {
+            alert('Nothing to copy yet. Please calculate first.');
+            return;
+        }
+
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(text)
+                .then(() => {
+                    alert('Assessment & Plan copied to clipboard.');
+                })
+                .catch(() => {
+                    fallbackCopy(text);
+                });
+        } else {
+            fallbackCopy(text);
+        }
+    });
+
+    function fallbackCopy(text) {
+        const temp = document.createElement('textarea');
+        temp.style.position = 'fixed';
+        temp.style.opacity = '0';
+        temp.value = text;
+        document.body.appendChild(temp);
+        temp.select();
+        try {
+            document.execCommand('copy');
+            alert('Assessment & Plan copied to clipboard.');
+        } catch (e) {
+            alert('Unable to copy automatically. You can manually select and copy the text.');
+        }
+        document.body.removeChild(temp);
+    }
+})();
+</script>
+</body>
+</html>
