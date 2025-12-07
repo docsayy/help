@@ -1,1 +1,1490 @@
-infectious_disease/uti_tool.html
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>UTI Severity & Antibiotic Helper</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <style>
+    :root {
+      --bg: #f3f4f6;
+      --card: #ffffff;
+      --accent: #06b6d4; /* teal */
+      --accent-soft: #e0f7fa;
+      --accent-strong: #0284c7;
+      --text-main: #0f172a;
+      --text-muted: #6b7280;
+      --border-subtle: #d1d5db;
+      --radius-lg: 18px;
+      --radius-pill: 999px;
+      --shadow-soft: 0 12px 28px rgba(6, 182, 212, 0.18);
+      --shadow-subtle: 0 4px 12px rgba(15, 23, 42, 0.08);
+      --transition-fast: 0.18s ease-out;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: radial-gradient(circle at top left, #e0f7fa 0, #f3f4f6 40%, #ffffff 100%);
+      color: var(--text-main);
+    }
+
+    body {
+      display: flex;
+      justify-content: center;
+      padding: 20px 12px 32px;
+    }
+
+    .app-shell {
+      width: 100%;
+      max-width: 1180px;
+      background: rgba(255, 255, 255, 0.94);
+      border-radius: 24px;
+      border: 1px solid rgba(148, 163, 184, 0.4);
+      box-shadow: 0 20px 60px rgba(6, 182, 212, 0.2);
+      backdrop-filter: blur(16px);
+      padding: 20px 18px 26px;
+    }
+
+    @media (min-width: 768px) {
+      .app-shell {
+        padding: 24px 28px 32px;
+      }
+    }
+
+    header {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      margin-bottom: 18px;
+      border-bottom: 1px solid var(--border-subtle);
+      padding-bottom: 16px;
+    }
+
+    @media (min-width: 640px) {
+      header {
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+      }
+    }
+
+    .title-block {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .system-icon {
+      width: 52px;
+      height: 52px;
+      border-radius: 20px;
+      background: radial-gradient(circle at 25% 20%, #ffffff 0, #a5f3fc 40%, #06b6d4 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 28px;
+      box-shadow: 0 12px 28px rgba(6, 182, 212, 0.4);
+      flex-shrink: 0;
+    }
+
+    .title-text h1 {
+      margin: 0;
+      font-size: 1.25rem;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.8rem;
+      padding: 3px 10px;
+      border-radius: var(--radius-pill);
+      background: var(--accent-soft);
+      color: var(--accent-strong);
+      margin-top: 4px;
+      font-weight: 600;
+    }
+
+    .title-text p {
+      margin: 6px 0 0;
+      font-size: 0.86rem;
+      color: var(--text-muted);
+    }
+
+    .nav-buttons {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      padding: 8px 14px;
+      border-radius: var(--radius-pill);
+      border: 1px solid var(--border-subtle);
+      background: #f9fafb;
+      color: var(--text-main);
+      font-size: 0.85rem;
+      text-decoration: none;
+      cursor: pointer;
+      box-shadow: var(--shadow-subtle);
+      transition: transform var(--transition-fast), box-shadow var(--transition-fast), background var(--transition-fast), border-color var(--transition-fast);
+    }
+
+    .btn svg {
+      width: 16px;
+      height: 16px;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #06b6d4, #0284c7);
+      border-color: transparent;
+      color: #ffffff;
+      box-shadow: var(--shadow-soft);
+    }
+
+    .btn:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 8px 18px rgba(15, 23, 42, 0.18);
+      background: #ffffff;
+    }
+
+    .btn-primary:hover {
+      background: linear-gradient(135deg, #0ea5e9, #0369a1);
+      box-shadow: 0 14px 32px rgba(14, 165, 233, 0.4);
+    }
+
+    main {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      margin-top: 6px;
+    }
+
+    .section-row {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr);
+      gap: 14px;
+    }
+
+    @media (min-width: 980px) {
+      .section-row.two-col {
+        grid-template-columns: 1.1fr 1.1fr;
+      }
+    }
+
+    .card {
+      background: var(--card);
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--border-subtle);
+      padding: 14px 14px 12px;
+      box-shadow: var(--shadow-subtle);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at top right, rgba(56, 189, 248, 0.18), transparent 55%);
+      opacity: 0;
+      transition: opacity var(--transition-fast);
+      pointer-events: none;
+    }
+
+    .card:hover::before {
+      opacity: 1;
+    }
+
+    .card-header {
+      margin-bottom: 10px;
+    }
+
+    .card-header h2 {
+      margin: 0;
+      font-size: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .card-header p {
+      margin: 4px 0 0;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 2px 8px;
+      border-radius: var(--radius-pill);
+      background: #e0f2fe;
+      color: #1d4ed8;
+      font-size: 0.75rem;
+      border: 1px solid #bfdbfe;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr);
+      gap: 8px 12px;
+    }
+
+    @media (min-width: 640px) {
+      .form-grid.two-col {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+      .form-grid.three-col {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+    }
+
+    label {
+      display: block;
+      font-size: 0.8rem;
+      font-weight: 500;
+      margin-bottom: 3px;
+      color: #0f172a;
+    }
+
+    .field {
+      margin-bottom: 6px;
+    }
+
+    input[type="number"],
+    select,
+    textarea {
+      width: 100%;
+      padding: 7px 9px;
+      border-radius: 10px;
+      border: 1px solid #cbd5e1;
+      font-size: 0.85rem;
+      font-family: inherit;
+      background: #f9fafb;
+      transition: border-color var(--transition-fast), box-shadow var(--transition-fast), background var(--transition-fast);
+    }
+
+    textarea {
+      resize: vertical;
+      min-height: 60px;
+    }
+
+    input[type="number"]:focus,
+    select:focus,
+    textarea:focus {
+      outline: none;
+      border-color: #06b6d4;
+      box-shadow: 0 0 0 1px rgba(6, 182, 212, 0.3);
+      background: #ffffff;
+    }
+
+    .checkbox-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px 10px;
+      margin-top: 4px;
+    }
+
+    .check-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 0.78rem;
+      padding: 4px 9px;
+      border-radius: 999px;
+      border: 1px solid #cbd5e1;
+      background: #f9fafb;
+      cursor: pointer;
+      user-select: none;
+      transition: background var(--transition-fast), border-color var(--transition-fast), box-shadow var(--transition-fast);
+    }
+
+    .check-pill input {
+      margin: 0;
+    }
+
+    .check-pill:hover {
+      background: #ecfeff;
+      border-color: #7dd3fc;
+      box-shadow: 0 3px 8px rgba(56, 189, 248, 0.35);
+    }
+
+    .subtle-note {
+      font-size: 0.74rem;
+      color: var(--text-muted);
+      margin-top: 3px;
+    }
+
+    .section-divider {
+      height: 1px;
+      background: var(--border-subtle);
+      margin: 6px 0 6px;
+    }
+
+    .actions-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      margin-top: 10px;
+      flex-wrap: wrap;
+    }
+
+    .btn-run {
+      padding: 9px 18px;
+      border-radius: var(--radius-pill);
+      border: none;
+      background: linear-gradient(135deg, #06b6d4, #0ea5e9);
+      color: #ffffff;
+      font-weight: 600;
+      font-size: 0.9rem;
+      cursor: pointer;
+      box-shadow: var(--shadow-soft);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: transform var(--transition-fast), box-shadow var(--transition-fast), background var(--transition-fast);
+    }
+
+    .btn-run:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 14px 32px rgba(6, 182, 212, 0.4);
+      background: linear-gradient(135deg, #0ea5e9, #0369a1);
+    }
+
+    .btn-secondary {
+      border-radius: var(--radius-pill);
+      padding: 7px 14px;
+      border: 1px solid #bae6fd;
+      background: #ecfeff;
+      color: #0369a1;
+      font-size: 0.8rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
+      box-shadow: 0 4px 10px rgba(6, 182, 212, 0.16);
+      transition: transform var(--transition-fast), box-shadow var(--transition-fast), background var(--transition-fast);
+    }
+
+    .btn-secondary:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 8px 18px rgba(6, 182, 212, 0.25);
+      background: #e0f7fa;
+    }
+
+    .results-card {
+      margin-top: 6px;
+    }
+
+    .results-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr);
+      gap: 10px;
+    }
+
+    @media (min-width: 980px) {
+      .results-grid {
+        grid-template-columns: 1.1fr 1.1fr;
+      }
+    }
+
+    .results-section h3 {
+      margin: 0 0 4px;
+      font-size: 0.95rem;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .results-section h4 {
+      margin: 6px 0 2px;
+      font-size: 0.9rem;
+    }
+
+    .results-section p,
+    .results-section li {
+      font-size: 0.8rem;
+      line-height: 1.4;
+    }
+
+    .tagline {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+
+    .chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 2px 7px;
+      border-radius: 999px;
+      background: #ecfeff;
+      color: #0369a1;
+      border: 1px solid #bae6fd;
+      font-size: 0.75rem;
+    }
+
+    ul {
+      padding-left: 18px;
+      margin: 4px 0 4px;
+    }
+
+    footer {
+      margin-top: 18px;
+      padding-top: 12px;
+      border-top: 1px solid var(--border-subtle);
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      display: flex;
+      justify-content: space-between;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 999px;
+      background: var(--accent-strong);
+      display: inline-block;
+      margin-right: 6px;
+    }
+
+    /* Modal */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.35);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 50;
+    }
+
+    .modal {
+      background: #ffffff;
+      border-radius: 16px;
+      padding: 16px 16px 14px;
+      max-width: 680px;
+      width: 100%;
+      box-shadow: 0 20px 50px rgba(15, 23, 42, 0.35);
+      border: 1px solid #d1d5db;
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+
+    .modal-header h3 {
+      margin: 0;
+      font-size: 0.95rem;
+    }
+
+    .modal-header button {
+      border: none;
+      background: transparent;
+      font-size: 1.1rem;
+      cursor: pointer;
+      color: #6b7280;
+    }
+
+    .modal-body {
+      margin-bottom: 8px;
+    }
+
+    .modal-body textarea {
+      width: 100%;
+      border-radius: 10px;
+      border: 1px solid #cbd5e1;
+      font-size: 0.8rem;
+      padding: 8px;
+      resize: vertical;
+      min-height: 220px;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      background: #f9fafb;
+    }
+
+    .modal-footer {
+      display: flex;
+      justify-content: flex-end;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .copy-hint {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      margin-right: auto;
+    }
+  </style>
+</head>
+<body>
+  <div class="app-shell">
+    <header>
+      <div class="title-block">
+        <div class="system-icon" aria-hidden="true">🧫</div>
+        <div class="title-text">
+          <h1>UTI Severity &amp; Antibiotic Helper</h1>
+          <div class="badge">
+            cUTI • CAUTI • ESBL/AmpC • Stewardship-focused regimens
+          </div>
+          <p>
+            Classifies UTI syndrome (cystitis, pyelo, CAUTI, urosepsis), estimates MDR risk, and suggests guideline-aligned empiric therapy (nitrofurantoin/TMP-SMX first when appropriate), including Foley and ESBL/AmpC considerations. Generates a copyable assessment &amp; plan.
+          </p>
+        </div>
+      </div>
+      <nav class="nav-buttons" aria-label="Page navigation">
+        <a href="../index.html" class="btn btn-primary">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path fill="currentColor" d="M12 3.172 3 10.5V20a1 1 0 0 0 1 1h6v-5h4v5h6a1 1 0 0 0 1-1v-9.5L12 3.172Z"/>
+          </svg>
+          <span>Home</span>
+        </a>
+        <a href="../infectious_disease.html" class="btn">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path fill="currentColor" d="M12 5.5 5.5 12l1.4 1.4L11 9.3V19h2V9.3l4.1 4.1 1.4-1.4L12 5.5Z"/>
+          </svg>
+          <span>Back to Infectious Disease</span>
+        </a>
+      </nav>
+    </header>
+
+    <main>
+      <!-- Top row -->
+      <div class="section-row two-col">
+        <!-- Patient & context -->
+        <section class="card">
+          <div class="card-header">
+            <h2>Patient basics &amp; context</h2>
+            <p>Helps classify uncomplicated vs complicated UTI and drives regimen choice.</p>
+          </div>
+          <div class="form-grid two-col">
+            <div class="field">
+              <label for="age">Age (years)</label>
+              <input type="number" id="age" min="0" max="120">
+            </div>
+            <div class="field">
+              <label for="sex">Sex</label>
+              <select id="sex">
+                <option value="">Select…</option>
+                <option value="female">Female</option>
+                <option value="male">Male</option>
+                <option value="other">Other / not specified</option>
+              </select>
+              <div class="subtle-note">Male UTI generally counts as complicated.</div>
+            </div>
+
+            <div class="field">
+              <label>Pregnancy status</label>
+              <div class="checkbox-row">
+                <label class="check-pill">
+                  <input type="checkbox" id="pregnant">
+                  <span>Pregnant</span>
+                </label>
+              </div>
+              <div class="subtle-note">
+                Pregnancy → treat bacteriuria and usually avoid fluoroquinolones; use nitrofurantoin cautiously near term.
+              </div>
+            </div>
+
+            <div class="field">
+              <label>Clinical setting</label>
+              <div class="checkbox-row">
+                <label class="check-pill">
+                  <input type="checkbox" id="setting-outpt">
+                  <span>Outpatient / clinic</span>
+                </label>
+                <label class="check-pill">
+                  <input type="checkbox" id="setting-ed">
+                  <span>ED</span>
+                </label>
+                <label class="check-pill">
+                  <input type="checkbox" id="setting-ward">
+                  <span>Inpatient ward</span>
+                </label>
+                <label class="check-pill">
+                  <input type="checkbox" id="setting-icu">
+                  <span>ICU</span>
+                </label>
+              </div>
+            </div>
+
+            <div class="field">
+              <label>Urinary tract risk / anatomy</label>
+              <div class="checkbox-row">
+                <label class="check-pill">
+                  <input type="checkbox" id="structural">
+                  <span>Structural GU abnormality / obstruction / stones</span>
+                </label>
+                <label class="check-pill">
+                  <input type="checkbox" id="neurogenic">
+                  <span>Neurogenic bladder / intermittent cath</span>
+                </label>
+                <label class="check-pill">
+                  <input type="checkbox" id="renal-transplant">
+                  <span>Renal transplant</span>
+                </label>
+              </div>
+            </div>
+
+            <div class="field">
+              <label for="egfr">eGFR (mL/min/1.73m², if known)</label>
+              <input type="number" id="egfr" step="1">
+              <div class="subtle-note">
+                Nitrofurantoin generally avoided if eGFR &lt;30; dose-adjust many agents in CKD.
+              </div>
+            </div>
+
+            <div class="field">
+              <label>Recurrent UTI history</label>
+              <div class="checkbox-row">
+                <label class="check-pill">
+                  <input type="checkbox" id="recurrent-uti">
+                  <span>Recurrent UTI (≥3/year or ≥2/6 months)</span>
+                </label>
+              </div>
+            </div>
+
+            <div class="field">
+              <label>Fever &amp; flank pain</label>
+              <div class="checkbox-row">
+                <label class="check-pill">
+                  <input type="checkbox" id="fever">
+                  <span>Fever / chills</span>
+                </label>
+                <label class="check-pill">
+                  <input type="checkbox" id="flank-pain">
+                  <span>Flank pain / CVA tenderness</span>
+                </label>
+                <label class="check-pill">
+                  <input type="checkbox" id="nausea-vomit">
+                  <span>Nausea / vomiting (PO intolerance)</span>
+                </label>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Syndrome & severity -->
+        <section class="card">
+          <div class="card-header">
+            <h2>UTI syndrome &amp; severity</h2>
+            <p>Choose the clinical syndrome and mark sepsis severity.</p>
+          </div>
+
+          <div class="field">
+            <label for="syndrome">Most likely UTI syndrome</label>
+            <select id="syndrome">
+              <option value="">Select…</option>
+              <option value="uncomplicated-cystitis">Uncomplicated cystitis (lower UTI, healthy nonpregnant female)</option>
+              <option value="complicated-cystitis">Complicated cystitis (male, pregnant, or structural disease)</option>
+              <option value="pyelonephritis">Pyelonephritis (upper tract, flank pain/fever)</option>
+              <option value="urosepsis">Urosepsis (pyelo with sepsis/instability)</option>
+              <option value="cauti">Catheter-associated UTI (CAUTI)</option>
+              <option value="asb">Asymptomatic bacteriuria (no urinary symptoms)</option>
+              <option value="uncertain">Uncertain / mixed picture</option>
+            </select>
+            <div class="subtle-note">
+              Tool will still give a best guess based on other features if this is left uncertain.
+            </div>
+          </div>
+
+          <div class="section-divider"></div>
+
+          <div class="form-grid two-col">
+            <div class="field">
+              <label>Vitals (optional but helpful)</label>
+              <div class="form-grid two-col">
+                <div>
+                  <label for="temp">Temp (°C)</label>
+                  <input type="number" id="temp" step="0.1">
+                </div>
+                <div>
+                  <label for="hr">HR (bpm)</label>
+                  <input type="number" id="hr">
+                </div>
+                <div>
+                  <label for="sbp">SBP (mmHg)</label>
+                  <input type="number" id="sbp">
+                </div>
+                <div>
+                  <label for="rr">RR (/min)</label>
+                  <input type="number" id="rr">
+                </div>
+              </div>
+              <div class="subtle-note">
+                Used to summarize systemic illness; sepsis/shock checkboxes drive management tier.
+              </div>
+            </div>
+            <div class="field">
+              <label>Sepsis severity</label>
+              <div class="checkbox-row">
+                <label class="check-pill">
+                  <input type="checkbox" id="sepsis">
+                  <span>Sepsis (organ dysfunction but no pressors)</span>
+                </label>
+                <label class="check-pill">
+                  <input type="checkbox" id="septic-shock">
+                  <span>Septic shock (pressors, MAP &lt;65, lactate ≥2)</span>
+                </label>
+              </div>
+              <div class="subtle-note">
+                “Sepsis” here = suspected UTI source + systemic instability; “shock” = needs vasopressors despite fluids.
+              </div>
+            </div>
+          </div>
+
+          <div class="section-divider"></div>
+
+          <div class="field">
+            <label>Urinary symptoms (for classification)</label>
+            <div class="checkbox-row">
+              <label class="check-pill">
+                <input type="checkbox" id="dysuria">
+                <span>Dysuria, frequency, urgency</span>
+              </label>
+              <label class="check-pill">
+                <input type="checkbox" id="suprapubic-pain">
+                <span>Suprapubic pain</span>
+              </label>
+              <label class="check-pill">
+                <input type="checkbox" id="hematuria">
+                <span>Hematuria</span>
+              </label>
+              <label class="check-pill">
+                <input type="checkbox" id="no-symptoms">
+                <span>No local urinary symptoms</span>
+              </label>
+            </div>
+            <div class="subtle-note">
+              Asymptomatic bacteriuria (ASB) generally not treated except pregnancy and certain urologic procedures.
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <!-- Second row -->
+      <div class="section-row two-col">
+        <!-- MDR risk & catheter -->
+        <section class="card">
+          <div class="card-header">
+            <h2>MDR / ESBL risk &amp; catheter factors</h2>
+            <p>More risk factors → higher chance of ESBL / AmpC / MDR uropathogens.</p>
+          </div>
+
+          <div class="field">
+            <label>Key MDR risk factors (ED study / guideline-inspired)</label>
+            <div class="checkbox-row">
+              <label class="check-pill">
+                <input type="checkbox" id="rf-nursing-home">
+                <span>Nursing home / long-term care resident</span>
+              </label>
+              <label class="check-pill">
+                <input type="checkbox" id="rf-hosp30">
+                <span>Hospitalization within last 30 days</span>
+              </label>
+              <label class="check-pill">
+                <input type="checkbox" id="rf-abx30">
+                <span>Systemic antibiotics in last 30 days</span>
+              </label>
+              <label class="check-pill">
+                <input type="checkbox" id="rf-foley">
+                <span>Indwelling Foley catheter</span>
+              </label>
+              <label class="check-pill">
+                <input type="checkbox" id="rf-recurrent">
+                <span>Recurrent UTI</span>
+              </label>
+              <label class="check-pill">
+                <input type="checkbox" id="rf-renal-tx">
+                <span>Renal transplant</span>
+              </label>
+            </div>
+            <div class="subtle-note">
+              0 factors → often &gt;90% susceptible to standard agents; ≥2 factors → susceptibility for fluoroquinolones/2nd gen cephalosporins can drop to ~50–60%.
+            </div>
+          </div>
+
+          <div class="section-divider"></div>
+
+          <div class="field">
+            <label>Prior culture history</label>
+            <div class="checkbox-row">
+              <label class="check-pill">
+                <input type="checkbox" id="prior-esbl">
+                <span>Prior ESBL-producing Enterobacterales (urine/blood)</span>
+              </label>
+              <label class="check-pill">
+                <input type="checkbox" id="prior-ampc">
+                <span>Prior AmpC-producing Enterobacterales</span>
+              </label>
+              <label class="check-pill">
+                <input type="checkbox" id="prior-pseudo">
+                <span>Prior Pseudomonas UTI</span>
+              </label>
+              <label class="check-pill">
+                <input type="checkbox" id="prior-enterococcus">
+                <span>Prior Enterococcus UTI</span>
+              </label>
+            </div>
+            <div class="subtle-note">
+              Prior organisms and susceptibilities are the strongest guide for empiric therapy, especially in cUTI and sepsis.
+            </div>
+          </div>
+
+          <div class="field">
+            <label for="prior-notes">Brief prior culture details (optional)</label>
+            <textarea id="prior-notes" placeholder="e.g., ESBL E. coli in urine last month, resistant to FQ and TMP-SMX, susceptible to ertapenem and nitrofurantoin."></textarea>
+          </div>
+
+          <div class="section-divider"></div>
+
+          <div class="field">
+            <label>Foley catheter status</label>
+            <div class="checkbox-row">
+              <label class="check-pill">
+                <input type="checkbox" id="foley-present">
+                <span>Foley catheter currently in place</span>
+              </label>
+              <label class="check-pill">
+                <input type="checkbox" id="foley-changed">
+                <span>Foley recently changed / removed prior to cultures</span>
+              </label>
+            </div>
+            <div class="subtle-note">
+              For CAUTI, replace/remove catheter before sending urine cultures when possible; treatment response is better after catheter exchange.
+            </div>
+          </div>
+        </section>
+
+        <!-- Allergy & other considerations -->
+        <section class="card">
+          <div class="card-header">
+            <h2>Allergies, kidney &amp; stewardship constraints</h2>
+            <p>Helps avoid unsafe options and prioritize nitrofurantoin/TMP-SMX when appropriate.</p>
+          </div>
+
+          <div class="field">
+            <label for="allergy-bl">Beta-lactam allergy</label>
+            <select id="allergy-bl">
+              <option value="none">No known beta-lactam allergy</option>
+              <option value="nonsevere">Non-severe (e.g., mild rash, GI upset)</option>
+              <option value="severe">Severe (anaphylaxis, SJS/TEN, organ injury)</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label>Other key allergy / intolerance flags</label>
+            <div class="checkbox-row">
+              <label class="check-pill">
+                <input type="checkbox" id="allergy-tmp">
+                <span>Allergy/intolerance to TMP-SMX (sulfa)</span>
+              </label>
+              <label class="check-pill">
+                <input type="checkbox" id="avoid-fq">
+                <span>Prefer to avoid fluoroquinolones</span>
+              </label>
+              <label class="check-pill">
+                <input type="checkbox" id="nitro-contra">
+                <span>Nitrofurantoin contraindicated (e.g., eGFR &lt;30, suspected pyelo, near term pregnancy)</span>
+              </label>
+            </div>
+            <div class="subtle-note">
+              Tool will try to favor nitrofurantoin or TMP-SMX when safe and avoid unnecessary fluoroquinolones.
+            </div>
+          </div>
+
+          <div class="section-divider"></div>
+
+          <div class="field">
+            <label>Additional clinical notes (optional)</label>
+            <textarea id="notes" placeholder="e.g., 72-year-old man from nursing home with Foley, fever, flank pain, hypotension; prior ESBL Klebsiella UTI; received ceftriaxone dose in ED."></textarea>
+          </div>
+        </section>
+      </div>
+
+      <!-- Actions -->
+      <div class="actions-row">
+        <button type="button" class="btn-run" onclick="runUTIHelper()">
+          <span>Generate UTI assessment &amp; antibiotic plan</span> ▸
+        </button>
+        <button type="button" class="btn-secondary" onclick="openCopyModal()">
+          📋 Preview &amp; copy full assessment &amp; plan
+        </button>
+      </div>
+
+      <!-- Results -->
+      <section class="card results-card">
+        <div class="card-header">
+          <h2>Assessment, Syndrome Classification &amp; Antibiotic Strategy</h2>
+          <p class="tagline">
+            <span class="chip">⚠️ Decision-support only — confirm with local ID/UTI guidelines and antibiogram.</span>
+          </p>
+        </div>
+        <div class="results-grid">
+          <div class="results-section">
+            <h3>🧭 UTI syndrome &amp; risk summary</h3>
+            <div id="severity-content">
+              <p>Enter clinical details and click “Generate…” to see syndrome classification, MDR risk, and disposition thoughts.</p>
+            </div>
+          </div>
+          <div class="results-section">
+            <h3>💊 Empiric antibiotics &amp; reasoning</h3>
+            <div id="abx-content">
+              <p>Guideline-aligned regimens (IDSA cUTI, ESBL/AmpC guidance, stewardship focus) will appear here, including Foley management and de-escalation reminders.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <div><span class="dot"></span>Light teal infectious disease theme. No dark mode.</div>
+      <div>Uses severity + MDR risk + prior culture history to steer empiric UTI therapy and protect key agents.</div>
+    </footer>
+  </div>
+
+  <!-- Copy modal -->
+  <div class="modal-overlay" id="copy-modal-overlay" aria-hidden="true">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="copy-modal-title">
+      <div class="modal-header">
+        <h3 id="copy-modal-title">Preview &amp; copy UTI assessment &amp; plan</h3>
+        <button type="button" onclick="closeCopyModal()" aria-label="Close">✕</button>
+      </div>
+      <div class="modal-body">
+        <textarea id="copy-modal-textarea" readonly></textarea>
+      </div>
+      <div class="modal-footer">
+        <span class="copy-hint">Plain text for H&amp;P, progress note, or sign-out.</span>
+        <button type="button" class="btn-secondary" onclick="copyPlanToClipboard()">Copy to clipboard</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let currentPlanText = "";
+
+    function valNum(id) {
+      const el = document.getElementById(id);
+      if (!el || el.value === "") return null;
+      const n = Number(el.value);
+      return isNaN(n) ? null : n;
+    }
+
+    function isChecked(id) {
+      const el = document.getElementById(id);
+      return !!(el && el.checked);
+    }
+
+    function anyChecked(ids) {
+      return ids.some(isChecked);
+    }
+
+    function getSeverityLevel() {
+      if (isChecked("septic-shock")) return "septic-shock";
+      if (isChecked("sepsis")) return "sepsis";
+      return "nonsevere";
+    }
+
+    function countMDRRiskFactors() {
+      const ids = [
+        "rf-nursing-home",
+        "rf-hosp30",
+        "rf-abx30",
+        "rf-foley",
+        "rf-recurrent",
+        "rf-renal-tx"
+      ];
+      let count = 0;
+      ids.forEach(id => { if (isChecked(id)) count++; });
+      // male sex is an additional risk factor for MDR in some cohorts
+      const sex = document.getElementById("sex").value;
+      if (sex === "male") count++;
+      return count;
+    }
+
+    function classifyMDRRisk() {
+      const n = countMDRRiskFactors();
+      let level = "low";
+      if (n === 1) level = "intermediate";
+      if (n >= 2) level = "high";
+      const reasons = [];
+      if (isChecked("rf-nursing-home")) reasons.push("nursing home / long-term care");
+      if (isChecked("rf-hosp30")) reasons.push("recent hospitalization");
+      if (isChecked("rf-abx30")) reasons.push("recent systemic antibiotics");
+      if (isChecked("rf-foley")) reasons.push("indwelling Foley catheter");
+      if (isChecked("rf-recurrent")) reasons.push("recurrent UTI");
+      if (isChecked("rf-renal-tx")) reasons.push("renal transplant");
+      const sex = document.getElementById("sex").value;
+      if (sex === "male") reasons.push("male sex");
+      return { level, n, reasons };
+    }
+
+    function inferSyndrome() {
+      let s = document.getElementById("syndrome").value;
+      const dysuria = isChecked("dysuria") || isChecked("suprapubic-pain");
+      const flank = isChecked("flank-pain");
+      const fever = isChecked("fever");
+      const noSym = isChecked("no-symptoms");
+      const foley = isChecked("foley-present");
+      const sex = document.getElementById("sex").value;
+      const pregnant = isChecked("pregnant");
+
+      if (!s || s === "uncertain") {
+        if (noSym) {
+          s = "asb";
+        } else if (flank || (fever && dysuria)) {
+          s = "pyelonephritis";
+        } else if (dysuria) {
+          s = "uncomplicated-cystitis";
+        } else if (foley) {
+          s = "cauti";
+        }
+      }
+
+      // Adjust for complexity
+      let uncomplicatedCandidate = (s === "uncomplicated-cystitis");
+      if (sex !== "female" || pregnant || isChecked("structural") || isChecked("neurogenic") || isChecked("renal-transplant")) {
+        uncomplicatedCandidate = false;
+      }
+      if (!uncomplicatedCandidate && s === "uncomplicated-cystitis") {
+        s = "complicated-cystitis";
+      }
+
+      return s || "uncertain";
+    }
+
+    function buildSyndromeSummary(syndrome) {
+      switch (syndrome) {
+        case "uncomplicated-cystitis":
+          return "Uncomplicated cystitis: lower tract symptoms in a nonpregnant female without structural abnormalities or systemic instability.";
+        case "complicated-cystitis":
+          return "Complicated cystitis: lower UTI in male, pregnant patient, or in presence of structural/functional GU disease.";
+        case "pyelonephritis":
+          return "Pyelonephritis: upper tract infection with flank pain, fever, or systemic features but without frank shock.";
+        case "urosepsis":
+          return "Urosepsis: UTI source with sepsis or significant organ dysfunction, but shock may or may not be present.";
+        case "cauti":
+          return "Catheter-associated UTI (CAUTI): symptomatic UTI with indwelling urinary catheter or within 48 hours of removal.";
+        case "asb":
+          return "Asymptomatic bacteriuria: positive culture without local urinary symptoms.";
+        default:
+          return "Syndrome uncertain: mixed or incomplete data; use best clinical judgment.";
+      }
+    }
+
+    function buildSeveritySummary() {
+      const severity = getSeverityLevel();
+      const pieces = [];
+      if (isChecked("fever")) pieces.push("fever/chills");
+      if (isChecked("flank-pain")) pieces.push("flank pain/CVA tenderness");
+      if (isChecked("nausea-vomit")) pieces.push("nausea/vomiting");
+      const temp = valNum("temp");
+      const hr = valNum("hr");
+      const sbp = valNum("sbp");
+      const rr = valNum("rr");
+      const parts = [];
+      if (temp !== null) parts.push("T " + temp + "°C");
+      if (hr !== null) parts.push("HR " + hr + " bpm");
+      if (sbp !== null) parts.push("SBP " + sbp + " mmHg");
+      if (rr !== null) parts.push("RR " + rr + "/min");
+
+      let label = "";
+      if (severity === "septic-shock") label = "Septic shock physiology (requires resuscitation, usually ICU).";
+      else if (severity === "sepsis") label = "Sepsis physiology (organ dysfunction without shock).";
+      else label = "No sepsis/shock box checked; may still be systemically unwell depending on vitals.";
+
+      return {
+        severity,
+        description: label,
+        symptomSummary: pieces.length ? pieces.join(", ") : "Local/systemic symptom details not fully specified.",
+        vitalsSummary: parts.length ? parts.join("; ") : "Vitals not fully entered."
+      };
+    }
+
+    function buildDispositionSuggestion(syndrome, severity, mdrRisk) {
+      let setting = "outpatient";
+      const reasons = [];
+
+      if (syndrome === "uncomplicated-cystitis" && severity === "nonsevere") {
+        setting = "outpatient";
+        reasons.push("Uncomplicated cystitis without sepsis → outpatient oral therapy typically appropriate if able to take PO and reliable follow-up.");
+      } else if (syndrome === "asb") {
+        setting = "outpatient";
+        reasons.push("Asymptomatic bacteriuria generally managed as outpatient; often no antibiotics required except in pregnancy or certain urologic procedures.");
+      } else if (severity === "septic-shock") {
+        setting = "inpatient-icu";
+        reasons.push("Septic shock physiology → ICU/stepdown level care, pressor support, and broad empiric therapy.");
+      } else if (severity === "sepsis") {
+        setting = "inpatient-ward";
+        reasons.push("UTI with sepsis → at least inpatient observation/ward care for IV therapy and close monitoring.");
+      } else if (syndrome === "pyelonephritis" || syndrome === "urosepsis" || syndrome === "cauti" || syndrome === "complicated-cystitis") {
+        setting = "inpatient-ward";
+        reasons.push("Complicated UTI/pyelonephritis/CAUTI → often requires IV antibiotics and monitoring, though select stable patients may be treated as outpatient with close follow-up.");
+      } else {
+        setting = "outpatient";
+        reasons.push("No clear sepsis and syndrome not high risk → outpatient management may be reasonable if social situation allows.");
+      }
+
+      if (mdrRisk.level === "high") {
+        reasons.push("High MDR risk (≥2 risk factors) → early ID input and careful choice of empiric agent recommended.");
+      }
+
+      return { setting, reasons };
+    }
+
+    function buildAbxPlan(syndrome, severity, mdrRisk) {
+      const sex = document.getElementById("sex").value;
+      const pregnant = isChecked("pregnant");
+      const foley = isChecked("foley-present");
+      const egfr = valNum("egfr");
+      const priorESBL = isChecked("prior-esbl");
+      const priorAmpC = isChecked("prior-ampc");
+      const priorPseudo = isChecked("prior-pseudo");
+      const priorEnterococcus = isChecked("prior-enterococcus");
+      const priorNotes = document.getElementById("prior-notes").value.trim();
+
+      const allergyBL = document.getElementById("allergy-bl").value;
+      const allergyTMP = isChecked("allergy-tmp");
+      const avoidFQ = isChecked("avoid-fq");
+      const nitroContra = isChecked("nitro-contra");
+
+      const asb = (syndrome === "asb");
+      const linesHtml = [];
+      const linesText = [];
+
+      // 1. Treat vs not treat (ASB logic)
+      linesHtml.push("<h4>1. Treat vs not treat bacteriuria</h4><ul>");
+      linesText.push("1) Treat vs not treat bacteriuria:");
+
+      if (asb) {
+        if (pregnant) {
+          linesHtml.push("<li><strong>Asymptomatic bacteriuria in pregnancy:</strong> Treatment recommended. Choose a narrow-spectrum agent (e.g., nitrofurantoin if not near term, or an oral cephalosporin) guided by culture and susceptibility; avoid fluoroquinolones.</li>");
+          linesText.push("  - ASB in pregnancy: Treat with a narrow agent (e.g., nitrofurantoin if not near term, or oral cephalosporin) guided by culture; avoid fluoroquinolones.");
+        } else {
+          linesHtml.push("<li><strong>Asymptomatic bacteriuria (non-pregnant, no urologic procedure planned):</strong> No antibiotics recommended in most cases. Exceptions: pregnancy or upcoming invasive urologic procedures.</li>");
+          linesText.push("  - ASB (non-pregnant, no urologic procedure): Generally no antibiotics; treat only if pregnant or undergoing certain urologic procedures.");
+        }
+      } else {
+        linesHtml.push("<li><strong>Symptomatic UTI:</strong> Antibiotics indicated; route, spectrum, and duration depend on syndrome, severity, MDR risk, and prior cultures.</li>");
+        linesText.push("  - Symptomatic UTI: Antibiotics indicated; route/spectrum/duration depend on syndrome, severity, MDR risk, and prior cultures.");
+      }
+
+      if (priorNotes) {
+        linesHtml.push("<li><strong>Prior culture note:</strong> " + priorNotes + "</li>");
+        linesText.push("  - Prior culture note: " + priorNotes);
+      }
+
+      linesHtml.push("</ul>");
+
+      // 2. Core empiric regimen by syndrome
+      linesHtml.push("<h4>2. Core empiric regimen by syndrome</h4><ul>");
+      linesText.push("2) Core empiric regimen by syndrome:");
+
+      if (!asb) {
+        if (syndrome === "uncomplicated-cystitis") {
+          // simple cystitis
+          const canUseNitro = !nitroContra && (egfr === null || egfr >= 30) && !pregnant; // keep simple; note exceptions
+          if (canUseNitro) {
+            linesHtml.push("<li><strong>Preferred:</strong> Nitrofurantoin 100 mg PO BID for 5 days (if eGFR ≥30 and no suspicion of pyelonephritis).</li>");
+            linesText.push("  - Preferred: Nitrofurantoin 100 mg PO BID for 5 days (eGFR ≥30; not for pyelo).");
+          }
+          if (!allergyTMP) {
+            linesHtml.push("<li><strong>Alternative:</strong> TMP-SMX DS PO BID for 3 days if local E. coli resistance is acceptable and no sulfa allergy.</li>");
+            linesText.push("  - Alternative: TMP-SMX DS PO BID for 3 days if local E. coli resistance acceptable and no sulfa allergy.");
+          } else {
+            linesHtml.push("<li><strong>Note:</strong> TMP-SMX avoided due to allergy/intolerance.</li>");
+            linesText.push("  - Note: TMP-SMX avoided due to allergy/intolerance.");
+          }
+          linesHtml.push("<li><strong>Additional option:</strong> Single-dose fosfomycin 3 g PO, especially for ESBL E. coli when susceptible (not reliable for K. pneumoniae with fosA genes).</li>");
+          linesText.push("  - Additional: Fosfomycin 3 g PO x1, especially for ESBL E. coli when susceptible (not reliable for K. pneumoniae with fosA).");
+          if (!avoidFQ) {
+            linesHtml.push("<li><strong>Reserve:</strong> Fluoroquinolones (e.g., ciprofloxacin, levofloxacin) should be reserved for when first-line options are not appropriate, due to risk of C. difficile, resistance, and tendon/aneurysm toxicity.</li>");
+            linesText.push("  - Reserve: Fluoroquinolones reserved only when other options not appropriate, due to C. diff/resistance/tendon risks.");
+          } else {
+            linesHtml.push("<li><strong>Fluoroquinolones:</strong> Flagged to avoid unless no other active options based on susceptibilities.</li>");
+            linesText.push("  - Fluoroquinolones: Prefer to avoid unless no other active options.");
+          }
+        } else if (syndrome === "complicated-cystitis" || syndrome === "cauti") {
+          // complicated lower tract
+          if (severity === "nonsevere") {
+            if (allergyBL === "severe") {
+              linesHtml.push("<li><strong>Preferred (severe β-lactam allergy, outpatient-appropriate):</strong> TMP-SMX PO (if tolerated) or fluoroquinolone (e.g., ciprofloxacin or levofloxacin) for 7 days, guided by local resistance and prior cultures.</li>");
+              linesText.push("  - Preferred (severe beta-lactam allergy, stable): TMP-SMX PO (if tolerated) or fluoroquinolone (cipro/levo) for ~7 days, guided by local resistance and prior cultures.");
+            } else {
+              linesHtml.push("<li><strong>Preferred:</strong> Oral β-lactam (e.g., cephalexin or cefpodoxime) for 7–10 days, often preceded by a single IV dose of ceftriaxone if MDR risk or local resistance is high.</li>");
+              linesText.push("  - Preferred: Oral beta-lactam (e.g., cephalexin/cefpodoxime) 7–10 days, often after one IV ceftriaxone dose if resistance risk high.");
+              if (!allergyTMP) {
+                linesHtml.push("<li><strong>Alternative:</strong> TMP-SMX for 7 days if organism likely susceptible and no sulfa allergy.</li>");
+                linesText.push("  - Alternative: TMP-SMX x7 days if organism likely susceptible and no sulfa allergy.");
+              }
+            }
+          } else {
+            // if sepsis or more ill, treat more like cUTI/pyelo below
+            linesHtml.push("<li>Because patient has complicated UTI with systemic illness, see pyelonephritis/cUTI recommendations below (IV therapy usually preferred initially).</li>");
+            linesText.push("  - Complicated UTI with systemic illness → treat like pyelonephritis/cUTI with initial IV therapy.");
+          }
+        } else if (syndrome === "pyelonephritis" || syndrome === "urosepsis" || (syndrome === "cauti" && getSeverityLevel() !== "nonsevere")) {
+          // pyelo / urosepsis / CAUTI with systemic features
+          const severe = (severity === "sepsis" || severity === "septic-shock");
+          if (severity === "nonsevere") {
+            // outpatient or short-stay pyelo
+            if (!avoidFQ && !priorESBL && mdrRisk.level !== "high") {
+              linesHtml.push("<li><strong>Preferred (stable, outpatient-capable):</strong> Ciprofloxacin 500 mg PO BID for 7 days or levofloxacin 750 mg PO daily for 5 days if local FQ resistance is low and patient has no FQ contraindications.</li>");
+              linesText.push("  - Preferred (stable pyelo, outpatient): Ciprofloxacin 500 mg PO BID x7 days or levofloxacin 750 mg PO daily x5 days if local FQ resistance low and no contraindications.");
+            }
+            if (!allergyTMP) {
+              linesHtml.push("<li><strong>Alternative:</strong> TMP-SMX DS PO BID for 7–14 days, ideally preceded by a single IV dose of ceftriaxone or an aminoglycoside if resistance is a concern.</li>");
+              linesText.push("  - Alternative: TMP-SMX DS PO BID x7–14 days, often after one IV ceftriaxone or aminoglycoside dose.");
+            }
+            linesHtml.push("<li><strong>Note:</strong> Oral nitrofurantoin and fosfomycin should not be used alone for pyelonephritis because they do not reach adequate renal parenchymal levels.</li>");
+            linesText.push("  - Note: Nitrofurantoin and fosfomycin should not be used alone for pyelonephritis (insufficient renal tissue levels).");
+          } else {
+            // inpatient cUTI/urosepsis
+            if (allergyBL === "severe") {
+              linesHtml.push("<li><strong>Severe β-lactam allergy:</strong> Use a non-β-lactam regimen such as fluoroquinolone (if active) ± aminoglycoside, or consider aztreonam-based regimens with ID input. Carbapenems may be off-limits unless allergy workup reclassifies risk.</li>");
+              linesText.push("  - Severe beta-lactam allergy: Consider FQ ± aminoglycoside or aztreonam-based regimen; early ID input recommended.");
+            } else {
+              if (priorESBL || mdrRisk.level === "high") {
+                linesHtml.push("<li><strong>High ESBL/MDR risk or prior ESBL:</strong> Empiric carbapenem is reasonable (e.g., ertapenem for stable cUTI; meropenem for critically ill or septic shock), with de-escalation when susceptibilities return.</li>");
+                linesText.push("  - High ESBL/MDR risk or prior ESBL: Empiric carbapenem (ertapenem if stable; meropenem if critically ill/shock), then de-escalate when susceptibilities available.");
+              } else if (priorAmpC) {
+                linesHtml.push("<li><strong>Prior AmpC-producing organism:</strong> Cefepime, TMP-SMX, or fluoroquinolone (if active) are preferred options; avoid ceftriaxone/cefazolin monotherapy for high-inoculum infections.</li>");
+                linesText.push("  - Prior AmpC: Cefepime, TMP-SMX, or FQ (if active) preferred; avoid ceftriaxone/cefazolin monotherapy in high-inoculum settings.");
+              } else if (priorPseudo) {
+                linesHtml.push("<li><strong>Prior Pseudomonas UTI:</strong> Use an anti-pseudomonal β-lactam (e.g., piperacillin-tazobactam, cefepime, ceftazidime) while awaiting culture data.</li>");
+                linesText.push("  - Prior Pseudomonas UTI: Use anti-pseudomonal beta-lactam (piperacillin-tazobactam, cefepime, ceftazidime) pending cultures.");
+              } else {
+                linesHtml.push("<li><strong>cUTI/pyelo with sepsis (no clear ESBL/AmpC/Pseudomonas history):</strong> Ceftriaxone IV is often adequate for many ward patients. Piperacillin-tazobactam or cefepime can be used if higher risk for Pseudomonas or severe sepsis.</li>");
+                linesText.push("  - cUTI/pyelo with sepsis, no clear ESBL/AmpC/Pseudo: Ceftriaxone IV often adequate for ward; piperacillin-tazobactam or cefepime if higher Pseudomonas risk or severe sepsis.");
+              }
+              if (priorEnterococcus) {
+                linesHtml.push("<li><strong>Prior Enterococcus UTI:</strong> Ensure regimen covers Enterococcus (e.g., ampicillin if susceptible, or consider vancomycin in β-lactam allergy or resistant isolates) depending on culture data.</li>");
+                linesText.push("  - Prior Enterococcus UTI: Ensure coverage (ampicillin if susceptible; consider vancomycin if allergy or resistance).");
+              }
+            }
+          }
+        } else {
+          // Uncertain syndrome
+          linesHtml.push("<li><strong>Unclear syndrome:</strong> Clarify whether symptoms are limited to lower tract vs pyelo vs non-UTI source. In the interim, choose an agent appropriate for cUTI/pyelo in your setting (e.g., ceftriaxone IV) while awaiting culture data.</li>");
+          linesText.push("  - Unclear syndrome: Clarify lower vs upper tract vs non-UTI source; interim therapy often ceftriaxone IV while awaiting cultures.");
+        }
+      }
+
+      linesHtml.push("</ul>");
+
+      // 3. CAUTI & Foley-specific management
+      linesHtml.push("<h4>3. Foley &amp; CAUTI management</h4><ul>");
+      linesText.push("3) Foley & CAUTI management:");
+
+      if (foley) {
+        if (!isChecked("foley-changed")) {
+          linesHtml.push("<li><strong>CAUTI / Foley present:</strong> Replace or remove the catheter prior to urine culture and antibiotic initiation when feasible; this improves treatment response and helps distinguish colonization vs infection.</li>");
+          linesText.push("  - CAUTI/Foley present: Replace or remove catheter before culture/therapy when feasible; improves response and reduces colonization effects.");
+        } else {
+          linesHtml.push("<li><strong>Foley recently changed:</strong> Treat as CAUTI but note that culture from new catheter better reflects true pathogens.</li>");
+          linesText.push("  - Foley changed: Treat as CAUTI; culture from new catheter better reflects true pathogen.");
+        }
+      } else {
+        linesHtml.push("<li><strong>No indwelling Foley:</strong> Standard cystitis/pyelonephritis pathways apply; avoid over-calling CAUTI.</li>");
+        linesText.push("  - No Foley: Use standard cystitis/pyelo pathways; avoid overdiagnosing CAUTI.");
+      }
+
+      linesHtml.push("</ul>");
+
+      // 4. Duration & follow-up
+      linesHtml.push("<h4>4. Duration &amp; follow-up</h4><ul>");
+      linesText.push("4) Duration & follow-up:");
+
+      if (syndrome === "uncomplicated-cystitis") {
+        linesHtml.push("<li><strong>Uncomplicated cystitis:</strong> Typically 3–5 days depending on agent (e.g., 5 days nitrofurantoin, 3 days TMP-SMX).</li>");
+        linesText.push("  - Uncomplicated cystitis: Typically 3–5 days (e.g., 5 days nitrofurantoin, 3 days TMP-SMX).");
+      } else if (syndrome === "complicated-cystitis" || syndrome === "cauti") {
+        linesHtml.push("<li><strong>Complicated cystitis/CAUTI:</strong> Usually 7 days if rapid response; 10–14 days if slow clinical response or bacteremia.</li>");
+        linesText.push("  - Complicated cystitis/CAUTI: Usually ~7 days if rapid response; up to 10–14 days if slow response or bacteremia.");
+      } else if (syndrome === "pyelonephritis" || syndrome === "urosepsis") {
+        linesHtml.push("<li><strong>Pyelonephritis/cUTI:</strong> 7–14 days total, shorter courses possible with highly bioavailable agents (e.g., FQ or TMP-SMX) in stable patients.</li>");
+        linesText.push("  - Pyelonephritis/cUTI: 7–14 days total; shorter courses with highly bioavailable agents (FQ or TMP-SMX) for stable patients.");
+      } else if (asb) {
+        linesHtml.push("<li><strong>ASB (treated):</strong> In pregnancy, short course (e.g., 3–7 days) guided by guideline and culture; obtain test-of-cure in pregnancy.</li>");
+        linesText.push("  - ASB (pregnancy treated): Short course (e.g., 3–7 days) per guideline; obtain test-of-cure culture.");
+      }
+
+      linesHtml.push("<li><strong>Reassessment:</strong> Reevaluate at 48–72 hours. Narrow based on urine culture, blood cultures (if positive), and clinical response. Consider stopping therapy if alternate diagnosis emerges.</li>");
+      linesText.push("  - Reassess at 48–72h: Narrow therapy based on cultures and response; stop if alternate diagnosis emerges.");
+      linesHtml.push("</ul>");
+
+      // 5. Stewardship & ID consult
+      linesHtml.push("<h4>5. Stewardship &amp; consultation</h4><ul>");
+      linesText.push("5) Stewardship & consultation:");
+
+      if (mdrRisk.level === "high" || priorESBL || priorAmpC || priorPseudo || priorEnterococcus || severity === "septic-shock") {
+        linesHtml.push("<li><strong>ID consult:</strong> High MDR risk, prior ESBL/AmpC/Pseudomonas/Enterococcus, or septic shock → early Infectious Disease involvement strongly recommended.</li>");
+        linesText.push("  - High MDR/ESBL/AmpC/Pseudomonas/Enterococcus or septic shock → early Infectious Disease consultation strongly recommended.");
+      } else {
+        linesHtml.push("<li><strong>ID consult:</strong> Consider if treatment failure, recurrent MDR infections, unusual organisms, or complex anatomy/transplant.</li>");
+        linesText.push("  - ID consult: Consider for treatment failure, recurrent MDR infections, unusual organisms, or complex anatomy/transplant.");
+      }
+
+      linesHtml.push("<li><strong>Stewardship:</strong> Use the narrowest effective agent once susceptibilities are known; avoid prolonged fluoroquinolone or carbapenem use when safer options exist.</li>");
+      linesText.push("  - Stewardship: Use the narrowest effective agent once susceptibilities are known; avoid prolonged FQ/carbapenem use when safer options exist.");
+      linesHtml.push("</ul>");
+
+      return { html: linesHtml.join(""), text: linesText.join("\n") };
+    }
+
+    function runUTIHelper() {
+      const age = valNum("age");
+      const sex = document.getElementById("sex").value;
+      const pregnant = isChecked("pregnant");
+      const egfr = valNum("egfr");
+      const settingLabels = [];
+      if (isChecked("setting-outpt")) settingLabels.push("outpatient/clinic");
+      if (isChecked("setting-ed")) settingLabels.push("ED");
+      if (isChecked("setting-ward")) settingLabels.push("inpatient ward");
+      if (isChecked("setting-icu")) settingLabels.push("ICU");
+
+      const syndrome = inferSyndrome();
+      const syndromeSummary = buildSyndromeSummary(syndrome);
+      const severityObj = buildSeveritySummary();
+      const mdrRisk = classifyMDRRisk();
+      const disposition = buildDispositionSuggestion(syndrome, severityObj.severity, mdrRisk);
+
+      const notes = document.getElementById("notes").value.trim();
+
+      const severityEl = document.getElementById("severity-content");
+      const abxEl = document.getElementById("abx-content");
+
+      const severityHtml = [];
+      const severityText = [];
+
+      // Snapshot
+      const snap = [];
+      if (age !== null) snap.push("Age " + age + " years");
+      if (sex) snap.push("Sex " + sex);
+      if (pregnant) snap.push("Pregnant");
+      if (settingLabels.length) snap.push("Setting: " + settingLabels.join(", "));
+      if (egfr !== null) snap.push("eGFR " + egfr + " mL/min/1.73m²");
+
+      if (snap.length) {
+        severityHtml.push("<p><strong>Patient snapshot:</strong> " + snap.join("; ") + ".</p>");
+        severityText.push("Patient snapshot: " + snap.join("; ") + ".");
+      }
+
+      // Syndrome & severity
+      severityHtml.push("<p><strong>UTI syndrome:</strong> " + syndromeSummary + "</p>");
+      severityText.push("UTI syndrome: " + syndromeSummary);
+
+      severityHtml.push("<p><strong>Symptoms:</strong> " + severityObj.symptomSummary + "</p>");
+      severityText.push("Symptoms: " + severityObj.symptomSummary);
+
+      severityHtml.push("<p><strong>Vitals:</strong> " + severityObj.vitalsSummary + "</p>");
+      severityText.push("Vitals: " + severityObj.vitalsSummary);
+
+      severityHtml.push("<p><strong>Systemic severity:</strong> " + severityObj.description + "</p>");
+      severityText.push("Systemic severity: " + severityObj.description);
+
+      // MDR risk summary
+      let mdrText = "MDR risk: " + mdrRisk.level.toUpperCase() + " (";
+      mdrText += mdrRisk.n + " risk factor" + (mdrRisk.n === 1 ? "" : "s") + ").";
+      severityHtml.push("<p><strong>" + mdrText + "</strong></p>");
+      severityText.push(mdrText);
+      if (mdrRisk.reasons.length) {
+        severityHtml.push("<ul>" + mdrRisk.reasons.map(r => "<li>" + r + "</li>").join("") + "</ul>");
+        mdrRisk.reasons.forEach(r => severityText.push("  - " + r));
+      }
+
+      // Disposition
+      severityHtml.push("<p><strong>Suggested site-of-care (guide only):</strong></p><ul>" +
+        disposition.reasons.map(d => "<li>" + d + "</li>").join("") + "</ul>");
+      severityText.push("Suggested site-of-care (guide only):");
+      disposition.reasons.forEach(d => severityText.push("  - " + d));
+
+      if (notes) {
+        severityHtml.push("<p><strong>Clinician note:</strong> " + notes + "</p>");
+        severityText.push("Clinician note: " + notes);
+      }
+
+      severityEl.innerHTML = severityHtml.join("");
+
+      // Build antibiotic plan
+      const abxPlan = buildAbxPlan(syndrome, severityObj.severity, mdrRisk);
+      abxEl.innerHTML = abxPlan.html;
+
+      // Build full plan text
+      const lines = [];
+      lines.push("=== UTI SEVERITY & SYNDROME ASSESSMENT ===");
+      lines.push(severityText.join("\n"));
+      lines.push("");
+      lines.push("=== EMPIRIC ANTIBIOTIC STRATEGY & REASONING ===");
+      lines.push(abxPlan.text);
+      lines.push("");
+      lines.push("Note: Educational decision-support only. Confirm with local UTI/cUTI/CAUTI guidelines, antibiogram, and Infectious Disease/Stewardship recommendations.");
+
+      currentPlanText = lines.join("\n");
+    }
+
+    function openCopyModal() {
+      if (!currentPlanText) {
+        alert("First generate the UTI assessment & plan, then you can preview and copy it.");
+        return;
+      }
+      const overlay = document.getElementById("copy-modal-overlay");
+      const ta = document.getElementById("copy-modal-textarea");
+      ta.value = currentPlanText;
+      overlay.style.display = "flex";
+      overlay.setAttribute("aria-hidden", "false");
+    }
+
+    function closeCopyModal() {
+      const overlay = document.getElementById("copy-modal-overlay");
+      overlay.style.display = "none";
+      overlay.setAttribute("aria-hidden", "true");
+    }
+
+    function copyPlanToClipboard() {
+      if (!currentPlanText) return;
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(currentPlanText)
+          .then(() => alert("UTI assessment & plan copied to clipboard."))
+          .catch(() => fallbackCopy());
+      } else {
+        fallbackCopy();
+      }
+    }
+
+    function fallbackCopy() {
+      const ta = document.getElementById("copy-modal-textarea");
+      ta.select();
+      try {
+        document.execCommand("copy");
+        alert("UTI assessment & plan copied to clipboard.");
+      } catch {
+        alert("Unable to copy automatically. Please manually select and copy the text.");
+      }
+    }
+  </script>
+</body>
+</html>
