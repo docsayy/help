@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DIC (Disseminated Intravascular Coagulation) Tool</title>
+
+<style>
+:root {
+    --primary: #7b1fa2;
+    --primary-dark: #4a148c;
+    --bg1: #f6f2f9;
+    --bg2: #ffffff;
+    --text-dark: #2c003e;
+    --radius: 14px;
+    --card-shadow: rgba(0,0,0,0.15);
+}
+
+body {
+    margin: 0;
+    padding: 20px;
+    font-family: "Segoe UI", system-ui, sans-serif;
+    background: linear-gradient(135deg, var(--bg1), #fafafa);
+}
+
+h1 {
+    text-align: center;
+    margin-top: 40px;
+    color: var(--primary-dark);
+    font-size: 26px;
+}
+
+.subtitle {
+    text-align: center;
+    color: #5f4375;
+    font-size: 14px;
+    margin-bottom: 20px;
+}
+
+.nav-btn {
+    position: fixed;
+    top: 15px;
+    padding: 8px 16px;
+    background: var(--primary);
+    color: white;
+    border-radius: 10px;
+    text-decoration: none;
+    font-weight: 600;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.25);
+    z-index: 1000;
+    transition: 0.2s;
+}
+
+.nav-btn:hover {
+    background: var(--primary-dark);
+}
+
+.left { left: 15px; }
+.right { right: 15px; }
+
+.container {
+    max-width: 900px;
+    margin: auto;
+    background: var(--bg2);
+    padding: 25px;
+    border-radius: var(--radius);
+    box-shadow: 0 8px 20px var(--card-shadow);
+}
+
+.section-title {
+    margin-top: 18px;
+    margin-bottom: 10px;
+    font-weight: 700;
+    color: var(--text-dark);
+}
+
+.grid {
+    display: grid;
+    gap: 16px;
+    grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+}
+
+label {
+    font-weight: 600;
+    color: var(--text-dark);
+}
+
+input, select {
+    width: 100%;
+    padding: 9px 10px;
+    margin-top: 6px;
+    border-radius: 10px;
+    background: #faf7ff;
+    border: 1px solid #c7b8d9;
+}
+
+button {
+    margin-top: 24px;
+    width: 100%;
+    padding: 14px;
+    background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+    border: none;
+    color: white;
+    border-radius: 12px;
+    font-size: 17px;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+    transition: 0.2s;
+}
+button:hover {
+    transform: scale(1.02);
+}
+
+.result {
+    margin-top: 22px;
+    padding: 18px;
+    background: #f3e5f5;
+    border-left: 6px solid var(--primary);
+    border-radius: 10px;
+}
+
+.emr-box {
+    margin-top: 20px;
+    padding: 18px;
+    background: #ede7f6;
+    border-left: 6px solid var(--primary-dark);
+    border-radius: 10px;
+}
+
+.copy-btn {
+    margin-top: 10px;
+    padding: 10px;
+    width: 100%;
+    background: var(--primary-dark);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 14px;
+}
+</style>
+</head>
+
+<body>
+
+<a href="hematology.html" class="nav-btn left">← Hematology</a>
+<a href="index.html" class="nav-btn right">Home</a>
+
+<h1>🩺 DIC (Disseminated Intravascular Coagulation) Tool</h1>
+<div class="subtitle">ISTH DIC Score + pattern recognition + management suggestions.</div>
+
+<div class="container">
+
+    <div class="section-title">Core Labs</div>
+    <div class="grid">
+        <div>
+            <label>Platelets (K/µL)</label>
+            <input type="number" id="plt">
+        </div>
+        <div>
+            <label>PT prolongation (seconds above normal)</label>
+            <input type="number" id="pt" step="0.1">
+        </div>
+        <div>
+            <label>Fibrinogen (mg/dL)</label>
+            <input type="number" id="fib">
+        </div>
+        <div>
+            <label>D-dimer (or FDP elevation)</label>
+            <select id="ddimer">
+                <option value="">-- Select --</option>
+                <option value="none">No increase</option>
+                <option value="moderate">Moderate increase</option>
+                <option value="strong">Strong/marked increase</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="section-title">Clinical Factors</div>
+    <div class="grid">
+        <div>
+            <label>Active infection / sepsis?</label>
+            <select id="sepsis">
+                <option value="">-- Select --</option>
+                <option value="yes">Yes</option>
+                <option value="no">No</option>
+            </select>
+        </div>
+        <div>
+            <label>Liver disease?</label>
+            <select id="liver">
+                <option value="">-- Select --</option>
+                <option value="yes">Yes (cirrhosis/end-stage)</option>
+                <option value="no">No</option>
+            </select>
+        </div>
+        <div>
+            <label>Evidence of hemolysis (MAHA)?</label>
+            <select id="maha">
+                <option value="">-- Select --</option>
+                <option value="yes">Yes (LDH↑, schistocytes, hapto↓)</option>
+                <option value="no">No</option>
+            </select>
+        </div>
+    </div>
+
+    <button onclick="calcDIC()">Assess DIC</button>
+
+    <div id="result" class="result" style="display:none;"></div>
+
+    <div id="emrBox" class="emr-box" style="display:none;">
+        <h3>Assessment & Plan (Copy Ready)</h3>
+        <pre id="emrText" style="white-space:pre-wrap;"></pre>
+        <button class="copy-btn" onclick="copyEMR()">Copy to Clipboard</button>
+    </div>
+</div>
+
+<script>
+function n(id) {
+    let v = parseFloat(document.getElementById(id).value);
+    return isNaN(v) ? null : v;
+}
+function v(id) {
+    let x = document.getElementById(id).value;
+    return x === "" ? null : x;
+}
+
+function calcDIC() {
+    const plt = n("plt");
+    const pt = n("pt");
+    const fib = n("fib");
+    const dd = v("ddimer");
+    const sepsis = v("sepsis");
+    const liver = v("liver");
+    const maha = v("maha");
+
+    let result = "";
+    let A = [];
+    let P = [];
+    let missing = [];
+
+    /* ============================
+       ISTH DIC SCORE CALCULATION
+    =============================*/
+    let score = 0;
+
+    // Platelets
+    if (plt !== null) {
+        if (plt >= 100) score += 0;
+        else if (plt >= 50) score += 1;
+        else score += 2;
+    } else missing.push("Platelets");
+
+    // D-dimer/FDP
+    if (dd !== null) {
+        if (dd === "none") score += 0;
+        if (dd === "moderate") score += 2;
+        if (dd === "strong") score += 3;
+    } else missing.push("D-dimer/FDP elevation");
+
+    // PT prolongation
+    if (pt !== null) {
+        if (pt < 3) score += 0;
+        else if (pt < 6) score += 1;
+        else score += 2;
+    } else missing.push("PT prolongation");
+
+    // Fibrinogen
+    if (fib !== null) {
+        if (fib < 100) score += 1;
+    } else missing.push("Fibrinogen");
+
+    result += `<b>ISTH DIC Score: ${score}</b><br>`;
+
+    let category = "";
+    if (score >= 5) {
+        category = "Overt DIC";
+        result += "Category: <b>Overt DIC</b><br>";
+        A.push("Overt DIC (ISTH ≥5)");
+        P.push("Treat the underlying cause (sepsis, trauma, malignancy, OB complication).");
+        P.push("Support hemodynamics and perfusion.");
+        P.push("If bleeding or high-risk procedure: Platelets, FFP, Cryo as indicated.");
+        P.push("Monitor PT/PTT, fibrinogen, platelets q4–6 hours.");
+    } else if (score >= 3) {
+        category = "Possible DIC";
+        result += "Category: <b>Possible evolving DIC</b><br>";
+        A.push("Possible evolving DIC (ISTH 3–4)");
+        P.push("Close monitoring of labs q6–12h.");
+        P.push("Evaluate and treat underlying trigger.");
+        P.push("Transfuse only if bleeding or procedures planned.");
+    } else {
+        category = "Not DIC";
+        result += "Category: <b>Not consistent with overt DIC</b><br>";
+        A.push("Low ISTH score – DIC unlikely.");
+    }
+
+    result += "<br>";
+
+    /* ============================
+       DIFFERENTIAL PATTERNS
+    =============================*/
+
+    // TTP-like
+    if (maha === "yes" && plt !== null && plt < 50 && pt !== null && pt < 1.3) {
+        result += "Pattern suggests <b>TMA (TTP/HUS)</b> → normal PT with severe thrombocytopenia & MAHA.<br>";
+        A.push("Consider TTP/TMA (normal PT, MAHA)");
+        P.push("Do not transfuse platelets unless life-threatening bleed.");
+    }
+
+    // Liver disease
+    if (liver === "yes") {
+        result += "Underlying <b>liver disease</b> may mimic DIC (low fibrinogen + elevated INR).<br>";
+        A.push("Coagulopathy likely influenced by liver dysfunction.");
+    }
+
+    // Sepsis classic pattern
+    if (sepsis === "yes") {
+        result += "Sepsis present → classic trigger for DIC.<br>";
+        A.push("Sepsis-associated coagulopathy.");
+        P.push("Treat sepsis aggressively (source control + antibiotics).");
+    }
+
+    /* ============================
+       Missing data
+    =============================*/
+    if (missing.length > 0) {
+        result += "<br><b>Missing labs:</b><ul>";
+        missing.forEach(m => result += `<li>${m}</li>`);
+        result += "</ul>";
+    }
+
+    /* ============================
+       EMR OUTPUT
+    =============================*/
+    let emr = "Assessment:\n";
+    A.forEach(x => emr += `• ${x}\n`);
+
+    emr += "\nPlan:\n";
+    P.forEach(x => emr += `• ${x}\n`);
+
+    if (missing.length > 0) {
+        emr += "\nMissing Labs:\n";
+        missing.forEach(x => emr += `• ${x}\n`);
+    }
+
+    document.getElementById("result").innerHTML = result;
+    document.getElementById("result").style.display = "block";
+
+    document.getElementById("emrText").textContent = emr;
+    document.getElementById("emrBox").style.display = "block";
+}
+
+function copyEMR() {
+    navigator.clipboard.writeText(
+        document.getElementById("emrText").textContent
+    );
+}
+</script>
+
+</body>
+</html>
