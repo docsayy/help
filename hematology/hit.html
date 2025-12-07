@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>HIT (Heparin-Induced Thrombocytopenia) Tool</title>
+
+<style>
+    :root {
+        --primary: #7b1fa2;
+        --primary-dark: #4a148c;
+        --bg1: #f6f2f9;
+        --bg2: #ffffff;
+        --text-dark: #2c003e;
+        --card-shadow: rgba(0,0,0,0.15);
+        --radius: 14px;
+    }
+
+    body {
+        margin: 0;
+        padding: 20px;
+        font-family: "Segoe UI", system-ui, sans-serif;
+        background: linear-gradient(135deg, var(--bg1), #fafafa);
+    }
+
+    h1 {
+        text-align: center;
+        color: var(--primary-dark);
+        font-size: 26px;
+        margin-top: 40px;
+    }
+
+    .subtitle {
+        text-align: center;
+        color: #5f4375;
+        margin-bottom: 20px;
+        font-size: 14px;
+    }
+
+    .nav-btn {
+        position: fixed;
+        top: 15px;
+        padding: 8px 16px;
+        background: var(--primary);
+        color: #fff;
+        border-radius: 10px;
+        font-weight: 600;
+        text-decoration: none;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.25);
+        z-index: 1000;
+        transition: 0.2s;
+        font-size: 14px;
+    }
+    .nav-btn:hover { background: var(--primary-dark); }
+    .left { left: 15px; }
+    .right { right: 15px; }
+
+    .container {
+        max-width: 900px;
+        margin: auto;
+        background: var(--bg2);
+        padding: 25px;
+        border-radius: var(--radius);
+        box-shadow: 0 8px 20px var(--card-shadow);
+    }
+
+    .section-title {
+        margin-top: 18px;
+        margin-bottom: 8px;
+        font-weight: 700;
+        color: var(--text-dark);
+        font-size: 16px;
+    }
+
+    .grid {
+        display: grid;
+        gap: 16px;
+        grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+    }
+
+    label {
+        font-weight: 600;
+        color: var(--text-dark);
+        font-size: 14px;
+    }
+
+    input, select {
+        width: 100%;
+        padding: 9px 10px;
+        margin-top: 6px;
+        border-radius: 10px;
+        border: 1px solid #c7b8d9;
+        background: #faf7ff;
+        font-size: 14px;
+    }
+
+    button {
+        margin-top: 24px;
+        width: 100%;
+        padding: 14px;
+        background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+        border: none;
+        color: white;
+        font-size: 17px;
+        border-radius: 12px;
+        cursor: pointer;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+        transition: 0.2s;
+    }
+    button:hover { transform: scale(1.02); }
+
+    .result {
+        margin-top: 22px;
+        padding: 18px;
+        background: #f3e5f5;
+        border-left: 6px solid var(--primary);
+        border-radius: 10px;
+        font-size: 14px;
+        line-height: 1.5;
+    }
+
+    .emr-box {
+        margin-top: 20px;
+        padding: 18px;
+        background: #ede7f6;
+        border-left: 6px solid var(--primary-dark);
+        border-radius: 10px;
+        font-size: 14px;
+    }
+
+    .copy-btn {
+        margin-top: 10px;
+        padding: 9px;
+        width: 100%;
+        border-radius: 8px;
+        border: none;
+        background: var(--primary-dark);
+        color: #fff;
+        font-size: 14px;
+        cursor: pointer;
+    }
+
+    @media (max-width: 480px) {
+        body { padding: 14px; }
+        h1 { font-size: 22px; margin-top: 50px; }
+    }
+</style>
+</head>
+
+<body>
+
+<a href="hematology.html" class="nav-btn left">← Hematology</a>
+<a href="index.html" class="nav-btn right">Home</a>
+
+<h1>💉 HIT (Heparin-Induced Thrombocytopenia) Tool</h1>
+<div class="subtitle">4T score, risk category, and management suggestions with copy-ready A&P.</div>
+
+<div class="container">
+
+    <div class="section-title">Platelet Counts</div>
+    <div class="grid">
+        <div>
+            <label>Pre-heparin / peak platelets (K/µL)</label>
+            <input type="number" id="plt_peak" />
+        </div>
+        <div>
+            <label>Current platelet count (K/µL)</label>
+            <input type="number" id="plt_current" />
+        </div>
+        <div>
+            <label>Absolute platelet nadir (if known, K/µL)</label>
+            <input type="number" id="plt_nadir" />
+        </div>
+    </div>
+
+    <div class="section-title">Timing of Thrombocytopenia</div>
+    <div class="grid">
+        <div>
+            <label>Days since starting current heparin course</label>
+            <input type="number" id="days_heparin" />
+        </div>
+        <div>
+            <label>Heparin exposure within last 30 days?</label>
+            <select id="recent30">
+                <option value="">-- Select --</option>
+                <option value="yes">Yes (≤30 days)</option>
+                <option value="old">Yes (31–100 days ago)</option>
+                <option value="no">No / unknown</option>
+            </select>
+        </div>
+        <div>
+            <label>Type of heparin</label>
+            <select id="hep_type">
+                <option value="">-- Select --</option>
+                <option value="ufh">UFH</option>
+                <option value="lmwh">LMWH</option>
+                <option value="both">UFH → LMWH / switched</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="section-title">Thrombosis / Skin / Systemic Findings</div>
+    <div class="grid">
+        <div>
+            <label>Thrombosis / skin necrosis / acute systemic reaction</label>
+            <select id="thrombosis">
+                <option value="">-- Select --</option>
+                <option value="none">None</option>
+                <option value="suspected">Suspected / non-necrotizing skin lesion</option>
+                <option value="confirmed">New thrombosis / skin necrosis / acute systemic reaction</option>
+            </select>
+        </div>
+        <div>
+            <label>Bleeding?</label>
+            <select id="bleeding">
+                <option value="">-- Select --</option>
+                <option value="none">No significant bleeding</option>
+                <option value="yes">Yes (clinically significant bleeding)</option>
+            </select>
+        </div>
+        <div>
+            <label>Other clear causes of thrombocytopenia?</label>
+            <select id="other_causes">
+                <option value="">-- Select --</option>
+                <option value="none">None evident</option>
+                <option value="possible">Possible (sepsis, post-op, etc.)</option>
+                <option value="definite">Definite alternate cause</option>
+            </select>
+        </div>
+    </div>
+
+    <button onclick="assessHIT()">Calculate 4T & Assess HIT</button>
+
+    <div id="result" class="result" style="display:none;"></div>
+
+    <div id="emrBox" class="emr-box" style="display:none;">
+        <h3>Assessment & Plan (Copy-Ready)</h3>
+        <pre id="emrText" style="white-space:pre-wrap;"></pre>
+        <button class="copy-btn" onclick="copyEMR()">Copy to Clipboard</button>
+    </div>
+</div>
+
+<script>
+function num(id) {
+    const v = parseFloat(document.getElementById(id).value);
+    return isNaN(v) ? null : v;
+}
+function val(id) {
+    return document.getElementById(id).value;
+}
+
+function assessHIT() {
+    const plt_peak    = num("plt_peak");
+    const plt_current = num("plt_current");
+    const plt_nadir   = num("plt_nadir") ?? plt_current;
+    const days        = num("days_heparin");
+    const recent30    = val("recent30");
+    const hep_type    = val("hep_type");
+    const thrombosis  = val("thrombosis");
+    const bleeding    = val("bleeding");
+    const other       = val("other_causes");
+
+    let resultHTML = "";
+    let A = [];
+    let P = [];
+    let missing = [];
+
+    /* ============ Thrombocytopenia component ============
+       2 points: >50% fall AND nadir >=20
+       1 point: 30–50% fall, or nadir 10–19
+       0 points: <30% fall, or nadir <10
+    */
+    let thrombocytopenia_points = 0;
+    let dropPct = null;
+
+    if (plt_peak !== null && plt_current !== null && plt_peak > 0) {
+        dropPct = ((plt_peak - plt_current) / plt_peak) * 100;
+        resultHTML += `Platelet fall: <b>${dropPct.toFixed(0)}%</b> (from ${plt_peak} → ${plt_current} K/µL).<br>`;
+    }
+
+    if (dropPct !== null && plt_nadir !== null) {
+        if (dropPct > 50 && plt_nadir >= 20) {
+            thrombocytopenia_points = 2;
+        } else if ((dropPct >= 30 && dropPct <= 50) || (plt_nadir >= 10 && plt_nadir < 20)) {
+            thrombocytopenia_points = 1;
+        } else {
+            thrombocytopenia_points = 0;
+        }
+    } else if (plt_current !== null && plt_nadir !== null) {
+        // Fallback to nadir only
+        if (plt_nadir >= 20) {
+            thrombocytopenia_points = 1;
+        } else if (plt_nadir < 10) {
+            thrombocytopenia_points = 0;
+        }
+    } else {
+        missing.push("Baseline platelet count to calculate % fall");
+    }
+
+    /* ============ Timing component ============
+       2: clear day 5–10, or ≤1 day with exposure in last 30 days
+       1: consistent with 5–10 but not clear, or day >10, or ≤1 day with exposure 31–100 days
+       0: ≤4 days without recent exposure
+    */
+    let timing_points = 0;
+    if (days !== null) {
+        if ((days >= 5 && days <= 10) || (days <= 1 && recent30 === "yes")) {
+            timing_points = 2;
+        } else if (
+            (days > 10) ||
+            (days >= 5 && days <= 14 && recent30 === "old") ||
+            (days <= 1 && recent30 === "old")
+        ) {
+            timing_points = 1;
+        } else if (days <= 4 && (!recent30 || recent30 === "no")) {
+            timing_points = 0;
+        } else {
+            timing_points = 1; // ambiguous but not clearly incompatible
+        }
+    } else {
+        timing_points = 1;
+        missing.push("Exact timing of platelet fall from start of heparin");
+    }
+
+    /* ============ Thrombosis component ============
+       2: new thrombosis, skin necrosis, acute systemic reaction
+       1: progressive/recurrent thrombosis, suspected thrombosis, non-necrotizing skin lesion
+       0: none
+    */
+    let thrombosis_points = 0;
+    if (thrombosis === "confirmed") {
+        thrombosis_points = 2;
+    } else if (thrombosis === "suspected") {
+        thrombosis_points = 1;
+    } else if (thrombosis === "none") {
+        thrombosis_points = 0;
+    }
+
+    /* ============ Other causes component ============
+       2: no other evident cause
+       1: possible other cause
+       0: definite other cause
+    */
+    let other_points = 0;
+    if (other === "none") {
+        other_points = 2;
+    } else if (other === "possible") {
+        other_points = 1;
+    } else if (other === "definite") {
+        other_points = 0;
+    } else {
+        other_points = 1;
+        missing.push("Clinical judgment on alternative causes of thrombocytopenia");
+    }
+
+    const total_4T = thrombocytopenia_points + timing_points + thrombosis_points + other_points;
+
+    resultHTML += `<br><b>4T Score:</b> ${total_4T} / 8<br>`;
+    resultHTML += `Thrombocytopenia: ${thrombocytopenia_points} | Timing: ${timing_points} | Thrombosis: ${thrombosis_points} | Other causes: ${other_points}<br><br>`;
+
+    let risk = "";
+    if (total_4T <= 3) {
+        risk = "Low probability (≤3)";
+        resultHTML += "<b>Risk Category:</b> Low probability for HIT.<br>";
+        A.push("Low 4T score – HIT unlikely.");
+        P.push("Continue heparin if clinically indicated; no HIT-specific testing usually required.");
+        P.push("Look for alternative causes of thrombocytopenia (sepsis, post-op, malignancy, IABP, DIC, etc.).");
+    } else if (total_4T >= 4 && total_4T <= 5) {
+        risk = "Intermediate probability (4–5)";
+        resultHTML += "<b>Risk Category:</b> Intermediate probability for HIT.<br>";
+        A.push("Intermediate 4T score – possible HIT.");
+        P.push("Stop all forms of heparin (UFH, LMWH, line flushes).");
+        P.push("Start a non-heparin anticoagulant (e.g., argatroban, bivalirudin, or fondaparinux) if not contraindicated.");
+        P.push("Order PF4/ELISA (or local HIT immunoassay); consider functional assay (e.g., SRA) based on results and pretest probability.");
+        P.push("Avoid platelet transfusions unless life-threatening bleeding or urgent procedure.");
+    } else {
+        risk = "High probability (6–8)";
+        resultHTML += "<b>Risk Category:</b> High probability for HIT.<br>";
+        A.push("High 4T score – high probability HIT.");
+        P.push("Stop all heparin immediately (including flushes).");
+        P.push("Start therapeutic-dose non-heparin anticoagulation unless contraindicated.");
+        P.push("Order PF4/ELISA and functional assay (e.g., SRA) urgently – do NOT wait for results to treat.");
+        P.push("Avoid platelet transfusions unless life-threatening bleeding or neurosurgical emergency.");
+        P.push("Assess for HIT-related thrombosis (duplex, CT, etc.) guided by symptoms.");
+    }
+
+    // Heparin type comment
+    if (hep_type === "ufh") {
+        A.push("UFH exposure (higher baseline risk for HIT than LMWH).");
+    } else if (hep_type === "lmwh") {
+        A.push("LMWH exposure (lower but real risk for HIT).");
+    }
+
+    // Bleeding note
+    if (bleeding === "yes") {
+        A.push("Clinically significant bleeding.");
+        P.push("Balance need for therapeutic anticoagulation with bleeding risk; involve hematology early.");
+    }
+
+    // Missing fields suggestions
+    if (plt_current === null) missing.push("Current platelet count");
+    if (plt_peak === null) missing.push("Pre-heparin or peak platelet count");
+    if (plt_nadir === null) missing.push("Platelet nadir");
+    if (days === null) missing.push("Number of days since heparin started");
+
+    // Deduplicate missing
+    missing = [...new Set(missing)];
+
+    if (missing.length > 0) {
+        resultHTML += "<b>Suggested additional data:</b><ul>";
+        missing.forEach(m => resultHTML += `<li>${m}</li>`);
+        resultHTML += "</ul>";
+    }
+
+    if (A.length === 0) {
+        A.push("HIT assessment – insufficient data to risk stratify.");
+    }
+    if (P.length === 0) {
+        P.push("Gather missing data and recalculate 4T score; evaluate for other causes of thrombocytopenia.");
+    }
+
+    let emr = "Assessment:\n";
+    A.forEach(a => emr += `• ${a}\n`);
+
+    emr += "\nPlan:\n";
+    P.forEach(p => emr += `• ${p}\n`);
+
+    if (missing.length > 0) {
+        emr += "\nSuggested additional data:\n";
+        missing.forEach(m => emr += `• ${m}\n`);
+    }
+
+    document.getElementById("result").innerHTML = resultHTML;
+    document.getElementById("result").style.display = "block";
+
+    document.getElementById("emrText").textContent = emr;
+    document.getElementById("emrBox").style.display = "block";
+}
+
+function copyEMR() {
+    navigator.clipboard.writeText(
+        document.getElementById("emrText").textContent
+    );
+}
+</script>
+
+</body>
+</html>
