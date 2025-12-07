@@ -1,0 +1,980 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ETT Depth & Tidal Volume Helper</title>
+<style>
+    :root {
+        --bg: #e0f7fa;
+        --card: #ffffff;
+        --accent: #00838f;
+        --accent-soft: rgba(0, 131, 143, 0.08);
+        --text-main: #0f172a;
+        --muted: #607d8b;
+        --danger: #c62828;
+        --warning: #ef6c00;
+        --success: #2e7d32;
+        --radius: 14px;
+        --shadow: 0 14px 30px rgba(15, 23, 42, 0.12);
+        --pad: 14px;
+    }
+
+    * {
+        box-sizing: border-box;
+    }
+
+    body {
+        margin: 0;
+        min-height: 100vh;
+        font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        background: radial-gradient(circle at top left, #e0f7fa 0, #f1f5f9 40%, #e3f2fd 100%);
+        color: var(--text-main);
+        padding: 16px;
+        display: flex;
+        justify-content: center;
+    }
+
+    .app-container {
+        width: 100%;
+        max-width: 960px;
+        background: linear-gradient(135deg, rgba(255,255,255,0.9), rgba(236,253,245,0.9));
+        border-radius: 20px;
+        box-shadow: var(--shadow);
+        padding: 18px;
+        backdrop-filter: blur(10px);
+    }
+
+    header {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        gap: 8px;
+        align-items: center;
+        margin-bottom: 14px;
+    }
+
+    h1 {
+        font-size: 1.3rem;
+        margin: 0;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    h1 span.icon {
+        font-size: 1.35rem;
+    }
+
+    .subtitle {
+        font-size: 0.85rem;
+        color: var(--muted);
+        margin-top: 2px;
+    }
+
+    .nav-buttons {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+
+    .nav-btn {
+        border: none;
+        border-radius: 999px;
+        padding: 6px 12px;
+        font-size: 0.85rem;
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        background: rgba(255,255,255,0.9);
+        color: var(--accent);
+        box-shadow: 0 2px 6px rgba(15,23,42,0.08);
+        text-decoration: none;
+    }
+
+    .nav-btn span.icon {
+        font-size: 1rem;
+    }
+
+    .grid {
+        display: grid;
+        grid-template-columns: minmax(0, 1.1fr) minmax(0, 1.1fr);
+        gap: 14px;
+    }
+
+    @media (max-width: 780px) {
+        .grid {
+            grid-template-columns: minmax(0, 1fr);
+        }
+    }
+
+    .card {
+        background: var(--card);
+        border-radius: var(--radius);
+        padding: var(--pad);
+        box-shadow: 0 6px 18px rgba(15, 23, 42, 0.06);
+        border: 1px solid rgba(148, 163, 184, 0.15);
+    }
+
+    .card-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: baseline;
+        margin-bottom: 8px;
+    }
+
+    .card-title {
+        font-size: 0.95rem;
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+    }
+
+    .pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 2px 8px;
+        border-radius: 999px;
+        font-size: 0.75rem;
+        background: var(--accent-soft);
+        color: var(--accent);
+    }
+
+    .inputs-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 8px;
+    }
+
+    @media (max-width: 600px) {
+        .inputs-grid {
+            grid-template-columns: minmax(0, 1fr);
+        }
+    }
+
+    label {
+        font-size: 0.8rem;
+        color: var(--muted);
+        display: block;
+        margin-bottom: 3px;
+    }
+
+    .input-group {
+        display: flex;
+        flex-direction: column;
+        gap: 3px;
+    }
+
+    input[type="number"],
+    select {
+        width: 100%;
+        border-radius: 10px;
+        border: 1px solid rgba(148, 163, 184, 0.7);
+        padding: 7px 9px;
+        font-size: 0.9rem;
+        outline: none;
+        background: linear-gradient(135deg, #f9fafb, #edf2f7);
+    }
+
+    input[type="number"]:focus,
+    select:focus {
+        border-color: var(--accent);
+        box-shadow: 0 0 0 1px rgba(0, 131, 143, 0.35);
+    }
+
+    .unit {
+        font-size: 0.7rem;
+        color: var(--muted);
+    }
+
+    .hint {
+        font-size: 0.7rem;
+        color: var(--muted);
+    }
+
+    .radio-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        font-size: 0.8rem;
+        color: var(--muted);
+    }
+
+    .radio-row label {
+        margin-bottom: 0;
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+    }
+
+    .btn-row {
+        margin-top: 10px;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+
+    .btn-primary {
+        border-radius: 999px;
+        border: none;
+        padding: 8px 16px;
+        background: linear-gradient(135deg, #00acc1, #00838f);
+        color: #ffffff;
+        font-weight: 600;
+        font-size: 0.9rem;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        cursor: pointer;
+        box-shadow: 0 10px 20px rgba(0, 131, 143, 0.35);
+    }
+
+    .btn-secondary {
+        border-radius: 999px;
+        border: 1px solid rgba(148, 163, 184, 0.6);
+        padding: 8px 14px;
+        background: #ffffff;
+        color: var(--muted);
+        font-size: 0.85rem;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        cursor: pointer;
+    }
+
+    .btn-primary:active,
+    .btn-secondary:active {
+        transform: translateY(1px);
+        box-shadow: none;
+    }
+
+    .results-section {
+        font-size: 0.85rem;
+    }
+
+    .section-label {
+        font-size: 0.75rem;
+        font-weight: 600;
+        color: var(--muted);
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        margin-top: 6px;
+        margin-bottom: 4px;
+    }
+
+    .result-line {
+        font-size: 0.85rem;
+        margin-bottom: 3px;
+    }
+
+    .result-line strong {
+        font-weight: 600;
+    }
+
+    .badge-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+        margin-bottom: 6px;
+    }
+
+    .badge {
+        font-size: 0.75rem;
+        border-radius: 999px;
+        padding: 2px 8px;
+        background: rgba(148, 163, 184, 0.12);
+        color: var(--muted);
+    }
+
+    .badge-good {
+        background: rgba(46, 125, 50, 0.1);
+        color: var(--success);
+    }
+
+    .badge-warning {
+        background: rgba(239, 108, 0, 0.1);
+        color: var(--warning);
+    }
+
+    .badge-danger {
+        background: rgba(198, 40, 40, 0.1);
+        color: var(--danger);
+    }
+
+    .interpretation-text {
+        font-size: 0.8rem;
+        line-height: 1.3;
+        color: var(--text-main);
+    }
+
+    .interpretation-text ul {
+        padding-left: 18px;
+        margin: 4px 0;
+    }
+
+    .interpretation-text li {
+        margin-bottom: 2px;
+    }
+
+    .textarea-wrapper {
+        margin-top: 6px;
+    }
+
+    textarea {
+        width: 100%;
+        min-height: 120px;
+        resize: vertical;
+        border-radius: 10px;
+        border: 1px solid rgba(148, 163, 184, 0.7);
+        padding: 8px 9px;
+        font-size: 0.8rem;
+        font-family: inherit;
+        background: #f9fafb;
+    }
+
+    textarea:focus {
+        outline: none;
+        border-color: var(--accent);
+        box-shadow: 0 0 0 1px rgba(0, 131, 143, 0.35);
+    }
+
+    .small-note {
+        font-size: 0.7rem;
+        color: var(--muted);
+        margin-top: 4px;
+    }
+
+    .error-text {
+        font-size: 0.8rem;
+        color: var(--danger);
+        margin-top: 4px;
+    }
+</style>
+</head>
+<body>
+<div class="app-container">
+    <header>
+        <div>
+            <h1><span class="icon">🫁</span>ETT Depth & Tidal Volume Helper</h1>
+            <div class="subtitle">
+                Adult-only tool: height-based PBW, tidal volume ranges, and suggested ETT depth at teeth.
+            </div>
+        </div>
+        <div class="nav-buttons">
+            <a href="../pulmonary.html" class="nav-btn">
+                <span class="icon">↩️</span><span>Back to Pulmonary</span>
+            </a>
+            <a href="../index.html" class="nav-btn">
+                <span class="icon">🏠</span><span>Home</span>
+            </a>
+        </div>
+    </header>
+
+    <div class="grid">
+        <!-- INPUTS -->
+        <section class="card">
+            <div class="card-header">
+                <div class="card-title">
+                    <span>Inputs</span>
+                    <span class="pill">Height → PBW → VT & depth</span>
+                </div>
+            </div>
+
+            <div class="inputs-grid">
+                <div class="input-group">
+                    <label>Sex (for PBW formulas)</label>
+                    <div class="radio-row">
+                        <label><input type="radio" name="sex" value="male" checked> Male</label>
+                        <label><input type="radio" name="sex" value="female"> Female</label>
+                    </div>
+                    <div class="hint">Adult formulas only (generally ≥ 16 years).</div>
+                </div>
+
+                <div class="input-group">
+                    <label for="age">Age (years) <span class="unit">(optional)</span></label>
+                    <input type="number" id="age" min="0" step="1" placeholder="e.g. 55">
+                    <div class="unit">Used only in text summary.</div>
+                </div>
+
+                <div class="input-group">
+                    <label>Height units</label>
+                    <div class="radio-row">
+                        <label><input type="radio" name="hunit" value="cm" checked> cm</label>
+                        <label><input type="radio" name="hunit" value="ftin"> ft / in</label>
+                    </div>
+                </div>
+
+                <div class="input-group" id="height-cm-group">
+                    <label for="height-cm">Height (cm)</label>
+                    <input type="number" id="height-cm" min="100" max="220" step="0.5" placeholder="e.g. 170">
+                    <div class="unit">Typical adult 140–200 cm; outside this range → use caution.</div>
+                </div>
+
+                <div class="input-group" id="height-ftin-group" style="display:none;">
+                    <label>Height (ft / in)</label>
+                    <div style="display:flex; gap:6px;">
+                        <input type="number" id="height-ft" min="4" max="7" step="1" placeholder="ft">
+                        <input type="number" id="height-in" min="0" max="11" step="1" placeholder="in">
+                    </div>
+                    <div class="unit">Example: 5 ft 8 in.</div>
+                </div>
+
+                <div class="input-group">
+                    <label for="weight-kg">Actual weight (kg) <span class="unit">(optional)</span></label>
+                    <input type="number" id="weight-kg" min="20" max="300" step="0.5" placeholder="e.g. 75">
+                    <div class="unit">Used only in summary; VT is based on PBW.</div>
+                </div>
+
+                <div class="input-group">
+                    <label for="ett-size">Chosen ETT size (mm ID) <span class="unit">(optional)</span></label>
+                    <input type="number" id="ett-size" min="6" max="9" step="0.5" placeholder="e.g. 7.5">
+                    <div class="unit">If blank, tool will suggest a typical size.</div>
+                </div>
+
+                <div class="input-group">
+                    <label>Vent strategy focus</label>
+                    <select id="vent-mode">
+                        <option value="ards">ARDS / high risk lung-protective (4–6 mL/kg PBW)</option>
+                        <option value="standard">Standard low VT (6–8 mL/kg PBW)</option>
+                        <option value="both" selected>Show both ranges (4–6 and 6–8)</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="btn-row">
+                <button type="button" class="btn-primary" id="btn-calc">
+                    <span>Calculate VT & depth</span> <span>➜</span>
+                </button>
+                <button type="button" class="btn-secondary" id="btn-example">
+                    <span>Fill example</span>
+                </button>
+            </div>
+            <div id="error" class="error-text" style="display:none;"></div>
+        </section>
+
+        <!-- RESULTS -->
+        <section class="card">
+            <div class="card-header">
+                <div class="card-title">
+                    <span>Results & Interpretation</span>
+                </div>
+            </div>
+            <div class="badge-row" id="badge-row">
+                <!-- dynamic badges -->
+            </div>
+
+            <div class="results-section" id="results">
+                <div class="section-label">Height & weight summary</div>
+                <div class="result-line"><strong>Height:</strong> –</div>
+                <div class="result-line"><strong>Actual weight:</strong> –</div>
+
+                <div class="section-label">Body weight formulas</div>
+                <div class="result-line"><strong>PBW (ARDSNet):</strong> –</div>
+                <div class="result-line"><strong>IBW (Devine):</strong> –</div>
+
+                <div class="section-label">Suggested tidal volumes (mL)</div>
+                <div class="result-line"><strong>4–6 mL/kg PBW (ARDS lung-protective):</strong> –</div>
+                <div class="result-line"><strong>6–8 mL/kg PBW (standard lower VT):</strong> –</div>
+                <div class="result-line"><strong>Suggested starting VT:</strong> –</div>
+
+                <div class="section-label">ETT size & depth (adults)</div>
+                <div class="result-line"><strong>Suggested ETT size:</strong> –</div>
+                <div class="result-line"><strong>Suggested depth at teeth:</strong> –</div>
+                <div class="result-line"><strong>21/23 rule reminder:</strong> ~21 cm female, ~23 cm male (adjust by CXR & exam).</div>
+
+                <div class="section-label">Comments (educational, not a protocol)</div>
+                <div class="interpretation-text" id="interpretation">
+                    Enter sex and height, then click <strong>Calculate VT & depth</strong> to get adult PBW, tidal volume
+                    ranges, and a height-based ETT depth suggestion. Always confirm clinically with auscultation, capnography,
+                    and radiography.
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- ASSESSMENT & PLAN -->
+    <section class="card" style="margin-top: 14px;">
+        <div class="card-header">
+            <div class="card-title">Assessment & Plan Snippet</div>
+            <button type="button" class="btn-secondary" id="btn-copy">
+                <span>Copy to clipboard</span>
+            </button>
+        </div>
+        <div class="textarea-wrapper">
+            <textarea id="assessment" placeholder="After calculation, a structured assessment & plan snippet will appear here. You can edit it then copy into your note."></textarea>
+        </div>
+        <div class="small-note">
+            Generated text is for documentation support and education only. Always apply clinical judgment, local protocols,
+            and senior/consultant guidance.
+        </div>
+    </section>
+</div>
+
+<script>
+(function () {
+    const btnCalc   = document.getElementById('btn-calc');
+    const btnExample = document.getElementById('btn-example');
+    const errorBox  = document.getElementById('error');
+    const badgeRow  = document.getElementById('badge-row');
+    const results   = document.getElementById('results');
+    const interpBox = document.getElementById('interpretation');
+    const assessmentBox = document.getElementById('assessment');
+    const btnCopy   = document.getElementById('btn-copy');
+
+    const heightCmGroup  = document.getElementById('height-cm-group');
+    const heightFtInGroup = document.getElementById('height-ftin-group');
+    const heightCmInput  = document.getElementById('height-cm');
+    const heightFtInput  = document.getElementById('height-ft');
+    const heightInInput  = document.getElementById('height-in');
+    const ageInput       = document.getElementById('age');
+    const weightKgInput  = document.getElementById('weight-kg');
+    const ettSizeInput   = document.getElementById('ett-size');
+    const ventModeSelect = document.getElementById('vent-mode');
+
+    // Switch height unit display
+    document.querySelectorAll('input[name="hunit"]').forEach(radio => {
+        radio.addEventListener('change', () => {
+            const val = document.querySelector('input[name="hunit"]:checked').value;
+            if (val === 'cm') {
+                heightCmGroup.style.display = '';
+                heightFtInGroup.style.display = 'none';
+            } else {
+                heightCmGroup.style.display = 'none';
+                heightFtInGroup.style.display = '';
+            }
+        });
+    });
+
+    function getSex() {
+        const radio = document.querySelector('input[name="sex"]:checked');
+        return radio ? radio.value : null;
+    }
+
+    function getHeightCm() {
+        const unit = document.querySelector('input[name="hunit"]:checked').value;
+        if (unit === 'cm') {
+            return heightCmInput.value ? parseFloat(heightCmInput.value) : null;
+        } else {
+            const ft = heightFtInput.value ? parseFloat(heightFtInput.value) : 0;
+            const inch = heightInInput.value ? parseFloat(heightInInput.value) : 0;
+            if (!ft && !inch) return null;
+            const totalInch = ft * 12 + inch;
+            return totalInch * 2.54;
+        }
+    }
+
+    function cmToInches(cm) {
+        return cm / 2.54;
+    }
+
+    function format(num, digits) {
+        if (num === null || isNaN(num)) return '–';
+        return Number(num).toFixed(digits);
+    }
+
+    // ARDSNet PBW (kg)
+    function calcPBW(sex, heightCm) {
+        if (!sex || !heightCm) return null;
+        if (sex === 'male') {
+            return 50 + 0.91 * (heightCm - 152.4);
+        } else {
+            return 45.5 + 0.91 * (heightCm - 152.4);
+        }
+    }
+
+    // Devine IBW (kg) using inches
+    function calcIBW(sex, heightIn) {
+        if (!sex || !heightIn) return null;
+        const over60 = heightIn - 60;
+        if (sex === 'male') {
+            return 50 + 2.3 * over60;
+        } else {
+            return 45.5 + 2.3 * over60;
+        }
+    }
+
+    function calcTidalVolumes(pbw) {
+        if (!pbw || isNaN(pbw)) return null;
+
+        const low4 = pbw * 4;
+        const low6 = pbw * 6;
+        const std6 = pbw * 6;
+        const std8 = pbw * 8;
+
+        return {
+            lowRange: [low4, low6],
+            stdRange: [std6, std8]
+        };
+    }
+
+    // Very simple adult height-based depth suggestions
+    function suggestDepth(sex, heightCm) {
+        if (!sex || !heightCm) return null;
+
+        let depth;
+        if (sex === 'male') {
+            if (heightCm < 165) depth = 21;
+            else if (heightCm < 180) depth = 22;
+            else depth = 23;
+        } else {
+            if (heightCm < 155) depth = 20;
+            else if (heightCm < 170) depth = 21;
+            else depth = 22;
+        }
+        return depth;
+    }
+
+    function suggestEttSize(sex, heightCm) {
+        if (!sex || !heightCm) return '7.0–7.5 mm (female), 7.5–8.0 mm (male) typical adult';
+
+        if (sex === 'male') {
+            if (heightCm < 165) return '7.5 mm (small–average male) or 7.0 if smaller airway suspected';
+            if (heightCm < 185) return '7.5–8.0 mm (average male)';
+            return '8.0 mm (tall male); consider 7.5 if difficult airway';
+        } else {
+            if (heightCm < 155) return '6.5–7.0 mm (shorter female)';
+            if (heightCm < 175) return '7.0–7.5 mm (average female)';
+            return '7.5 mm (taller female); consider 7.0 if smaller airway';
+        }
+    }
+
+    function buildBadges(pbw, vtObj, depth) {
+        badgeRow.innerHTML = '';
+
+        if (pbw && pbw > 0) {
+            const b = document.createElement('span');
+            b.className = 'badge badge-good';
+            b.textContent = 'PBW ≈ ' + format(pbw, 1) + ' kg';
+            badgeRow.appendChild(b);
+        }
+
+        if (vtObj && vtObj.lowRange) {
+            const [low4, low6] = vtObj.lowRange;
+            const b2 = document.createElement('span');
+            b2.className = 'badge badge-warning';
+            b2.textContent = 'ARDS VT ≈ ' + Math.round(low4) + '–' + Math.round(low6) + ' mL';
+            badgeRow.appendChild(b2);
+        }
+
+        if (depth) {
+            const b3 = document.createElement('span');
+            b3.className = 'badge badge-warning';
+            b3.textContent = 'Depth at teeth ≈ ' + depth + ' cm (confirm on CXR & exam)';
+            badgeRow.appendChild(b3);
+        }
+    }
+
+    function buildInterpretationText(sex, age, heightCm, pbw, ibw, vtObj, depth, ettSizeSuggested, ettSizeEntered, ventMode) {
+        if (!heightCm || !pbw || !vtObj) {
+            return `
+                <div class="interpretation-text">
+                    Insufficient data. Please enter sex and height, then recalculate.
+                </div>
+            `;
+        }
+
+        const heightInInch = cmToInches(heightCm);
+        const heightFeet = Math.floor(heightInInch / 12);
+        const heightRemIn = Math.round(heightInInch - heightFeet * 12);
+
+        const sexText = sex === 'male' ? 'male' : 'female';
+
+        const [low4, low6] = vtObj.lowRange;
+        const [std6, std8] = vtObj.stdRange;
+
+        const modeText =
+            ventMode === 'ards' ? 'Lung-protective ARDS strategy (target 4–6 mL/kg PBW).' :
+            ventMode === 'standard' ? 'Standard lower tidal volume strategy (target 6–8 mL/kg PBW, if not ARDS/high risk).' :
+            'Showing both ARDS (4–6 mL/kg PBW) and standard lower VT (6–8 mL/kg PBW) ranges.';
+
+        const ettSizeText = ettSizeEntered
+            ? `ETT size chosen: ${ettSizeEntered} mm ID; ensure this matches airway/bronchoscopic needs.`
+            : `Suggested ETT size: ${ettSizeSuggested}.`;
+
+        const depthText = depth
+            ? `Suggested depth at teeth ≈ ${depth} cm (then fine-tune using equal bilateral breath sounds, cuff position, and CXR).`
+            : 'Depth suggestion unavailable (missing data).';
+
+        const lines = [];
+        lines.push(`<li>Adult ${sexText}${age ? ' ~' + age + ' yrs' : ''}, height ≈ ${Math.round(heightCm)} cm (${heightFeet}′${heightRemIn}″).</li>`);
+        lines.push(`<li>Predicted body weight (PBW, ARDSNet) ≈ ${format(pbw,1)} kg; IBW (Devine) ≈ ${ibw ? format(ibw,1) + ' kg' : '–'}.</li>`);
+        lines.push(`<li>ARDS lung-protective range (4–6 mL/kg PBW): ≈ ${Math.round(low4)}–${Math.round(low6)} mL.</li>`);
+        lines.push(`<li>Standard lower VT range (6–8 mL/kg PBW): ≈ ${Math.round(std6)}–${Math.round(std8)} mL.</li>`);
+        lines.push(`<li>${depthText}</li>`);
+        lines.push(`<li>${ettSizeText}</li>`);
+
+        return `
+            <div class="interpretation-text">
+                <ul>
+                    ${lines.join('')}
+                </ul>
+                <div class="section-label">Vent strategy note</div>
+                <ul>
+                    <li>${modeText}</li>
+                    <li>Always titrate VT to driving pressure, plateau pressure, and patient comfort/synchrony (e.g., keep plateau ≤ 30 cm H₂O in ARDS).</li>
+                    <li>Adjust PEEP/FiO₂ per ARDS or local vent protocols; monitor gas exchange, hemodynamics, and lung mechanics.</li>
+                </ul>
+                <div class="section-label">ETT positioning note</div>
+                <ul>
+                    <li>Use these depth estimates as a starting point only. Confirm with auscultation, capnography, and chest radiography.</li>
+                    <li>Classic “21/23 rule”: ~21 cm at teeth for average adult females, ~23 cm for average adult males; modify by height and imaging.</li>
+                </ul>
+                <div class="small-note">
+                    This is an educational tool and does not replace your clinical judgment, airway assessment,
+                    or institutional guidelines.
+                </div>
+            </div>
+        `;
+    }
+
+    function buildResultsText(params) {
+        const {
+            sex, age, heightCm, weightKg, pbw, ibw,
+            vtObj, depth, ventMode, ettSizeEntered, ettSizeSuggested
+        } = params;
+
+        const heightInInch = heightCm ? cmToInches(heightCm) : null;
+        const heightFt = heightInInch ? Math.floor(heightInInch / 12) : null;
+        const heightRemIn = heightInInch ? Math.round(heightInInch - heightFt * 12) : null;
+
+        const heightLine = heightCm
+            ? `${Math.round(heightCm)} cm (${heightFt}′${heightRemIn}″)`
+            : '–';
+
+        const weightLine = weightKg ? `${format(weightKg,1)} kg` : 'Not provided';
+
+        const [low4, low6] = vtObj && vtObj.lowRange ? vtObj.lowRange : [null, null];
+        const [std6, std8] = vtObj && vtObj.stdRange ? vtObj.stdRange : [null, null];
+
+        let suggestedVT = '–';
+        if (pbw && vtObj) {
+            if (ventMode === 'ards') {
+                const vt = pbw * 6;
+                suggestedVT = `${Math.round(vt)} mL (≈ 6 mL/kg PBW)`;
+            } else if (ventMode === 'standard') {
+                const vt = pbw * 7;
+                suggestedVT = `${Math.round(vt)} mL (≈ 7 mL/kg PBW)`;
+            } else {
+                const vt = pbw * 6;
+                suggestedVT = `${Math.round(vt)} mL (within both ARDS and standard lower VT ranges)`;
+            }
+        }
+
+        const sizeText = ettSizeEntered
+            ? `${ettSizeEntered} mm (user-chosen); typical suggestion: ${ettSizeSuggested}`
+            : ettSizeSuggested;
+
+        const depthText = depth ? `${depth} cm at teeth (then adjust per exam/CXR)` : '–';
+
+        results.innerHTML = `
+            <div class="section-label">Height & weight summary</div>
+            <div class="result-line"><strong>Height:</strong> ${heightLine}</div>
+            <div class="result-line"><strong>Actual weight:</strong> ${weightLine}</div>
+
+            <div class="section-label">Body weight formulas</div>
+            <div class="result-line"><strong>PBW (ARDSNet):</strong> ${pbw ? format(pbw,1) + ' kg' : '–'}</div>
+            <div class="result-line"><strong>IBW (Devine):</strong> ${ibw ? format(ibw,1) + ' kg' : '–'}</div>
+
+            <div class="section-label">Suggested tidal volumes (mL)</div>
+            <div class="result-line"><strong>4–6 mL/kg PBW (ARDS lung-protective):</strong> ${
+                low4 && low6 ? Math.round(low4) + '–' + Math.round(low6) + ' mL' : '–'
+            }</div>
+            <div class="result-line"><strong>6–8 mL/kg PBW (standard lower VT):</strong> ${
+                std6 && std8 ? Math.round(std6) + '–' + Math.round(std8) + ' mL' : '–'
+            }</div>
+            <div class="result-line"><strong>Suggested starting VT:</strong> ${suggestedVT}</div>
+
+            <div class="section-label">ETT size & depth (adults)</div>
+            <div class="result-line"><strong>Suggested ETT size:</strong> ${sizeText}</div>
+            <div class="result-line"><strong>Suggested depth at teeth:</strong> ${depthText}</div>
+            <div class="result-line"><strong>21/23 rule reminder:</strong> ~21 cm female, ~23 cm male (confirm with CXR & exam).</div>
+
+            <div class="section-label">Comments (educational, not a protocol)</div>
+            <div class="interpretation-text" id="interpretation">
+                ${buildInterpretationText(sex, age, heightCm, pbw, ibw, vtObj, depth, ettSizeSuggested, ettSizeEntered, ventMode)}
+            </div>
+        `;
+    }
+
+    function buildAssessmentSnippet(params) {
+        const {
+            sex, age, heightCm, weightKg, pbw, ibw,
+            vtObj, depth, ventMode, ettSizeEntered, ettSizeSuggested
+        } = params;
+
+        if (!heightCm || !pbw || !vtObj) {
+            return 'Insufficient data. Please enter at least sex and height, then recalculate.';
+        }
+
+        const heightInInch = cmToInches(heightCm);
+        const heightFeet = Math.floor(heightInInch / 12);
+        const heightRemIn = Math.round(heightInInch - heightFeet * 12);
+
+        const sexText = sex === 'male' ? 'male' : 'female';
+
+        const [low4, low6] = vtObj.lowRange;
+        const [std6, std8] = vtObj.stdRange;
+
+        let vtLine;
+        if (ventMode === 'ards') {
+            vtLine = `Will target VT ≈ ${Math.round(pbw * 6)} mL (≈ 6 mL/kg PBW, within 4–6 mL/kg ARDS range ≈ ${Math.round(low4)}–${Math.round(low6)} mL).`;
+        } else if (ventMode === 'standard') {
+            vtLine = `Will target VT ≈ ${Math.round(pbw * 7)} mL (≈ 7 mL/kg PBW, within 6–8 mL/kg range ≈ ${Math.round(std6)}–${Math.round(std8)} mL).`;
+        } else {
+            vtLine = `Lung-protective options: 4–6 mL/kg PBW ≈ ${Math.round(low4)}–${Math.round(low6)} mL; standard lower VT: 6–8 mL/kg PBW ≈ ${Math.round(std6)}–${Math.round(std8)} mL.`;
+        }
+
+        const ettSizeText = ettSizeEntered
+            ? `ETT size chosen: ${ettSizeEntered} mm ID (clinically appropriate).`
+            : `Plan ETT size ≈ ${ettSizeSuggested}.`;
+
+        const depthText = depth
+            ? `Initial ETT depth at teeth ≈ ${depth} cm (then adjust using auscultation, capnography, and CXR).`
+            : 'Depth estimate not available; will confirm position with exam and CXR.';
+
+        const lines = [];
+        lines.push('Airway & ventilation assessment:');
+        lines.push(`- Adult ${sexText}${age ? ' ~' + age + ' yrs' : ''}, height ≈ ${Math.round(heightCm)} cm (${heightFeet}′${heightRemIn}″).`);
+        if (weightKg) {
+            lines.push(`- Actual weight ≈ ${format(weightKg,1)} kg.`);
+        }
+        lines.push(`- Predicted body weight (PBW, ARDSNet) ≈ ${format(pbw,1)} kg; IBW (Devine) ≈ ${ibw ? format(ibw,1) + ' kg' : '–'}.`);
+        lines.push(`- ${vtLine}`);
+        lines.push(`- ${ettSizeText}`);
+        lines.push(`- ${depthText}`);
+        lines.push('');
+
+        lines.push('Plan (adjust to patient and local protocol):');
+        lines.push('- Intubate with appropriate-size cuffed ETT as above; pre-oxygenate, perform RSI or awake technique as clinically indicated.');
+        lines.push('- Confirm tube position with bilateral breath sounds, continuous waveform capnography, and post-intubation chest X-ray.');
+        lines.push('- Set initial VT based on PBW as above; titrate PEEP, FiO₂, and respiratory rate to gas exchange and lung mechanics (e.g., plateau ≤ 30 cm H₂O in ARDS).');
+        lines.push('- Reassess for auto-PEEP, high driving pressures, and ventilator synchrony; adjust sedation, analgesia, and mode accordingly.');
+        lines.push('- Re-evaluate ventilator settings after ABG/venous gas and clinical response; involve ICU/respiratory therapy team for optimization.');
+
+        return lines.join('\n');
+    }
+
+    function calculate() {
+        errorBox.style.display = 'none';
+        errorBox.textContent = '';
+
+        const sex = getSex();
+        const age = ageInput.value ? parseFloat(ageInput.value) : null;
+        const heightCm = getHeightCm();
+        const weightKg = weightKgInput.value ? parseFloat(weightKgInput.value) : null;
+        const ettSizeEntered = ettSizeInput.value ? parseFloat(ettSizeInput.value) : null;
+        const ventMode = ventModeSelect.value;
+
+        if (!sex || !heightCm) {
+            errorBox.textContent = 'Please select sex and enter height to calculate.';
+            errorBox.style.display = 'block';
+        }
+
+        // Warn about extreme values
+        if (heightCm && (heightCm < 135 || heightCm > 210)) {
+            errorBox.textContent = 'Height is outside typical adult range. Use extreme caution; formulas may not apply to pediatric or very atypical body habitus.';
+            errorBox.style.display = 'block';
+        }
+
+        // compute PBW & IBW
+        const pbw = calcPBW(sex, heightCm);
+        const heightIn = heightCm ? cmToInches(heightCm) : null;
+        const ibw = heightIn ? calcIBW(sex, heightIn) : null;
+        const vtObj = calcTidalVolumes(pbw);
+        const depth = suggestDepth(sex, heightCm);
+        const ettSizeSuggested = suggestEttSize(sex, heightCm);
+
+        // badges
+        buildBadges(pbw, vtObj, depth);
+
+        // results section
+        buildResultsText({
+            sex,
+            age,
+            heightCm,
+            weightKg,
+            pbw,
+            ibw,
+            vtObj,
+            depth,
+            ventMode,
+            ettSizeEntered,
+            ettSizeSuggested
+        });
+
+        // interpretation (inside results) is already handled by buildResultsText()
+
+        // assessment snippet
+        assessmentBox.value = buildAssessmentSnippet({
+            sex,
+            age,
+            heightCm,
+            weightKg,
+            pbw,
+            ibw,
+            vtObj,
+            depth,
+            ventMode,
+            ettSizeEntered,
+            ettSizeSuggested
+        });
+    }
+
+    btnCalc.addEventListener('click', calculate);
+
+    btnExample.addEventListener('click', function () {
+        // Example: 60-year-old male, 175 cm, 80 kg, ETT 7.5
+        document.querySelector('input[name="sex"][value="male"]').checked = true;
+        document.querySelector('input[name="hunit"][value="cm"]').checked = true;
+        heightCmGroup.style.display = '';
+        heightFtInGroup.style.display = 'none';
+
+        if (!heightCmInput.value) heightCmInput.value = 175;
+        if (!ageInput.value) ageInput.value = 60;
+        if (!weightKgInput.value) weightKgInput.value = 80;
+        if (!ettSizeInput.value) ettSizeInput.value = 7.5;
+        ventModeSelect.value = 'both';
+
+        calculate();
+    });
+
+    btnCopy.addEventListener('click', function () {
+        const text = assessmentBox.value || '';
+        if (!text.trim()) {
+            alert('Nothing to copy yet. Please calculate first.');
+            return;
+        }
+
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(text)
+                .then(() => {
+                    alert('Assessment & Plan copied to clipboard.');
+                })
+                .catch(() => fallbackCopy(text));
+        } else {
+            fallbackCopy(text);
+        }
+    });
+
+    function fallbackCopy(text) {
+        const temp = document.createElement('textarea');
+        temp.style.position = 'fixed';
+        temp.style.opacity = '0';
+        temp.value = text;
+        document.body.appendChild(temp);
+        temp.select();
+        try {
+            document.execCommand('copy');
+            alert('Assessment & Plan copied to clipboard.');
+        } catch (e) {
+            alert('Unable to copy automatically. You can manually select and copy the text.');
+        }
+        document.body.removeChild(temp);
+    }
+})();
+</script>
+</body>
+</html>
