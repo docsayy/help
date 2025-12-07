@@ -1,1 +1,720 @@
-BP
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>BP Medication Selector – Cardiology</title>
+<style>
+:root{
+  --bg:#020617;
+  --card:#0b1120;
+  --accent:#f97316;
+  --accent-soft:rgba(249,115,22,0.16);
+  --muted:#9ca3af;
+  --border:rgba(148,163,184,0.35);
+  --radius:16px;
+  --pad:14px;
+  color-scheme:dark;
+}
+*{box-sizing:border-box;}
+body{
+  margin:0;
+  min-height:100vh;
+  background:
+    radial-gradient(circle at top,rgba(248,113,22,0.22),transparent 50%),
+    radial-gradient(circle at bottom,#020617,#020617 55%);
+  font-family:system-ui,Segoe UI,Roboto,Arial;
+  color:#e5e7eb;
+  display:flex;
+  justify-content:center;
+  padding:14px;
+}
+main{width:100%;max-width:1150px;}
+header{margin-bottom:14px;}
+h1{
+  margin:0 0 4px;
+  font-size:1.6rem;
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+h1 .icon{font-size:1.6rem;}
+header p{margin:0;font-size:0.9rem;color:var(--muted);}
+.tag-row{margin-top:6px;display:flex;flex-wrap:wrap;gap:6px;}
+.tag{
+  font-size:0.75rem;
+  padding:3px 7px;
+  border-radius:999px;
+  border:1px solid rgba(148,163,184,0.5);
+  color:var(--muted);
+  background:rgba(15,23,42,0.9);
+}
+.grid{
+  display:grid;
+  gap:14px;
+}
+@media(min-width:900px){
+  .grid{
+    grid-template-columns:1.25fr 1fr;
+  }
+}
+.card{
+  background:linear-gradient(135deg,rgba(15,23,42,0.96),rgba(15,23,42,0.99));
+  border-radius:var(--radius);
+  border:1px solid var(--border);
+  padding:var(--pad);
+  box-shadow:0 18px 40px rgba(0,0,0,0.75);
+  position:relative;
+  overflow:hidden;
+}
+.card::before{
+  content:"";
+  position:absolute;
+  inset:-45%;
+  background:
+    radial-gradient(circle at 0 0,rgba(248,113,113,0.16),transparent 55%),
+    radial-gradient(circle at 100% 100%,rgba(249,115,22,0.22),transparent 55%);
+  opacity:.7;
+  pointer-events:none;
+}
+.card-inner{position:relative;z-index:1;}
+.card h2{
+  margin:0 0 4px;
+  font-size:1.1rem;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+.badge{
+  font-size:0.7rem;
+  text-transform:uppercase;
+  letter-spacing:0.08em;
+  padding:3px 7px;
+  border-radius:999px;
+  background:var(--accent-soft);
+  color:#fed7aa;
+  border:1px solid rgba(248,250,252,0.1);
+}
+.subtitle{
+  margin:0 0 8px;
+  font-size:0.85rem;
+  color:var(--muted);
+}
+form{display:grid;gap:8px;}
+.field{
+  display:flex;
+  flex-direction:column;
+  font-size:0.82rem;
+}
+.field-row{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:8px;
+}
+input[type="number"],select,textarea{
+  margin-top:3px;
+  padding:6px 8px;
+  border-radius:9px;
+  border:1px solid rgba(148,163,184,0.5);
+  background:rgba(15,23,42,0.95);
+  color:#e5e7eb;
+  font-size:0.85rem;
+}
+textarea{
+  min-height:50px;
+  resize:vertical;
+}
+.checkbox-group{
+  margin-top:5px;
+  display:grid;
+  gap:4px;
+  font-size:0.8rem;
+}
+.helper{
+  font-size:0.72rem;
+  color:var(--muted);
+  margin-top:2px;
+}
+.btn-row{
+  margin-top:8px;
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+}
+button{
+  border-radius:999px;
+  border:none;
+  padding:8px 15px;
+  font-size:0.85rem;
+  font-weight:600;
+  cursor:pointer;
+  background:radial-gradient(circle at 0 0,#fed7aa,#fb923c 40%,#ea580c 100%);
+  color:#111827;
+  box-shadow:0 10px 26px rgba(248,113,22,0.55);
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  transition:0.08s;
+}
+button:hover{
+  transform:translateY(-1px);
+  filter:brightness(1.05);
+  box-shadow:0 14px 32px rgba(248,113,22,0.7);
+}
+button.secondary{
+  background:transparent;
+  border:1px solid rgba(148,163,184,0.6);
+  color:#e5e7eb;
+  box-shadow:none;
+}
+.result{
+  display:grid;
+  gap:10px;
+  font-size:0.82rem;
+}
+.block{
+  background:rgba(15,23,42,0.92);
+  padding:10px 12px;
+  border-radius:12px;
+  border:1px solid rgba(148,163,184,0.45);
+}
+.block-title{
+  font-weight:700;
+  margin-bottom:4px;
+  font-size:0.9rem;
+}
+.pill-row{
+  display:flex;
+  flex-wrap:wrap;
+  gap:4px;
+  margin-top:4px;
+}
+.pill{
+  font-size:0.72rem;
+  padding:2px 6px;
+  border-radius:999px;
+  border:1px solid rgba(148,163,184,0.5);
+  color:#e5e7eb;
+}
+.risk-low{color:#4ade80;}
+.risk-mod{color:#facc15;}
+.risk-high{color:#fb7185;}
+footer{
+  margin-top:12px;
+  font-size:0.73rem;
+  color:var(--muted);
+}
+</style>
+</head>
+<body>
+<main>
+<header>
+  <h1><span class="icon">🩺</span> BP Medication Selector</h1>
+  <p>Educational helper to choose antihypertensive classes & starting doses based on BP, comorbidities, and prior issues.</p>
+  <div class="tag-row">
+    <span class="tag">Cardiology theme</span>
+    <span class="tag">Hypertension</span>
+    <span class="tag">Dark mode</span>
+  </div>
+</header>
+
+<section class="grid">
+  <!-- INPUT -->
+  <article class="card">
+    <div class="card-inner">
+      <h2>Patient Profile <span class="badge">Inputs</span></h2>
+      <p class="subtitle">Fill what you know; unknowns can be left blank.</p>
+
+      <form id="bp-form">
+
+        <div class="field-row">
+          <div class="field">
+            <label for="age">Age (years)</label>
+            <input id="age" type="number" min="18" max="99" placeholder="e.g. 55">
+          </div>
+          <div class="field">
+            <label for="sex">Sex</label>
+            <select id="sex">
+              <option value="M">Male</option>
+              <option value="F">Female</option>
+              <option value="O">Other / not specified</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="race">Race (for guideline patterns)</label>
+          <select id="race">
+            <option value="unknown">Not specified / mixed</option>
+            <option value="black">Black</option>
+            <option value="nonblack">Non-Black</option>
+          </select>
+        </div>
+
+        <div class="field-row">
+          <div class="field">
+            <label for="sbp">Clinic SBP (mmHg)</label>
+            <input id="sbp" type="number" min="80" max="260" placeholder="e.g. 162">
+          </div>
+          <div class="field">
+            <label for="dbp">Clinic DBP (mmHg)</label>
+            <input id="dbp" type="number" min="40" max="160" placeholder="e.g. 98">
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="homebp">Home BP pattern (optional)</label>
+          <textarea id="homebp" placeholder="e.g. 3–5 readings/week, mostly 145–150/85–90"></textarea>
+        </div>
+
+        <div class="field">
+          <label for="status">Hypertension status</label>
+          <select id="status">
+            <option value="new">New diagnosis / no meds</option>
+            <option value="onmeds">Established HTN on meds</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label for="current-meds">Current BP meds & doses</label>
+          <textarea id="current-meds" placeholder="e.g. Lisinopril 20 mg daily, Amlodipine 10 mg daily"></textarea>
+          <div class="helper">If new diagnosis, leave blank.</div>
+        </div>
+
+        <div class="field">
+          <label>Comorbidities / special situations</label>
+          <div class="checkbox-group">
+            <label><input type="checkbox" id="ckd"> CKD (eGFR &lt;60 or albuminuria)</label>
+            <label><input type="checkbox" id="dm"> Diabetes</label>
+            <label><input type="checkbox" id="cad"> CAD / prior MI</label>
+            <label><input type="checkbox" id="hfref"> HFrEF</label>
+            <label><input type="checkbox" id="stroke"> Stroke/TIA</label>
+            <label><input type="checkbox" id="preg"> Pregnancy or trying to conceive</label>
+            <label><input type="checkbox" id="bph"> BPH</label>
+            <label><input type="checkbox" id="gout"> Gout / uric acid issues</label>
+            <label><input type="checkbox" id="copd"> Asthma/COPD (reactive airway)</label>
+          </div>
+        </div>
+
+        <div class="field">
+          <label>Prior side effects / cautions</label>
+          <div class="checkbox-group">
+            <label><input type="checkbox" id="acecough"> ACEI cough / angioedema</label>
+            <label><input type="checkbox" id="edema"> CCB leg edema</label>
+            <label><input type="checkbox" id="brady"> Bradycardia / heart block</label>
+            <label><input type="checkbox" id="hyperk"> Hyperkalemia history</label>
+            <label><input type="checkbox" id="hypona"> Thiazide hyponatremia</label>
+          </div>
+        </div>
+
+        <div class="btn-row">
+          <button type="submit"><span>Suggest regimen</span></button>
+          <button type="button" class="secondary" id="reset-btn"><span>Reset</span></button>
+        </div>
+
+      </form>
+    </div>
+  </article>
+
+  <!-- OUTPUT -->
+  <article class="card">
+    <div class="card-inner">
+      <h2>Suggested Strategy <span class="badge">Output</span></h2>
+      <p class="subtitle">Stage, preferred drug classes, combinations, and what to avoid.</p>
+
+      <div id="result" class="result">
+        <div class="block">
+          <div class="block-title">Waiting for input…</div>
+          <div>Fill in the left panel and click <strong>“Suggest regimen”</strong> to see recommendations.</div>
+        </div>
+      </div>
+    </div>
+  </article>
+</section>
+
+<footer>
+Educational support only – always confirm with latest HTN guidelines, patient-specific factors, and local protocols. Not a substitute for clinical judgement or emergency evaluation.
+</footer>
+
+<script>
+function classifyBP(sbp, dbp){
+  if (isNaN(sbp) || isNaN(dbp)) return {stage:"Unknown", detail:"BP not entered"};
+  if (sbp >= 180 || dbp >= 120){
+    return {
+      stage:"Hypertensive-range &gt;=180/120",
+      detail:"Severely elevated BP. Assess for symptoms/signs of emergency (neuro deficits, chest pain, dyspnea, AKI, etc.)."
+    };
+  }
+  if (sbp >= 140 || dbp >= 90){
+    return {
+      stage:"Stage 2 hypertension",
+      detail:"Generally dual therapy and closer follow-up."
+    };
+  }
+  if (sbp >= 130 || dbp >= 80){
+    return {
+      stage:"Stage 1 hypertension",
+      detail:"Often start with single agent ± lifestyle, depending on ASCVD risk and comorbidities."
+    };
+  }
+  if (sbp >= 120 || dbp >= 70){
+    return {
+      stage:"Elevated BP",
+      detail:"Lifestyle focus; meds only if compelling indications."
+    };
+  }
+  return {
+    stage:"Normal range",
+    detail:"If accurate, usually no antihypertensive intensification required."
+  };
+}
+
+function buildSummary(age, sex, race, stageInfo, status){
+  const bits = [];
+  if (!isNaN(age) && age>0) bits.push("Age " + age);
+  if (sex === "M") bits.push("male");
+  else if (sex === "F") bits.push("female");
+
+  if (race === "black") bits.push("Black");
+  else if (race === "nonblack") bits.push("non-Black");
+
+  bits.push(status === "new" ? "new HTN diagnosis or untreated" : "established HTN on meds");
+  bits.push(stageInfo.stage);
+
+  return bits.join(", ");
+}
+
+function suggestClasses(params){
+  const {
+    race, ckd, dm, cad, hfref, stroke, preg, bph, gout, copd,
+    acecough, edema, brady, hyperk, hypona,
+    stageInfo, status
+  } = params;
+
+  const prefer = new Set();
+  const addOn = new Set();
+  const avoid = new Set();
+  const caution = new Set();
+  const notes = [];
+
+  const needAggressive =
+    stageInfo.stage.includes("Stage 2") ||
+    stageInfo.stage.includes("Hypertensive-range");
+
+  // Baseline guideline tendencies:
+  if (!preg){
+    if (race === "black"){
+      prefer.add("Thiazide");
+      prefer.add("DHP CCB");
+      notes.push("In Black patients without CKD, thiazide-type diuretics and DHP CCBs are typical first-line choices.");
+    } else {
+      prefer.add("ACEI/ARB");
+      prefer.add("Thiazide");
+      prefer.add("DHP CCB");
+      notes.push("In non-Black or unspecified race without contraindications, ACEI/ARB, thiazide, or DHP CCB are all reasonable first-line options.");
+    }
+  }
+
+  // CKD / albuminuria
+  if (ckd && !preg){
+    prefer.add("ACEI/ARB");
+    notes.push("CKD with proteinuria → ACEI/ARB favored for renal protection.");
+  }
+
+  // Diabetes (esp. albuminuria) – still ACEI/ARB-slanted
+  if (dm && !preg){
+    prefer.add("ACEI/ARB");
+  }
+
+  // CAD / MI / stroke – RAAS + beta-blocker
+  if (cad || stroke){
+    prefer.add("ACEI/ARB");
+    prefer.add("Beta-blocker");
+    notes.push("CAD/MI or prior stroke → ACEI/ARB plus beta-blocker often used.");
+  }
+
+  // HFrEF – RAAS + BB (we have separate HF tool but still hint here)
+  if (hfref){
+    prefer.add("ACEI/ARB");
+    prefer.add("Beta-blocker");
+    addOn.add("MRA");
+    addOn.add("Loop diuretic");
+    notes.push("HFrEF → use HF GDMT (ACEI/ARB/ARNI, BB, MRA, SGLT2i). Avoid isolated vasodilators without GDMT.");
+  }
+
+  // Pregnancy
+  if (preg){
+    prefer.clear();
+    addOn.clear();
+    prefer.add("Labetalol");
+    prefer.add("Nifedipine ER");
+    prefer.add("Methyldopa");
+    avoid.add("ACEI/ARB");
+    avoid.add("Direct renin inhibitor");
+    avoid.add("Mineralocorticoid (MRA)");
+    notes.push("Pregnancy → avoid ACEI/ARB/direct renin inhibitors; labetalol, nifedipine ER, and methyldopa are typical options.");
+  }
+
+  // BPH – alpha-blocker
+  if (bph && !preg){
+    addOn.add("Alpha-blocker");
+    notes.push("BPH → alpha-blocker (e.g., doxazosin, terazosin) may help LUTS but not first-line for HTN alone.");
+  }
+
+  // Gout – avoid thiazides
+  if (gout){
+    avoid.add("High-dose thiazide");
+    caution.add("Thiazide");
+    notes.push("Gout → high-dose thiazides can raise uric acid; consider ACEI/ARB/CCB instead or use low thiazide dose with caution.");
+  }
+
+  // COPD/asthma – careful with BB
+  if (copd){
+    caution.add("Non-selective beta-blocker");
+    notes.push("Asthma/COPD → prefer beta-1 selective BB (metoprolol, bisoprolol) if BB needed; avoid high-dose non-selective BB.");
+  }
+
+  // ACEI cough/angioedema
+  if (acecough){
+    avoid.add("ACE inhibitor");
+    prefer.add("ARB");
+    notes.push("ACEI cough/angioedema → avoid ACEI; ARB often preferred.");
+  }
+
+  // CCB leg edema
+  if (edema){
+    caution.add("DHP CCB");
+    notes.push("Significant CCB-related leg edema → use lower dose, combine with ACEI/ARB, or choose alternative class.");
+  }
+
+  // Bradycardia / conduction
+  if (brady){
+    avoid.add("Non-DHP CCB");
+    caution.add("Beta-blocker");
+    notes.push("Bradycardia / conduction disease → avoid non-DHP CCB; use BB cautiously or avoid depending on severity.");
+  }
+
+  // Hyperkalemia
+  if (hyperk){
+    caution.add("ACEI/ARB");
+    caution.add("MRA");
+    caution.add("K-sparing diuretic");
+    notes.push("Hyperkalemia history → monitor closely with ACEI/ARB/MRA, or consider lower doses/alternative classes.");
+  }
+
+  // Thiazide hyponatremia
+  if (hypona){
+    avoid.add("High-dose thiazide");
+    caution.add("Thiazide");
+    notes.push("Thiazide hyponatremia → limit or avoid thiazides, consider ACEI/ARB/CCB instead.");
+  }
+
+  // Stage-based intensification
+  if (needAggressive){
+    addOn.add("Second first-line agent");
+    notes.push("Stage 2 or very high BP → often start with two complementary agents (e.g., ACEI/ARB + thiazide or ACEI/ARB + DHP CCB).");
+  } else if (status === "new" && stageInfo.stage.includes("Stage 1")){
+    notes.push("Stage 1 HTN → single agent may be enough unless ASCVD risk is high or multiple comorbidities present.");
+  }
+
+  return {prefer, addOn, avoid, caution, notes};
+}
+
+function renderResult(summary, bpObj, classes, status, currentMeds){
+  const res = document.getElementById("result");
+  const {prefer, addOn, avoid, caution, notes} = classes;
+
+  const preferList = Array.from(prefer);
+  const addOnList = Array.from(addOn);
+  const avoidList = Array.from(avoid);
+  const cautionList = Array.from(caution);
+
+  function renderClassExamples(){
+    let html = "";
+
+    // ACEI / ARB
+    if (preferList.includes("ACEI/ARB") || preferList.includes("ARB") || cautionList.includes("ACEI/ARB")){
+      html += `
+        <li>
+          <strong>ACEI</strong> (e.g., Lisinopril 10–40 mg daily, Enalapril 5–20 mg BID)
+          <br><strong>ARB</strong> (e.g., Losartan 50–100 mg daily, Valsartan 80–320 mg daily)
+        </li>`;
+    }
+    if (preferList.includes("ARB") && !preferList.includes("ACEI/ARB")){
+      html += `
+        <li><strong>ARB-focused</strong> due to ACEI intolerance (e.g., Losartan 50–100 mg, Valsartan 80–320 mg daily).</li>`;
+    }
+    // Thiazide
+    if (preferList.includes("Thiazide") || cautionList.includes("Thiazide")){
+      html += `
+        <li><strong>Thiazide-type diuretic:</strong> Chlorthalidone 12.5–25 mg daily; HCTZ 12.5–25 mg daily.</li>`;
+    }
+    // DHP CCB
+    if (preferList.includes("DHP CCB") || cautionList.includes("DHP CCB")){
+      html += `
+        <li><strong>DHP CCB:</strong> Amlodipine 5–10 mg daily; Felodipine 5–10 mg daily.</li>`;
+    }
+    // Beta-blocker
+    if (preferList.includes("Beta-blocker") || cautionList.includes("Beta-blocker")){
+      html += `
+        <li><strong>Beta-blocker:</strong> Metoprolol succinate 25–200 mg daily, Carvedilol 6.25–25 mg BID
+          (prefer beta-1 selective in asthma/COPD).</li>`;
+    }
+    // Others
+    if (preferList.includes("Labetalol") || preferList.includes("Nifedipine ER") || preferList.includes("Methyldopa")){
+      html += `
+        <li><strong>Pregnancy options:</strong> Labetalol (e.g., 100–200 mg BID), Nifedipine ER (30–60 mg daily), Methyldopa (250–500 mg BID–TID).</li>`;
+    }
+    if (addOnList.includes("Alpha-blocker")){
+      html += `<li><strong>Alpha-blocker:</strong> Doxazosin 1–8 mg daily, Terazosin 1–10 mg HS (especially with BPH).</li>`;
+    }
+    if (addOnList.includes("Loop diuretic")){
+      html += `<li><strong>Loop diuretic (for volume):</strong> Furosemide 20–40 mg BID, Torsemide 10–20 mg daily.</li>`;
+    }
+    if (addOnList.includes("MRA")){
+      html += `<li><strong>MRA (if K and renal function allow):</strong> Spironolactone 12.5–25 mg daily.</li>`;
+    }
+
+    return html || `<li>No specific drug examples triggered – consider ACEI/ARB, thiazide, or DHP CCB as standard first-line options if no contraindications.</li>`;
+  }
+
+  res.innerHTML = `
+    <div class="block">
+      <div class="block-title">Clinical summary</div>
+      <div>${summary}</div>
+      <div class="pill-row">
+        <span class="pill">${bpObj.stage}</span>
+        <span class="pill">${bpObj.detail}</span>
+      </div>
+    </div>
+
+    <div class="block">
+      <div class="block-title">Preferred first-line / backbone classes</div>
+      <div>${
+        preferList.length
+          ? preferList.join(", ")
+          : "No strong preference detected – use usual first-line classes (ACEI/ARB, thiazide, DHP CCB) if no contraindications."
+      }</div>
+      <ul>${renderClassExamples()}</ul>
+    </div>
+
+    <div class="block">
+      <div class="block-title">Add-on / combination options</div>
+      <div>${
+        addOnList.length
+          ? addOnList.join(", ")
+          : "Add a second complementary first-line agent if BP remains above goal despite initial therapy."
+      }</div>
+      <div class="helper">
+        For Stage 2 or very high BP, initial therapy with a 2-drug combination (e.g., ACEI/ARB + thiazide or ACEI/ARB + DHP CCB) is common.
+      </div>
+    </div>
+
+    <div class="block">
+      <div class="block-title">Avoid or use with caution</div>
+      <div>
+        ${
+          avoidList.length
+            ? "<strong>Avoid if possible:</strong> " + avoidList.join(", ") + "<br>"
+            : ""
+        }
+        ${
+          cautionList.length
+            ? "<strong>Use with caution / monitor:</strong> " + cautionList.join(", ")
+            : !avoidList.length
+              ? "No specific avoid/caution flags detected, but always check kidney function, potassium, heart rate, and pregnancy status."
+              : ""
+        }
+      </div>
+    </div>
+
+    ${
+      currentMeds.trim()
+        ? `
+        <div class="block">
+          <div class="block-title">Current regimen context</div>
+          <div><strong>Reported meds:</strong> ${currentMeds.replace(/\n/g,"; ")}</div>
+          <div class="helper">
+            Consider whether to up-titrate existing agents to guideline doses before adding new classes, unless side effects or contraindications limit them.
+          </div>
+        </div>`
+        : ""
+    }
+
+    ${
+      notes.length
+        ? `<div class="block">
+             <div class="block-title">Additional notes</div>
+             <ul>${notes.map(n => `<li>${n}</li>`).join("")}</ul>
+           </div>`
+        : ""
+    }
+
+    <div class="block">
+      <div class="block-title">Follow-up & monitoring</div>
+      <ul>
+        <li>Recheck BP in 2–4 weeks after starting or changing therapy; sooner if very high BP.</li>
+        <li>Monitor basic metabolic panel (Na, K, Cr) with ACEI/ARB, diuretics, or MRA.</li>
+        <li>Watch for symptoms of hypotension, dizziness, syncope, or bradycardia.</li>
+        <li>Escalate care quickly if hypertensive emergency symptoms are present (neuro changes, chest pain, dyspnea, etc.).</li>
+      </ul>
+    </div>
+  `;
+}
+
+document.getElementById("bp-form").addEventListener("submit", function(e){
+  e.preventDefault();
+
+  const age = Number(document.getElementById("age").value || NaN);
+  const sex = document.getElementById("sex").value;
+  const race = document.getElementById("race").value;
+  const sbp = Number(document.getElementById("sbp").value || NaN);
+  const dbp = Number(document.getElementById("dbp").value || NaN);
+  const status = document.getElementById("status").value;
+  const homeBP = document.getElementById("homebp").value || "";
+  const currentMeds = document.getElementById("current-meds").value || "";
+
+  const ckd = document.getElementById("ckd").checked;
+  const dm = document.getElementById("dm").checked;
+  const cad = document.getElementById("cad").checked;
+  const hfref = document.getElementById("hfref").checked;
+  const stroke = document.getElementById("stroke").checked;
+  const preg = document.getElementById("preg").checked;
+  const bph = document.getElementById("bph").checked;
+  const gout = document.getElementById("gout").checked;
+  const copd = document.getElementById("copd").checked;
+
+  const acecough = document.getElementById("acecough").checked;
+  const edema = document.getElementById("edema").checked;
+  const brady = document.getElementById("brady").checked;
+  const hyperk = document.getElementById("hyperk").checked;
+  const hypona = document.getElementById("hypona").checked;
+
+  const bpObj = classifyBP(sbp, dbp);
+  const summary = buildSummary(age, sex, race, bpObj, status) +
+    (homeBP.trim() ? `; Home BP: ${homeBP.replace(/\n/g,"; ")}` : "");
+
+  const classes = suggestClasses({
+    race, ckd, dm, cad, hfref, stroke, preg, bph, gout, copd,
+    acecough, edema, brady, hyperk, hypona,
+    stageInfo: bpObj, status
+  });
+
+  renderResult(summary, bpObj, classes, status, currentMeds);
+});
+
+document.getElementById("reset-btn").addEventListener("click", function(){
+  document.getElementById("bp-form").reset();
+  document.getElementById("sex").value = "M";
+  document.getElementById("race").value = "unknown";
+  document.getElementById("status").value = "new";
+  document.getElementById("result").innerHTML = `
+    <div class="block">
+      <div class="block-title">Waiting for input…</div>
+      <div>Fill in the left panel and click <strong>“Suggest regimen”</strong> to see recommendations.</div>
+    </div>`;
+});
+</script>
+
+</body>
+</html>
