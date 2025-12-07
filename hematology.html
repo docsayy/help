@@ -1,0 +1,1295 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Hematology Decision Helper</title>
+<style>
+:root{
+  --bg:#f9fafb;
+  --card:#ffffff;
+  --accent:#b91c1c;      /* hematology red */
+  --accent-soft:#fee2e2;
+  --muted:#6b7280;
+  --border:#e5e7eb;
+  --radius:14px;
+  --pad:14px;
+  --shadow:0 10px 25px rgba(15,23,42,0.08);
+}
+*{box-sizing:border-box;}
+body{
+  margin:0;
+  font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  background:var(--bg);
+  color:#0f172a;
+}
+.app-shell{
+  max-width:1100px;
+  margin:0 auto;
+  padding:16px 12px 40px;
+}
+header{
+  display:flex;
+  flex-wrap:wrap;
+  justify-content:space-between;
+  gap:8px;
+  align-items:center;
+  margin-bottom:16px;
+}
+header h1{
+  font-size:1.4rem;
+  font-weight:700;
+  display:flex;
+  align-items:center;
+  gap:8px;
+  margin:0;
+}
+.tag{
+  font-size:0.75rem;
+  padding:2px 8px;
+  border-radius:999px;
+  background:var(--accent-soft);
+  color:var(--accent);
+  font-weight:600;
+}
+.nav-buttons{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+}
+button, .btn-link{
+  border:none;
+  border-radius:999px;
+  padding:8px 14px;
+  font-size:0.85rem;
+  cursor:pointer;
+  background:var(--accent);
+  color:#fff;
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  box-shadow:0 4px 8px rgba(185,28,28,0.25);
+}
+button.secondary, .btn-secondary{
+  background:#f3f4f6;
+  color:#111827;
+  box-shadow:none;
+  border:1px solid #e5e7eb;
+}
+button.small{
+  padding:6px 10px;
+  font-size:0.8rem;
+  box-shadow:none;
+}
+button:active{
+  transform:scale(0.98);
+}
+a.btn-link, a.btn-secondary{
+  text-decoration:none;
+}
+.layout{
+  display:grid;
+  grid-template-columns: minmax(0,2.1fr) minmax(0,1.2fr);
+  gap:16px;
+}
+@media (max-width:900px){
+  .layout{grid-template-columns:1fr;}
+}
+.card{
+  background:var(--card);
+  border-radius:var(--radius);
+  padding:var(--pad);
+  box-shadow:var(--shadow);
+  border:1px solid var(--border);
+}
+.card h2{
+  margin:0 0 8px;
+  font-size:1.1rem;
+}
+.card h3{
+  margin:12px 0 4px;
+  font-size:0.98rem;
+}
+.card small{
+  color:var(--muted);
+}
+.section-label{
+  font-size:0.75rem;
+  font-weight:600;
+  text-transform:uppercase;
+  letter-spacing:0.07em;
+  color:var(--muted);
+}
+.grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(120px,1fr));
+  gap:8px 10px;
+  margin-top:8px;
+}
+.field{
+  display:flex;
+  flex-direction:column;
+  gap:2px;
+  font-size:0.8rem;
+}
+.field label{
+  font-weight:500;
+}
+.field input, .field select{
+  padding:6px 7px;
+  border-radius:8px;
+  border:1px solid #d1d5db;
+  font-size:0.82rem;
+}
+.field input:focus, .field select:focus{
+  outline:none;
+  border-color:var(--accent);
+  box-shadow:0 0 0 1px rgba(185,28,28,0.15);
+}
+.badge{
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  padding:3px 8px;
+  border-radius:999px;
+  font-size:0.7rem;
+  background:#ecfdf3;
+  color:#166534;
+  font-weight:600;
+}
+.badge.warn{
+  background:#fef3c7;
+  color:#92400e;
+}
+.badge.danger{
+  background:#fee2e2;
+  color:#991b1b;
+}
+.output-box{
+  font-size:0.82rem;
+  border-radius:10px;
+  border:1px dashed #e5e7eb;
+  padding:8px 10px;
+  background:#f9fafb;
+  max-height:260px;
+  overflow:auto;
+  white-space:pre-wrap;
+}
+.tabs{
+  display:flex;
+  flex-wrap:wrap;
+  gap:6px;
+  margin:4px 0 10px;
+}
+.tab-btn{
+  padding:6px 10px;
+  border-radius:999px;
+  border:1px solid #e5e7eb;
+  background:#f9fafb;
+  font-size:0.78rem;
+  cursor:pointer;
+}
+.tab-btn.active{
+  background:var(--accent);
+  border-color:var(--accent);
+  color:#fff;
+}
+.helper-note{
+  font-size:0.75rem;
+  color:var(--muted);
+  margin-top:4px;
+}
+.coming-list{
+  margin:6px 0 0;
+  padding-left:18px;
+  font-size:0.82rem;
+  color:var(--muted);
+}
+textarea.hidden-copy{
+  position:absolute;
+  left:-9999px;
+  top:-9999px;
+}
+</style>
+</head>
+<body>
+<div class="app-shell">
+  <header>
+    <div>
+      <h1>Hematology Decision Helper <span class="tag">Work in progress</span></h1>
+      <div class="helper-note">Quick bedside support for anemia, platelets, TTP/HIT/DIC, MTP, neutropenic fever & transfusion thresholds.</div>
+    </div>
+    <div class="nav-buttons">
+      <a href="index.html" class="btn-link btn-secondary">🏠 Home</a>
+      <a href="hematology.html" class="btn-link btn-secondary">⬅ Back to Hematology</a>
+    </div>
+  </header>
+
+  <div class="layout">
+    <!-- LEFT: ANEMIA TOOL -->
+    <section class="card">
+      <div class="section-label">Tool 1</div>
+      <h2>Comprehensive Anemia Workup Assistant</h2>
+      <small>Enter whatever you have; the tool still provides a structured assessment & plan even with missing data.</small>
+
+      <h3>CBC</h3>
+      <div class="grid">
+        <div class="field">
+          <label for="hb">Hemoglobin (g/dL)</label>
+          <input id="hb" type="number" step="0.1" />
+        </div>
+        <div class="field">
+          <label for="hct">Hematocrit (%)</label>
+          <input id="hct" type="number" step="0.1" />
+        </div>
+        <div class="field">
+          <label for="mcv">MCV (fL)</label>
+          <input id="mcv" type="number" step="0.1" />
+        </div>
+        <div class="field">
+          <label for="rdw">RDW (%)</label>
+          <input id="rdw" type="number" step="0.1" />
+        </div>
+        <div class="field">
+          <label for="wbc">WBC (K/µL)</label>
+          <input id="wbc" type="number" step="0.1" />
+        </div>
+        <div class="field">
+          <label for="plt">Platelets (K/µL)</label>
+          <input id="plt" type="number" step="1" />
+        </div>
+        <div class="field">
+          <label for="retic">Retic (%)</label>
+          <input id="retic" type="number" step="0.1" />
+        </div>
+      </div>
+
+      <h3>Iron Studies</h3>
+      <div class="grid">
+        <div class="field">
+          <label for="ferritin">Ferritin (ng/mL)</label>
+          <input id="ferritin" type="number" step="0.1" />
+        </div>
+        <div class="field">
+          <label for="iron">Serum iron (µg/dL)</label>
+          <input id="iron" type="number" step="1" />
+        </div>
+        <div class="field">
+          <label for="tibc">TIBC (µg/dL)</label>
+          <input id="tibc" type="number" step="1" />
+        </div>
+        <div class="field">
+          <label for="tsat">TSAT (%)</label>
+          <input id="tsat" type="number" step="0.1" />
+        </div>
+        <div class="field">
+          <label for="b12">B12 (pg/mL)</label>
+          <input id="b12" type="number" step="1" />
+        </div>
+        <div class="field">
+          <label for="folate">Folate (ng/mL)</label>
+          <input id="folate" type="number" step="0.1" />
+        </div>
+      </div>
+
+      <h3>Hemolysis & Other</h3>
+      <div class="grid">
+        <div class="field">
+          <label for="ldh">LDH (U/L)</label>
+          <input id="ldh" type="number" step="1" />
+        </div>
+        <div class="field">
+          <label for="haptoglobin">Haptoglobin (mg/dL)</label>
+          <input id="haptoglobin" type="number" step="1" />
+        </div>
+        <div class="field">
+          <label for="bili_total">Total bili (mg/dL)</label>
+          <input id="bili_total" type="number" step="0.1" />
+        </div>
+        <div class="field">
+          <label for="bili_direct">Direct bili (mg/dL)</label>
+          <input id="bili_direct" type="number" step="0.1" />
+        </div>
+        <div class="field">
+          <label for="coombs">Coombs (DAT)</label>
+          <select id="coombs">
+            <option value="">Not done</option>
+            <option value="pos">Positive</option>
+            <option value="neg">Negative</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="crp_esr">Inflammation marker (CRP/ESR)</label>
+          <select id="crp_esr">
+            <option value="">Unknown</option>
+            <option value="elevated">Elevated</option>
+            <option value="normal">Normal</option>
+          </select>
+        </div>
+      </div>
+
+      <div style="margin-top:10px; display:flex; gap:8px; flex-wrap:wrap; align-items:center;">
+        <button type="button" onclick="runAnemiaTool()">🩸 Assess Anemia</button>
+        <button type="button" class="secondary small" onclick="clearAnemiaInputs()">Clear</button>
+        <div class="helper-note">This does <b>not</b> replace clinical judgment or local guidelines.</div>
+      </div>
+
+      <h3 style="margin-top:12px;">AI-style Assessment & Plan</h3>
+      <div id="anemia-summary-badge" style="margin-bottom:6px;"></div>
+      <div id="anemia-output" class="output-box">Assessment & plan will appear here.</div>
+      <div style="margin-top:8px; display:flex; gap:8px; flex-wrap:wrap;">
+        <button type="button" class="small" onclick="copyAnemiaPlan()">📋 Copy assessment & plan</button>
+      </div>
+    </section>
+
+    <!-- RIGHT: OTHER HEME TOOLS -->
+    <section class="card">
+      <div class="section-label">Tool 2–7</div>
+      <h2>Platelets / TTP / HIT / DIC / MTP / Neutropenic Fever / Transfusion</h2>
+      <small>Select a micro-tool, enter minimal info, and get a short assessment + suggested plan.</small>
+
+      <div class="tabs">
+        <button class="tab-btn active" id="tab-thrombocytopenia" onclick="switchHemeTab('thrombocytopenia')">Thrombocytopenia</button>
+        <button class="tab-btn" id="tab-ttp" onclick="switchHemeTab('ttp')">TTP (PLASMIC)</button>
+        <button class="tab-btn" id="tab-hit" onclick="switchHemeTab('hit')">HIT (4T)</button>
+        <button class="tab-btn" id="tab-dic" onclick="switchHemeTab('dic')">DIC</button>
+        <button class="tab-btn" id="tab-mtp" onclick="switchHemeTab('mtp')">Massive Tx</button>
+        <button class="tab-btn" id="tab-neutro" onclick="switchHemeTab('neutro')">Neutropenic Fever</button>
+        <button class="tab-btn" id="tab-tx" onclick="switchHemeTab('tx')">Transfusion Thresholds</button>
+      </div>
+
+      <!-- Thrombocytopenia -->
+      <div id="panel-thrombocytopenia">
+        <h3>Thrombocytopenia Quick Triage</h3>
+        <div class="grid">
+          <div class="field">
+            <label for="plt_current">Platelets (K/µL)</label>
+            <input id="plt_current" type="number" step="1" />
+          </div>
+          <div class="field">
+            <label for="tp_acute">Onset</label>
+            <select id="tp_acute">
+              <option value="">Unknown</option>
+              <option value="acute">&lt; 7 days</option>
+              <option value="subacute">7–30 days</option>
+              <option value="chronic">&gt; 30 days</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="tp_bleeding">Clinically significant bleeding?</label>
+            <select id="tp_bleeding">
+              <option value="">Unknown</option>
+              <option value="none">None / minor</option>
+              <option value="major">Major / life-threatening</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="tp_schisto">Schistocytes on smear?</label>
+            <select id="tp_schisto">
+              <option value="">Not known</option>
+              <option value="present">Present</option>
+              <option value="absent">Absent</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="tp_splenomegaly">Splenomegaly?</label>
+            <select id="tp_splenomegaly">
+              <option value="">Unknown</option>
+              <option value="yes">Yes</option>
+              <option value="no">No</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="tp_drugs">Recent new drugs (esp. heparin)?</label>
+            <select id="tp_drugs">
+              <option value="">Unknown</option>
+              <option value="yes">Yes</option>
+              <option value="no">No</option>
+            </select>
+          </div>
+        </div>
+        <div style="margin-top:8px;display:flex;gap:8px;flex-wrap:wrap;">
+          <button type="button" class="small" onclick="runThrombocytopenia()">Assess</button>
+        </div>
+        <div id="tp-output" class="output-box" style="margin-top:6px;">Assessment & plan for thrombocytopenia will appear here.</div>
+        <button type="button" class="small" style="margin-top:6px;" onclick="copyTextFrom('tp-output')">📋 Copy</button>
+      </div>
+
+      <!-- TTP (PLASMIC) -->
+      <div id="panel-ttp" style="display:none;">
+        <h3>TTP – PLASMIC Score</h3>
+        <div class="grid">
+          <div class="field">
+            <label for="plasmic_plts">Platelets &lt; 30K?</label>
+            <select id="plasmic_plts">
+              <option value="">Unknown</option>
+              <option value="yes">Yes (1 point)</option>
+              <option value="no">No (0)</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="plasmic_hemolysis">Hemolysis evidence?</label>
+            <select id="plasmic_hemolysis">
+              <option value="">Unknown</option>
+              <option value="yes">Yes (1)</option>
+              <option value="no">No (0)</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="plasmic_creatinine">Creatinine &lt; 2 mg/dL?</label>
+            <select id="plasmic_creatinine">
+              <option value="">Unknown</option>
+              <option value="yes">&lt; 2 (1)</option>
+              <option value="no">&ge; 2 (0)</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="plasmic_mcv">MCV &lt; 90 fL?</label>
+            <select id="plasmic_mcv">
+              <option value="">Unknown</option>
+              <option value="yes">Yes (1)</option>
+              <option value="no">No (0)</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="plasmic_inr">INR &lt; 1.5?</label>
+            <select id="plasmic_inr">
+              <option value="">Unknown</option>
+              <option value="yes">Yes (1)</option>
+              <option value="no">No (0)</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="plasmic_cancer">Active cancer?</label>
+            <select id="plasmic_cancer">
+              <option value="">Unknown</option>
+              <option value="no">No (1)</option>
+              <option value="yes">Yes (0)</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="plasmic_transplant">History of transplant?</label>
+            <select id="plasmic_transplant">
+              <option value="">Unknown</option>
+              <option value="no">No (1)</option>
+              <option value="yes">Yes (0)</option>
+            </select>
+          </div>
+        </div>
+        <button type="button" class="small" style="margin-top:8px;" onclick="runPlasmic()">Calculate PLASMIC</button>
+        <div id="plasmic-output" class="output-box" style="margin-top:6px;">PLASMIC score & interpretation will appear here.</div>
+        <button type="button" class="small" style="margin-top:6px;" onclick="copyTextFrom('plasmic-output')">📋 Copy</button>
+      </div>
+
+      <!-- HIT (4T) -->
+      <div id="panel-hit" style="display:none;">
+        <h3>HIT – 4T Score</h3>
+        <div class="grid">
+          <div class="field">
+            <label for="fourT_thrombocytopenia">Thrombocytopenia</label>
+            <select id="fourT_thrombocytopenia">
+              <option value="">Select</option>
+              <option value="2">&gt;50% fall, nadir &ge;20K (2)</option>
+              <option value="1">30–50% fall or nadir 10–19K (1)</option>
+              <option value="0">&lt;30% fall or nadir &lt;10K (0)</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="fourT_timing">Timing of fall</label>
+            <select id="fourT_timing">
+              <option value="">Select</option>
+              <option value="2">Clear 5–10 d or &lt;1 d with recent heparin (2)</option>
+              <option value="1">Consistent but not clear (1)</option>
+              <option value="0">&lt;4 days, no recent heparin (0)</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="fourT_thrombosis">Thrombosis/other sequelae</label>
+            <select id="fourT_thrombosis">
+              <option value="">Select</option>
+              <option value="2">New confirmed thrombosis/skin necrosis (2)</option>
+              <option value="1">Progressive/suspected thrombosis (1)</option>
+              <option value="0">None (0)</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="fourT_other">Other causes for thrombocytopenia?</label>
+            <select id="fourT_other">
+              <option value="">Select</option>
+              <option value="2">No other cause (2)</option>
+              <option value="1">Possible other cause (1)</option>
+              <option value="0">Definite other cause (0)</option>
+            </select>
+          </div>
+        </div>
+        <button type="button" class="small" style="margin-top:8px;" onclick="runFourT()">Calculate 4T</button>
+        <div id="fourT-output" class="output-box" style="margin-top:6px;">4T score & interpretation will appear here.</div>
+        <button type="button" class="small" style="margin-top:6px;" onclick="copyTextFrom('fourT-output')">📋 Copy</button>
+      </div>
+
+      <!-- DIC -->
+      <div id="panel-dic" style="display:none;">
+        <h3>DIC – ISTH-style Score (simplified)</h3>
+        <div class="grid">
+          <div class="field">
+            <label for="dic_plts">Platelets (K/µL)</label>
+            <input id="dic_plts" type="number" step="1" />
+          </div>
+          <div class="field">
+            <label for="dic_ddimer">D-dimer / FDP</label>
+            <select id="dic_ddimer">
+              <option value="">Unknown</option>
+              <option value="0">No / minimal ↑ (0)</option>
+              <option value="2">Moderate ↑ (2)</option>
+              <option value="3">Strong ↑ (3)</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="dic_fibrinogen">Fibrinogen (mg/dL)</label>
+            <input id="dic_fibrinogen" type="number" step="1" />
+          </div>
+          <div class="field">
+            <label for="dic_pt">PT prolongation (seconds)</label>
+            <input id="dic_pt" type="number" step="0.1" />
+          </div>
+        </div>
+        <button type="button" class="small" style="margin-top:8px;" onclick="runDIC()">Calculate DIC score</button>
+        <div id="dic-output" class="output-box" style="margin-top:6px;">DIC score & interpretation will appear here.</div>
+        <button type="button" class="small" style="margin-top:6px;" onclick="copyTextFrom('dic-output')">📋 Copy</button>
+      </div>
+
+      <!-- Massive Transfusion -->
+      <div id="panel-mtp" style="display:none;">
+        <h3>Massive Transfusion / Life-threatening Bleeding Helper</h3>
+        <div class="grid">
+          <div class="field">
+            <label for="mtp_context">Context</label>
+            <select id="mtp_context">
+              <option value="">Select</option>
+              <option value="trauma">Trauma</option>
+              <option value="ob">Obstetric</option>
+              <option value="gi">GI bleed</option>
+              <option value="surgery">Post-op / surgical</option>
+              <option value="other">Other</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="mtp_shock">Shock / SBP &lt; 90?</label>
+            <select id="mtp_shock">
+              <option value="">Unknown</option>
+              <option value="yes">Yes</option>
+              <option value="no">No</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="mtp_o2">On high O₂ / intubated?</label>
+            <select id="mtp_o2">
+              <option value="">Unknown</option>
+              <option value="yes">Yes</option>
+              <option value="no">No</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="mtp_lab">Labs available?</label>
+            <select id="mtp_lab">
+              <option value="">Unknown</option>
+              <option value="limited">Limited / pending</option>
+              <option value="full">Full labs / viscoelastic</option>
+            </select>
+          </div>
+        </div>
+        <button type="button" class="small" style="margin-top:8px;" onclick="runMTP()">Generate MTP plan</button>
+        <div id="mtp-output" class="output-box" style="margin-top:6px;">Suggested MTP-style approach will appear here.</div>
+        <button type="button" class="small" style="margin-top:6px;" onclick="copyTextFrom('mtp-output')">📋 Copy</button>
+      </div>
+
+      <!-- Neutropenic Fever -->
+      <div id="panel-neutro" style="display:none;">
+        <h3>Neutropenic Fever Risk & Initial Plan</h3>
+        <div class="grid">
+          <div class="field">
+            <label for="neutro_anc">ANC (cells/µL)</label>
+            <input id="neutro_anc" type="number" step="10" />
+          </div>
+          <div class="field">
+            <label for="neutro_hemo">Hemodynamics</label>
+            <select id="neutro_hemo">
+              <option value="">Unknown</option>
+              <option value="stable">Stable</option>
+              <option value="unstable">Unstable / septic shock</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="neutro_comorb">Significant comorbidities?</label>
+            <select id="neutro_comorb">
+              <option value="">Unknown</option>
+              <option value="yes">Yes (CHF, COPD, CKD, etc.)</option>
+              <option value="no">No major</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="neutro_mucositis">Severe mucositis / GI symptoms?</label>
+            <select id="neutro_mucositis">
+              <option value="">Unknown</option>
+              <option value="yes">Yes</option>
+              <option value="no">No</option>
+            </select>
+          </div>
+        </div>
+        <button type="button" class="small" style="margin-top:8px;" onclick="runNeutro()">Assess neutropenic fever</button>
+        <div id="neutro-output" class="output-box" style="margin-top:6px;">Risk category & treatment suggestions will appear here.</div>
+        <button type="button" class="small" style="margin-top:6px;" onclick="copyTextFrom('neutro-output')">📋 Copy</button>
+      </div>
+
+      <!-- Transfusion Thresholds -->
+      <div id="panel-tx" style="display:none;">
+        <h3>Transfusion Threshold Helper</h3>
+        <div class="grid">
+          <div class="field">
+            <label for="tx_hb">Hemoglobin (g/dL)</label>
+            <input id="tx_hb" type="number" step="0.1" />
+          </div>
+          <div class="field">
+            <label for="tx_active_bleed">Active bleeding?</label>
+            <select id="tx_active_bleed">
+              <option value="">Unknown</option>
+              <option value="no">No</option>
+              <option value="yes">Yes / ongoing</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="tx_acs">Known CAD / ACS / stroke?</label>
+            <select id="tx_acs">
+              <option value="">Unknown</option>
+              <option value="no">No</option>
+              <option value="yes">Yes</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="tx_neuro">Neurosurgery / CNS bleed?</label>
+            <select id="tx_neuro">
+              <option value="">Unknown</option>
+              <option value="no">No</option>
+              <option value="yes">Yes</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="tx_plts">Platelets (K/µL)</label>
+            <input id="tx_plts" type="number" step="1" />
+          </div>
+          <div class="field">
+            <label for="tx_procedure">Upcoming procedure?</label>
+            <select id="tx_procedure">
+              <option value="">None / minor</option>
+              <option value="low">Low-risk</option>
+              <option value="high">High-risk / CNS / eye</option>
+            </select>
+          </div>
+        </div>
+        <button type="button" class="small" style="margin-top:8px;" onclick="runTx()">Get thresholds</button>
+        <div id="tx-output" class="output-box" style="margin-top:6px;">Suggested RBC & platelet transfusion thresholds will appear here.</div>
+        <button type="button" class="small" style="margin-top:6px;" onclick="copyTextFrom('tx-output')">📋 Copy</button>
+      </div>
+
+      <h3 style="margin-top:14px;">Coming soon (list only)</h3>
+      <ul class="coming-list">
+        <li>Superficial venous thrombosis treatment</li>
+        <li>VTE duration of anticoagulation helper</li>
+        <li>Neutrophil / platelet transfusion support in hematologic malignancy</li>
+        <li>Tumor lysis syndrome risk & management</li>
+        <li>Multiple myeloma CRAB/SLiM workup helper</li>
+        <li>Advanced coagulation / mixing study interpreter</li>
+      </ul>
+    </section>
+  </div>
+</div>
+
+<textarea id="hidden-copy" class="hidden-copy"></textarea>
+
+<script>
+// Utility
+function num(id){
+  const v = document.getElementById(id).value;
+  const n = parseFloat(v);
+  return isNaN(n) ? null : n;
+}
+function setBadge(containerId, text, type){
+  const c = document.getElementById(containerId);
+  if(!c) return;
+  if(!text){
+    c.innerHTML = "";
+    return;
+  }
+  const cls = type === 'danger' ? 'badge danger'
+            : type === 'warn' ? 'badge warn'
+            : 'badge';
+  c.innerHTML = `<span class="${cls}">${text}</span>`;
+}
+function copyTextFrom(elementId){
+  const el = document.getElementById(elementId);
+  if(!el) return;
+  const text = el.innerText || el.textContent || "";
+  const fallback = () => {
+    const ta = document.getElementById('hidden-copy');
+    ta.value = text;
+    ta.select();
+    document.execCommand('copy');
+    alert('Copied to clipboard.');
+  };
+  if(navigator.clipboard && navigator.clipboard.writeText){
+    navigator.clipboard.writeText(text).then(()=>alert('Copied to clipboard.'), fallback);
+  }else{
+    fallback();
+  }
+}
+
+// ANEMIA TOOL
+function runAnemiaTool(){
+  const hb = num('hb');
+  const mcv = num('mcv');
+  const rdw = num('rdw');
+  const retic = num('retic');
+
+  const ferritin = num('ferritin');
+  const iron = num('iron');
+  const tibc = num('tibc');
+  const tsat = num('tsat');
+  const b12 = num('b12');
+  const folate = num('folate');
+
+  const ldh = num('ldh');
+  const haptoglobin = num('haptoglobin');
+  const biliT = num('bili_total');
+  const biliD = num('bili_direct');
+  const coombs = document.getElementById('coombs').value;
+  const inflam = document.getElementById('crp_esr').value;
+
+  let lines = [];
+  let summary = [];
+  let recs = [];
+  let missing = [];
+
+  // Basic classification
+  let anemia = null;
+  if(hb !== null){
+    if(hb < 13){
+      anemia = "anemia present (using ~13 g/dL reference)";
+    }else{
+      anemia = "hemoglobin not frankly anemic by generic cutoff (~13 g/dL), but context-specific thresholds still apply.";
+    }
+  }else{
+    missing.push("Hemoglobin level");
+  }
+
+  let mcvType = "MCV not available.";
+  if(mcv !== null){
+    if(mcv < 80) mcvType = "Microcytic pattern (MCV < 80 fL).";
+    else if(mcv > 100) mcvType = "Macrocytic pattern (MCV > 100 fL).";
+    else mcvType = "Normocytic pattern (MCV 80–100 fL).";
+  }else{
+    missing.push("MCV for micro/normo/macro classification");
+  }
+
+  // Reticulocyte response
+  let reticComment = "";
+  if(retic !== null){
+    if(retic > 3) reticComment = "Increased reticulocyte count → suggests peripheral loss/hemolysis or recovery.";
+    else if(retic < 1) reticComment = "Inappropriately low reticulocyte count → hypoproliferative picture.";
+    else reticComment = "Reticulocyte count in intermediate range.";
+  }else{
+    missing.push("Reticulocyte count to distinguish production vs destruction.");
+  }
+
+  // Iron interpretation (rough, heuristic)
+  let ironDx = [];
+  if(ferritin !== null || iron !== null || tibc !== null || tsat !== null){
+    if((ferritin !== null && ferritin < 30) || (tsat !== null && tsat < 20) ||
+       (iron !== null && tibc !== null && iron < 50 && tibc > 350)){
+      ironDx.push("Iron-deficiency pattern is favored (low ferritin and/or low TSAT with high TIBC).");
+    }else if((ferritin !== null && ferritin >= 100 && inflam === "elevated") ||
+             (iron !== null && tibc !== null && iron < 60 && tibc < 250)){
+      ironDx.push("Anemia of inflammation/chronic disease pattern is possible (normal/high ferritin with low iron, low/normal TIBC).");
+    }else{
+      ironDx.push("Iron studies do not clearly show classic iron deficiency vs anemia of inflammation.");
+    }
+  }else{
+    missing.push("Iron studies (ferritin, iron, TIBC, TSAT).");
+  }
+
+  // Macrocytic vitamins
+  let macroDx = [];
+  if(b12 !== null){
+    if(b12 < 200) macroDx.push("B12 deficiency possible (B12 is low).");
+    else macroDx.push("B12 not clearly low.");
+  }else if(mcv !== null && mcv > 100){
+    missing.push("Vitamin B12 level for macrocytosis.");
+  }
+  if(folate !== null){
+    if(folate < 4) macroDx.push("Folate deficiency possible (folate is low).");
+    else macroDx.push("Folate not clearly low.");
+  }else if(mcv !== null && mcv > 100){
+    missing.push("Folate level for macrocytosis.");
+  }
+
+  // Hemolysis
+  let hemolysisPossible = false;
+  let hemolysisLines = [];
+  if(ldh !== null || haptoglobin !== null || biliT !== null){
+    if((ldh !== null && ldh > 250) ||
+       (haptoglobin !== null && haptoglobin < 30) ||
+       (biliT !== null && biliT > 1.2)){
+      hemolysisPossible = true;
+      hemolysisLines.push("Biochemical hemolysis is suggested (LDH↑ and/or haptoglobin↓ and/or indirect bilirubin↑).");
+      if(coombs === "pos"){
+        hemolysisLines.push("Positive Coombs test → immune-mediated hemolytic anemia likely.");
+      }else if(coombs === "neg"){
+        hemolysisLines.push("Negative Coombs test → non-immune hemolysis (MAHA, hereditary, etc.) more likely.");
+      }else{
+        missing.push("Coombs (DAT) to help immune vs non-immune hemolysis.");
+      }
+    }else{
+      hemolysisLines.push("No strong biochemical suggestion of hemolysis from entered values.");
+    }
+  }else{
+    missing.push("LDH, haptoglobin, bilirubin for hemolysis assessment.");
+  }
+
+  // Combine to propose types
+  let typeLines = [];
+
+  if(mcv !== null){
+    if(mcv < 80){
+      typeLines.push("Microcytic anemia pattern.");
+      typeLines = typeLines.concat(ironDx);
+      if(rdw !== null && rdw > 15){
+        typeLines.push("RDW is elevated → acquired iron deficiency more likely than thalassemia trait.");
+      }
+      if(rdw !== null && rdw <= 15 && ferritin !== null && ferritin normal){
+        typeLines.push("Relatively uniform RBC size → consider thalassemia trait if chronic and ethnic risk.");
+      }
+    }else if(mcv >= 80 && mcv <= 100){
+      typeLines.push("Normocytic anemia pattern.");
+      if(retic !== null && retic > 3){
+        if(hemolysisPossible){
+          typeLines.push("Normocytic with high retic and hemolysis labs → hemolytic anemia or acute blood loss.");
+        }else{
+          typeLines.push("High retic without hemolysis labs → consider recent acute blood loss or recovery from marrow suppression.");
+        }
+      }else if(retic !== null && retic < 1){
+        typeLines.push("Normocytic with low retic → hypoproliferative cause (CKD, chronic inflammation, marrow disease, endocrine).");
+      }
+      if(inflam === "elevated"){
+        typeLines.push("Elevated CRP/ESR supports anemia of inflammation/chronic disease contribution.");
+      }
+    }else if(mcv > 100){
+      typeLines.push("Macrocytic anemia pattern.");
+      typeLines = typeLines.concat(macroDx);
+      typeLines.push("Also consider liver disease, alcohol use, hypothyroidism, medications, or MDS in persistent macrocytosis.");
+    }
+  }else{
+    typeLines.push("MCV missing → cannot classify micro/normo/macro, but iron, hemolysis and retic still partially informative.");
+  }
+
+  if(hemolysisLines.length) typeLines = typeLines.concat(hemolysisLines);
+
+  // Summary
+  if(anemia){
+    summary.push("1) Overall: " + anemia);
+  }
+  summary.push("2) Morphology: " + mcvType);
+  if(reticComment) summary.push("3) Marrow response: " + reticComment);
+
+  // Recommendations / plan skeleton
+  if(mcv !== null){
+    if(mcv < 80){
+      recs.push("• Evaluate for iron deficiency: history of blood loss (GI, menstrual), diet, pregnancy, malabsorption.");
+      recs.push("• If iron deficiency likely → treat with iron (IV vs PO) and search for source of bleeding (especially GI in adult males/post-menopausal females).");
+      recs.push("• If iron studies non-diagnostic or chronic microcytosis → consider hemoglobin electrophoresis / thalassemia workup.");
+    }else if(mcv >= 80 && mcv <= 100){
+      recs.push("• If low retic → review kidney function, chronic inflammatory disease, endocrine issues, medications, marrow processes.");
+      recs.push("• If high retic with hemolysis → send smear, Coombs, LDH/haptoglobin, consider TTP/MAHA, G6PD, hereditary spherocytosis, etc. and manage as hemolysis.");
+      recs.push("• If high retic without hemolysis → think acute blood loss (GI, retroperitoneal) and volume status.");
+    }else{
+      recs.push("• In macrocytic anemia, check B12, folate, liver tests, TSH, and medication history (MTX, hydroxyurea, antiretrovirals, etc.).");
+      recs.push("• If B12/folate deficiency present → replete and evaluate for pernicious anemia or malabsorption.");
+      recs.push("• If unexplained persistent macrocytosis → consider bone marrow evaluation for MDS or other marrow disorders.");
+    }
+  }
+
+  if(hemolysisPossible){
+    recs.push("• Hemolysis suspected → ensure adequate hydration, folate, treat underlying cause; consider transfusion, TTP workup, or autoimmune hemolysis therapy as indicated.");
+  }
+
+  if(missing.length){
+    recs.push("• Helpful additional labs/tests (if not yet done): " + missing.join("; ") + ".");
+  }
+
+  const finalText =
+    "ASSESSMENT:\n" +
+    summary.join("\n") + "\n\n" +
+    "Likely anemia pattern & key reasoning:\n" +
+    typeLines.join("\n") + "\n\n" +
+    "PLAN (template – adjust to patient):\n" +
+    recs.join("\n");
+
+  document.getElementById('anemia-output').textContent = finalText;
+
+  // Badge
+  if(hb !== null && hb < 8){
+    setBadge('anemia-summary-badge', 'Severe anemia – consider transfusion depending on symptoms, comorbidities & guidelines.', 'danger');
+  }else if(hb !== null && hb < 10){
+    setBadge('anemia-summary-badge', 'Moderate anemia – evaluate cause and consider transfusion if symptomatic/ACS.', 'warn');
+  }else if(hb !== null){
+    setBadge('anemia-summary-badge', 'Mild or no anemia – focus on etiology and trend.', 'ok');
+  }else{
+    setBadge('anemia-summary-badge',"","ok");
+  }
+}
+function copyAnemiaPlan(){
+  copyTextFrom('anemia-output');
+}
+function clearAnemiaInputs(){
+  const ids = ['hb','hct','mcv','rdw','wbc','plt','retic',
+               'ferritin','iron','tibc','tsat','b12','folate',
+               'ldh','haptoglobin','bili_total','bili_direct'];
+  ids.forEach(id=>{const el=document.getElementById(id); if(el) el.value="";});
+  document.getElementById('coombs').value="";
+  document.getElementById('crp_esr').value="";
+  document.getElementById('anemia-output').textContent="Assessment & plan will appear here.";
+  setBadge('anemia-summary-badge',"","");
+}
+
+// HEME SIDE-TABS
+function switchHemeTab(name){
+  const panels = ['thrombocytopenia','ttp','hit','dic','mtp','neutro','tx'];
+  panels.forEach(p=>{
+    const panel = document.getElementById('panel-'+p);
+    const tab = document.getElementById('tab-'+p);
+    if(panel) panel.style.display = (p===name) ? 'block':'none';
+    if(tab) tab.classList.toggle('active', p===name);
+  });
+}
+
+// Thrombocytopenia helper
+function runThrombocytopenia(){
+  const plt = num('plt_current');
+  const onset = document.getElementById('tp_acute').value;
+  const bleed = document.getElementById('tp_bleeding').value;
+  const schisto = document.getElementById('tp_schisto').value;
+  const spleno = document.getElementById('tp_splenomegaly').value;
+  const drugs = document.getElementById('tp_drugs').value;
+
+  let lines = [];
+  lines.push("ASSESSMENT:");
+  if(plt !== null){
+    lines.push(`• Platelets ≈ ${plt} K/µL.`);
+    if(plt < 10) lines.push("• Very severe thrombocytopenia – spontaneous bleeding risk is high.");
+    else if(plt < 30) lines.push("• Severe thrombocytopenia – high bleeding risk, especially with procedures.");
+    else if(plt < 100) lines.push("• Moderate thrombocytopenia – bleeding risk depends on clinical context.");
+  }else{
+    lines.push("• Platelet count not entered; risk stratification limited.");
+  }
+
+  if(onset){
+    lines.push(`• Onset: ${onset === 'acute' ? 'acute (<7 days)' :
+                           onset === 'subacute' ? 'subacute (7–30 days)' :
+                           'chronic (>30 days)'}.`);
+  }
+  if(bleed){
+    lines.push(`• Bleeding: ${bleed === 'major' ? 'clinically significant or life-threatening' : 'none/minor reported'}.`);
+  }
+  if(schisto === 'present'){
+    lines.push("• Schistocytes present → consider MAHA/TTP/DIC/HELLP.");
+  }
+  if(spleno === 'yes'){
+    lines.push("• Splenomegaly → consider splenic sequestration (cirrhosis, portal HTN, hematologic malignancy).");
+  }
+  if(drugs === 'yes'){
+    lines.push("• Recent new drug exposure → consider drug-induced thrombocytopenia including HIT if heparin used.");
+  }
+
+  lines.push("\nPLAN (template – adjust to patient):");
+  if(bleed === 'major' || (plt !== null && plt < 10)){
+    lines.push("• Treat as high-risk: urgent hematology input, transfuse platelets if bleeding or invasive procedure, control source.");
+  }
+  if(schisto === 'present'){
+    lines.push("• If MAHA suspected → send hemolysis labs, LDH, haptoglobin, smear, coagulation profile, consider TTP vs DIC and start appropriate therapy (e.g., plasma exchange if TTP highly suspected).");
+  }
+  if(drugs === 'yes'){
+    lines.push("• Review medication list; stop potential offending agent (including heparin if HIT possible).");
+  }
+  lines.push("• Check CBC trend, smear, coagulation panel, fibrinogen, LFTs, creatinine.");
+  lines.push("• Evaluate for infection, sepsis, liver disease, alcohol, nutritional deficiencies, autoimmune disease, or marrow infiltration as indicated.");
+
+  document.getElementById('tp-output').textContent = lines.join("\n");
+}
+
+// PLASMIC
+function runPlasmic(){
+  const yesNoVal = (id) => {
+    const v = document.getElementById(id).value;
+    if(v === "") return null;
+    return v === 'yes' ? 1 : 0;
+  };
+  let score = 0;
+  const comp = [];
+
+  const plts = yesNoVal('plasmic_plts');
+  if(plts !== null){score += plts; comp.push(`Platelets <30K: ${plts} pt(s)`);}
+  const hemol = yesNoVal('plasmic_hemolysis');
+  if(hemol !== null){score += hemol; comp.push(`Hemolysis: ${hemol} pt(s)`);}
+  const creat = yesNoVal('plasmic_creatinine');
+  if(creat !== null){score += creat; comp.push(`Cr <2: ${creat} pt(s)`);}
+  const mcv = yesNoVal('plasmic_mcv');
+  if(mcv !== null){score += mcv; comp.push(`MCV <90: ${mcv} pt(s)`);}
+  const inr = yesNoVal('plasmic_inr');
+  if(inr !== null){score += inr; comp.push(`INR <1.5: ${inr} pt(s)`);}
+  const cancer = document.getElementById('plasmic_cancer').value;
+  if(cancer){
+    const val = cancer === 'no' ? 1 : 0;
+    score += val;
+    comp.push(`No active cancer: ${val} pt(s)`);
+  }
+  const tx = document.getElementById('plasmic_transplant').value;
+  if(tx){
+    const val = tx === 'no' ? 1 : 0;
+    score += val;
+    comp.push(`No prior transplant: ${val} pt(s)`);
+  }
+
+  let risk = "";
+  if(score <= 4) risk = "Low probability of severe ADAMTS13 deficiency (classic PLASMIC ≤4).";
+  else if(score === 5) risk = "Intermediate probability of severe ADAMTS13 deficiency.";
+  else risk = "High probability of severe ADAMTS13 deficiency (PLASMIC 6–7). Treat as TTP while awaiting ADAMTS13.";
+
+  const lines = [];
+  lines.push(`PLASMIC score ≈ ${score} (0–7).`);
+  if(comp.length) lines.push("Components:\n" + comp.join("\n"));
+  lines.push("\nINTERPRETATION:");
+  lines.push(risk);
+  lines.push("\nPLAN (template – adjust to patient):");
+  if(score >= 6){
+    lines.push("• High suspicion TTP → urgent hematology consult, start plasma exchange and steroids; avoid platelet transfusion unless life-threatening bleed.");
+  }else if(score === 5){
+    lines.push("• Intermediate suspicion → discuss with hematology; consider early plasma exchange if patient unstable or classic TTP picture.");
+  }else{
+    lines.push("• Low suspicion for severe ADAMTS13 deficiency; evaluate for alternative causes of MAHA/thrombocytopenia (DIC, malignant hypertension, HELLP, sepsis, etc.).");
+  }
+
+  document.getElementById('plasmic-output').textContent = lines.join("\n");
+}
+
+// 4T (HIT)
+function runFourT(){
+  const n = (id) => {
+    const v = document.getElementById(id).value;
+    return v === "" ? null : parseInt(v,10);
+  };
+  const t1 = n('fourT_thrombocytopenia') || 0;
+  const t2 = n('fourT_timing') || 0;
+  const t3 = n('fourT_thrombosis') || 0;
+  const t4 = n('fourT_other') || 0;
+  const score = t1 + t2 + t3 + t4;
+
+  let prob = "";
+  if(score <= 3) prob = "Low pretest probability for HIT.";
+  else if(score <= 5) prob = "Intermediate pretest probability for HIT.";
+  else prob = "High pretest probability for HIT.";
+
+  const lines = [];
+  lines.push(`4T score ≈ ${score} (0–8).`);
+  lines.push("Breakdown:");
+  lines.push(`• Thrombocytopenia: ${t1}`);
+  lines.push(`• Timing: ${t2}`);
+  lines.push(`• Thrombosis: ${t3}`);
+  lines.push(`• Other causes: ${t4}`);
+  lines.push("\nINTERPRETATION:");
+  lines.push(prob);
+  lines.push("\nPLAN (template – adjust to patient):");
+  if(score <= 3){
+    lines.push("• Low probability → HIT is unlikely; typically, heparin can be continued with routine monitoring.");
+  }else if(score <= 5){
+    lines.push("• Intermediate probability → stop all heparin, start non-heparin anticoagulant while sending HIT immunoassay (PF4 ELISA) as per local protocol.");
+  }else{
+    lines.push("• High probability → stop heparin, start non-heparin anticoagulant, and send confirmatory testing; avoid platelet transfusion unless life-threatening bleeding.");
+  }
+
+  document.getElementById('fourT-output').textContent = lines.join("\n");
+}
+
+// DIC
+function runDIC(){
+  const plts = num('dic_plts');
+  const dd = document.getElementById('dic_ddimer').value;
+  const fib = num('dic_fibrinogen');
+  const pt = num('dic_pt');
+
+  let score = 0;
+  const comp = [];
+
+  // Platelets
+  if(plts !== null){
+    if(plts < 50) { score += 2; comp.push("Platelets <50K: 2"); }
+    else if(plts < 100) { score += 1; comp.push("Platelets 50–100K: 1"); }
+    else comp.push("Platelets >100K: 0");
+  }
+
+  // D-dimer / FDP
+  if(dd){
+    const val = parseInt(dd,10);
+    score += val;
+    comp.push(`D-dimer/FDP category: ${val}`);
+  }
+
+  // Fibrinogen
+  if(fib !== null){
+    if(fib < 100){ score += 1; comp.push("Fibrinogen <100 mg/dL: 1"); }
+    else comp.push("Fibrinogen ≥100 mg/dL: 0");
+  }
+
+  // PT prolongation
+  if(pt !== null){
+    if(pt > 6){ score += 2; comp.push("PT prolongation >6 sec: 2"); }
+    else if(pt >= 3){ score += 1; comp.push("PT prolongation 3–6 sec: 1"); }
+    else comp.push("PT prolongation <3 sec: 0");
+  }
+
+  let interp = "";
+  if(score >= 5) interp = "Compatible with overt DIC in appropriate clinical setting.";
+  else interp = "Does not meet typical overt DIC threshold, but trend and context remain important.";
+
+  const lines = [];
+  lines.push(`Simplified ISTH-style DIC score ≈ ${score}.`);
+  if(comp.length) lines.push("Components:\n" + comp.join("\n"));
+  lines.push("\nINTERPRETATION:");
+  lines.push(interp);
+  lines.push("\nPLAN (template – adjust to patient):");
+  lines.push("• Treat the underlying cause (sepsis, trauma, malignancy, obstetric catastrophe, etc.).");
+  lines.push("• Support with platelets, cryoprecipitate (for fibrinogen), and plasma based on active bleeding and procedure needs.");
+  lines.push("• Monitor platelets, PT/PTT, fibrinogen, D-dimer and clinical status frequently.");
+
+  document.getElementById('dic-output').textContent = lines.join("\n");
+}
+
+// Massive transfusion helper
+function runMTP(){
+  const ctx = document.getElementById('mtp_context').value;
+  const shock = document.getElementById('mtp_shock').value;
+  const o2 = document.getElementById('mtp_o2').value;
+  const lab = document.getElementById('mtp_lab').value;
+
+  let lines = [];
+  lines.push("ASSESSMENT:");
+  if(ctx) lines.push(`• Context: ${ctx}.`);
+  if(shock === 'yes') lines.push("• Shock/hypotension present → life-threatening hemorrhage until proven otherwise.");
+  if(o2 === 'yes') lines.push("• High O₂ / ventilated → suggests severe illness.");
+  if(lab === 'limited') lines.push("• Limited labs/viscoelastic testing – empirical MTP approach may be needed.");
+
+  lines.push("\nPLAN (template – adjust to patient & local MTP):");
+  lines.push("• Activate massive transfusion protocol if not already done (e.g., 1:1:1 RBC:plasma:platelets, according to local policy).");
+  lines.push("• Send type & cross, CBC, PT/PTT, fibrinogen, ionized Ca²⁺, lactate, ABG.");
+  lines.push("• Replace calcium (e.g., CaCl₂ or Ca gluconate) periodically during large-volume transfusion.");
+  lines.push("• Use viscoelastic or lab-guided adjustments if available (e.g., targeted fibrinogen or platelet replacement).");
+  lines.push("• Address source control (surgery, IR, endoscopy) as rapidly as possible.");
+  lines.push("• Monitor for hypothermia, acidosis, and hypocalcemia (lethal triad).");
+
+  document.getElementById('mtp-output').textContent = lines.join("\n");
+}
+
+// Neutropenic fever
+function runNeutro(){
+  const anc = num('neutro_anc');
+  const hemo = document.getElementById('neutro_hemo').value;
+  const comorb = document.getElementById('neutro_comorb').value;
+  const muc = document.getElementById('neutro_mucositis').value;
+
+  let lines = [];
+  lines.push("ASSESSMENT:");
+  if(anc !== null){
+    lines.push(`• ANC ≈ ${anc} cells/µL.`);
+    if(anc < 500) lines.push("• Severe neutropenia (ANC <500).");
+    else if(anc < 1000) lines.push("• Moderate neutropenia (ANC 500–1000).");
+  }else{
+    lines.push("• ANC not entered; cannot fully stratify neutropenia severity.");
+  }
+
+  if(hemo) lines.push(`• Hemodynamics: ${hemo === 'unstable' ? 'unstable / possible septic shock' : 'stable at present'}.`);
+  if(comorb === 'yes') lines.push("• Significant comorbidities present.");
+  if(muc === 'yes') lines.push("• Severe mucositis/GI symptoms – higher risk for complications and bacteremia.");
+
+  let highRisk = false;
+  if((anc !== null && anc < 100) || hemo === 'unstable' || comorb === 'yes' || muc === 'yes'){
+    highRisk = true;
+  }
+
+  lines.push("\nRISK CATEGORY (rough):");
+  lines.push(highRisk ? "• High-risk neutropenic fever." : "• Low–intermediate risk neutropenic fever (if hemodynamically stable, few comorbidities).");
+
+  lines.push("\nPLAN (template – adjust to patient & local guidelines):");
+  if(highRisk){
+    lines.push("• Manage as high-risk: inpatient IV broad-spectrum antipseudomonal β-lactam (e.g., cefepime, piperacillin-tazobactam, or carbapenem as locally appropriate).");
+    lines.push("• Obtain blood cultures (peripheral and line), urine culture, CXR/imaging as indicated.");
+    lines.push("• Evaluate for fungal coverage if prolonged fever or high-risk features.");
+  }else{
+    lines.push("• Consider low-risk pathway (per MASCC/CISNE and local protocol): may be candidate for early discharge or oral regimen if stable and reliable.");
+  }
+
+  document.getElementById('neutro-output').textContent = lines.join("\n");
+}
+
+// Transfusion thresholds
+function runTx(){
+  const hb = num('tx_hb');
+  const active = document.getElementById('tx_active_bleed').value;
+  const acs = document.getElementById('tx_acs').value;
+  const neuro = document.getElementById('tx_neuro').value;
+  const plts = num('tx_plts');
+  const proc = document.getElementById('tx_procedure').value;
+
+  let lines = [];
+  lines.push("ASSESSMENT:");
+
+  if(hb !== null) lines.push(`• Hemoglobin ≈ ${hb} g/dL.`);
+  if(plts !== null) lines.push(`• Platelets ≈ ${plts} K/µL.`);
+  if(active === 'yes') lines.push("• Active or ongoing bleeding.");
+  if(acs === 'yes') lines.push("• Known CAD/ACS/stroke – may justify a higher Hb threshold.");
+  if(neuro === 'yes') lines.push("• Neurosurgical/CNS context – more conservative thresholds.");
+  if(proc && proc !== "") lines.push(`• Upcoming procedure risk: ${proc}.`);
+
+  lines.push("\nRBC TRANSFUSION (generic guidance – tailor to guidelines/local policy):");
+  if(hb !== null){
+    if(hb < 7){
+      lines.push("• Hb <7 g/dL: RBC transfusion generally recommended in most stable hospitalized patients.");
+    }else if(hb < 8 && (acs === 'yes' || active === 'yes')){
+      lines.push("• Hb 7–8 g/dL with ACS/active bleeding: RBC transfusion is reasonable.");
+    }else if(hb < 8){
+      lines.push("• Hb 7–8 g/dL: consider transfusion if symptomatic or significant comorbidities.");
+    }else{
+      lines.push("• Hb ≥8 g/dL: transfusion usually not required unless active bleeding, ACS, or special circumstances.");
+    }
+  }else{
+    lines.push("• Hb not entered; cannot estimate threshold.");
+  }
+
+  lines.push("\nPLATELET TRANSFUSION (rough procedural/bleeding thresholds):");
+  if(plts !== null){
+    if(plts < 10){
+      lines.push("• <10K: typically transfuse prophylactically in most settings (especially if inpatient).");
+    }else if(plts < 20){
+      lines.push("• 10–20K: consider transfusion if fever, sepsis, or additional bleeding risks.");
+    }else if(plts < 50){
+      lines.push("• 20–50K: transfuse for active bleeding or prior to most invasive procedures.");
+    }else if(plts < 100 && (proc === 'high' || neuro === 'yes')){
+      lines.push("• 50–100K with high-risk/neurosurgical procedure: consider raising platelets ≥100K.");
+    }else{
+      lines.push("• ≥50K (no high-risk procedure): platelet transfusion usually not required.");
+    }
+  }else{
+    lines.push("• Platelet count not entered; procedural thresholds cannot be suggested.");
+  }
+
+  document.getElementById('tx-output').textContent = lines.join("\n");
+}
+</script>
+</body>
+</html>
