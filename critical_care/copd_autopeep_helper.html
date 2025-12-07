@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>COPD Auto-PEEP Helper – Critical Care</title>
+
+<style>
+:root {
+    --bg:#e0f7fa;
+    --card:#ffffff;
+    --accent:#00838f;
+    --muted:#546e7a;
+    --radius:14px;
+}
+body { margin:0;font-family:system-ui;background:radial-gradient(circle,#b2ebf2,#e0f7fa); }
+header {
+    background:linear-gradient(90deg,#00acc1,#00838f);
+    padding:16px;color:white;
+    display:flex;justify-content:space-between;flex-wrap:wrap;
+}
+header h1 { margin:0;font-size:1.25rem; }
+.nav-buttons a {
+    text-decoration:none;color:white;
+    padding:6px 10px;border:1px solid rgba(255,255,255,0.8);
+    border-radius:999px;margin-left:6px;
+}
+main { max-width:900px;margin:20px auto;padding:0 12px; }
+.card {
+    background:var(--card);padding:18px;border-radius:var(--radius);
+    margin-bottom:18px;box-shadow:0 8px 24px rgba(0,0,0,0.1);
+}
+h2 { margin:0 0 6px;color:#004d5a; }
+.subtitle { color:var(--muted);margin-bottom:12px; }
+label{ display:block;margin-bottom:4px;color:#37474f; }
+input { width:100%;padding:10px;border-radius:10px;border:1px solid #cfd8dc; }
+.grid-2 { display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px; }
+.btn-primary{
+    width:100%;padding:12px;background:#00838f;color:white;
+    border:none;border-radius:999px;margin-top:12px;font-weight:600;
+}
+.plan-box{
+    background:#f1ffff;border:1px dashed var(--accent);
+    padding:14px;border-radius:12px;white-space:pre-line;
+}
+.copy-btn{ margin-top:10px;padding:10px 16px;border:none;border-radius:999px;background:#eceff1; }
+</style>
+
+</head>
+
+<body>
+
+<header>
+    <h1>🫁 COPD Auto-PEEP Helper</h1>
+    <div class="nav-buttons">
+        <a href="../home.html">🏠 Home</a>
+        <a href="../critical_care.html">⬅ Critical Care</a>
+    </div>
+</header>
+
+<main>
+
+<div class="card">
+    <h2>Inputs</h2>
+    <p class="subtitle">Detect auto-PEEP & get recommended vent changes.</p>
+
+    <div class="grid-2">
+        <div>
+            <label>pH</label>
+            <input id="ph" type="number" step="0.01" placeholder="e.g. 7.25">
+        </div>
+        <div>
+            <label>pCO₂ (mmHg)</label>
+            <input id="pco2" type="number" placeholder="e.g. 70">
+        </div>
+        <div>
+            <label>Respiratory Rate (RR)</label>
+            <input id="rr" type="number" placeholder="e.g. 22">
+        </div>
+        <div>
+            <label>Current PEEP</label>
+            <input id="peep" type="number" placeholder="e.g. 5">
+        </div>
+        <div>
+            <label>MAP (optional)</label>
+            <input id="map" type="number" placeholder="e.g. 65">
+        </div>
+    </div>
+
+    <button class="btn-primary" onclick="calc()">Evaluate</button>
+</div>
+
+<div class="card" id="results" style="display:none;">
+    <h2>Results</h2>
+    <div class="plan-box" id="plan"></div>
+    <button class="copy-btn" onclick="copyPlan()">📋 Copy</button>
+</div>
+
+</main>
+
+<script>
+let lastPlan="";
+
+function calc(){
+    const ph=parseFloat(document.getElementById("ph").value);
+    const co2=parseFloat(document.getElementById("pco2").value);
+    const rr=parseFloat(document.getElementById("rr").value);
+    const peep=parseFloat(document.getElementById("peep").value);
+    const map=parseFloat(document.getElementById("map").value);
+
+    let out="COPD Auto-PEEP Evaluation\n\n";
+
+    // Detection
+    if(rr>=20 && co2>50 && ph<7.35){
+        out+="LIKELY AUTO-PEEP PRESENT\n";
+        out+="• High RR + High CO₂ + Acidosis → dynamic hyperinflation.\n\n";
+    } else {
+        out+="Auto-PEEP less likely, but COPD strategies still apply.\n\n";
+    }
+
+    // Core recommendations
+    out+="VENT RECOMMENDATIONS\n";
+    out+="• Decrease RR to allow longer expiration (target RR 10–14).\n";
+    out+="• Increase inspiratory flow (60–100 L/min).\n";
+    out+="• Set I:E ratio ~ 1:3 to 1:5.\n";
+    out+="• Avoid excessive PEEP — target external PEEP: 0–5 cmH₂O.\n";
+    out+="• Permissive hypercapnia acceptable if pH ≥ 7.20.\n\n";
+
+    // Shock/PEEP interaction
+    if(!isNaN(map) && map<65 && peep>5){
+        out+="In shock with hypotension:\n";
+        out+="• Consider lowering PEEP slightly (down to 3–5 cmH₂O).\n";
+        out+="• Monitor SpO₂ closely.\n\n";
+    }
+
+    // Severe acidosis
+    if(!isNaN(ph) && ph<7.20){
+        out+="Severe acidosis present — avoid excessive permissive hypercapnia.\n";
+        out+="Ensure RR not too low and treat underlying trigger.\n\n";
+    }
+
+    lastPlan=out;
+    show(out);
+}
+
+function show(x){
+    document.getElementById("plan").innerText=x;
+    document.getElementById("results").style.display="block";
+}
+
+function copyPlan(){
+    navigator.clipboard.writeText(lastPlan)
+    .then(()=>alert("Copied"))
+    .catch(()=>alert("Copy failed"));
+}
+</script>
+
+</body>
+</html>
