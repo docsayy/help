@@ -1,1 +1,263 @@
-hemodynamic_pocus_helper.html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hemodynamic POCUS Helper – Critical Care</title>
+<style>
+:root{
+    --bg:#e0f7fa;
+    --card:#ffffff;
+    --accent:#00838f;
+    --muted:#546e7a;
+    --radius:14px;
+}
+body{
+    margin:0;
+    font-family:system-ui,sans-serif;
+    background:radial-gradient(circle,#b2ebf2,#e0f7fa);
+}
+header{
+    background:linear-gradient(90deg,#00acc1,#00838f);
+    color:white;
+    padding:16px;
+    display:flex;
+    justify-content:space-between;
+    flex-wrap:wrap;
+}
+header h1{margin:0;font-size:1.25rem;}
+.nav-buttons a{
+    text-decoration:none;color:white;
+    padding:6px 10px;border-radius:999px;
+    border:1px solid rgba(255,255,255,0.8);
+    margin-left:6px;font-size:.9rem;
+}
+main{max-width:900px;margin:20px auto 32px;padding:0 12px;}
+.card{
+    background:var(--card);
+    padding:18px;
+    border-radius:var(--radius);
+    margin-bottom:18px;
+    box-shadow:0 8px 24px rgba(0,0,0,0.1);
+}
+h2{margin:0 0 6px;color:#004d5a;font-size:1.15rem;}
+.subtitle{margin:0 0 12px;font-size:.9rem;color:var(--muted);}
+label{display:block;margin-bottom:4px;font-size:.85rem;color:#37474f;}
+select,input{
+    width:100%;padding:10px;border-radius:10px;
+    border:1px solid #cfd8dc;background:#f9feff;
+}
+.grid-2{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px;}
+.btn-primary{
+    width:100%;margin-top:12px;padding:12px;
+    border-radius:999px;border:none;background:#00838f;
+    color:white;font-weight:600;cursor:pointer;
+}
+.plan-box{
+    background:#f1ffff;border-radius:12px;
+    border:1px dashed #b2ebf2;padding:12px;
+    white-space:pre-line;font-size:.9rem;color:#37474f;
+}
+.copy-btn{
+    margin-top:10px;padding:10px 16px;border:none;
+    border-radius:999px;background:#eceff1;cursor:pointer;
+}
+.helper-text{font-size:.8rem;color:var(--muted);margin-top:4px;}
+</style>
+</head>
+<body>
+
+<header>
+    <h1>♥ Hemodynamic POCUS Helper</h1>
+    <div class="nav-buttons">
+        <a href="../home.html">🏠 Home</a>
+        <a href="../critical_care.html">⬅ Critical Care</a>
+    </div>
+</header>
+
+<main>
+
+<div class="card">
+    <h2>Pump–Tank–Pipes Assessment</h2>
+    <p class="subtitle">Use basic POCUS and vitals to frame shock type and next steps.</p>
+
+    <div class="grid-2">
+        <div>
+            <label>IVC appearance</label>
+            <select id="ivc">
+                <option value="">Select...</option>
+                <option value="flat">Flat / very collapsible</option>
+                <option value="normal">Normal / mildly collapsible</option>
+                <option value="plethoric">Plethoric / non-collapsible</option>
+            </select>
+        </div>
+        <div>
+            <label>LV systolic function</label>
+            <select id="lv">
+                <option value="">Select...</option>
+                <option value="hyperdynamic">Hyperdynamic</option>
+                <option value="normal">Normal</option>
+                <option value="reduced">Reduced / poor squeeze</option>
+            </select>
+        </div>
+        <div>
+            <label>RV size / strain</label>
+            <select id="rv">
+                <option value="">Select...</option>
+                <option value="normal">Normal</option>
+                <option value="dilated">Dilated / D-sign / strain</option>
+            </select>
+        </div>
+        <div>
+            <label>Pericardial effusion</label>
+            <select id="pericardial">
+                <option value="">Select...</option>
+                <option value="none">None</option>
+                <option value="small">Small (no tamponade)</option>
+                <option value="tamponade">Large with tamponade physiology</option>
+            </select>
+        </div>
+        <div>
+            <label>MAP (mmHg)</label>
+            <input type="number" id="map" placeholder="e.g. 55">
+        </div>
+        <div>
+            <label>Lactate (mmol/L, optional)</label>
+            <input type="number" step="0.1" id="lactate" placeholder="e.g. 3.5">
+        </div>
+        <div>
+            <label>Suspected infection / sepsis?</label>
+            <select id="sepsis">
+                <option value="">Select...</option>
+                <option value="yes">Yes</option>
+                <option value="no">No</option>
+            </select>
+        </div>
+    </div>
+
+    <p class="helper-text">
+        Tool organizes findings into pump (heart), tank (volume), and pipes (SVR/obstruction) to suggest fluids, pressors, inotropes, or procedures.
+    </p>
+
+    <button class="btn-primary" onclick="makeHemoPlan()">Generate Hemodynamic Plan</button>
+</div>
+
+<div class="card" id="results" style="display:none;">
+    <h2>Hemodynamic Assessment & Plan</h2>
+    <div class="plan-box" id="plan"></div>
+    <button class="copy-btn" onclick="copyPlan()">📋 Copy Plan</button>
+</div>
+
+</main>
+
+<script>
+let lastPlan="";
+
+function makeHemoPlan(){
+    const ivc=document.getElementById("ivc").value;
+    const lv=document.getElementById("lv").value;
+    const rv=document.getElementById("rv").value;
+    const pericardial=document.getElementById("pericardial").value;
+    const map=parseFloat(document.getElementById("map").value);
+    const lactate=parseFloat(document.getElementById("lactate").value);
+    const sepsis=document.getElementById("sepsis").value;
+
+    let plan="";
+
+    plan+="SUMMARY OF FINDINGS\n";
+    plan+="• IVC: "+(ivc||"not specified")+"\n";
+    plan+="• LV function: "+(lv||"not specified")+"\n";
+    plan+="• RV: "+(rv||"not specified")+"\n";
+    plan+="• Pericardial effusion: "+(pericardial||"not specified")+"\n";
+    if(!isNaN(map)) plan+="• MAP: "+map+" mmHg\n";
+    if(!isNaN(lactate)) plan+="• Lactate: "+lactate+" mmol/L\n";
+    if(sepsis) plan+="• Sepsis suspected: "+sepsis+"\n";
+    plan+="\n";
+
+    // Pump-tank-pipes classification (simple)
+    plan+="PROBABLE SHOCK PHYSIOLOGY\n";
+
+    // Obstructive first
+    if(pericardial==="tamponade"){
+        plan+="• Possible obstructive shock: tamponade physiology.\n";
+    } else if(rv==="dilated"){
+        plan+="• Possible obstructive shock: RV strain / PE or severe pulmonary HTN.\n";
+    }
+
+    // Hypovolemic vs distributive vs cardiogenic
+    if(ivc==="flat" && (lv==="hyperdynamic"||lv==="normal")){
+        plan+="• Tank problem likely: hypovolemia / distributive (especially if sepsis).\n";
+    }
+    if(ivc==="plethoric" && lv==="reduced"){
+        plan+="• Pump failure likely: cardiogenic shock (reduced LV with full IVC).\n";
+    }
+    if(ivc==="plethoric" && lv==="hyperdynamic" && sepsis==="yes"){
+        plan+="• Distributive shock with high output state likely (e.g., septic shock).\n";
+    }
+
+    plan+="\nSUGGESTED ACTIONS (TO DISCUSS WITH TEAM)\n";
+
+    // Tank suggestions
+    if(ivc==="flat"){
+        plan+="• TANK (volume) – IVC flat/collapsible:\n";
+        plan+="  - Consider fluid bolus (e.g., 250–500 mL) with close reassessment of MAP, lungs, and IVC.\n";
+    }
+
+    // Pump suggestions
+    if(lv==="reduced"){
+        plan+="• PUMP (LV dysfunction):\n";
+        plan+="  - Limit fluid loading if IVC plethoric.\n";
+        plan+="  - Consider inotrope (e.g., dobutamine or epinephrine) as per cardiology/ICU.\n";
+    }
+
+    // Pipes / distributive
+    if(sepsis==="yes" || (!isNaN(lactate) && lactate>2)){
+        plan+="• PIPES (distributive / sepsis):\n";
+        plan+="  - Ensure adequate volume, then start norepinephrine if MAP <65.\n";
+        plan+="  - Follow sepsis bundle: early antibiotics, source control.\n";
+    }
+
+    // Obstructive interventions
+    if(pericardial==="tamponade"){
+        plan+="• OBSTRUCTIVE (tamponade):\n";
+        plan+="  - Urgent pericardiocentesis / surgical drainage.\n";
+        plan+="  - Avoid excessive PEEP that may worsen venous return.\n";
+    }
+    if(rv==="dilated"){
+        plan+="• OBSTRUCTIVE (PE/RV strain):\n";
+        plan+="  - Evaluate for PE (CTPA or bedside assessment if unstable).\n";
+        plan+="  - Consider thrombolysis or thrombectomy if massive PE with shock.\n";
+        plan+="  - Avoid aggressive fluids if RV overloaded.\n";
+    }
+
+    // MAP/Lactate
+    if(!isNaN(map) && map<65){
+        plan+="• MAP <65: ensure volume resuscitation then initiate/adjust vasopressors.\n";
+    }
+    if(!isNaN(lactate) && lactate>2){
+        plan+="• Elevated lactate: monitor trend, address perfusion and source.\n";
+    }
+
+    plan+="\nNOTES\n";
+    plan+="• Always integrate POCUS with clinical exam, invasive hemodynamics, and ECG.\n";
+    plan+="• Reassess after each intervention (fluids, pressors, inotropes, procedures).\n";
+
+    lastPlan=plan;
+    show(plan);
+}
+
+function show(text){
+    document.getElementById("plan").innerText=text;
+    document.getElementById("results").style.display="block";
+}
+
+function copyPlan(){
+    if(!lastPlan){alert("No plan to copy.");return;}
+    navigator.clipboard.writeText(lastPlan)
+        .then(()=>alert("Plan copied!"))
+        .catch(()=>alert("Copy failed."));
+}
+</script>
+
+</body>
+</html>
