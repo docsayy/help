@@ -1,0 +1,918 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>COPD / Asthma Exacerbation Helper</title>
+
+<style>
+    :root {
+        --bg: #e0f7fa;
+        --card: #ffffff;
+        --accent: #00838f;
+        --accent-soft: rgba(0, 131, 143, 0.08);
+        --text-main: #0f172a;
+        --muted: #607d8b;
+        --danger: #c62828;
+        --warning: #ef6c00;
+        --success: #2e7d32;
+        --radius: 14px;
+        --shadow: 0 14px 30px rgba(15, 23, 42, 0.12);
+        --pad: 14px;
+    }
+
+    * {
+        box-sizing: border-box;
+    }
+
+    body {
+        margin: 0;
+        min-height: 100vh;
+        font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        background: radial-gradient(circle at top left, #e0f7fa 0, #f1f5f9 40%, #e3f2fd 100%);
+        color: var(--text-main);
+        padding: 16px;
+        display: flex;
+        justify-content: center;
+    }
+
+    .app-container {
+        width: 100%;
+        max-width: 980px;
+        background: linear-gradient(135deg, rgba(255,255,255,0.9), rgba(236, 253, 245, 0.9));
+        border-radius: 20px;
+        box-shadow: var(--shadow);
+        padding: 18px;
+        backdrop-filter: blur(10px);
+    }
+
+    header {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        gap: 10px;
+        align-items: center;
+        margin-bottom: 14px;
+    }
+
+    h1 {
+        font-size: 1.35rem;
+        margin: 0;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    h1 span.icon {
+        font-size: 1.4rem;
+    }
+
+    .subtitle {
+        font-size: 0.85rem;
+        color: var(--muted);
+        margin-top: 2px;
+    }
+
+    .nav-buttons {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+
+    .nav-btn {
+        border: none;
+        border-radius: 999px;
+        padding: 6px 12px;
+        font-size: 0.85rem;
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        background: rgba(255,255,255,0.9);
+        color: var(--accent);
+        box-shadow: 0 2px 6px rgba(15,23,42,0.08);
+        text-decoration: none;
+    }
+
+    .nav-btn span.icon {
+        font-size: 1rem;
+    }
+
+    .grid {
+        display: grid;
+        grid-template-columns: minmax(0, 1.1fr) minmax(0, 1.1fr);
+        gap: 14px;
+    }
+
+    @media (max-width: 860px) {
+        .grid {
+            grid-template-columns: minmax(0, 1fr);
+        }
+    }
+
+    .card {
+        background: var(--card);
+        border-radius: var(--radius);
+        padding: var(--pad);
+        box-shadow: 0 6px 18px rgba(15, 23, 42, 0.06);
+        border: 1px solid rgba(148, 163, 184, 0.15);
+    }
+
+    .card-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: baseline;
+        margin-bottom: 8px;
+    }
+
+    .card-title {
+        font-size: 0.95rem;
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+    }
+
+    .pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 2px 8px;
+        border-radius: 999px;
+        font-size: 0.75rem;
+        background: var(--accent-soft);
+        color: var(--accent);
+    }
+
+    .inputs-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 8px;
+    }
+
+    @media (max-width: 620px) {
+        .inputs-grid {
+            grid-template-columns: minmax(0, 1fr);
+        }
+    }
+
+    label {
+        font-size: 0.8rem;
+        color: var(--muted);
+        display: block;
+        margin-bottom: 3px;
+    }
+
+    .input-group {
+        display: flex;
+        flex-direction: column;
+        gap: 3px;
+    }
+
+    input[type="number"],
+    select {
+        width: 100%;
+        border-radius: 10px;
+        border: 1px solid rgba(148, 163, 184, 0.7);
+        padding: 7px 9px;
+        font-size: 0.9rem;
+        outline: none;
+        background: linear-gradient(135deg, #f9fafb, #edf2f7);
+    }
+
+    input[type="number"]:focus,
+    select:focus {
+        border-color: var(--accent);
+        box-shadow: 0 0 0 1px rgba(0, 131, 143, 0.35);
+    }
+
+    .radio-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        font-size: 0.8rem;
+        color: var(--muted);
+    }
+
+    .radio-row label {
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+    }
+
+    .hint {
+        font-size: 0.7rem;
+        color: var(--muted);
+    }
+
+    .btn-row {
+        margin-top: 10px;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+
+    .btn-primary {
+        border-radius: 999px;
+        border: none;
+        padding: 8px 16px;
+        background: linear-gradient(135deg, #00acc1, #00838f);
+        color: #ffffff;
+        font-weight: 600;
+        font-size: 0.9rem;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        cursor: pointer;
+        box-shadow: 0 10px 20px rgba(0, 131, 143, 0.35);
+    }
+
+    .btn-secondary {
+        border-radius: 999px;
+        border: 1px solid rgba(148, 163, 184, 0.6);
+        padding: 8px 14px;
+        background: #ffffff;
+        color: var(--muted);
+        font-size: 0.85rem;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        cursor: pointer;
+    }
+
+    .btn-primary:active,
+    .btn-secondary:active {
+        transform: translateY(1px);
+        box-shadow: none;
+    }
+
+    .badge-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+        margin-bottom: 6px;
+    }
+
+    .badge {
+        font-size: 0.75rem;
+        border-radius: 999px;
+        padding: 2px 8px;
+        background: rgba(148, 163, 184, 0.12);
+        color: var(--muted);
+    }
+
+    .badge-good {
+        background: rgba(46, 125, 50, 0.1);
+        color: var(--success);
+    }
+
+    .badge-warning {
+        background: rgba(239, 108, 0, 0.1);
+        color: var(--warning);
+    }
+
+    .badge-danger {
+        background: rgba(198, 40, 40, 0.1);
+        color: var(--danger);
+    }
+
+    .section-label {
+        font-size: 0.75rem;
+        font-weight: 600;
+        color: var(--muted);
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        margin-top: 6px;
+        margin-bottom: 4px;
+    }
+
+    .result-line {
+        font-size: 0.85rem;
+        margin-bottom: 4px;
+    }
+
+    .interpretation-text {
+        font-size: 0.8rem;
+        line-height: 1.3;
+    }
+
+    .interpretation-text ul {
+        padding-left: 18px;
+        margin: 4px 0;
+    }
+
+    .interpretation-text li {
+        margin-bottom: 2px;
+    }
+
+    textarea {
+        width: 100%;
+        min-height: 130px;
+        resize: vertical;
+        border-radius: 10px;
+        border: 1px solid rgba(148, 163, 184, 0.7);
+        padding: 8px 9px;
+        font-size: 0.8rem;
+        font-family: inherit;
+        background: #f9fafb;
+    }
+
+    textarea:focus {
+        outline: none;
+        border-color: var(--accent);
+        box-shadow: 0 0 0 1px rgba(0, 131, 143, 0.35);
+    }
+
+    .small-note {
+        font-size: 0.7rem;
+        color: var(--muted);
+        margin-top: 4px;
+    }
+
+    .error-text {
+        font-size: 0.8rem;
+        color: var(--danger);
+        margin-top: 4px;
+    }
+</style>
+</head>
+<body>
+<div class="app-container">
+    <header>
+        <div>
+            <h1><span class="icon">🌬️</span>COPD / Asthma Exacerbation Helper</h1>
+            <div class="subtitle">
+                Severity grading + red flags + treatment suggestions (educational, not a protocol).
+            </div>
+        </div>
+        <div class="nav-buttons">
+            <a href="../pulmonary.html" class="nav-btn">
+                <span class="icon">↩️</span><span>Pulmonary</span>
+            </a>
+            <a href="../index.html" class="nav-btn">
+                <span class="icon">🏠</span><span>Home</span>
+            </a>
+        </div>
+    </header>
+
+    <div class="grid">
+        <!-- INPUTS -->
+        <section class="card">
+            <div class="card-header">
+                <div class="card-title">
+                    <span>Inputs</span>
+                    <span class="pill">Phenotype + severity markers</span>
+                </div>
+            </div>
+
+            <div class="inputs-grid">
+                <div class="input-group">
+                    <label for="phenotype">Clinical phenotype</label>
+                    <select id="phenotype">
+                        <option value="copd">Likely COPD exacerbation</option>
+                        <option value="asthma">Likely Asthma exacerbation</option>
+                        <option value="overlap">Asthma–COPD overlap / unclear</option>
+                    </select>
+                </div>
+
+                <div class="input-group">
+                    <label for="age">Age (years) <span class="hint">(optional)</span></label>
+                    <input type="number" id="age" min="0" step="1" placeholder="e.g. 65">
+                </div>
+
+                <div class="input-group">
+                    <label for="rr">Respiratory rate (breaths/min)</label>
+                    <input type="number" id="rr" min="5" max="80" step="1" placeholder="e.g. 28">
+                </div>
+
+                <div class="input-group">
+                    <label for="hr">Heart rate (bpm) <span class="hint">(optional)</span></label>
+                    <input type="number" id="hr" min="30" max="200" step="1" placeholder="e.g. 110">
+                </div>
+
+                <div class="input-group">
+                    <label for="spo2">SpO₂ (%)</label>
+                    <input type="number" id="spo2" min="50" max="100" step="1" placeholder="e.g. 88">
+                    <div class="hint">On the current FiO₂ / O₂ device.</div>
+                </div>
+
+                <div class="input-group">
+                    <label for="fio2">FiO₂ (%) <span class="hint">(optional)</span></label>
+                    <input type="number" id="fio2" min="21" max="100" step="1" placeholder="e.g. 40">
+                </div>
+
+                <div class="input-group">
+                    <label for="abg_pco2">PaCO₂ (mmHg) <span class="hint">(optional)</span></label>
+                    <input type="number" id="abg_pco2" min="20" max="120" step="1" placeholder="e.g. 60">
+                </div>
+
+                <div class="input-group">
+                    <label for="abg_ph">pH <span class="hint">(optional)</span></label>
+                    <input type="number" id="abg_ph" min="7" max="7.8" step="0.01" placeholder="e.g. 7.29">
+                </div>
+
+                <div class="input-group">
+                    <label for="bp_sys">Systolic BP (mmHg) <span class="hint">(optional)</span></label>
+                    <input type="number" id="bp_sys" min="50" max="250" step="1" placeholder="e.g. 110">
+                </div>
+
+                <div class="input-group">
+                    <label for="speech">Ability to speak</label>
+                    <select id="speech">
+                        <option value="sentences">Full sentences</option>
+                        <option value="phrases">Phrases only</option>
+                        <option value="words">Single words only</option>
+                        <option value="unable">Unable to speak</option>
+                    </select>
+                </div>
+
+                <div class="input-group">
+                    <label for="mental">Mental status</label>
+                    <select id="mental">
+                        <option value="normal">Normal / Alert</option>
+                        <option value="anxious">Anxious / agitated</option>
+                        <option value="drowsy">Drowsy / confused</option>
+                        <option value="obtunded">Obtunded / coma</option>
+                    </select>
+                </div>
+
+                <div class="input-group">
+                    <label for="work_breathing">Work of breathing</label>
+                    <select id="work_breathing">
+                        <option value="mild">Mild ↑ (speaks easily)</option>
+                        <option value="mod">Moderate ↑ (accessory muscles / retractions)</option>
+                        <option value="severe">Severe ↑ (paradoxical / exhausted)</option>
+                    </select>
+                </div>
+
+                <div class="input-group">
+                    <label for="wheeze">Wheeze intensity</label>
+                    <select id="wheeze">
+                        <option value="mild">End-expiratory only</option>
+                        <option value="mod">Diffuse expiratory</option>
+                        <option value="severe">Inspiratory + expiratory / silent chest</option>
+                    </select>
+                </div>
+
+                <div class="input-group">
+                    <label for="prior_icu">Prior intubation / ICU for COPD/asthma?</label>
+                    <select id="prior_icu">
+                        <option value="no">No / unknown</option>
+                        <option value="yes">Yes (high-risk)</option>
+                    </select>
+                </div>
+
+                <div class="input-group">
+                    <label for="home_o2">On home O₂ or chronic hypercapnia?</label>
+                    <select id="home_o2">
+                        <option value="no">No / unknown</option>
+                        <option value="yes">Yes (baseline severe COPD)</option>
+                    </select>
+                </div>
+
+                <div class="input-group">
+                    <label for="sputum">Sputum change (COPD)</label>
+                    <select id="sputum">
+                        <option value="none">No increase / no purulence</option>
+                        <option value="either">Increased volume OR purulence</option>
+                        <option value="both">↑ dyspnea + ↑ volume + purulence</option>
+                    </select>
+                    <div class="hint">Used for COPD antibiotic suggestion.</div>
+                </div>
+            </div>
+
+            <div class="btn-row">
+                <button type="button" class="btn-primary" id="btn-calc">
+                    <span>Assess severity</span> <span>➜</span>
+                </button>
+                <button type="button" class="btn-secondary" id="btn-example">
+                    <span>Fill COPD example</span>
+                </button>
+                <button type="button" class="btn-secondary" id="btn-example-asthma">
+                    <span>Fill Asthma example</span>
+                </button>
+            </div>
+            <div id="error" class="error-text" style="display:none;"></div>
+        </section>
+
+        <!-- RESULTS -->
+        <section class="card">
+            <div class="card-header">
+                <div class="card-title">
+                    <span>Results & Interpretation</span>
+                    <span class="pill">Severity + red flags</span>
+                </div>
+            </div>
+
+            <div class="badge-row" id="badge-row"></div>
+
+            <div id="results">
+                <div class="section-label">Summary</div>
+                <div class="result-line"><strong>Phenotype:</strong> –</div>
+                <div class="result-line"><strong>Respiratory distress:</strong> –</div>
+                <div class="result-line"><strong>Hemodynamics / mental status:</strong> –</div>
+                <div class="result-line"><strong>Likely severity:</strong> –</div>
+
+                <div class="section-label">Key concerns</div>
+                <div class="interpretation-text" id="interpretation">
+                    Enter clinical details on the left and click <strong>Assess severity</strong> to see a
+                    COPD/asthma severity classification (mild/moderate/severe/life-threatening) plus suggested
+                    treatment priorities (SABA/SAMA, steroids, NIV/intubation, antibiotics for COPD, etc.).
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- ASSESSMENT / PLAN -->
+    <section class="card" style="margin-top: 14px;">
+        <div class="card-header">
+            <div class="card-title">Assessment & Plan Snippet</div>
+            <button type="button" class="btn-secondary" id="btn-copy">
+                <span>Copy to clipboard</span>
+            </button>
+        </div>
+        <textarea id="assessment" placeholder="After calculation, a structured assessment & plan snippet will appear here. You can edit it and then copy-paste into your note."></textarea>
+        <div class="small-note">
+            This tool is an educational aid only and does not replace guidelines, local protocols, or senior/consultant input.
+        </div>
+    </section>
+</div>
+
+<script>
+(function () {
+    const btnCalc = document.getElementById('btn-calc');
+    const btnExample = document.getElementById('btn-example');
+    const btnExampleAsthma = document.getElementById('btn-example-asthma');
+    const btnCopy = document.getElementById('btn-copy');
+    const errorBox = document.getElementById('error');
+    const badgeRow = document.getElementById('badge-row');
+    const resultsBox = document.getElementById('results');
+    const interpretationBox = document.getElementById('interpretation');
+    const assessmentBox = document.getElementById('assessment');
+
+    function valNum(id) {
+        const el = document.getElementById(id);
+        if (!el || el.value === '') return null;
+        const v = parseFloat(el.value);
+        return isNaN(v) ? null : v;
+    }
+
+    function valSel(id) {
+        const el = document.getElementById(id);
+        return el ? el.value : null;
+    }
+
+    function setError(msg) {
+        errorBox.textContent = msg;
+        errorBox.style.display = msg ? 'block' : 'none';
+    }
+
+    function addBadge(text, cls) {
+        const span = document.createElement('span');
+        span.className = 'badge ' + (cls || '');
+        span.textContent = text;
+        badgeRow.appendChild(span);
+    }
+
+    function format(num, digits) {
+        if (num === null || isNaN(num)) return '–';
+        return Number(num).toFixed(digits);
+    }
+
+    function classifySeverity(phenotype, rr, spo2, fio2, mental, speech, work, hr, bp_sys, pco2, ph) {
+        let severeRedFlag = false;
+        let lifeThreat = false;
+
+        // Basic rule-based logic (simplified)
+        if (speech === 'words' || speech === 'unable') severeRedFlag = true;
+        if (mental === 'drowsy' || mental === 'obtunded') severeRedFlag = true;
+        if (work === 'severe') severeRedFlag = true;
+        if (spo2 !== null && spo2 < 88) severeRedFlag = true;
+        if (rr !== null && rr > 35) severeRedFlag = true;
+        if (bp_sys !== null && bp_sys < 90) severeRedFlag = true;
+        if (pco2 !== null && ph !== null && ph < 7.30 && pco2 > 45) severeRedFlag = true;
+
+        // Life-threatening markers
+        if (mental === 'obtunded' || speech === 'unable' || (ph && ph < 7.25) || (rr && rr > 40)) {
+            lifeThreat = true;
+        }
+
+        let category;
+        if (lifeThreat) category = 'Life-threatening exacerbation';
+        else if (severeRedFlag) category = 'Severe exacerbation';
+        else if ((rr && rr >= 24) || (spo2 && spo2 < 92) || work === 'mod') category = 'Moderate exacerbation';
+        else category = 'Mild exacerbation';
+
+        return { category, severeRedFlag, lifeThreat };
+    }
+
+    function buildPhenotypeText(phenotype) {
+        if (phenotype === 'asthma') return 'Asthma exacerbation';
+        if (phenotype === 'copd') return 'COPD exacerbation';
+        return 'Asthma–COPD overlap / unclear';
+    }
+
+    function buildResultsText(params) {
+        const {
+            phenotype, rr, spo2, fio2, mental, speech, work, hr, bp_sys, pco2, ph,
+            category
+        } = params;
+
+        const phenotypeText = buildPhenotypeText(phenotype);
+
+        const distress = [];
+        if (rr !== null) distress.push(`RR ${rr}/min`);
+        if (spo2 !== null) distress.push(`SpO₂ ${spo2}%${fio2 ? ` on FiO₂ ${fio2}%` : ''}`);
+        if (work === 'mild') distress.push('mild ↑ WOB');
+        if (work === 'mod') distress.push('moderate ↑ WOB');
+        if (work === 'severe') distress.push('severe ↑ WOB/exhaustion');
+
+        const hemoNeurologic = [];
+        if (hr !== null) hemoNeurologic.push(`HR ${hr}/min`);
+        if (bp_sys !== null) hemoNeurologic.push(`SBP ${bp_sys} mmHg`);
+        hemoNeurologic.push(`speech: ${speech}`);
+        hemoNeurologic.push(`mental: ${mental}`);
+        if (pco2 !== null) hemoNeurologic.push(`PaCO₂ ${pco2} mmHg`);
+        if (ph !== null) hemoNeurologic.push(`pH ${ph}`);
+
+        resultsBox.innerHTML = `
+            <div class="section-label">Summary</div>
+            <div class="result-line"><strong>Phenotype:</strong> ${phenotypeText}</div>
+            <div class="result-line"><strong>Respiratory distress:</strong> ${
+                distress.length ? distress.join(', ') : '–'
+            }</div>
+            <div class="result-line"><strong>Hemodynamics / mental status:</strong> ${
+                hemoNeurologic.length ? hemoNeurologic.join(', ') : '–'
+            }</div>
+            <div class="result-line"><strong>Likely severity:</strong> ${category}</div>
+
+            <div class="section-label">Key concerns</div>
+            <div class="interpretation-text" id="interpretation"></div>
+        `;
+    }
+
+    function buildInterpretation(phenotype, severityInfo, priorIcu, homeO2, sputum) {
+        const { category, severeRedFlag, lifeThreat } = severityInfo;
+        const bullets = [];
+
+        bullets.push(`Severity classification: ${category}.`);
+
+        if (lifeThreat) {
+            bullets.push('Life-threatening features present: consider immediate ICU-level care, early NIV/intubation, and continuous monitoring.');
+        } else if (severeRedFlag) {
+            bullets.push('Severe features present: close monitoring, consider step-up to higher level of care and NIV if appropriate.');
+        } else {
+            bullets.push('No immediate life-threatening features identified, but continue close clinical assessment and trend monitoring.');
+        }
+
+        if (priorIcu === 'yes') {
+            bullets.push('High-risk history (prior intubation/ICU for COPD/asthma). Lower threshold for ICU and early escalation.');
+        }
+
+        if (homeO2 === 'yes') {
+            bullets.push('Baseline severe COPD/chronically hypercapnic: be cautious with over-oxygenation; target SpO₂ ~88–92% unless otherwise indicated.');
+        }
+
+        if (phenotype === 'copd') {
+            if (sputum === 'both') {
+                bullets.push('COPD: cardinal symptoms (↑dyspnea, ↑sputum volume, purulence) present → antibiotics are usually indicated.');
+            } else if (sputum === 'either') {
+                bullets.push('COPD: partial cardinal symptoms — consider antibiotics based on clinical context and guidelines.');
+            } else {
+                bullets.push('COPD: no clear sputum change — antibiotics may not be needed unless other infection signs present.');
+            }
+        } else if (phenotype === 'asthma') {
+            bullets.push('Asthma: ensure adequate SABA dosing, early systemic steroids, and consider MgSO₄/IM epinephrine in severe or life-threatening attacks.');
+        }
+
+        const generic = [
+            'Check for red flags: silent chest, exhaustion, altered mental status, hypotension, or rising hypercapnia with acidosis.',
+            'Reassess frequently after each treatment, watching trends in work of breathing, vitals, and gas exchange.'
+        ];
+
+        interpretationBox.innerHTML = `
+            <ul>
+                ${bullets.concat(generic).map(x => `<li>${x}</li>`).join('')}
+            </ul>
+        `;
+    }
+
+    function buildAssessmentSnippet(params) {
+        const {
+            phenotype, age, rr, spo2, fio2, hr, bp_sys, mental, speech,
+            work, wheeze, pco2, ph, priorIcu, homeO2, sputum, severityInfo
+        } = params;
+        const { category, severeRedFlag, lifeThreat } = severityInfo;
+
+        const lines = [];
+        const phenoText = buildPhenotypeText(phenotype);
+
+        lines.push(`${phenoText} – severity assessment:`);
+        lines.push(
+            `- Age${age ? ' ~' + age + ' yrs' : ''}, RR ${rr || '–'}/min, SpO₂ ${spo2 || '–'}%` +
+            (fio2 ? ` on FiO₂ ${fio2}%` : '') + `.`
+        );
+        if (hr || bp_sys) {
+            lines.push(`- Hemodynamics: HR ${hr || '–'}/min, SBP ${bp_sys || '–'} mmHg.`);
+        }
+        lines.push(`- Work of breathing: ${work}; speech: ${speech}; mental status: ${mental}.`);
+        lines.push(`- Wheeze: ${wheeze}.`);
+        if (pco2 || ph) {
+            lines.push(`- Gas exchange: PaCO₂ ${pco2 || '–'} mmHg, pH ${ph || '–'}.`);
+        }
+        if (priorIcu === 'yes') {
+            lines.push('- History: prior intubation/ICU for COPD/asthma → high risk of decompensation.');
+        }
+        if (homeO2 === 'yes') {
+            lines.push('- Baseline: on home O₂ / chronic hypercapnia (advanced COPD).');
+        }
+        if (phenotype === 'copd') {
+            const sputumText =
+                sputum === 'both'
+                    ? '↑ dyspnea + ↑ sputum volume + purulence.'
+                    : sputum === 'either'
+                        ? 'Partial sputum change (volume or purulence).'
+                        : 'No significant sputum change.';
+            lines.push(`- Sputum change (COPD): ${sputumText}`);
+        }
+
+        lines.push(`- Overall exacerbation severity: ${category}.`);
+        lines.push('');
+
+        lines.push('Plan (adjust to local protocols and clinical context):');
+
+        // Shared bronchodilator + steroid plan
+        lines.push('- Initiate/continue frequent short-acting bronchodilators (e.g., albuterol ± ipratropium via neb or MDI with spacer).');
+        lines.push('- Give systemic corticosteroids (e.g., IV/PO formulation per local protocol and severity).');
+
+        if (phenotype === 'asthma') {
+            lines.push('- In moderate–severe asthma, consider IV magnesium sulfate and evaluate for adjuncts (epinephrine for anaphylaxis/near-fatal asthma).');
+        } else if (phenotype === 'copd') {
+            if (sputum === 'both' || sputum === 'either') {
+                lines.push('- COPD: antibiotics likely indicated (e.g., for ↑ dyspnea, ↑ sputum volume and/or purulence; choose agent per local guideline and risk for resistant organisms).');
+            } else {
+                lines.push('- COPD: no clear sputum change; reserve antibiotics for clear evidence of infection or guideline-based indications.');
+            }
+        }
+
+        // Oxygen + NIV / intubation
+        lines.push('- Titrate oxygen to target saturation (often 88–92% in COPD/hypercapnia; higher targets if pure asthma/other causes, per protocol).');
+        if (lifeThreat || severeRedFlag) {
+            lines.push('- Strongly consider ICU-level care. Evaluate for noninvasive ventilation (NIV) if hypercapnic COPD or impending fatigue without contraindications.');
+            lines.push('- Prepare for early intubation if worsening mental status, inability to protect airway, refractory hypoxemia, or rising CO₂ with acidosis.');
+        } else {
+            lines.push('- Monitor closely on the floor/step-down; escalate care if worsening work of breathing, gas exchange, or mental status.');
+        }
+
+        lines.push('- Repeat assessment after treatments (vitals, work of breathing, lung exam, gas exchange).');
+        lines.push('- Address triggers: infection, fluid overload, PE, non-adherence, environmental/occupational exposures.');
+
+        return lines.join('\n');
+    }
+
+    function calculate() {
+        setError('');
+        badgeRow.innerHTML = '';
+
+        const phenotype = valSel('phenotype');
+        const age = valNum('age');
+        const rr = valNum('rr');
+        const hr = valNum('hr');
+        const spo2 = valNum('spo2');
+        const fio2 = valNum('fio2');
+        const bp_sys = valNum('bp_sys');
+        const pco2 = valNum('abg_pco2');
+        const ph = valNum('abg_ph');
+
+        const speech = valSel('speech');
+        const mental = valSel('mental');
+        const work = valSel('work_breathing');
+        const wheeze = valSel('wheeze');
+        const priorIcu = valSel('prior_icu');
+        const homeO2 = valSel('home_o2');
+        const sputum = valSel('sputum');
+
+        if (rr === null || spo2 === null) {
+            setError('Please enter at least respiratory rate and SpO₂ to run severity assessment.');
+        }
+
+        const severityInfo = classifySeverity(
+            phenotype, rr, spo2, fio2, mental, speech, work, hr, bp_sys, pco2, ph
+        );
+
+        // Badges
+        const { category, severeRedFlag, lifeThreat } = severityInfo;
+        addBadge(buildPhenotypeText(phenotype), 'badge-warning');
+        addBadge(category, lifeThreat ? 'badge-danger' : (severeRedFlag ? 'badge-warning' : 'badge-good'));
+
+        if (priorIcu === 'yes') addBadge('Prior intubation/ICU', 'badge-warning');
+        if (homeO2 === 'yes') addBadge('Chronic severe COPD / home O₂', 'badge-warning');
+
+        if (spo2 !== null) {
+            if (spo2 < 88) addBadge(`SpO₂ ${spo2}% (low)`, 'badge-danger');
+            else if (spo2 < 92) addBadge(`SpO₂ ${spo2}% (borderline)`, 'badge-warning');
+            else addBadge(`SpO₂ ${spo2}%`, 'badge-good');
+        }
+
+        if (pco2 !== null && ph !== null) {
+            if (ph < 7.30 && pco2 > 45) {
+                addBadge(`Hypercapnic acidosis: pH ${ph}, PaCO₂ ${pco2}`, 'badge-danger');
+            } else if (pco2 > 45) {
+                addBadge(`Hypercapnia: PaCO₂ ${pco2}`, 'badge-warning');
+            }
+        }
+
+        // Results + interpretation
+        buildResultsText({
+            phenotype, rr, spo2, fio2, mental, speech, work, hr, bp_sys, pco2, ph,
+            category
+        });
+
+        buildInterpretation(phenotype, severityInfo, priorIcu, homeO2, sputum);
+
+        // Assessment snippet
+        assessmentBox.value = buildAssessmentSnippet({
+            phenotype, age, rr, spo2, fio2, hr, bp_sys, mental, speech,
+            work, wheeze, pco2, ph, priorIcu, homeO2, sputum, severityInfo
+        });
+    }
+
+    btnCalc.addEventListener('click', calculate);
+
+    btnExample.addEventListener('click', function () {
+        // Typical COPD exacerbation example
+        document.getElementById('phenotype').value = 'copd';
+        document.getElementById('age').value = 68;
+        document.getElementById('rr').value = 28;
+        document.getElementById('hr').value = 110;
+        document.getElementById('spo2').value = 86;
+        document.getElementById('fio2').value = 40;
+        document.getElementById('abg_pco2').value = 65;
+        document.getElementById('abg_ph').value = 7.30;
+        document.getElementById('bp_sys').value = 120;
+        document.getElementById('speech').value = 'phrases';
+        document.getElementById('mental').value = 'anxious';
+        document.getElementById('work_breathing').value = 'mod';
+        document.getElementById('wheeze').value = 'mod';
+        document.getElementById('prior_icu').value = 'yes';
+        document.getElementById('home_o2').value = 'yes';
+        document.getElementById('sputum').value = 'both';
+        calculate();
+    });
+
+    btnExampleAsthma.addEventListener('click', function () {
+        // Typical severe asthma example
+        document.getElementById('phenotype').value = 'asthma';
+        document.getElementById('age').value = 30;
+        document.getElementById('rr').value = 34;
+        document.getElementById('hr').value = 120;
+        document.getElementById('spo2').value = 90;
+        document.getElementById('fio2').value = 35;
+        document.getElementById('abg_pco2').value = 50;
+        document.getElementById('abg_ph').value = 7.28;
+        document.getElementById('bp_sys').value = 115;
+        document.getElementById('speech').value = 'phrases';
+        document.getElementById('mental').value = 'anxious';
+        document.getElementById('work_breathing').value = 'severe';
+        document.getElementById('wheeze').value = 'severe';
+        document.getElementById('prior_icu').value = 'no';
+        document.getElementById('home_o2').value = 'no';
+        document.getElementById('sputum').value = 'none';
+        calculate();
+    });
+
+    btnCopy.addEventListener('click', function () {
+        const text = assessmentBox.value || '';
+        if (!text.trim()) {
+            alert('Nothing to copy yet. Please assess severity first.');
+            return;
+        }
+
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(text)
+                .then(() => alert('Assessment & Plan copied to clipboard.'))
+                .catch(() => fallbackCopy(text));
+        } else {
+            fallbackCopy(text);
+        }
+    });
+
+    function fallbackCopy(text) {
+        const temp = document.createElement('textarea');
+        temp.style.position = 'fixed';
+        temp.style.opacity = '0';
+        temp.value = text;
+        document.body.appendChild(temp);
+        temp.select();
+        try {
+            document.execCommand('copy');
+            alert('Assessment & Plan copied to clipboard.');
+        } catch (e) {
+            alert('Unable to copy automatically. Please select and copy manually.');
+        }
+        document.body.removeChild(temp);
+    }
+})();
+</script>
+</body>
+</html>
