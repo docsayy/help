@@ -1,0 +1,780 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RSI & Difficult Airway Helper – Critical Care</title>
+<style>
+:root {
+    --bg: #e0f7fa;
+    --card: #ffffff;
+    --accent: #00838f;
+    --accent-soft: #b2ebf2;
+    --muted: #546e7a;
+    --danger: #d32f2f;
+    --success: #2e7d32;
+    --radius: 14px;
+}
+* { box-sizing: border-box; }
+body {
+    margin: 0;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    background: radial-gradient(circle at top, #b2ebf2 0, #e0f7fa 40%, #e0f2f1 100%);
+    color: #102a43;
+}
+header {
+    padding: 16px;
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 8px;
+    background: linear-gradient(90deg, #00acc1, #00838f);
+    color: white;
+}
+header h1 {
+    margin: 0;
+    font-size: 1.25rem;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+.nav-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+}
+.nav-buttons a {
+    text-decoration: none;
+    padding: 6px 10px;
+    border-radius: 999px;
+    border: 1px solid rgba(255,255,255,0.8);
+    color: white;
+    font-size: 0.9rem;
+}
+main {
+    max-width: 960px;
+    margin: 16px auto 32px;
+    padding: 0 12px;
+}
+.card {
+    background: var(--card);
+    padding: 18px;
+    border-radius: var(--radius);
+    margin-bottom: 16px;
+    box-shadow: 0 8px 24px rgba(0, 76, 92, 0.18);
+}
+h2 {
+    margin: 0 0 6px;
+    font-size: 1.15rem;
+    color: #004d5a;
+}
+.subtitle {
+    margin: 0 0 12px;
+    font-size: 0.9rem;
+    color: var(--muted);
+}
+.chip {
+    display: inline-flex;
+    align-items: center;
+    padding: 3px 9px;
+    border-radius: 999px;
+    font-size: 0.75rem;
+    background: var(--accent-soft);
+    color: #004d40;
+    font-weight: 600;
+}
+.title-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+/* Stepper */
+.stepper {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+    margin-bottom: 14px;
+}
+.step-pill {
+    text-align: center;
+    padding: 6px 4px;
+    border-radius: 999px;
+    font-size: 0.8rem;
+    background: rgba(255,255,255,0.8);
+    border: 1px solid rgba(0,0,0,0.05);
+    color: var(--muted);
+}
+.step-pill.active {
+    background: var(--accent);
+    color: white;
+    font-weight: 600;
+}
+
+/* Inputs */
+label {
+    display: block;
+    font-size: 0.85rem;
+    margin-bottom: 4px;
+    color: #37474f;
+}
+input[type="number"],
+select {
+    width: 100%;
+    padding: 10px 12px;
+    border-radius: 10px;
+    border: 1px solid #cfd8dc;
+    font-size: 0.9rem;
+    background: #f9feff;
+}
+input[type="number"]:focus,
+select:focus {
+    outline: none;
+    border-color: var(--accent);
+    box-shadow: 0 0 0 2px rgba(0,131,143,0.18);
+    background: #ffffff;
+}
+.grid-2 {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 12px;
+}
+.section-label {
+    margin: 10px 0 4px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #37474f;
+}
+.pill-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+}
+.pill-checkbox {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 7px 11px;
+    border-radius: 999px;
+    border: 1px solid #cfd8dc;
+    font-size: 0.8rem;
+    background: #f5fcfd;
+    cursor: pointer;
+}
+.pill-checkbox input {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+}
+.pill-checkbox span.dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 999px;
+    border: 1px solid #90a4ae;
+    background: #ffffff;
+}
+.pill-checkbox input:checked + span.dot {
+    background: var(--accent);
+    border-color: var(--accent);
+}
+.pill-checkbox input:checked ~ span.text {
+    color: #004d40;
+    font-weight: 600;
+}
+.badge {
+    padding: 2px 6px;
+    border-radius: 999px;
+    font-size: 0.7rem;
+    background: #eceff1;
+    color: #37474f;
+}
+
+/* Buttons */
+.buttons-row {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 12px;
+}
+.buttons-right {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+button {
+    border-radius: 999px;
+    border: none;
+    padding: 10px 18px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    white-space: nowrap;
+}
+.btn-secondary {
+    background: #eceff1;
+    color: #37474f;
+}
+.btn-primary {
+    background: var(--accent);
+    color: white;
+    box-shadow: 0 4px 10px rgba(0,131,143,0.4);
+}
+.btn-primary:hover { background: #006978; }
+
+/* Results */
+.hidden { display: none; }
+
+.plan-box {
+    background: #f5fdfd;
+    border-radius: 12px;
+    border: 1px dashed #b2ebf2;
+    padding: 10px 12px;
+    font-size: 0.86rem;
+    white-space: pre-line;
+    color: #37474f;
+    max-height: 260px;
+    overflow-y: auto;
+}
+.helper-text {
+    font-size: 0.8rem;
+    color: var(--muted);
+    margin-top: 4px;
+}
+.results-main {
+    border-left: 4px solid var(--accent);
+}
+.badge-primary-type {
+    background: #e0f2f1;
+    color: #004d40;
+    padding: 4px 10px;
+    border-radius: 999px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+.results-section-title {
+    font-size: 0.95rem;
+    font-weight: 600;
+    margin: 10px 0 4px;
+    color: #37474f;
+}
+.results-list {
+    margin: 4px 0 0;
+    padding-left: 18px;
+    font-size: 0.87rem;
+    color: #455a64;
+}
+.results-list li { margin-bottom: 3px; }
+
+@media (max-width: 600px) {
+    header { flex-direction: column; align-items: flex-start; }
+    .buttons-row { flex-direction: column; }
+    .buttons-right { justify-content: space-between; width: 100%; }
+    .buttons-right button { flex: 1; justify-content: center; }
+}
+</style>
+</head>
+<body>
+
+<header>
+    <h1>🫁 RSI & Difficult Airway Helper</h1>
+    <div class="nav-buttons">
+        <a href="../home.html">🏠 Home</a>
+        <a href="../critical_care.html">⬅ Critical Care</a>
+    </div>
+</header>
+
+<main>
+    <div class="card">
+        <div class="title-row">
+            <h2>Intubation Planning Wizard</h2>
+            <span class="chip">Airway & Ventilation</span>
+        </div>
+        <p class="subtitle">
+            Stepwise helper for induction and paralytic choice, dosing, airway difficulty assessment, and pre/post-intubation checklist.
+            This supports — not replaces — clinical judgment and local protocols.
+        </p>
+
+        <div class="stepper">
+            <div class="step-pill active" id="step-pill-1">1 • Basics</div>
+            <div class="step-pill" id="step-pill-2">2 • Risk & Difficulty</div>
+            <div class="step-pill" id="step-pill-3">3 • Checklist & Dosing</div>
+        </div>
+    </div>
+
+    <!-- STEP 1 -->
+    <div class="card" id="step-1">
+        <div class="title-row">
+            <h2>Step 1 – Patient Basics & Indication</h2>
+        </div>
+        <p class="subtitle">Enter simple patient data and why you are intubating.</p>
+
+        <div class="grid-2">
+            <div>
+                <label for="weight">Weight (kg)</label>
+                <input type="number" id="weight" placeholder="e.g. 80">
+            </div>
+            <div>
+                <label for="age">Approximate Age (years)</label>
+                <input type="number" id="age" placeholder="e.g. 55">
+            </div>
+            <div>
+                <label for="indication">Primary indication</label>
+                <select id="indication">
+                    <option value="">Select...</option>
+                    <option value="hypoxemia">Refractory hypoxemia / respiratory failure</option>
+                    <option value="airway-protect">Airway protection (AMS, vomiting, seizures)</option>
+                    <option value="shock">Shock / hemodynamic instability</option>
+                    <option value="procedure">Procedure / operative</option>
+                    <option value="neuro">Neuro injury / ICP control</option>
+                </select>
+            </div>
+            <div>
+                <label for="map">MAP (mmHg)</label>
+                <input type="number" id="map" placeholder="e.g. 55">
+            </div>
+            <div>
+                <label for="spo2">SpO₂ (%) on current support</label>
+                <input type="number" id="spo2" placeholder="e.g. 88">
+            </div>
+            <div>
+                <label for="support">Current support</label>
+                <select id="support">
+                    <option value="">Select...</option>
+                    <option value="nc">Nasal cannula</option>
+                    <option value="mask">Nonrebreather / mask</option>
+                    <option value="hfnc">High-flow nasal cannula</option>
+                    <option value="niv">BiPAP / NIV</option>
+                    <option value="none">None</option>
+                </select>
+            </div>
+        </div>
+
+        <p class="helper-text">
+            Hypotension (MAP &lt; 65) = high hemodynamic risk → favor etomidate or ketamine, avoid large propofol doses.
+        </p>
+
+        <div class="buttons-row">
+            <span></span>
+            <div class="buttons-right">
+                <button class="btn-primary" onclick="goToStep(2)">Next: Risk & Difficulty ➜</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- STEP 2 -->
+    <div class="card hidden" id="step-2">
+        <div class="title-row">
+            <h2>Step 2 – Airway Difficulty & Physiologic Risk</h2>
+        </div>
+        <p class="subtitle">
+            Check relevant airway and physiologic risk factors. This helps suggest backup plans and drug choices.
+        </p>
+
+        <div class="section-label">Predicted Anatomical Difficult Airway</div>
+        <div class="pill-group">
+            <label class="pill-checkbox">
+                <input type="checkbox" id="diff-obesity">
+                <span class="dot"></span><span class="text">Morbid obesity / large neck</span>
+                <span class="badge">LEMON</span>
+            </label>
+            <label class="pill-checkbox">
+                <input type="checkbox" id="diff-limited-mouth">
+                <span class="dot"></span><span class="text">Limited mouth opening</span>
+            </label>
+            <label class="pill-checkbox">
+                <input type="checkbox" id="diff-limited-neck">
+                <span class="dot"></span><span class="text">Limited neck mobility</span>
+            </label>
+            <label class="pill-checkbox">
+                <input type="checkbox" id="diff-facial">
+                <span class="dot"></span><span class="text">Facial trauma / distortion</span>
+            </label>
+            <label class="pill-checkbox">
+                <input type="checkbox" id="diff-obstruction">
+                <span class="dot"></span><span class="text">Suspected upper airway obstruction</span>
+            </label>
+        </div>
+
+        <div class="section-label">Physiologic Danger</div>
+        <div class="pill-group">
+            <label class="pill-checkbox">
+                <input type="checkbox" id="risk-severe-hypox">
+                <span class="dot"></span><span class="text">Severe hypoxemia (SpO₂ &lt; 90%)</span>
+            </label>
+            <label class="pill-checkbox">
+                <input type="checkbox" id="risk-shock">
+                <span class="dot"></span><span class="text">Shock / high-dose pressors</span>
+            </label>
+            <label class="pill-checkbox">
+                <input type="checkbox" id="risk-asthma">
+                <span class="dot"></span><span class="text">Severe asthma / obstructive disease</span>
+            </label>
+            <label class="pill-checkbox">
+                <input type="checkbox" id="risk-icp">
+                <span class="dot"></span><span class="text">Concern for ↑ ICP</span>
+            </label>
+        </div>
+
+        <div class="section-label">Medication Contraindications</div>
+        <div class="pill-group">
+            <label class="pill-checkbox">
+                <input type="checkbox" id="contra-hyperkalemia">
+                <span class="dot"></span><span class="text">Hyperkalemia / neuromuscular disease (avoid sux)</span>
+            </label>
+            <label class="pill-checkbox">
+                <input type="checkbox" id="contra-seizure">
+                <span class="dot"></span><span class="text">Hx seizures / concern (be cautious with ketamine)</span>
+            </label>
+            <label class="pill-checkbox">
+                <input type="checkbox" id="contra-allergy-etomidate">
+                <span class="dot"></span><span class="text">Etomidate allergy / avoid</span>
+            </label>
+        </div>
+
+        <p class="helper-text">
+            Multiple anatomical risk factors → have video laryngoscope, bougie, and backup supraglottic device ready.
+        </p>
+
+        <div class="buttons-row">
+            <button class="btn-secondary" onclick="goToStep(1)">⬅ Back</button>
+            <div class="buttons-right">
+                <button class="btn-primary" onclick="generatePlan()">Generate RSI Plan ➜</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- STEP 3 / RESULTS -->
+    <div class="card hidden results-main" id="step-3">
+        <div class="title-row">
+            <h2>Step 3 – Dosing & Checklist</h2>
+            <span class="chip">Summary & Copy Plan</span>
+        </div>
+
+        <div id="results-summary"></div>
+
+        <div class="buttons-row">
+            <button class="btn-secondary" onclick="goToStep(2)">⬅ Back</button>
+            <div class="buttons-right">
+                <button class="btn-secondary" onclick="resetWizard()">Reset Wizard</button>
+                <button class="btn-primary" onclick="copyPlan()">📋 Copy Plan</button>
+            </div>
+        </div>
+    </div>
+</main>
+
+<script>
+let lastPlanText = "";
+
+function goToStep(step) {
+    for (let i = 1; i <= 3; i++) {
+        const card = document.getElementById("step-" + i);
+        const pill = document.getElementById("step-pill-" + i);
+        if (card) card.classList.add("hidden");
+        if (pill) pill.classList.remove("active");
+    }
+    const current = document.getElementById("step-" + step);
+    if (current) current.classList.remove("hidden");
+    const pillCurrent = document.getElementById("step-pill-" + step);
+    if (pillCurrent) pillCurrent.classList.add("active");
+    window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+function readNumber(id) {
+    const el = document.getElementById(id);
+    if (!el) return null;
+    const v = parseFloat(el.value);
+    return isNaN(v) ? null : v;
+}
+function isChecked(id) {
+    const el = document.getElementById(id);
+    return el ? el.checked : false;
+}
+
+function generatePlan() {
+    const weight = readNumber("weight");
+    const age = readNumber("age");
+    const indication = document.getElementById("indication").value;
+    const map = readNumber("map");
+    const spo2 = readNumber("spo2");
+    const support = document.getElementById("support").value;
+
+    const diffFactors = [
+        isChecked("diff-obesity"),
+        isChecked("diff-limited-mouth"),
+        isChecked("diff-limited-neck"),
+        isChecked("diff-facial"),
+        isChecked("diff-obstruction")
+    ];
+    const nDiff = diffFactors.filter(x => x).length;
+
+    const riskSevereHypox = isChecked("risk-severe-hypox") || (spo2 !== null && spo2 < 90);
+    const riskShock = isChecked("risk-shock") || (map !== null && map < 65);
+    const riskAsthma = isChecked("risk-asthma");
+    const riskICP = isChecked("risk-icp");
+
+    const avoidSux = isChecked("contra-hyperkalemia");
+    const avoidKetamine = isChecked("contra-seizure");
+    const avoidEtomidate = isChecked("contra-allergy-etomidate");
+
+    // Decide induction agent
+    let induction = "";
+    let inductionDose = "";
+    let inductionNotes = [];
+
+    if (riskShock) {
+        // Hemodynamically unstable
+        if (!avoidEtomidate) {
+            induction = "Etomidate";
+            if (weight) {
+                const dose = 0.3 * weight;
+                inductionDose = dose.toFixed(1) + " mg IV (0.3 mg/kg)";
+            } else {
+                inductionDose = "0.3 mg/kg IV";
+            }
+            inductionNotes.push("Hemodynamically unstable – etomidate preferred for minimal cardiovascular depression.");
+        } else if (!avoidKetamine) {
+            induction = "Ketamine";
+            if (weight) {
+                const dose = 1.0 * weight;
+                inductionDose = dose.toFixed(1) + " mg IV (1 mg/kg slow push in shock)";
+            } else {
+                inductionDose = "1 mg/kg IV (slow push in shock)";
+            }
+            inductionNotes.push("Etomidate avoided; ketamine preferred in shock with some catecholamine support.");
+        } else {
+            induction = "Reduced-dose Propofol (cautious)";
+            if (weight) {
+                const dose = 0.5 * weight;
+                inductionDose = dose.toFixed(1) + " mg IV (0.5 mg/kg, titrate slowly)";
+            } else {
+                inductionDose = "0.5 mg/kg IV, titrated slowly";
+            }
+            inductionNotes.push("All usual agents limited – use very cautious, small-dose propofol with pressor support.");
+        }
+    } else {
+        // Hemodynamically stable
+        if (riskAsthma && !avoidKetamine) {
+            induction = "Ketamine";
+            if (weight) {
+                const dose = 1.5 * weight;
+                inductionDose = dose.toFixed(1) + " mg IV (1.5 mg/kg)";
+            } else {
+                inductionDose = "1.5 mg/kg IV";
+            }
+            inductionNotes.push("Severe bronchospasm – ketamine beneficial as bronchodilator.");
+        } else if (!avoidKetamine && (indication === "hypoxemia" || indication === "airway-protect")) {
+            induction = "Ketamine";
+            if (weight) {
+                const dose = 1.5 * weight;
+                inductionDose = dose.toFixed(1) + " mg IV (1–1.5 mg/kg)";
+            } else {
+                inductionDose = "1–1.5 mg/kg IV";
+            }
+            inductionNotes.push("Ketamine maintains BP and supports sympathetic tone.");
+        } else {
+            induction = "Propofol";
+            if (weight) {
+                const dose = 1.5 * weight;
+                inductionDose = dose.toFixed(1) + " mg IV (1–2 mg/kg, adjust by BP/frailty)";
+            } else {
+                inductionDose = "1–2 mg/kg IV (adjust by BP/frailty)";
+            }
+            inductionNotes.push("Hemodynamically stable – propofol is acceptable, titrate to effect.");
+        }
+    }
+
+    if (riskICP && induction === "Ketamine" && !avoidKetamine) {
+        inductionNotes.push("Modern data suggest ketamine is acceptable in elevated ICP when ventilation and BP are controlled.");
+    }
+
+    // Paralytic choice
+    let paralytic = "";
+    let paralyticDose = "";
+    let paralyticNotes = [];
+
+    if (!avoidSux && age !== null && age < 80) {
+        paralytic = "Succinylcholine";
+        if (weight) {
+            const dose = 1.5 * weight;
+            paralyticDose = dose.toFixed(1) + " mg IV (1.5 mg/kg)";
+        } else {
+            paralyticDose = "1.0–1.5 mg/kg IV";
+        }
+        paralyticNotes.push("Fast onset/offset ideal if difficult airway anticipated and no contraindications.");
+    } else {
+        paralytic = "Rocuronium";
+        if (weight) {
+            const dose = 1.2 * weight;
+            paralyticDose = dose.toFixed(1) + " mg IV (1.2 mg/kg)";
+        } else {
+            paralyticDose = "1.0–1.2 mg/kg IV";
+        }
+        paralyticNotes.push("Succinylcholine avoided (hyperkalemia/neuromuscular risk or older patient) – use high-dose roc for rapid onset.");
+    }
+
+    // Airway difficulty impression
+    let difficultyText = "";
+    if (nDiff === 0) difficultyText = "No major anatomical difficult airway predictors checked.";
+    else if (nDiff === 1) difficultyText = "Single anatomical difficult airway predictor – prepare video laryngoscope and bougie.";
+    else if (nDiff >= 2) difficultyText = "Multiple anatomical predictors of difficult airway – treat as potentially difficult airway.";
+
+    // Preoxygenation suggestion
+    let preox = [];
+    if (support === "hfnc" || support === "niv") {
+        preox.push("Continue current HFNC/NIV with maximal FiO₂ for at least 3–5 minutes.");
+    } else {
+        preox.push("Preoxygenate with tight-fitting mask (or HFNC if available) at FiO₂ 1.0 for 3–5 minutes.");
+    }
+    if (riskSevereHypox) {
+        preox.push("Consider dual preoxygenation (HFNC + NRB) and apneic oxygenation during laryngoscopy.");
+    }
+
+    // Post-intubation sedation/pressor notes
+    let postInt = [];
+    if (riskShock) {
+        postInt.push("Be ready to escalate norepinephrine with intubation (BP drop after induction is common).");
+        postInt.push("Use lower ongoing sedative doses; avoid deep oversedation.");
+    } else {
+        postInt.push("Start post-intubation sedation/analgesia (e.g., fentanyl + propofol/dexmedetomidine as appropriate).");
+    }
+
+    // Build rationale list
+    let rationale = [];
+    if (riskShock) rationale.push("Hemodynamic instability (shock/low MAP).");
+    if (riskSevereHypox) rationale.push("Severe hypoxemia → high physiologic risk.");
+    if (riskAsthma) rationale.push("Severe obstructive disease → need bronchodilator-friendly induction and gentle ventilation.");
+    if (riskICP) rationale.push("Concern for elevated ICP → minimize hypotension and prolonged apnea.");
+    if (nDiff > 0) rationale.push("Anatomical difficult airway predictors present.");
+    if (avoidSux) rationale.push("Hyperkalemia/neuromuscular risk → avoiding succinylcholine.");
+    if (avoidKetamine) rationale.push("Seizure concern – limiting ketamine use.");
+    if (avoidEtomidate) rationale.push("Etomidate allergy/avoidance requiring alternative induction.");
+
+    if (rationale.length === 0) {
+        rationale.push("No major physiologic or anatomical red flags entered; standard RSI approach appropriate.");
+    }
+
+    // Build plan text
+    let planLines = [];
+    planLines.push("RSI PLAN");
+    planLines.push("");
+    planLines.push("Indication: " + (indication || "not specified"));
+    planLines.push("Hemodynamics: " + (map !== null ? "MAP " + map + " mmHg" : "MAP not entered"));
+    planLines.push("Oxygenation: " + (spo2 !== null ? "SpO₂ " + spo2 + "%" : "SpO₂ not entered"));
+    planLines.push("");
+
+    planLines.push("1) PREPARATION & PREOXYGENATION");
+    preox.forEach(l => planLines.push("• " + l));
+    if (nDiff >= 1) {
+        planLines.push("• Have video laryngoscope, bougie, and supraglottic airway at bedside.");
+    }
+    if (nDiff >= 2) {
+        planLines.push("• Consider early backup plan: awake look / awake intubation if feasible, or call anesthesia/ENT early.");
+    }
+    planLines.push("");
+
+    planLines.push("2) INDUCTION AGENT");
+    planLines.push("• " + induction + ": " + inductionDose);
+    inductionNotes.forEach(l => planLines.push("  - " + l));
+    planLines.push("");
+
+    planLines.push("3) PARALYTIC");
+    planLines.push("• " + paralytic + ": " + paralyticDose);
+    paralyticNotes.forEach(l => planLines.push("  - " + l));
+    planLines.push("");
+
+    planLines.push("4) AIRWAY STRATEGY");
+    planLines.push("• Difficulty assessment: " + difficultyText);
+    if (nDiff >= 1) {
+        planLines.push("• Plan: video laryngoscopy first; bougie available; backup supraglottic device immediately at hand.");
+    } else {
+        planLines.push("• Plan: standard RSI with direct or video laryngoscopy per operator preference.");
+    }
+    if (riskSevereHypox) {
+        planLines.push("• Minimize apnea time, consider delayed sequence intubation (DSI) if extremely hypoxemic.");
+    }
+    planLines.push("");
+
+    planLines.push("5) POST-INTUBATION");
+    postInt.forEach(l => planLines.push("• " + l));
+    planLines.push("• Confirm tube placement with waveform capnography and auscultation.");
+    planLines.push("• Set initial ventilator settings (tidal volume based on ideal body weight, appropriate PEEP/FiO₂).");
+    planLines.push("");
+
+    planLines.push("KEY RATIONALE / FLAGS");
+    rationale.forEach(l => planLines.push("• " + l));
+
+    lastPlanText = planLines.join("\n");
+
+    // Build HTML view
+    let rationaleHtml = "<ul class='results-list'>";
+    rationale.forEach(r => rationaleHtml += "<li>" + r + "</li>");
+    rationaleHtml += "</ul>";
+
+    const resultsDiv = document.getElementById("results-summary");
+    resultsDiv.innerHTML =
+        "<div class='results-section-title'>Suggested RSI approach</div>" +
+        "<div class='badge-primary-type'>Induction: " + induction + " • Paralytic: " + paralytic + "</div>" +
+        "<div class='results-section-title'>Why this approach?</div>" +
+        rationaleHtml +
+        "<div class='results-section-title'>Full checklist & dosing (editable then copy)</div>" +
+        "<div class='plan-box' id='plan-box'>" +
+        lastPlanText.replace(/\\n/g, "<br>") +
+        "</div>" +
+        "<p class='helper-text'>This tool is educational decision support and does not replace your clinical judgment, airway training, or local RSI protocol.</p>";
+
+    goToStep(3);
+}
+
+function copyPlan() {
+    if (!lastPlanText) {
+        alert("No plan to copy yet. Generate a plan first.");
+        return;
+    }
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(lastPlanText)
+            .then(() => alert("RSI plan copied to clipboard."))
+            .catch(() => fallbackCopy());
+    } else {
+        fallbackCopy();
+    }
+}
+
+function fallbackCopy() {
+    const temp = document.createElement("textarea");
+    temp.value = lastPlanText;
+    document.body.appendChild(temp);
+    temp.select();
+    try {
+        document.execCommand("copy");
+        alert("RSI plan copied to clipboard.");
+    } catch (e) {
+        alert("Could not copy automatically. Please manually select and copy.");
+    }
+    document.body.removeChild(temp);
+}
+
+function resetWizard() {
+    const inputs = document.querySelectorAll("input[type='number']");
+    inputs.forEach(i => i.value = "");
+    const selects = document.querySelectorAll("select");
+    selects.forEach(s => s.value = "");
+    const checks = document.querySelectorAll("input[type='checkbox']");
+    checks.forEach(c => c.checked = false);
+    lastPlanText = "";
+    document.getElementById("results-summary").innerHTML = "";
+    goToStep(1);
+}
+</script>
+
+</body>
+</html>
