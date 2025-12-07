@@ -1,1 +1,247 @@
-icu_sedation_analgesia.html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ICU Sedation & Analgesia – Critical Care</title>
+<style>
+:root{
+    --bg:#e0f7fa;
+    --card:#ffffff;
+    --accent:#00838f;
+    --muted:#546e7a;
+    --radius:14px;
+}
+body{
+    margin:0;
+    font-family:system-ui,sans-serif;
+    background:radial-gradient(circle,#b2ebf2,#e0f7fa);
+}
+header{
+    background:linear-gradient(90deg,#00acc1,#00838f);
+    color:white;
+    padding:16px;
+    display:flex;
+    justify-content:space-between;
+    flex-wrap:wrap;
+}
+header h1{margin:0;font-size:1.25rem;}
+.nav-buttons a{
+    text-decoration:none;color:white;
+    padding:6px 10px;border-radius:999px;
+    border:1px solid rgba(255,255,255,0.8);
+    margin-left:6px;font-size:.9rem;
+}
+main{max-width:900px;margin:20px auto 32px;padding:0 12px;}
+.card{
+    background:var(--card);
+    padding:18px;
+    border-radius:var(--radius);
+    margin-bottom:18px;
+    box-shadow:0 8px 24px rgba(0,0,0,0.1);
+}
+h2{margin:0 0 6px;color:#004d5a;font-size:1.15rem;}
+.subtitle{margin:0 0 12px;font-size:.9rem;color:var(--muted);}
+label{display:block;margin-bottom:4px;font-size:.85rem;color:#37474f;}
+select,input{
+    width:100%;padding:10px;border-radius:10px;
+    border:1px solid #cfd8dc;background:#f9feff;
+}
+.grid-2{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px;}
+.btn-primary{
+    width:100%;margin-top:12px;padding:12px;
+    border-radius:999px;border:none;background:#00838f;
+    color:white;font-weight:600;cursor:pointer;
+}
+.plan-box{
+    background:#f1ffff;border-radius:12px;
+    border:1px dashed #b2ebf2;padding:12px;
+    white-space:pre-line;font-size:.9rem;color:#37474f;
+}
+.copy-btn{
+    margin-top:10px;padding:10px 16px;border:none;
+    border-radius:999px;background:#eceff1;cursor:pointer;
+}
+.helper-text{font-size:.8rem;color:var(--muted);margin-top:4px;}
+</style>
+</head>
+<body>
+
+<header>
+    <h1>💤 ICU Sedation & Analgesia Helper</h1>
+    <div class="nav-buttons">
+        <a href="../home.html">🏠 Home</a>
+        <a href="../critical_care.html">⬅ Critical Care</a>
+    </div>
+</header>
+
+<main>
+
+<div class="card">
+    <h2>Inputs</h2>
+    <p class="subtitle">Analgesia-first, then sedation, tailored to hemodynamics and goals.</p>
+
+    <div class="grid-2">
+        <div>
+            <label>Is patient intubated?</label>
+            <select id="intubated">
+                <option value="">Select...</option>
+                <option value="yes">Yes</option>
+                <option value="no">No (NIV/standard O₂)</option>
+            </select>
+        </div>
+        <div>
+            <label>Pain level (clinical judgement)</label>
+            <select id="pain">
+                <option value="">Select...</option>
+                <option value="none">None / mild</option>
+                <option value="moderate">Moderate</option>
+                <option value="severe">Severe</option>
+            </select>
+        </div>
+        <div>
+            <label>Target RASS</label>
+            <select id="rass">
+                <option value="">Select...</option>
+                <option value="0to-1">0 to -1 (light)</option>
+                <option value="-2to-3">-2 to -3 (moderate)</option>
+                <option value="-4to-5">-4 to -5 (deep)</option>
+            </select>
+        </div>
+        <div>
+            <label>Hemodynamics</label>
+            <select id="hemo">
+                <option value="">Select...</option>
+                <option value="stable">Stable (MAP ≥65, no/low pressors)</option>
+                <option value="borderline">Borderline (MAP 60–65 or low pressors)</option>
+                <option value="shock">Shock (MAP <60 or high-dose pressors)</option>
+            </select>
+        </div>
+        <div>
+            <label>Delirium risk / h/o prolonged QT / hepatic issues</label>
+            <select id="delirium">
+                <option value="">Select...</option>
+                <option value="low">Low</option>
+                <option value="high">High delirium / hepatic/QT concerns</option>
+            </select>
+        </div>
+    </div>
+
+    <p class="helper-text">
+        This is a conceptual guide, not a dosing calculator. Always use institutional protocols and weight-based dosing.
+    </p>
+
+    <button class="btn-primary" onclick="makeSedationPlan()">Generate Sedation Plan</button>
+</div>
+
+<div class="card" id="results" style="display:none;">
+    <h2>Sedation & Analgesia Plan</h2>
+    <div class="plan-box" id="plan"></div>
+    <button class="copy-btn" onclick="copyPlan()">📋 Copy Plan</button>
+</div>
+
+</main>
+
+<script>
+let lastPlan="";
+
+function makeSedationPlan(){
+    const intubated=document.getElementById("intubated").value;
+    const pain=document.getElementById("pain").value;
+    const rass=document.getElementById("rass").value;
+    const hemo=document.getElementById("hemo").value;
+    const delirium=document.getElementById("delirium").value;
+
+    let plan="";
+
+    if(!intubated || !rass || !hemo){
+        plan="Please select at least intubation status, target RASS, and hemodynamics.";
+        show(plan);
+        return;
+    }
+
+    plan+="OVERVIEW\n";
+    plan+="• Intubated: "+intubated+"\n";
+    plan+="• Pain level: "+(pain||"not specified")+"\n";
+    plan+="• Target RASS: "+rass+"\n";
+    plan+="• Hemodynamics: "+hemo+"\n";
+    plan+="• Delirium / hepatic risk: "+(delirium||"not specified")+"\n\n";
+
+    // Analgesia-first
+    plan+="1) ANALGESIA (FIRST)\n";
+
+    if(pain==="none"){
+        plan+="• Minimal pain: consider PRN opioid rather than continuous infusion.\n";
+    } else if(pain==="moderate"){
+        plan+="• Moderate pain: small, frequent opioid boluses (e.g., fentanyl) or low-dose infusion.\n";
+    } else if(pain==="severe"){
+        plan+="• Severe pain: scheduled opioid (fentanyl or hydromorphone), consider ketamine if hypotensive\n";
+    } else {
+        plan+="• Assess pain with CPOT/NRS; use opioids as appropriate.\n";
+    }
+
+    if(hemo==="shock"){
+        plan+="• In shock: avoid large boluses that may worsen hypotension; consider fentanyl or ketamine over high-dose propofol.\n";
+    }
+
+    plan+="\n2) SEDATION (IF INTUBATED)\n";
+
+    if(intubated==="no"){
+        plan+="• Non-intubated: prioritize analgesia and non-pharmacologic measures; if needed, small doses of short-acting agents (e.g., low-dose dexmedetomidine or haloperidol per protocol).\n";
+    } else {
+        // Intubated sedation logic
+        if(rass==="0to-1"){
+            if(hemo==="stable"){
+                plan+="• Light sedation target (RASS 0 to -1): prefer dexmedetomidine or low-dose propofol.\n";
+            } else {
+                plan+="• Light sedation with borderline/shock: dexmedetomidine or very low-dose propofol if pressor requirements allow.\n";
+            }
+        } else if(rass===" -2to-3" || rass==="-2to-3"){
+            if(hemo==="stable"){
+                plan+="• Moderate sedation (RASS -2 to -3): propofol infusion +/- fentanyl; dexmedetomidine as adjunct if agitation/delirium.\n";
+            } else {
+                plan+="• Moderate sedation with hemodynamic fragility: prefer fentanyl + dexmedetomidine over high-dose propofol or benzodiazepines.\n";
+            }
+        } else { // deep
+            plan+="• Deep sedation (RASS -4 to -5): may require propofol + opioid; if paralysis is used, ensure adequate analgesia and amnesia.\n";
+            if(hemo!=="stable"){
+                plan+="• Deep sedation in shock: avoid large dose propofol/midazolam loads; titrate carefully with continuous BP monitoring.\n";
+            }
+        }
+
+        if(delirium==="high"){
+            plan+="• High delirium risk: limit benzodiazepines; prefer dexmedetomidine or propofol.\n";
+        } else {
+            plan+="• Benzodiazepines (e.g., midazolam) generally reserved for specific indications (seizures, status, or refractory agitation).\n";
+        }
+    }
+
+    plan+="\n3) MAINTENANCE & DAILY PRACTICES\n";
+    plan+="• Use a sedation scale (e.g., RASS) and titrate to the lightest level that maintains safety.\n";
+    plan+="• Perform daily spontaneous awakening trial (SAT) and, if intubated, spontaneous breathing trial (SBT) when appropriate.\n";
+    plan+="• Reassess sedation requirements frequently after procedures, proning, or changes in ventilator settings.\n";
+
+    plan+="\n4) SAFETY NOTES\n";
+    plan+="• Monitor for hypotension and bradycardia with propofol and dexmedetomidine.\n";
+    plan+="• Monitor triglycerides and propofol infusion syndrome risk in prolonged high-dose propofol.\n";
+    plan+="• Avoid over-sedation that delays extubation and worsens delirium.\n";
+
+    lastPlan=plan;
+    show(plan);
+}
+
+function show(text){
+    document.getElementById("plan").innerText=text;
+    document.getElementById("results").style.display="block";
+}
+
+function copyPlan(){
+    if(!lastPlan){alert("No plan to copy.");return;}
+    navigator.clipboard.writeText(lastPlan)
+        .then(()=>alert("Plan copied!"))
+        .catch(()=>alert("Copy failed."));
+}
+</script>
+
+</body>
+</html>
