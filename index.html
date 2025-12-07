@@ -60,7 +60,17 @@ header p{
   box-shadow:0 6px 18px rgba(0,0,0,0.10);
   display:flex;
   flex-direction:column;
+  transition:0.2s;
 }
+.card:hover{
+  transform:translateY(-3px);
+}
+
+.card .icon{
+  font-size:40px;
+  margin-bottom:10px;
+}
+
 .card h2{
   margin:0 0 10px 0;
   font-size:20px;
@@ -98,64 +108,71 @@ footer{
 
 <header>
   <h1>Medical Tools Hub</h1>
-  <p>Quick, organized access to your clinical calculators</p>
+  <p>Select a system to begin</p>
 </header>
 
 <div class="grid">
 
   <!-- Cardiology -->
   <div class="card">
+    <div class="icon">🫀</div>
     <h2>Cardiology</h2>
-    <p>Risk scores & tools for AFib, ACS, chest pain, DVT/PE, and more.</p>
+    <p>AFib scores, ACS tools, PE/DVT scores.</p>
     <a class="btn" href="cardiology.html">Open Cardiology</a>
   </div>
 
   <!-- Renal -->
   <div class="card">
+    <div class="icon">🩺</div>
     <h2>Renal</h2>
-    <p>AKI evaluation, CrCl, FE calculations, CKD tools, electrolytes.</p>
-    <a class="btn" href="categories/renal.html">Open Renal</a>
+    <p>AKI evaluation, CrCl, electrolytes.</p>
+    <a class="btn" href="renal.html">Open Renal</a>
   </div>
 
   <!-- Endocrine / Metabolic -->
   <div class="card">
+    <div class="icon">🧪</div>
     <h2>Endocrine & Metabolic</h2>
-    <p>DKA, HHS, free water deficit, acid-base tools, metabolic tables.</p>
-    <a class="btn" href="categories/endocrine.html">Open Endocrine</a>
+    <p>DKA, HHS, metabolic calculators.</p>
+    <a class="btn" href="endocrine.html">Open Endocrine</a>
   </div>
 
   <!-- Infectious Disease -->
   <div class="card">
+    <div class="icon">🦠</div>
     <h2>Infectious Disease</h2>
-    <p>Sepsis, SIRS, PSI, antibiotic wizard, cultures, severity scales.</p>
-    <a class="btn" href="categories/infectious.html">Open Infectious</a>
+    <p>Sepsis, PSI, antibiotic wizard.</p>
+    <a class="btn" href="infectious.html">Open Infectious</a>
   </div>
 
   <!-- Pulmonary -->
   <div class="card">
+    <div class="icon">🫁</div>
     <h2>Pulmonary</h2>
-    <p>PSI, VTE tools, PERC rule, respiratory failure & ABG module.</p>
-    <a class="btn" href="categories/pulmonary.html">Open Pulmonary</a>
+    <p>PSI, PERC, respiratory failure.</p>
+    <a class="btn" href="pulmonary.html">Open Pulmonary</a>
   </div>
 
   <!-- Critical Care -->
   <div class="card">
+    <div class="icon">🚑</div>
     <h2>Critical Care</h2>
-    <p>Shock classification, sepsis bundle, fluids, pressors, ventilation.</p>
-    <a class="btn" href="categories/critical.html">Open Critical Care</a>
+    <p>Shock, fluids, pressors, sepsis bundle.</p>
+    <a class="btn" href="critical.html">Open Critical Care</a>
   </div>
 
   <!-- EM Tools -->
   <div class="card">
-    <h2>EM Tools</h2>
-    <p>EMR snippet generator, vitals interpreter, triage calculations.</p>
-    <a class="btn" href="categories/emtools.html">Open EM Tools</a>
+    <div class="icon">🩻</div>
+    <h2>Emergency Medicine</h2>
+    <p>EMR snippets, triage tools, quick calcs.</p>
+    <a class="btn" href="emtools.html">Open EM Tools</a>
   </div>
 
 </div>
 
 <footer>
-  © 2025 Bedside Tools — Custom clinical calculators & EMR helpers.
+  © 2025 Bedside Tools — Custom clinical calculators.
 </footer>
 
 </body>
