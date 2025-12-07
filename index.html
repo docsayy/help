@@ -1,128 +1,162 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Medical Decision Support Tools</title>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Medical Tools Hub</title>
 
 <style>
-    body {
-        margin: 0;
-        padding: 0;
-        font-family: Arial, Helvetica, sans-serif;
-        background: #f3f6fa;
-        color: #333;
-    }
+:root{
+  --bg1:#e3f2fd;
+  --bg2:#e0f7fa;
+  --card:#ffffffee;
+  --accent:#0288d1;
+  --accent2:#0277bd;
+  --muted:#546e7a;
+  --border:#cfd8dc;
+  --radius:16px;
+}
 
-    header {
-        background: #0a4b78;
-        padding: 25px;
-        text-align: center;
-        color: white;
-        font-size: 28px;
-        font-weight: bold;
-        letter-spacing: 1px;
-    }
+/* Base Layout */
+body{
+  margin:0;
+  font-family:Inter,Arial,sans-serif;
+  background:linear-gradient(135deg,var(--bg1),var(--bg2));
+  color:#0f1f29;
+  min-height:100vh;
+}
 
-    .container {
-        max-width: 1100px;
-        margin: 40px auto;
-        padding: 10px;
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-        gap: 25px;
-    }
+/* Header */
+header{
+  padding:26px;
+  text-align:center;
+}
+header h1{
+  margin:0;
+  color:#01579b;
+  font-size:30px;
+}
+header p{
+  margin-top:6px;
+  color:var(--muted);
+  font-size:15px;
+}
 
-    .card {
-        background: white;
-        padding: 28px 20px;
-        border-radius: 14px;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.12);
-        text-align: center;
-        transition: transform .25s ease, box-shadow .25s ease;
-        text-decoration: none;
-        color: #222;
-    }
+/* Category Grid */
+.grid{
+  max-width:1100px;
+  margin:0 auto;
+  display:grid;
+  grid-template-columns:repeat(auto-fit, minmax(260px,1fr));
+  gap:20px;
+  padding:20px;
+}
 
-    .card:hover {
-        transform: translateY(-6px);
-        box-shadow: 0 8px 18px rgba(0,0,0,0.22);
-    }
+.card{
+  background:var(--card);
+  padding:22px;
+  border-radius:var(--radius);
+  border:1px solid var(--border);
+  box-shadow:0 6px 18px rgba(0,0,0,0.10);
+  display:flex;
+  flex-direction:column;
+}
+.card h2{
+  margin:0 0 10px 0;
+  font-size:20px;
+  color:#01579b;
+}
+.card p{
+  color:var(--muted);
+  font-size:14px;
+  margin-bottom:18px;
+}
 
-    /* Icon styling for external PNG/SVG files */
-    .icon {
-        width: 64px;     /* desktop size */
-        height: 64px;
-        margin-bottom: 15px;
-        object-fit: contain;
-    }
+/* Buttons */
+.btn{
+  padding:12px 16px;
+  background:var(--accent);
+  text-decoration:none;
+  color:white;
+  border-radius:10px;
+  font-weight:600;
+  text-align:center;
+}
+.btn:hover{background:var(--accent2);}
 
-    /* Mobile scaling */
-    @media (max-width: 600px) {
-        .icon {
-            width: 48px;    /* mobile touch-optimized size */
-            height: 48px;
-        }
-        header {
-            font-size: 22px;
-            padding: 18px;
-        }
-        .card {
-            padding: 20px;
-        }
-    }
-
-    .title {
-        font-size: 20px;
-        margin-bottom: 8px;
-        font-weight: bold;
-    }
-
-    .desc {
-        font-size: 14px;
-        opacity: 0.8;
-    }
+/* Footer */
+footer{
+  text-align:center;
+  padding:20px;
+  color:var(--muted);
+  font-size:13px;
+}
 </style>
 </head>
 
 <body>
 
 <header>
-    Medical Decision Support Tools
+  <h1>Medical Tools Hub</h1>
+  <p>Quick, organized access to your clinical calculators</p>
 </header>
 
-<div class="container">
+<div class="grid">
 
-    <!-- ABG / Acid-Base Tool -->
-    <a href="abg.html" class="card">
-        <img src="icons/abg.png" class="icon" alt="ABG Icon">
-        <div class="title">ABG / Acid–Base Calculator</div>
-        <div class="desc">AG, delta gap, metabolic acidosis & alkalosis.</div>
-    </a>
+  <!-- Cardiology -->
+  <div class="card">
+    <h2>Cardiology</h2>
+    <p>Risk scores & tools for AFib, ACS, chest pain, DVT/PE, and more.</p>
+    <a class="btn" href="categories/cardiology.html">Open Cardiology</a>
+  </div>
 
-    <!-- Anemia Tool -->
-    <a href="anemia.html" class="card">
-        <img src="icons/anemia.png" class="icon" alt="Anemia Icon">
-        <div class="title">Anemia Analyzer</div>
-        <div class="desc">Classification, labs, causes, and next steps.</div>
-    </a>
+  <!-- Renal -->
+  <div class="card">
+    <h2>Renal</h2>
+    <p>AKI evaluation, CrCl, FE calculations, CKD tools, electrolytes.</p>
+    <a class="btn" href="categories/renal.html">Open Renal</a>
+  </div>
 
-    <!-- AKI Tool -->
-    <a href="aki.html" class="card">
-        <img src="icons/aki.png" class="icon" alt="AKI Icon">
-        <div class="title">AKI / Renal Function</div>
-        <div class="desc">FeNa, FeUrea, staging, prerenal vs intrinsic.</div>
-    </a>
+  <!-- Endocrine / Metabolic -->
+  <div class="card">
+    <h2>Endocrine & Metabolic</h2>
+    <p>DKA, HHS, free water deficit, acid-base tools, metabolic tables.</p>
+    <a class="btn" href="categories/endocrine.html">Open Endocrine</a>
+  </div>
 
-    <!-- Future Tools -->
-    <a href="#" class="card">
-        <img src="icons/more.png" class="icon" alt="More Tools Icon">
-        <div class="title">More Tools Coming</div>
-        <div class="desc">Add new calculators anytime.</div>
-    </a>
+  <!-- Infectious Disease -->
+  <div class="card">
+    <h2>Infectious Disease</h2>
+    <p>Sepsis, SIRS, PSI, antibiotic wizard, cultures, severity scales.</p>
+    <a class="btn" href="categories/infectious.html">Open Infectious</a>
+  </div>
+
+  <!-- Pulmonary -->
+  <div class="card">
+    <h2>Pulmonary</h2>
+    <p>PSI, VTE tools, PERC rule, respiratory failure & ABG module.</p>
+    <a class="btn" href="categories/pulmonary.html">Open Pulmonary</a>
+  </div>
+
+  <!-- Critical Care -->
+  <div class="card">
+    <h2>Critical Care</h2>
+    <p>Shock classification, sepsis bundle, fluids, pressors, ventilation.</p>
+    <a class="btn" href="categories/critical.html">Open Critical Care</a>
+  </div>
+
+  <!-- EM Tools -->
+  <div class="card">
+    <h2>EM Tools</h2>
+    <p>EMR snippet generator, vitals interpreter, triage calculations.</p>
+    <a class="btn" href="categories/emtools.html">Open EM Tools</a>
+  </div>
 
 </div>
 
-    
+<footer>
+  © 2025 Bedside Tools — Custom clinical calculators & EMR helpers.
+</footer>
+
 </body>
 </html>
