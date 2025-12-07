@@ -1,0 +1,339 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>ASCVD Risk Helper</title>
+  <style>
+    :root {
+      --bg: #020617;
+      --card: #0b1120;
+      --accent: #f97316;
+      --accent-soft: rgba(249,115,22,0.18);
+      --muted: #9ca3af;
+      --border: rgba(148,163,184,0.4);
+      --radius: 16px;
+      --pad: 14px;
+      color-scheme: dark;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: radial-gradient(circle at top, rgba(248,113,22,0.25), #020617 55%);
+      color: #e5e7eb;
+      display: flex;
+      justify-content: center;
+      padding: 14px;
+    }
+    main { width: 100%; max-width: 880px; }
+    header { margin-bottom: 14px; }
+    h1 {
+      margin: 0 0 4px;
+      font-size: 1.4rem;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    h1 span.icon { font-size: 1.4rem; }
+    header p {
+      margin: 0;
+      font-size: 0.85rem;
+      color: var(--muted);
+    }
+    .card {
+      background: linear-gradient(135deg, rgba(15,23,42,0.97), rgba(15,23,42,1));
+      border-radius: var(--radius);
+      padding: var(--pad);
+      border: 1px solid var(--border);
+      box-shadow: 0 18px 40px rgba(0,0,0,0.75);
+      position: relative;
+      overflow: hidden;
+    }
+    .card::before {
+      content: "";
+      position: absolute;
+      inset: -45%;
+      background:
+        radial-gradient(circle at 0 0, rgba(248,113,113,0.2), transparent 55%),
+        radial-gradient(circle at 100% 100%, rgba(52,211,153,0.18), transparent 55%);
+      opacity: 0.9;
+      pointer-events: none;
+    }
+    .card-inner { position: relative; z-index: 1; }
+    h2 {
+      margin: 0 0 6px;
+      font-size: 1.05rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 6px;
+    }
+    .badge {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      padding: 3px 7px;
+      border-radius: 999px;
+      background: var(--accent-soft);
+      color: #fed7aa;
+      border: 1px solid rgba(248,250,252,0.07);
+      white-space: nowrap;
+    }
+    .subtitle {
+      margin: 0 0 10px;
+      font-size: 0.8rem;
+      color: var(--muted);
+    }
+    form {
+      display: grid;
+      gap: 8px;
+      margin-bottom: 8px;
+    }
+    .inline { display: flex; flex-wrap: wrap; gap: 10px; }
+    .field {
+      display: flex;
+      flex-direction: column;
+      font-size: 0.8rem;
+    }
+    label { font-size: 0.8rem; }
+    input[type="number"], select {
+      margin-top: 3px;
+      padding: 6px 8px;
+      border-radius: 9px;
+      border: 1px solid rgba(148,163,184,0.45);
+      background: rgba(15,23,42,0.96);
+      color: #e5e7eb;
+      font-size: 0.85rem;
+    }
+    .helper {
+      font-size: 0.72rem;
+      color: var(--muted);
+      margin-top: 2px;
+    }
+    .btn-row { margin-top: 6px; }
+    button {
+      border-radius: 999px;
+      border: none;
+      padding: 7px 13px;
+      font-size: 0.86rem;
+      font-weight: 500;
+      cursor: pointer;
+      background: radial-gradient(circle at 0 0, #fed7aa, #fb923c 40%, #ea580c 100%);
+      color: #111827;
+      box-shadow: 0 10px 26px rgba(248,113,22,0.55);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: transform 0.08s ease, box-shadow 0.08s ease, filter 0.08s ease;
+    }
+    button:hover {
+      transform: translateY(-1px);
+      filter: brightness(1.05);
+      box-shadow: 0 14px 32px rgba(248,113,22,0.7);
+    }
+    .result {
+      margin-top: 8px;
+      padding: 8px 9px;
+      border-radius: 11px;
+      border: 1px solid rgba(148,163,184,0.5);
+      background: rgba(15,23,42,0.98);
+      font-size: 0.8rem;
+    }
+    .result-title { font-weight: 600; margin-bottom: 3px; }
+    .risk-low { color: #4ade80; }
+    .risk-int { color: #facc15; }
+    .risk-high { color: #f97373; }
+    ul { margin: 4px 0 0 18px; padding: 0; font-size: 0.78rem; }
+    li { margin-bottom: 2px; }
+    footer {
+      margin-top: 12px;
+      font-size: 0.72rem;
+      color: var(--muted);
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <header>
+      <h1><span class="icon">🧮</span> ASCVD Risk Helper</h1>
+      <p>Simplified 10-year ASCVD risk category helper based on pooled-cohort style inputs. Does not produce exact percentages.</p>
+    </header>
+
+    <section class="card">
+      <div class="card-inner">
+        <h2>
+          Patient Inputs
+          <span class="badge">Primary prevention</span>
+        </h2>
+        <p class="subtitle">For adults 40–79 without known ASCVD. Use official calculators for exact % if needed.</p>
+
+        <form id="ascvd-form">
+          <div class="inline">
+            <div class="field" style="flex:1 1 120px;">
+              <label for="age">Age (years)</label>
+              <input id="age" type="number" min="20" max="90" value="55">
+            </div>
+            <div class="field" style="flex:1 1 140px;">
+              <label for="sex">Sex</label>
+              <select id="sex">
+                <option value="M">Male</option>
+                <option value="F">Female</option>
+              </select>
+            </div>
+            <div class="field" style="flex:1 1 160px;">
+              <label for="race">Race (for risk context)</label>
+              <select id="race">
+                <option value="white">White / other</option>
+                <option value="black">Black</option>
+                <option value="other">Other / not listed</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="inline">
+            <div class="field" style="flex:1 1 140px;">
+              <label for="tc">Total cholesterol (mg/dL)</label>
+              <input id="tc" type="number" min="80" max="400" value="200">
+            </div>
+            <div class="field" style="flex:1 1 140px;">
+              <label for="hdl">HDL (mg/dL)</label>
+              <input id="hdl" type="number" min="10" max="120" value="50">
+            </div>
+            <div class="field" style="flex:1 1 140px;">
+              <label for="ldl">LDL (mg/dL)</label>
+              <input id="ldl" type="number" min="30" max="300" value="120">
+            </div>
+          </div>
+
+          <div class="inline">
+            <div class="field" style="flex:1 1 140px;">
+              <label for="sbp">SBP (mmHg)</label>
+              <input id="sbp" type="number" min="80" max="220" value="135">
+            </div>
+            <div class="field" style="flex:1 1 180px;">
+              <label for="htnTx">On BP meds?</label>
+              <select id="htnTx">
+                <option value="no">No</option>
+                <option value="yes">Yes (treated HTN)</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="inline">
+            <div class="field" style="flex:1 1 140px;">
+              <label for="dm">Diabetes?</label>
+              <select id="dm">
+                <option value="no">No</option>
+                <option value="yes">Yes</option>
+              </select>
+            </div>
+            <div class="field" style="flex:1 1 160px;">
+              <label for="smoke">Current smoker?</label>
+              <select id="smoke">
+                <option value="no">No</option>
+                <option value="yes">Yes</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="field">
+            <label for="enhancers">Risk-enhancing factors present?</label>
+            <select id="enhancers">
+              <option value="none">None / not known</option>
+              <option value="some">Some (e.g., family history, CKD, inflammatory disease)</option>
+              <option value="many">Multiple strong enhancers</option>
+            </select>
+          </div>
+
+          <div class="btn-row">
+            <button type="submit">Classify risk category</button>
+          </div>
+        </form>
+
+        <div id="result" class="result" aria-live="polite">
+          <div class="result-title">Result will appear here.</div>
+          <div>Enter values and click “Classify risk category”.</div>
+        </div>
+      </div>
+    </section>
+
+    <footer>
+      This helper offers an approximate ASCVD risk category only (low / borderline / intermediate / high). Use official pooled cohort calculators for exact percentages and follow current prevention guidelines.
+    </footer>
+  </main>
+
+  <script>
+    function estimateCategory(data) {
+      let points = 0;
+
+      // Age
+      if (data.age >= 70) points += 4;
+      else if (data.age >= 60) points += 3;
+      else if (data.age >= 50) points += 2;
+      else if (data.age >= 40) points += 1;
+
+      // Lipids
+      if (data.ldl >= 190) points += 4;
+      else if (data.ldl >= 160) points += 3;
+      else if (data.ldl >= 130) points += 2;
+      else if (data.ldl >= 100) points += 1;
+
+      if (data.hdl < 40) points += 2;
+      else if (data.hdl < 50) points += 1;
+
+      // SBP
+      if (data.sbp >= 160) points += 3;
+      else if (data.sbp >= 140) points += 2;
+      else if (data.sbp >= 130) points += 1;
+
+      if (data.htnTx) points += 1;
+      if (data.dm) points += 2;
+      if (data.smoke) points += 2;
+
+      if (data.enhancers === "some") points += 1;
+      if (data.enhancers === "many") points += 2;
+
+      if (data.sex === "M" && data.race === "black") points += 1;
+
+      if (points <= 2) return {label: "Low risk (approx <5%)", css: "risk-low"};
+      if (points <= 4) return {label: "Borderline risk (approx ~5%)", css: "risk-int"};
+      if (points <= 7) return {label: "Intermediate risk (approx 7.5–20%)", css: "risk-int"};
+      return {label: "High risk (approx ≥20%)", css: "risk-high"};
+    }
+
+    document.getElementById("ascvd-form").addEventListener("submit", function (e) {
+      e.preventDefault();
+      const data = {
+        age: Number(document.getElementById("age").value || 0),
+        sex: document.getElementById("sex").value,
+        race: document.getElementById("race").value,
+        tc: Number(document.getElementById("tc").value || 0),
+        hdl: Number(document.getElementById("hdl").value || 0),
+        ldl: Number(document.getElementById("ldl").value || 0),
+        sbp: Number(document.getElementById("sbp").value || 0),
+        htnTx: document.getElementById("htnTx").value === "yes",
+        dm: document.getElementById("dm").value === "yes",
+        smoke: document.getElementById("smoke").value === "yes",
+        enhancers: document.getElementById("enhancers").value
+      };
+
+      const cat = estimateCategory(data);
+
+      const bullets = [];
+      if (cat.label.startsWith("Low")) bullets.push("Emphasize lifestyle; statin generally not indicated unless other strong reasons.");
+      if (cat.label.startsWith("Borderline")) bullets.push("Lifestyle + consider statin if risk-enhancing factors present.");
+      if (cat.label.startsWith("Intermediate")) bullets.push("Lifestyle + moderate- to high-intensity statin often appropriate if agreed upon after discussion.");
+      if (cat.label.startsWith("High")) bullets.push("Lifestyle + high-intensity statin typically indicated, unless contraindicated.");
+
+      const box = document.getElementById("result");
+      box.innerHTML = `
+        <div class="result-title">Estimated category</div>
+        <div class="${cat.css}"><strong>${cat.label}</strong></div>
+        ${bullets.length ? "<ul>" + bullets.map(b => `<li>${b}</li>`).join("") + "</ul>" : ""}
+      `;
+    });
+  </script>
+</body>
+</html>
