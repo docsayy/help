@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Massive Transfusion Protocol Tool</title>
+
+<style>
+:root {
+    --primary: #7b1fa2;
+    --primary-dark: #4a148c;
+    --bg1: #f6f2f9;
+    --bg2: #ffffff;
+    --text-dark: #2c003e;
+    --radius: 14px;
+    --card-shadow: rgba(0,0,0,0.15);
+}
+
+body {
+    margin: 0;
+    padding: 20px;
+    font-family: "Segoe UI", system-ui, sans-serif;
+    background: linear-gradient(135deg, var(--bg1), #fafafa);
+}
+
+h1 {
+    text-align: center;
+    margin-top: 40px;
+    color: var(--primary-dark);
+    font-size: 26px;
+}
+
+.subtitle {
+    text-align: center;
+    color: #5f4375;
+    font-size: 14px;
+    margin-bottom: 20px;
+}
+
+/* Nav buttons */
+.nav-btn {
+    position: fixed;
+    top: 15px;
+    padding: 8px 16px;
+    background: var(--primary);
+    color: white;
+    border-radius: 10px;
+    text-decoration: none;
+    font-weight: 600;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.25);
+    z-index: 1000;
+    transition: 0.2s;
+    font-size: 14px;
+}
+.nav-btn:hover { background: var(--primary-dark); }
+.left { left: 15px; }
+.right { right: 15px; }
+
+/* Card container */
+.container {
+    max-width: 950px;
+    margin: auto;
+    background: var(--bg2);
+    padding: 25px;
+    border-radius: var(--radius);
+    box-shadow: 0 8px 20px var(--card-shadow);
+}
+
+.section-title {
+    margin-top: 18px;
+    margin-bottom: 8px;
+    font-weight: 700;
+    color: var(--text-dark);
+    font-size: 16px;
+}
+
+.grid {
+    display: grid;
+    gap: 16px;
+    grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+}
+
+label {
+    font-weight: 600;
+    color: var(--text-dark);
+    font-size: 14px;
+}
+
+input, select {
+    width: 100%;
+    padding: 9px 10px;
+    margin-top: 6px;
+    border-radius: 10px;
+    border: 1px solid #c7b8d9;
+    background: #faf7ff;
+    font-size: 14px;
+}
+
+button {
+    margin-top: 24px;
+    width: 100%;
+    padding: 14px;
+    background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+    border: none;
+    color: white;
+    border-radius: 12px;
+    font-size: 17px;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+    transition: 0.2s;
+}
+button:hover { transform: scale(1.02); }
+
+.result {
+    margin-top: 22px;
+    padding: 18px;
+    background: #f3e5f5;
+    border-left: 6px solid var(--primary);
+    border-radius: 10px;
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+.emr-box {
+    margin-top: 20px;
+    padding: 18px;
+    background: #ede7f6;
+    border-left: 6px solid var(--primary-dark);
+    border-radius: 10px;
+    font-size: 14px;
+}
+
+.copy-btn {
+    margin-top: 10px;
+    padding: 10px;
+    width: 100%;
+    background: var(--primary-dark);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 14px;
+    cursor: pointer;
+}
+</style>
+</head>
+
+<body>
+
+<a href="hematology.html" class="nav-btn left">← Hematology</a>
+<a href="index.html" class="nav-btn right">Home</a>
+
+<h1>🩸 Massive Transfusion Protocol Tool</h1>
+<div class="subtitle">
+    Helps decide when to activate MTP and suggests balanced product ratios & key adjuncts.
+</div>
+
+<div class="container">
+
+    <div class="section-title">Patient & Hemodynamics</div>
+    <div class="grid">
+        <div>
+            <label>Weight (kg)</label>
+            <input type="number" id="weight" step="0.1">
+        </div>
+        <div>
+            <label>Estimated blood loss (mL)</label>
+            <input type="number" id="ebl">
+        </div>
+        <div>
+            <label>Systolic BP (mmHg)</label>
+            <input type="number" id="sbp">
+        </div>
+        <div>
+            <label>Heart rate (bpm)</label>
+            <input type="number" id="hr">
+        </div>
+        <div>
+            <label>Active major bleeding?</label>
+            <select id="bleeding">
+                <option value="">-- Select --</option>
+                <option value="yes">Yes - ongoing major bleeding</option>
+                <option value="no">No / controlled</option>
+            </select>
+        </div>
+        <div>
+            <label>Mechanism</label>
+            <select id="mech">
+                <option value="">-- Select --</option>
+                <option value="trauma">Trauma</option>
+                <option value="ob">Obstetric (PPH)</option>
+                <option value="gi">GI bleed</option>
+                <option value="surgery">Post-op / peri-op bleeding</option>
+                <option value="other">Other / unclear</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="section-title">Key Labs</div>
+    <div class="grid">
+        <div>
+            <label>Hemoglobin (g/dL)</label>
+            <input type="number" id="hb" step="0.1">
+        </div>
+        <div>
+            <label>INR</label>
+            <input type="number" id="inr" step="0.1">
+        </div>
+        <div>
+            <label>Platelets (K/µL)</label>
+            <input type="number" id="plt">
+        </div>
+        <div>
+            <label>Fibrinogen (mg/dL)</label>
+            <input type="number" id="fib">
+        </div>
+        <div>
+            <label>Lactate (mmol/L)</label>
+            <input type="number" id="lactate" step="0.1">
+        </div>
+        <div>
+            <label>Base deficit (if known)</label>
+            <input type="number" id="base_def" step="0.1">
+        </div>
+    </div>
+
+    <button onclick="assessMTP()">Assess for Massive Transfusion</button>
+
+    <div id="result" class="result" style="display:none;"></div>
+
+    <div id="emrBox" class="emr-box" style="display:none;">
+        <h3>Assessment & Plan (Copy Ready)</h3>
+        <pre id="emrText" style="white-space:pre-wrap;"></pre>
+        <button class="copy-btn" onclick="copyEMR()">Copy to Clipboard</button>
+    </div>
+</div>
+
+<script>
+function num(id){
+    const v=parseFloat(document.getElementById(id).value);
+    return isNaN(v)?null:v;
+}
+function val(id){
+    const v=document.getElementById(id).value;
+    return v===""?null:v;
+}
+
+function assessMTP() {
+    const wt    = num("weight");
+    const ebl   = num("ebl");
+    const sbp   = num("sbp");
+    const hr    = num("hr");
+    const bleed = val("bleeding");
+    const mech  = val("mech");
+
+    const hb    = num("hb");
+    const inr   = num("inr");
+    const plt   = num("plt");
+    const fib   = num("fib");
+    const lact  = num("lactate");
+    const bd    = num("base_def");
+
+    let out = "";
+    let A = [];
+    let P = [];
+    let missing = [];
+
+    /* Shock index */
+    let shockIndex = null;
+    if (sbp !== null && hr !== null && sbp > 0) {
+        shockIndex = hr / sbp;
+        out += `Shock index (HR/SBP): <b>${shockIndex.toFixed(2)}</b><br>`;
+    }
+
+    if (ebl !== null && wt !== null) {
+        const estBloodVol = wt * 70; // mL
+        const pctLoss = (ebl / estBloodVol) * 100;
+        out += `Estimated blood loss: <b>${ebl} mL</b> (~${pctLoss.toFixed(0)}% of estimated blood volume).<br>`;
+    } else if (ebl !== null) {
+        out += `Estimated blood loss: <b>${ebl} mL</b>.<br>`;
+    }
+
+    /* MTP activation suggestion */
+    let highRiskBleeding = false;
+
+    if (bleed === "yes") {
+        if (
+            (shockIndex !== null && shockIndex > 1.0) ||
+            (sbp !== null && sbp < 90) ||
+            (lact !== null && lact > 4) ||
+            (bd !== null && bd < -6)
+        ) {
+            highRiskBleeding = true;
+        }
+    }
+
+    if (highRiskBleeding) {
+        out += "<br><b>Recommendation:</b> Clinical picture suggests need for <b>Massive Transfusion Protocol activation</b> if consistent with bedside assessment.<br>";
+        A.push("Ongoing hemodynamically significant hemorrhage with shock physiology.");
+        P.push("Activate Massive Transfusion Protocol in coordination with surgery/trauma/anesthesia.");
+    } else if (bleed === "yes") {
+        out += "<br><b>Recommendation:</b> Active bleeding present; MTP may be considered depending on trajectory and response to resuscitation.<br>";
+        A.push("Active bleeding without clear shock physiology yet.");
+        P.push("Monitor hemodynamics and transfusion needs closely; low threshold to activate MTP if instability persists or worsens.");
+    } else if (bleed === "no") {
+        out += "<br><b>Recommendation:</b> No ongoing major bleeding reported — routine transfusion strategy rather than MTP.<br>";
+        A.push("No current indication for Massive Transfusion Protocol.");
+    } else {
+        missing.push("Clarify if there is ongoing major bleeding.");
+    }
+
+    /* Mechanism commentary */
+    if (mech === "trauma") {
+        A.push("Traumatic hemorrhage risk.");
+        P.push("Coordinate with trauma surgery; consider TXA if within 3 hours of injury and no contraindications.");
+    } else if (mech === "ob") {
+        A.push("Obstetric hemorrhage (PPH) pattern.");
+        P.push("Address uterine tone, retained products, laceration repair; involve OB anesthesia and MFM as available.");
+    } else if (mech === "gi") {
+        A.push("GI bleed with potential for large-volume blood loss.");
+        P.push("Coordinate with GI/interventional radiology for source control.");
+    } else if (mech === "surgery") {
+        A.push("Perioperative hemorrhage.");
+        P.push("Discuss with surgical and anesthesia team for operative or interventional control.");
+    }
+
+    /* Product targets / coagulopathy */
+    if (plt !== null && plt < 50) {
+        out += "Platelets <50 K/µL → below typical target for active bleeding.<br>";
+        A.push("Thrombocytopenia in active/at-risk bleeding.");
+        P.push("Transfuse platelets to keep ≥50 K/µL (≥100 K/µL for CNS / neurosurgery).");
+    }
+
+    if (inr !== null && inr > 1.5) {
+        out += `INR ${inr} → coagulopathy present.<br>`;
+        A.push("Coagulopathy (INR >1.5).");
+        P.push("Give plasma/4-factor PCC per local protocol, especially if active bleeding or before procedures.");
+    }
+
+    if (fib !== null && fib < 150) {
+        out += `Fibrinogen ${fib} mg/dL → low for major bleeding.<br>`;
+        A.push("Hypofibrinogenemia.");
+        P.push("Give cryoprecipitate or fibrinogen concentrate to maintain fibrinogen ≥150–200 mg/dL in major hemorrhage.");
+    }
+
+    if (hb !== null && hb < 7) {
+        out += `Hemoglobin ${hb} g/dL → below restrictive threshold.<br>`;
+        P.push("Transfuse PRBCs to maintain Hb generally ≥7 g/dL (higher threshold in active cardiac ischemia or pregnancy per clinician judgment).");
+    }
+
+    /* Lactate / base deficit */
+    if (lact !== null && lact > 4) {
+        A.push("Elevated lactate suggesting poor perfusion/ongoing shock.");
+        P.push("Continue resuscitation targeting hemodynamics and clearance of lactate; reassess frequently.");
+    }
+    if (bd !== null && bd < -6) {
+        A.push("Significant base deficit consistent with shock.");
+    }
+
+    /* Standard MTP bundle suggestion */
+    if (bleed === "yes") {
+        out += "<br><b>Suggested initial MTP pack (example, adjust to local protocol):</b><br>";
+        out += "• 4 units PRBC + 4 units FFP + 1 apheresis platelet (≈6 pooled units) in ~1:1:1 ratio.<br>";
+        out += "• Consider 1–2 g calcium chloride (or equivalent) spaced with transfused units.<br>";
+        out += "• Repeat labs (CBC, PT/INR, PTT, fibrinogen, ionized Ca, lactate) every 30–60 min during active resuscitation.<br>";
+        P.push("Use balanced product resuscitation (PRBC:FFP:platelets ~1:1:1) per local MTP protocol.");
+        P.push("Check ionized calcium frequently and replete aggressively during massive transfusion.");
+        P.push("Trend labs (CBC, PT/INR, PTT, fibrinogen, lactate, Ca) q30–60 min while MTP active.");
+    }
+
+    /* Stop criteria / de-escalation */
+    P.push("Reassess frequently; consider deactivating MTP once surgical/IR control achieved, hemodynamics stable, and transfusion needs decrease.");
+
+    /* Missing fields */
+    if (wt === null) missing.push("Weight (for estimated blood volume)");
+    if (sbp === null) missing.push("Systolic BP");
+    if (hr === null) missing.push("Heart rate");
+    if (!mech) missing.push("Bleeding mechanism (trauma, OB, GI, etc.)");
+    if (!bleed) missing.push("Clarify if bleeding is ongoing and major");
+
+    // Deduplicate
+    missing = [...new Set(missing)];
+
+    if (missing.length > 0) {
+        out += "<br><b>Suggested additional data:</b><ul>";
+        missing.forEach(m => out += `<li>${m}</li>`);
+        out += "</ul>";
+    }
+
+    if (A.length === 0) {
+        A.push("Hemorrhage / resuscitation assessment – limited data provided.");
+    }
+    if (P.length === 0) {
+        P.push("Gather additional hemodynamic and lab data to decide on MTP activation and transfusion targets.");
+    }
+
+    /* EMR output */
+    let emr = "Assessment:\n";
+    A.forEach(a => emr += `• ${a}\n`);
+
+    emr += "\nPlan:\n";
+    P.forEach(p => emr += `• ${p}\n`);
+
+    if (missing.length > 0) {
+        emr += "\nSuggested additional data:\n";
+        missing.forEach(m => emr += `• ${m}\n`);
+    }
+
+    document.getElementById("result").innerHTML = out;
+    document.getElementById("result").style.display = "block";
+    document.getElementById("emrText").textContent = emr;
+    document.getElementById("emrBox").style.display = "block";
+}
+
+function copyEMR(){
+    navigator.clipboard.writeText(
+        document.getElementById("emrText").textContent
+    );
+}
+</script>
+
+</body>
+</html>
