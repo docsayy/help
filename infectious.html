@@ -1,87 +1,594 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Infectious Disease Tools</title>
+  <meta charset="utf-8" />
+  <title>Infectious Disease Tools</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <style>
+    :root {
+      --bg: #f3f4f6;
+      --card: #ffffff;
+      --accent: #0597a8; /* teal/aqua */
+      --accent-soft: #e0f7fa;
+      --accent-strong: #007b89;
+      --text-main: #0f172a;
+      --text-muted: #6b7280;
+      --border-subtle: #d1d5db;
+      --radius-lg: 16px;
+      --radius-pill: 999px;
+      --shadow-soft: 0 10px 30px rgba(15, 118, 110, 0.12);
+      --shadow-subtle: 0 4px 12px rgba(15, 23, 42, 0.06);
+      --gap: 16px;
+      --pad: 16px;
+      --transition-fast: 0.18s ease-out;
+    }
 
-<style>
-:root{
-  --bg1:#e8f5e9;
-  --bg2:#f1f8e9;
-  --card:#ffffffee;
-  --accent:#388e3c;
-  --accent2:#2e7d32;
-  --muted:#556b57;
-  --border:#c8e6c9;
-  --radius:16px;
-}
+    * {
+      box-sizing: border-box;
+    }
 
-body{
-  margin:0;font-family:Inter,Arial,sans-serif;
-  background:linear-gradient(135deg,var(--bg1),var(--bg2));
-}
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: radial-gradient(circle at top left, #e0f7fa 0, #f3f4f6 40%, #ffffff 100%);
+      color: var(--text-main);
+    }
 
-.home-btn{position:fixed;top:15px;right:15px;background:var(--accent);
-color:white;padding:10px 18px;border-radius:10px;font-weight:700;text-decoration:none;
-box-shadow:0 4px 12px rgba(0,0,0,0.2);}
-.home-btn:hover{background:var(--accent2);}
+    body {
+      display: flex;
+      justify-content: center;
+      padding: 20px 12px 32px;
+    }
 
-header{text-align:center;padding:32px 12px;}
-header .icon{font-size:45px;}
-header h1{margin:10px 0;color:var(--accent2);}
-header p{color:var(--muted);}
+    .app-shell {
+      width: 100%;
+      max-width: 1100px;
+      background: rgba(255, 255, 255, 0.9);
+      border-radius: 24px;
+      box-shadow: 0 20px 60px rgba(15, 118, 110, 0.18);
+      border: 1px solid rgba(148, 163, 184, 0.35);
+      backdrop-filter: blur(16px);
+      padding: 20px 18px 24px;
+    }
 
-.grid{max-width:1100px;margin:0 auto;padding:20px;display:grid;
-gap:20px;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));}
+    @media (min-width: 768px) {
+      .app-shell {
+        padding: 24px 28px 32px;
+      }
+    }
 
-.card{background:var(--card);padding:22px;border-radius:var(--radius);
-border:1px solid var(--border);box-shadow:0 4px 14px rgba(0,0,0,0.12);}
-.card h2{margin:0;color:var(--accent2);}
-.card p{margin:8px 0;color:var(--muted);}
-.btn{background:var(--accent);padding:10px 14px;color:white;
-text-decoration:none;border-radius:10px;font-weight:600;}
-.btn:hover{background:var(--accent2);}
-</style>
+    header {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      border-bottom: 1px solid var(--border-subtle);
+      padding-bottom: 16px;
+      margin-bottom: 20px;
+    }
+
+    @media (min-width: 640px) {
+      header {
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+      }
+    }
+
+    .title-block {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .system-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 18px;
+      background: radial-gradient(circle at 30% 20%, #ffffff 0, #a5f3fc 40%, #06b6d4 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 26px;
+      box-shadow: 0 10px 25px rgba(6, 182, 212, 0.35);
+    }
+
+    .title-text h1 {
+      font-size: 1.4rem;
+      margin: 0;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 3px 10px;
+      border-radius: 999px;
+      background: var(--accent-soft);
+      color: var(--accent-strong);
+      font-size: 0.78rem;
+      font-weight: 600;
+    }
+
+    .title-text p {
+      margin: 4px 0 0;
+      color: var(--text-muted);
+      font-size: 0.88rem;
+    }
+
+    .nav-buttons {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      padding: 8px 14px;
+      border-radius: var(--radius-pill);
+      border: 1px solid var(--border-subtle);
+      background: #f9fafb;
+      color: var(--text-main);
+      font-size: 0.85rem;
+      text-decoration: none;
+      cursor: pointer;
+      box-shadow: var(--shadow-subtle);
+      transition: transform var(--transition-fast), box-shadow var(--transition-fast), background var(--transition-fast), border-color var(--transition-fast);
+    }
+
+    .btn svg {
+      width: 16px;
+      height: 16px;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #06b6d4, #0597a8);
+      color: #ffffff;
+      border-color: transparent;
+      box-shadow: var(--shadow-soft);
+    }
+
+    .btn:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 6px 16px rgba(15, 23, 42, 0.18);
+      background: #ffffff;
+    }
+
+    .btn-primary:hover {
+      background: linear-gradient(135deg, #0ea5e9, #0284c7);
+      box-shadow: 0 14px 30px rgba(14, 165, 233, 0.35);
+    }
+
+    .btn:active {
+      transform: translateY(0);
+      box-shadow: var(--shadow-subtle);
+    }
+
+    main {
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .section-header h2 {
+      margin: 0;
+      font-size: 1.05rem;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .section-header h2 span {
+      font-size: 1.25rem;
+    }
+
+    .section-header p {
+      margin: 0;
+      color: var(--text-muted);
+      font-size: 0.86rem;
+    }
+
+    .pill-hint {
+      padding: 4px 10px;
+      border-radius: 999px;
+      background: #e5f6ff;
+      color: #0369a1;
+      font-size: 0.78rem;
+      border: 1px solid #bae6fd;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .tool-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr);
+      gap: 14px;
+      margin-top: 4px;
+    }
+
+    @media (min-width: 640px) {
+      .tool-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (min-width: 1024px) {
+      .tool-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+    }
+
+    .tool-card {
+      background: var(--card);
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--border-subtle);
+      padding: 14px 14px 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      box-shadow: var(--shadow-subtle);
+      position: relative;
+      overflow: hidden;
+      transition: transform var(--transition-fast), box-shadow var(--transition-fast), border-color var(--transition-fast), background var(--transition-fast);
+    }
+
+    .tool-card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at top right, rgba(56, 189, 248, 0.13), transparent 55%);
+      opacity: 0;
+      transition: opacity var(--transition-fast);
+      pointer-events: none;
+    }
+
+    .tool-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 26px rgba(15, 23, 42, 0.16);
+      border-color: rgba(56, 189, 248, 0.6);
+      background: #ffffff;
+    }
+
+    .tool-card:hover::before {
+      opacity: 1;
+    }
+
+    .tool-header {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+    }
+
+    .tool-icon {
+      width: 34px;
+      height: 34px;
+      border-radius: 14px;
+      background: var(--accent-soft);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      flex-shrink: 0;
+    }
+
+    .tool-title-block h3 {
+      margin: 0;
+      font-size: 0.98rem;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .tool-tag {
+      font-size: 0.72rem;
+      padding: 2px 8px;
+      border-radius: 999px;
+      background: #eff6ff;
+      color: #1d4ed8;
+      border: 1px solid #bfdbfe;
+      white-space: nowrap;
+    }
+
+    .tool-title-block p {
+      margin: 2px 0 0;
+      color: var(--text-muted);
+      font-size: 0.82rem;
+    }
+
+    .tool-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+      margin-top: 4px;
+      flex-wrap: wrap;
+    }
+
+    .tool-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+    }
+
+    .meta-pill {
+      padding: 2px 8px;
+      border-radius: 999px;
+      background: #f3f4f6;
+      border: 1px solid #e5e7eb;
+    }
+
+    .btn-small {
+      padding: 6px 11px;
+      font-size: 0.8rem;
+      border-radius: var(--radius-pill);
+      border: 1px solid var(--accent-strong);
+      background: #ecfeff;
+      color: var(--accent-strong);
+      text-decoration: none;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
+      transition: background var(--transition-fast), transform var(--transition-fast), box-shadow var(--transition-fast), border-color var(--transition-fast);
+      box-shadow: 0 4px 10px rgba(6, 182, 212, 0.2);
+    }
+
+    .btn-small span {
+      font-size: 0.9rem;
+    }
+
+    .btn-small:hover {
+      background: #cffafe;
+      transform: translateY(-1px);
+      box-shadow: 0 8px 18px rgba(6, 182, 212, 0.35);
+      border-color: var(--accent-strong);
+    }
+
+    .btn-small:active {
+      transform: translateY(0);
+      box-shadow: 0 3px 8px rgba(6, 182, 212, 0.25);
+    }
+
+    footer {
+      margin-top: 20px;
+      padding-top: 12px;
+      border-top: 1px solid var(--border-subtle);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 8px;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+
+    .footer-note {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 999px;
+      background: var(--accent-strong);
+    }
+  </style>
 </head>
-
 <body>
+  <div class="app-shell">
+    <header>
+      <div class="title-block">
+        <div class="system-icon" aria-hidden="true">🦠</div>
+        <div class="title-text">
+          <h1>
+            Infectious Disease Tools
+          </h1>
+          <div class="badge">
+            <span>🧪</span>
+            <span>System: Infectious Disease</span>
+          </div>
+          <p>
+            Quick-access calculators and decision helpers for sepsis, antibiotics, pneumonia, UTI, and more.
+          </p>
+        </div>
+      </div>
 
-<a class="home-btn" href="index.html">Home</a>
+      <nav class="nav-buttons" aria-label="Page navigation">
+        <!-- Home button (to main index) -->
+        <a href="index.html" class="btn btn-primary">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path fill="currentColor" d="M12 3.172 3 10.5V20a1 1 0 0 0 1 1h6v-5h4v5h6a1 1 0 0 0 1-1v-9.5L12 3.172Z"/>
+          </svg>
+          <span>Home</span>
+        </a>
 
-<header>
-  <div class="icon">🦠</div>
-  <h1>Infectious Disease Tools</h1>
-  <p>Sepsis, pneumonia, PSI, antibiotic wizard.</p>
-</header>
+        <!-- "Back to Infectious Disease" (on this page, just scrolls to top/self-link for consistency with tools) -->
+        <a href="#top" class="btn">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path fill="currentColor" d="M12 5.5 5.5 12l1.4 1.4L11 9.3V19h2V9.3l4.1 4.1 1.4-1.4L12 5.5Z"/>
+          </svg>
+          <span>Back to Infectious Disease</span>
+        </a>
+      </nav>
+    </header>
 
-<div class="grid">
+    <main id="top">
+      <section>
+        <div class="section-header">
+          <div>
+            <h2>
+              <span>📋</span>
+              Core Infectious Disease Tools
+            </h2>
+            <p>
+              Start with these high-yield tools for day-to-day inpatient and ED infectious disease decisions.
+            </p>
+          </div>
+          <div class="pill-hint">
+            <span>✨</span>
+            <span>Each tool page will also have Home &amp; Back to Infectious Disease buttons.</span>
+          </div>
+        </div>
 
-  <div class="card">
-    <h2>SIRS Criteria (Future)</h2>
-    <p>Systemic inflammatory response detection.</p>
-    <a class="btn" href="#">Coming Soon</a>
+        <div class="tool-grid">
+          <!-- Antibiotic Wizard -->
+          <article class="tool-card">
+            <div class="tool-header">
+              <div class="tool-icon" aria-hidden="true">💊</div>
+              <div class="tool-title-block">
+                <h3>
+                  Antibiotic Wizard
+                  <span class="tool-tag">Empiric &amp; targeted</span>
+                </h3>
+                <p>
+                  Age, gender, prior antibiotics &amp; cultures, residence, devices, COPD/vent/VAP, and Pseudomonas risk—designed to handle multiple sites (e.g., UTI + pneumonia).
+                </p>
+              </div>
+            </div>
+            <div class="tool-footer">
+              <div class="tool-meta">
+                <span class="meta-pill">Site-based choices</span>
+                <span class="meta-pill">De-escalation guidance</span>
+              </div>
+              <a href="infectious_disease/antibiotic_wizard.html" class="btn-small">
+                <span>Open tool</span> ▸
+              </a>
+            </div>
+          </article>
+
+          <!-- SIRS / Sepsis / Septic Shock -->
+          <article class="tool-card">
+            <div class="tool-header">
+              <div class="tool-icon" aria-hidden="true">🚨</div>
+              <div class="tool-title-block">
+                <h3>
+                  SIRS, Sepsis &amp; Shock
+                  <span class="tool-tag">One combined flow</span>
+                </h3>
+                <p>
+                  Single workflow for SIRS, sepsis, and septic shock with lactate, fluids, vasopressors, reassessment, and ID/ICU escalation triggers.
+                </p>
+              </div>
+            </div>
+            <div class="tool-footer">
+              <div class="tool-meta">
+                <span class="meta-pill">Criteria + actions</span>
+                <span class="meta-pill">Bundle-focused</span>
+              </div>
+              <a href="infectious_disease/sepsis_tool.html" class="btn-small">
+                <span>Open tool</span> ▸
+              </a>
+            </div>
+          </article>
+
+          <!-- Pneumonia Tool -->
+          <article class="tool-card">
+            <div class="tool-header">
+              <div class="tool-icon" aria-hidden="true">🫁</div>
+              <div class="tool-title-block">
+                <h3>
+                  Pneumonia (CAP / HAP / VAP)
+                  <span class="tool-tag">Severity &amp; therapy</span>
+                </h3>
+                <p>
+                  CAP vs HAP vs VAP, PSI/CURB-65, MRSA &amp; Pseudomonas risk, empiric choices, cultures, duration, and step-down recommendations.
+                </p>
+              </div>
+            </div>
+            <div class="tool-footer">
+              <div class="tool-meta">
+                <span class="meta-pill">PSI / CURB-65</span>
+                <span class="meta-pill">Inpatient vs outpatient</span>
+              </div>
+              <a href="infectious_disease/pneumonia_tool.html" class="btn-small">
+                <span>Open tool</span> ▸
+              </a>
+            </div>
+          </article>
+
+          <!-- UTI Tool -->
+          <article class="tool-card">
+            <div class="tool-header">
+              <div class="tool-icon" aria-hidden="true">🧴</div>
+              <div class="tool-title-block">
+                <h3>
+                  UTI &amp; Pyelonephritis
+                  <span class="tool-tag">UTI / Pyelo / CAUTI</span>
+                </h3>
+                <p>
+                  Distinguish asymptomatic bacteriuria, cystitis, pyelo, and CAUTI; decide when to treat; choose initial antibiotics and duration.
+                </p>
+              </div>
+            </div>
+            <div class="tool-footer">
+              <div class="tool-meta">
+                <span class="meta-pill">When not to treat</span>
+                <span class="meta-pill">Catheter-focused logic</span>
+              </div>
+              <a href="infectious_disease/uti_tool.html" class="btn-small">
+                <span>Open tool</span> ▸
+              </a>
+            </div>
+          </article>
+
+          <!-- Placeholder / future tools -->
+          <article class="tool-card">
+            <div class="tool-header">
+              <div class="tool-icon" aria-hidden="true">🧬</div>
+              <div class="tool-title-block">
+                <h3>
+                  More ID Tools (Coming Soon)
+                  <span class="tool-tag">Planned</span>
+                </h3>
+                <p>
+                  Space reserved for future modules like meningitis, neutropenic fever, SSTI/osteomyelitis, infectious diarrhea, TB, and fever in returning traveler.
+                </p>
+              </div>
+            </div>
+            <div class="tool-footer">
+              <div class="tool-meta">
+                <span class="meta-pill">Extensible design</span>
+                <span class="meta-pill">Same teal theme</span>
+              </div>
+              <span class="btn-small" style="pointer-events:none; opacity:0.7;">
+                In progress
+              </span>
+            </div>
+          </article>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <div class="footer-note">
+        <span class="dot"></span>
+        <span>Design: light teal Infectious Disease theme (no dark mode).</span>
+      </div>
+      <div>
+        <span>All tools: standalone HTML with built-in navigation.</span>
+      </div>
+    </footer>
   </div>
-
-  <div class="card">
-    <h2>Sepsis / Septic Shock (Future)</h2>
-    <p>qSOFA, lactate, MAP, fluids, vasopressors.</p>
-    <a class="btn" href="#">Coming Soon</a>
-  </div>
-
-  <div class="card">
-    <h2>PSI (Pneumonia Index) (Future)</h2>
-    <p>Pneumonia severity scoring tool.</p>
-    <a class="btn" href="#">Coming Soon</a>
-  </div>
-
-  <div class="card">
-    <h2>Antibiotic Wizard</h2>
-    <p>MDRO risk factors, cultures, VAP/HAP, COPD, UTI + PNA together.</p>
-    <a class="btn" href="#">Coming Soon</a>
-  </div>
-
-</div>
-
 </body>
 </html>
