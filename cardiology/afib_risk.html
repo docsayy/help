@@ -1,0 +1,422 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>AFib Risk – CHA₂DS₂-VASc & HAS-BLED</title>
+  <style>
+    :root {
+      --bg: #020617;
+      --card: #0b1120;
+      --accent: #22c55e;
+      --accent-soft: rgba(34,197,94,0.16);
+      --muted: #9ca3af;
+      --border: rgba(148,163,184,0.3);
+      --radius: 16px;
+      --pad: 14px;
+      color-scheme: dark;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: radial-gradient(circle at top, #111827 0, #020617 55%);
+      color: #e5e7eb;
+      display: flex;
+      justify-content: center;
+      padding: 14px;
+    }
+    main {
+      width: 100%;
+      max-width: 980px;
+    }
+    header {
+      margin-bottom: 14px;
+    }
+    h1 {
+      font-size: 1.5rem;
+      margin: 0 0 4px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    h1 span.icon {
+      font-size: 1.4rem;
+    }
+    header p {
+      margin: 0;
+      font-size: 0.85rem;
+      color: var(--muted);
+    }
+    .layout {
+      display: grid;
+      gap: 14px;
+    }
+    @media (min-width: 880px) {
+      .layout {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+    .card {
+      background: linear-gradient(135deg, rgba(15,23,42,0.96), rgba(15,23,42,0.99));
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      padding: var(--pad);
+      box-shadow: 0 18px 40px rgba(0,0,0,0.7);
+      position: relative;
+      overflow: hidden;
+    }
+    .card::before {
+      content: "";
+      position: absolute;
+      inset: -40%;
+      background:
+        radial-gradient(circle at 0 0, rgba(45,212,191,0.16), transparent 55%),
+        radial-gradient(circle at 100% 100%, rgba(52,211,153,0.16), transparent 55%);
+      opacity: 0.7;
+      pointer-events: none;
+    }
+    .card-inner {
+      position: relative;
+      z-index: 1;
+    }
+    .card h2 {
+      margin: 0 0 4px;
+      font-size: 1.1rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 6px;
+    }
+    .badge {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      padding: 3px 7px;
+      border-radius: 999px;
+      background: var(--accent-soft);
+      color: #bbf7d0;
+      border: 1px solid rgba(248,250,252,0.09);
+      white-space: nowrap;
+    }
+    .subtitle {
+      margin: 0 0 8px;
+      font-size: 0.8rem;
+      color: var(--muted);
+    }
+    form {
+      display: grid;
+      gap: 8px;
+      margin-bottom: 8px;
+    }
+    .field {
+      display: flex;
+      flex-direction: column;
+      font-size: 0.8rem;
+    }
+    label {
+      font-size: 0.8rem;
+    }
+    input[type="number"], select {
+      width: 100%;
+      padding: 6px 8px;
+      border-radius: 9px;
+      border: 1px solid rgba(148,163,184,0.4);
+      background: rgba(15,23,42,0.9);
+      color: #e5e7eb;
+      font-size: 0.85rem;
+      margin-top: 2px;
+    }
+    .helper {
+      font-size: 0.72rem;
+      color: var(--muted);
+      margin-top: 2px;
+    }
+    .checkbox-group {
+      display: grid;
+      gap: 4px;
+      font-size: 0.8rem;
+    }
+    .btn-row {
+      margin-top: 4px;
+    }
+    button {
+      border-radius: 999px;
+      border: none;
+      padding: 7px 13px;
+      font-size: 0.85rem;
+      font-weight: 500;
+      cursor: pointer;
+      background: radial-gradient(circle at 0 0, #bbf7d0, #4ade80 40%, #22c55e 100%);
+      color: #052e16;
+      box-shadow: 0 10px 25px rgba(34,197,94,0.4);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: transform 0.08s ease, box-shadow 0.08s ease, filter 0.08s ease;
+    }
+    button:hover {
+      transform: translateY(-1px);
+      filter: brightness(1.05);
+      box-shadow: 0 14px 32px rgba(34,197,94,0.55);
+    }
+    .result {
+      margin-top: 6px;
+      padding: 7px 8px;
+      border-radius: 10px;
+      font-size: 0.8rem;
+      background: rgba(15,23,42,0.9);
+      border: 1px solid rgba(148,163,184,0.45);
+    }
+    .result .title {
+      font-weight: 600;
+      margin-bottom: 2px;
+    }
+    .chip-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px;
+      margin-top: 4px;
+    }
+    .chip {
+      font-size: 0.7rem;
+      padding: 2px 6px;
+      border-radius: 999px;
+      border: 1px solid rgba(148,163,184,0.45);
+      color: #e5e7eb;
+    }
+    .risk-low { color: #4ade80; }
+    .risk-int { color: #facc15; }
+    .risk-high { color: #f97373; }
+    footer {
+      margin-top: 12px;
+      font-size: 0.72rem;
+      color: var(--muted);
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <header>
+      <h1><span class="icon">🫀</span> AFib Stroke & Bleeding Risk</h1>
+      <p>CHA₂DS₂-VASc and HAS-BLED to support anticoagulation decisions in non-valvular AF. Use with current AF guidelines and clinical judgement.</p>
+    </header>
+
+    <section class="layout">
+      <!-- CHA2DS2-VASc -->
+      <article class="card">
+        <div class="card-inner">
+          <h2>
+            CHA₂DS₂-VASc
+            <span class="badge">Stroke risk</span>
+          </h2>
+          <p class="subtitle">Standard stroke risk score to decide on need for long-term oral anticoagulation.</p>
+
+          <form id="cha2ds2-form">
+            <div class="field">
+              <label for="cha-age">Age (years)</label>
+              <input id="cha-age" type="number" min="18" max="110" value="70" />
+              <div class="helper">65–74 → 1 pt, ≥75 → 2 pts.</div>
+            </div>
+
+            <div class="field">
+              <label for="cha-sex">Sex</label>
+              <select id="cha-sex">
+                <option value="M">Male</option>
+                <option value="F">Female</option>
+              </select>
+            </div>
+
+            <div class="checkbox-group">
+              <label><input type="checkbox" id="cha-chf" /> Congestive HF / LV systolic dysfunction</label>
+              <label><input type="checkbox" id="cha-htn" /> Hypertension (treated or BP &gt;140/90)</label>
+              <label><input type="checkbox" id="cha-dm" /> Diabetes mellitus</label>
+              <label><input type="checkbox" id="cha-stroke" /> Prior stroke / TIA / thromboembolism</label>
+              <label><input type="checkbox" id="cha-vasc" /> Vascular disease (MI, PAD, aortic plaque)</label>
+            </div>
+
+            <div class="btn-row">
+              <button type="submit">Calculate CHA₂DS₂-VASc</button>
+            </div>
+          </form>
+
+          <div id="cha-result" class="result" aria-live="polite">
+            <div class="title">Result will appear here.</div>
+            <div>Enter basic details and click calculate.</div>
+          </div>
+        </div>
+      </article>
+
+      <!-- HAS-BLED -->
+      <article class="card">
+        <div class="card-inner">
+          <h2>
+            HAS-BLED
+            <span class="badge">Bleeding risk</span>
+          </h2>
+          <p class="subtitle">1-year major bleeding risk in AF patients on anticoagulation (ESC/ACC preferred tool).</p>
+
+          <form id="hasbled-form">
+            <div class="checkbox-group">
+              <label><input type="checkbox" id="hb-htn" /> Hypertension (SBP &gt;160 mmHg uncontrolled)</label>
+              <label><input type="checkbox" id="hb-renal" /> Abnormal renal function (dialysis, transplant, Cr &gt;2.26 mg/dL)</label>
+              <label><input type="checkbox" id="hb-liver" /> Abnormal liver function (cirrhosis or major LFT derangement)</label>
+              <label><input type="checkbox" id="hb-stroke" /> Prior stroke</label>
+              <label><input type="checkbox" id="hb-bleed" /> Prior major bleed or bleeding predisposition</label>
+              <label><input type="checkbox" id="hb-labile" /> Labile INR (TTR &lt;60% on warfarin)</label>
+              <label><input type="checkbox" id="hb-elderly" /> Elderly (&gt;65 years)</label>
+              <label><input type="checkbox" id="hb-drugs" /> Drugs predisposing to bleed (antiplatelets, NSAIDs)</label>
+              <label><input type="checkbox" id="hb-alcohol" /> Alcohol use (≥8 drinks/week)</label>
+            </div>
+
+            <div class="btn-row">
+              <button type="submit">Calculate HAS-BLED</button>
+            </div>
+          </form>
+
+          <div id="hb-result" class="result" aria-live="polite">
+            <div class="title">Result will appear here.</div>
+            <div>Tick applicable risk factors and click calculate.</div>
+          </div>
+        </div>
+      </article>
+    </section>
+
+    <footer>
+      Typical approach: anticoagulation generally recommended for CHA₂DS₂-VASc ≥2 (men) or ≥3 (women); HAS-BLED ≥3 flags higher bleeding risk & need for closer review, but is not by itself a reason to withhold OAC. Always follow current AF guidelines and local protocols.
+    </footer>
+  </main>
+
+  <script>
+    function calcCHA2DS2VASc() {
+      const age = Number(document.getElementById("cha-age").value || 0);
+      const sex = document.getElementById("cha-sex").value;
+      let score = 0;
+      const chips = [];
+
+      // C
+      if (document.getElementById("cha-chf").checked) {
+        score += 1;
+        chips.push("CHF/LV dysfunction (+1)");
+      }
+      // H
+      if (document.getElementById("cha-htn").checked) {
+        score += 1;
+        chips.push("Hypertension (+1)");
+      }
+      // A2 (age)
+      if (age >= 75) {
+        score += 2;
+        chips.push("Age ≥75 (+2)");
+      } else if (age >= 65) {
+        score += 1;
+        chips.push("Age 65–74 (+1)");
+      }
+      // D
+      if (document.getElementById("cha-dm").checked) {
+        score += 1;
+        chips.push("Diabetes (+1)");
+      }
+      // S2
+      if (document.getElementById("cha-stroke").checked) {
+        score += 2;
+        chips.push("Stroke/TIA/TE (+2)");
+      }
+      // V
+      if (document.getElementById("cha-vasc").checked) {
+        score += 1;
+        chips.push("Vascular disease (+1)");
+      }
+      // Sc (female sex)
+      if (sex === "F") {
+        score += 1;
+        chips.push("Female sex (+1)");
+      }
+
+      let riskClass, note, css;
+      const male = (sex === "M");
+      if ((male && score === 0) || (!male && score === 1)) {
+        riskClass = "Low risk";
+        css = "risk-low";
+        note = "Guidelines: often no anticoagulation if truly low risk (CHA₂DS₂-VASc 0 in men, 1 in women).";
+      } else if ((male && score === 1) || (!male && score === 2)) {
+        riskClass = "Intermediate risk";
+        css = "risk-int";
+        note = "Borderline; consider OAC based on individual factors and shared decision-making.";
+      } else {
+        riskClass = "High risk";
+        css = "risk-high";
+        note = "Stroke risk generally warrants long-term OAC unless contraindicated.";
+      }
+
+      const box = document.getElementById("cha-result");
+      box.innerHTML = `
+        <div class="title">CHA₂DS₂-VASc: <strong>${score}</strong> / 9 (${sex === "M" ? "male" : "female"})</div>
+        <div class="${css}"><strong>${riskClass}</strong></div>
+        <div>${note}</div>
+        <div class="chip-row">
+          ${chips.length ? chips.map(c => `<span class="chip">${c}</span>`).join("") : "<span class='chip'>No risk factors checked</span>"}
+        </div>
+      `;
+    }
+
+    function calcHASBLED() {
+      let score = 0;
+      const chips = [];
+
+      function add(id, label) {
+        if (document.getElementById(id).checked) {
+          score += 1;
+          chips.push(label);
+        }
+      }
+
+      add("hb-htn", "Hypertension (+1)");
+      add("hb-renal", "Abnormal renal (+1)");
+      add("hb-liver", "Abnormal liver (+1)");
+      add("hb-stroke", "Stroke (+1)");
+      add("hb-bleed", "Bleeding history/predisposition (+1)");
+      add("hb-labile", "Labile INR (+1)");
+      add("hb-elderly", "Elderly >65 (+1)");
+      add("hb-drugs", "Drugs (antiplatelets/NSAIDs) (+1)");
+      add("hb-alcohol", "Alcohol use (+1)");
+
+      let riskClass, note, css;
+      if (score <= 1) {
+        riskClass = "Low bleeding risk";
+        css = "risk-low";
+        note = "Estimated 1-year major bleeding risk is relatively low.";
+      } else if (score === 2) {
+        riskClass = "Moderate bleeding risk";
+        css = "risk-int";
+        note = "Caution; address modifiable bleeding risk factors where possible.";
+      } else {
+        riskClass = "High bleeding risk (HAS-BLED ≥3)";
+        css = "risk-high";
+        note = "Flag for closer follow-up and aggressive management of reversible risk factors – not a stand-alone reason to withhold OAC.";
+      }
+
+      const box = document.getElementById("hb-result");
+      box.innerHTML = `
+        <div class="title">HAS-BLED: <strong>${score}</strong> / 9</div>
+        <div class="${css}"><strong>${riskClass}</strong></div>
+        <div>${note}</div>
+        <div class="chip-row">
+          ${chips.length ? chips.map(c => `<span class="chip">${c}</span>`).join("") : "<span class='chip'>No bleeding risk factors checked</span>"}
+        </div>
+      `;
+    }
+
+    document.getElementById("cha2ds2-form").addEventListener("submit", function (e) {
+      e.preventDefault();
+      calcCHA2DS2VASc();
+    });
+
+    document.getElementById("hasbled-form").addEventListener("submit", function (e) {
+      e.preventDefault();
+      calcHASBLED();
+    });
+  </script>
+</body>
+</html>
