@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Thyroid Function Interpreter</title>
+<style>
+:root {
+    --primary: #9b5de5;
+    --secondary: #f7c948;
+    --bg1: #fdf7ff;
+    --bg2: #f3eaff;
+    --card-bg: #ffffff;
+    --text: #3a2a4c;
+    --radius: 14px;
+    --pad: 14px;
+}
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: linear-gradient(135deg, var(--bg1), var(--bg2));
+    padding: 20px;
+    color: var(--text);
+}
+h1 {
+    text-align: center;
+    color: var(--primary);
+    font-size: 28px;
+    margin-bottom: 20px;
+}
+.card {
+    background: var(--card-bg);
+    border-radius: var(--radius);
+    padding: 20px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    max-width: 700px;
+    margin: 0 auto 25px auto;
+}
+label {
+    font-weight: bold;
+    display: block;
+    margin-top: 12px;
+}
+input, select {
+    width: 100%;
+    padding: 9px;
+    border-radius: var(--radius);
+    border: 1px solid #ccc;
+    margin-top: 5px;
+    font-size: 15px;
+}
+.section-title {
+    margin-top: 18px;
+    font-weight: bold;
+    color: var(--primary);
+}
+.checkbox-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 8px;
+}
+.checkbox-row label {
+    font-weight: normal;
+    display: flex;
+    align-items: center;
+}
+button {
+    width: 100%;
+    padding: 14px;
+    margin-top: 20px;
+    background: var(--primary);
+    color: white;
+    font-size: 17px;
+    border: none;
+    border-radius: var(--radius);
+    cursor: pointer;
+    transition: 0.2s;
+}
+button:hover {
+    background: #8649d6;
+}
+h2 {
+    color: var(--primary);
+    margin-top: 20px;
+}
+.output {
+    white-space: pre-line;
+    padding: 12px;
+    background: #fff7e6;
+    border-left: 5px solid var(--secondary);
+    border-radius: var(--radius);
+    margin-top: 8px;
+}
+.nav-buttons {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 25px;
+}
+.nav-buttons a {
+    text-decoration: none;
+    background: var(--secondary);
+    padding: 10px 14px;
+    border-radius: var(--radius);
+    color: #5b440b;
+    font-weight: bold;
+    box-shadow: 0 3px 6px rgba(0,0,0,0.15);
+}
+.disclaimer {
+    font-size: 12px;
+    color: #6b5b7a;
+    margin-top: 10px;
+}
+</style>
+</head>
+<body>
+<h1>Thyroid Function Interpreter</h1>
+<div class="card">
+
+    <div class="disclaimer">
+        Educational support tool only. Does not replace clinical judgment or local guidelines.
+    </div>
+
+    <div class="section-title">Lab Values</div>
+    <label>TSH (mIU/L)</label>
+    <input id="tsh" type="number" step="0.01">
+
+    <label>Free T4 (ng/dL)</label>
+    <input id="ft4" type="number" step="0.01">
+
+    <label>Total or Free T3</label>
+    <input id="t3" type="number" step="0.01">
+
+    <label>TPO antibodies (positive? 1=yes, 0=no, blank=unknown)</label>
+    <input id="tpo" type="number" step="1" min="0" max="1">
+
+    <label>TRAb / TSI (positive? 1=yes, 0=no, blank=unknown)</label>
+    <input id="trab" type="number" step="1" min="0" max="1">
+
+    <div class="section-title">Clinical Context</div>
+    <label>Pregnancy status</label>
+    <select id="pregnancy">
+        <option value="none">Not pregnant / male</option>
+        <option value="t1">Pregnant – 1st trimester</option>
+        <option value="t2">Pregnant – 2nd trimester</option>
+        <option value="t3">Pregnant – 3rd trimester</option>
+    </select>
+
+    <label>Medications / Factors</label>
+    <div class="checkbox-row">
+        <label><input type="checkbox" id="med_amio"> Amiodarone</label>
+        <label><input type="checkbox" id="med_biotin"> High-dose Biotin</label>
+        <label><input type="checkbox" id="med_steroids"> Glucocorticoids</label>
+        <label><input type="checkbox" id="med_dopamine"> Dopamine / dobutamine</label>
+        <label><input type="checkbox" id="med_lithium"> Lithium</label>
+        <label><input type="checkbox" id="med_heparin"> Heparin</label>
+    </div>
+
+    <label>Acute severe illness / ICU?</label>
+    <select id="acute">
+        <option value="no">No</option>
+        <option value="yes">Yes – acutely ill / ICU</option>
+    </select>
+
+    <label>Symptoms (optional)</label>
+    <div class="checkbox-row">
+        <label><input type="checkbox" id="sym_hypo"> Hypothyroid symptoms (fatigue, weight gain, cold)</label>
+        <label><input type="checkbox" id="sym_hyper"> Hyperthyroid symptoms (palpitations, weight loss, heat)</label>
+    </div>
+
+    <button onclick="interpretThyroid()">Interpret</button>
+
+    <h2>Primary Pattern</h2>
+    <div id="pattern" class="output"></div>
+
+    <h2>Suggested Differential & Etiology</h2>
+    <div id="differential" class="output"></div>
+
+    <h2>Next Steps & Management Thoughts</h2>
+    <div id="management" class="output"></div>
+
+    <h2>Copy to Clipboard</h2>
+    <button onclick="copyThyroidPlan()">Copy Summary</button>
+    <div id="copytext" class="output"></div>
+
+    <div class="nav-buttons">
+        <a href="index.html">Home</a>
+        <a href="endocrine.html">Back to Endocrine</a>
+    </div>
+</div>
+
+<script>
+function getNum(id) {
+    let v = document.getElementById(id).value;
+    let n = parseFloat(v);
+    return isNaN(n) ? null : n;
+}
+
+function interpretThyroid() {
+    const tsh = getNum("tsh");
+    const ft4 = getNum("ft4");
+    const t3 = getNum("t3");
+    const tpo = getNum("tpo");
+    const trab = getNum("trab");
+
+    const pregnancy = document.getElementById("pregnancy").value;
+    const acute = document.getElementById("acute").value;
+
+    const symHypo = document.getElementById("sym_hypo").checked;
+    const symHyper = document.getElementById("sym_hyper").checked;
+
+    const medAmio = document.getElementById("med_amio").checked;
+    const medBiotin = document.getElementById("med_biotin").checked;
+    const medSteroids = document.getElementById("med_steroids").checked;
+    const medDopa = document.getElementById("med_dopamine").checked;
+    const medLith = document.getElementById("med_lithium").checked;
+    const medHep = document.getElementById("med_heparin").checked;
+
+    // Simple cutoffs (can tweak later)
+    const tshLow = tsh !== null && tsh < 0.4;
+    const tshVeryLow = tsh !== null && tsh < 0.1;
+    const tshHigh = tsh !== null && tsh > 4.5;
+    const tshVeryHigh = tsh !== null && tsh > 10;
+
+    const ft4Low = ft4 !== null && ft4 < 0.8;
+    const ft4High = ft4 !== null && ft4 > 1.8;
+
+    const t3Low = t3 !== null && t3 < 80;
+    const t3High = t3 !== null && t3 > 180;
+
+    let pattern = [];
+    let diff = [];
+    let mgmt = [];
+    let caveats = [];
+
+    // Pregnancy reference nuance (very simplified)
+    if (pregnancy !== "none" && tshLow && !ft4High) {
+        caveats.push("Pregnancy can lower TSH (especially 1st trimester); interpret using trimester-specific ranges.");
+    }
+
+    // Non-thyroidal illness (NTI) / sick euthyroid
+    if (acute === "yes" && t3Low && !ft4Low) {
+        diff.push("Non-thyroidal illness (sick euthyroid) pattern – low T3 with normal/low-normal FT4 in acute illness.");
+        mgmt.push("Defer thyroid hormone treatment unless clear primary thyroid disease. Repeat TFTs when clinically improved.");
+    }
+
+    // Core pattern logic
+    if (tshHigh && ft4Low) {
+        pattern.push("Overt primary hypothyroidism (TSH high, FT4 low).");
+        if (tpo === 1) {
+            diff.push("Hashimoto thyroiditis (TPO positive) – most likely.");
+        } else {
+            diff.push("Primary hypothyroidism – consider Hashimoto, prior radioiodine/surgery, drugs (amiodarone, lithium), infiltrative disease.");
+        }
+        if (symHypo) {
+            mgmt.push("Start or uptitrate levothyroxine; typical starting dose ~1.6 mcg/kg/day in young healthy patients, lower in older/heart disease.");
+        } else {
+            mgmt.push("Consider levothyroxine; adjust dose to bring TSH into target range, titrating every 4–6 weeks.");
+        }
+    } else if (tshHigh && !ft4Low) {
+        pattern.push("Subclinical hypothyroidism (TSH high, FT4 normal).");
+        diff.push("Subclinical autoimmune hypothyroidism vs recovery phase vs lab variation.");
+        mgmt.push("Repeat TSH/FT4 in 6–8 weeks; consider treatment if TSH ≥10, symptoms, TPO+, pregnancy or infertility.");
+    } else if (tshLow && ft4High) {
+        pattern.push("Overt hyperthyroidism (TSH low, FT4 high).");
+        if (trab === 1) {
+            diff.push("Graves disease (TRAb positive) – most likely.");
+        } else {
+            diff.push("Hyperthyroidism – Graves vs toxic nodular goiter vs thyroiditis vs exogenous thyroid hormone.");
+        }
+        if (t3High) {
+            diff.push("T3-predominant thyrotoxicosis (T3 high).");
+        }
+        mgmt.push("Beta-blockade for symptom control if no contraindication.");
+        mgmt.push("Check TRAb/TSI if not already done. Consider radioactive iodine uptake or ultrasound depending on context.");
+    } else if (tshLow && !ft4High) {
+        pattern.push("Subclinical hyperthyroidism (TSH low, FT4 normal).");
+        diff.push("Early/mild hyperthyroidism vs autonomous nodule vs exogenous thyroid hormone.");
+        mgmt.push("Repeat TSH/FT4/T3 in 4–6 weeks. Consider treatment if TSH persistently <0.1, age >65, AF or osteoporosis risk.");
+    } else if (!tshHigh && !tshLow && ft4Low) {
+        pattern.push("Possible central (secondary) hypothyroidism (FT4 low with non-elevated TSH).");
+        diff.push("Pituitary/hypothalamic disease, severe illness, or drugs (steroids, dopamine).");
+        mgmt.push("Evaluate pituitary axis (cortisol/ACTH, prolactin, LH/FSH, IGF-1) and consider pituitary MRI. Replace cortisol before thyroid hormone if adrenal insufficiency suspected.");
+    } else if (!tshHigh && !tshLow && ft4High) {
+        pattern.push("Inappropriate TSH for elevated FT4 – consider TSH-secreting adenoma or thyroid hormone resistance.");
+        diff.push("TSH-secreting pituitary adenoma vs thyroid hormone resistance; check alpha-subunit, pituitary MRI, family history.");
+        mgmt.push("Refer to endocrinology; avoid reflex LT4 changes without full workup.");
+    } else {
+        pattern.push("No clear primary thyroid disorder pattern based on current inputs.");
+        diff.push("Euthyroid, lab variation, early disease, or significant confounders (illness, meds, pregnancy).");
+        mgmt.push("Repeat TFTs with consistent timing and lab, and review meds/clinical status.");
+    }
+
+    // Antibody refinements
+    if (tpo === 1 && pattern[0].includes("hypothyroid")) {
+        diff.push("TPO positivity supports chronic autoimmune thyroiditis.");
+    }
+    if (trab === 1 && tshLow) {
+        diff.push("TRAb/TSI positivity supports Graves disease.");
+    }
+
+    // Medication caveats
+    if (medAmio) {
+        caveats.push("Amiodarone can cause both hypo- and hyperthyroidism and alter T4/T3 conversion; interpret with caution.");
+    }
+    if (medBiotin) {
+        caveats.push("High-dose biotin can artifactually alter immunoassay results; hold biotin for at least 24–48h and repeat labs if discordant.");
+    }
+    if (medSteroids || medDopa) {
+        caveats.push("Glucocorticoids and dopamine can suppress TSH, mimicking central hypothyroidism or NTI.");
+    }
+    if (medLith) {
+        caveats.push("Lithium can impair thyroid hormone release and cause hypothyroidism or goiter.");
+    }
+    if (medHep) {
+        caveats.push("Heparin can transiently raise free T4 due to lipase activation; interpret FT4 carefully.");
+    }
+
+    // Pregnancy management considerations
+    if (pregnancy !== "none" && tshHigh) {
+        mgmt.push("In pregnancy, aim for tighter TSH targets; consider levothyroxine if TSH above trimester-specific upper limit, particularly if TPO+.");
+    }
+    if (pregnancy !== "none" && tshLow && ft4High) {
+        mgmt.push("Thyrotoxicosis in pregnancy – consider Graves vs hCG-mediated; coordinate management with high-risk OB and endocrinology.");
+    }
+
+    // Acute illness
+    if (acute === "yes") {
+        caveats.push("Acute severe illness can significantly alter TFTs (non-thyroidal illness); avoid overdiagnosing chronic thyroid disease in this context.");
+    }
+
+    const patternText = pattern.join("\n");
+    let diffText = diff.join("\n");
+    if (caveats.length > 0) {
+        diffText += (diffText ? "\n\nCaveats:\n" : "Caveats:\n") + caveats.join("\n");
+    }
+    const mgmtText = mgmt.join("\n");
+
+    const copy = "Thyroid interpretation summary:\n" + patternText +
+                 "\n\nDifferential / notes:\n" + diffText +
+                 "\n\nNext steps / management thoughts:\n" + mgmtText;
+
+    document.getElementById("pattern").innerText = patternText;
+    document.getElementById("differential").innerText = diffText;
+    document.getElementById("management").innerText = mgmtText;
+    document.getElementById("copytext").innerText = copy;
+}
+
+function copyThyroidPlan() {
+    navigator.clipboard.writeText(document.getElementById("copytext").innerText);
+    alert("Copied!");
+}
+</script>
+</body>
+</html>
