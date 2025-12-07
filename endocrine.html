@@ -2,75 +2,122 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Endocrine Tools</title>
 
 <style>
-:root{
-  --bg1:#fff8e1;
-  --bg2:#ffecb3;
-  --card:#ffffffee;
-  --accent:#f57f17;
-  --accent2:#e65100;
-  --muted:#6b6b6b;
-  --border:#ffe082;
-  --radius:16px;
+:root {
+    --primary: #9b5de5;      /* Endocrine bright violet */
+    --secondary: #f7c948;    /* Gold accent */
+    --bg1: #fdf7ff;
+    --bg2: #f3eaff;
+    --card-bg: #ffffff;
+    --text: #3a2a4c;
+    --radius: 14px;
 }
 
-/* Shared layout as others */
-body{
-  margin:0;font-family:Inter,Arial,sans-serif;
-  background:linear-gradient(135deg,var(--bg1),var(--bg2));
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: linear-gradient(135deg, var(--bg1), var(--bg2));
+    padding: 20px;
+    color: var(--text);
 }
-.home-btn{position:fixed;top:15px;right:15px;background:var(--accent);
-color:white;padding:10px 18px;border-radius:10px;text-decoration:none;
-font-weight:700;box-shadow:0 4px 12px rgba(0,0,0,0.2);}
-.home-btn:hover{background:var(--accent2);}
-header{text-align:center;padding:32px 12px;}
-header .icon{font-size:45px;}
-header h1{margin:10px 0;color:var(--accent2);}
-header p{color:var(--muted);}
-.grid{max-width:1100px;margin:0 auto;padding:20px;display:grid;
-gap:20px;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));}
-.card{background:var(--card);padding:22px;border-radius:var(--radius);
-border:1px solid var(--border);box-shadow:0 4px 14px rgba(0,0,0,0.12);}
-.card h2{margin:0;color:var(--accent2);}
-.card p{margin:8px 0;color:var(--muted);}
-.btn{background:var(--accent);padding:10px 14px;color:white;text-decoration:none;
-border-radius:10px;font-weight:600;}
-.btn:hover{background:var(--accent2);}
+
+h1 {
+    text-align: center;
+    font-size: 32px;
+    color: var(--primary);
+    margin-bottom: 25px;
+}
+
+.card {
+    background: var(--card-bg);
+    border-radius: var(--radius);
+    padding: 22px;
+    max-width: 760px;
+    margin: 0 auto;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.section-title {
+    font-size: 20px;
+    font-weight: bold;
+    color: var(--primary);
+    margin-top: 10px;
+    margin-bottom: 10px;
+    text-align: center;
+}
+
+.tool-button {
+    display: block;
+    width: 100%;
+    text-decoration: none;
+    background: var(--primary);
+    color: white;
+    padding: 16px;
+    border-radius: var(--radius);
+    text-align: center;
+    font-size: 18px;
+    margin: 14px 0;
+    font-weight: bold;
+    transition: 0.2s;
+}
+
+.tool-button:hover {
+    background: #8649d6;
+}
+
+.nav-buttons {
+    display: flex;
+    justify-content: center;
+    margin-top: 25px;
+}
+
+.nav-buttons a {
+    text-decoration: none;
+    background: var(--secondary);
+    padding: 12px 18px;
+    border-radius: var(--radius);
+    color: #5b440b;
+    font-weight: bold;
+    box-shadow: 0 3px 6px rgba(0,0,0,0.15);
+    font-size: 16px;
+}
 </style>
-</head>
 
+</head>
 <body>
 
-<a class="home-btn" href="index.html">Home</a>
+<h1>Endocrine Tools</h1>
 
-<header>
-  <div class="icon">🧪</div>
-  <h1>Endocrine & Metabolic Tools</h1>
-  <p>DKA, acid-base, metabolic calculations.</p>
-</header>
+<div class="card">
 
-<div class="grid">
+    <div class="section-title">Clinical Decision Support</div>
 
-  <div class="card">
-    <h2>DKA Tool</h2>
-    <p>AG, pH, ketones, insulin, potassium, and EMR summary.</p>
-    <a class="btn" href="endocrine/dka.html">Open</a>
-  </div>
+    <a class="tool-button" href="endocrine/dka_hhs_tool.html">
+        DKA / HHS Rapid Assessment & Management
+    </a>
 
-  <div class="card">
-    <h2>Free Water Deficit (Future)</h2>
-    <p>Hypernatremia correction tool.</p>
-    <a class="btn" href="#">Coming Soon</a>
-  </div>
+    <a class="tool-button" href="endocrine/thyroid_interpreter.html">
+        Thyroid Function Interpreter
+    </a>
 
-  <div class="card">
-    <h2>Acid-Base Hub (Future)</h2>
-    <p>ABG interpretation & metabolic logic.</p>
-    <a class="btn" href="#">Coming Soon</a>
-  </div>
+    <a class="tool-button" href="endocrine/myxedema_coma_tool.html">
+        Myxedema Coma Severity Tool
+    </a>
+
+    <a class="tool-button" href="endocrine/thyroid_storm_burch_wartofsky.html">
+        Thyroid Storm (Burch–Wartofsky) Tool
+    </a>
+
+    <a class="tool-button" href="endocrine/endocrine_emergencies.html">
+        Endocrine Emergencies Triage Tool
+    </a>
+
+    <div class="nav-buttons">
+        <a href="index.html">Home</a>
+    </div>
 
 </div>
 
