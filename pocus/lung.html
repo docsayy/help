@@ -4,184 +4,850 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Lung POCUS Guide</title>
-
 <style>
-body {
-    font-family: Arial, sans-serif;
-    background: #e6f8ff;
-    padding: 20px;
-    margin: 0;
-}
-h1 {
-    text-align: center;
-    color: #005b80;
-}
-
-section {
-    background: white;
-    border-radius: 12px;
-    padding: 15px;
-    margin: 12px 0;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-}
-
-summary {
-    font-size: 20px;
-    font-weight: bold;
-    color: #005b80;
-    cursor: pointer;
-}
-
-img {
-    width: 100%;
-    margin-top: 10px;
-    border-radius: 10px;
-}
-
-ul { margin-left: 16px; }
-
-.home-btn, .back-btn {
-    display: inline-block;
-    padding: 8px 12px;
-    background: #005b80;
-    color: white;
-    border-radius: 8px;
-    text-decoration: none;
-    margin-right: 8px;
-}
+    :root{
+        --bg:#f5f9fb;
+        --card:#ffffff;
+        --accent:#0ea5e9;
+        --accent-soft:#e0f2fe;
+        --text:#0f172a;
+        --muted:#64748b;
+        --border:#dbe4f0;
+        --radius:14px;
+        --shadow:0 10px 30px rgba(15,23,42,0.08);
+    }
+    *{box-sizing:border-box;}
+    body{
+        margin:0;
+        font-family: system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+        background: radial-gradient(circle at top,#e0f2fe,#f5f9fb 55%,#eef2ff);
+        color:var(--text);
+    }
+    a{color:var(--accent);text-decoration:none;font-weight:500;}
+    a:hover{text-decoration:underline;}
+    header{
+        background:linear-gradient(120deg,#0ea5e9,#22c1c3);
+        color:#f9fafb;
+        padding:16px 12px;
+        box-shadow:var(--shadow);
+        position:sticky;
+        top:0;
+        z-index:10;
+    }
+    .header-inner{
+        max-width:1100px;
+        margin:0 auto;
+        display:flex;
+        align-items:center;
+        justify-content:space-between;
+        gap:8px;
+        flex-wrap:wrap;
+    }
+    .title-block h1{
+        margin:0;
+        font-size:1.7rem;
+        letter-spacing:0.02em;
+    }
+    .title-block p{
+        margin:2px 0 0;
+        font-size:0.9rem;
+        opacity:0.9;
+    }
+    .nav-links{
+        display:flex;
+        gap:8px;
+        flex-wrap:wrap;
+    }
+    .nav-links a{
+        display:inline-flex;
+        align-items:center;
+        gap:4px;
+        padding:6px 10px;
+        border-radius:999px;
+        background:rgba(15,23,42,0.14);
+        color:#e5f4ff;
+        font-size:0.85rem;
+        text-decoration:none;
+        border:1px solid rgba(255,255,255,0.18);
+    }
+    .nav-links a span.icon{font-size:1rem;}
+    main{
+        max-width:1100px;
+        margin:18px auto 32px;
+        padding:0 12px 32px;
+    }
+    .intro{
+        background:var(--card);
+        padding:18px 18px 16px;
+        border-radius:var(--radius);
+        box-shadow:var(--shadow);
+        border:1px solid var(--border);
+        margin-bottom:18px;
+    }
+    .intro h2{
+        margin-top:0;
+        font-size:1.25rem;
+    }
+    .pill-row{
+        display:flex;
+        flex-wrap:wrap;
+        gap:6px;
+        margin-top:8px;
+    }
+    .pill{
+        font-size:0.75rem;
+        padding:3px 10px;
+        border-radius:999px;
+        background:var(--accent-soft);
+        color:var(--muted);
+        border:1px solid #bfdbfe;
+    }
+    .toc{
+        background:var(--card);
+        border-radius:var(--radius);
+        border:1px solid var(--border);
+        padding:14px 16px;
+        margin-bottom:18px;
+    }
+    .toc h3{
+        margin-top:0;
+        font-size:1rem;
+    }
+    .toc ul{
+        columns:2;
+        padding-left:18px;
+        margin:6px 0 0;
+        font-size:0.9rem;
+    }
+    @media(max-width:720px){
+        .toc ul{columns:1;}
+    }
+    section{
+        background:var(--card);
+        border-radius:var(--radius);
+        border:1px solid var(--border);
+        padding:16px 18px 14px;
+        margin-bottom:16px;
+        box-shadow:var(--shadow);
+    }
+    section h2{
+        margin-top:0;
+        font-size:1.15rem;
+        border-left:4px solid var(--accent);
+        padding-left:8px;
+    }
+    h3{
+        margin-bottom:6px;
+        margin-top:14px;
+        font-size:1.02rem;
+    }
+    p{
+        margin:6px 0;
+        line-height:1.45;
+        font-size:0.94rem;
+    }
+    ul{
+        padding-left:20px;
+        margin:4px 0 8px;
+        font-size:0.93rem;
+    }
+    li{margin-bottom:3px;}
+    figure{
+        margin:10px 0;
+        padding:8px;
+        border-radius:12px;
+        border:1px solid #e2e8f0;
+        background:#f8fafc;
+    }
+    figure img{
+        max-width:100%;
+        border-radius:8px;
+        display:block;
+        margin:0 auto 6px;
+    }
+    figcaption{
+        font-size:0.8rem;
+        color:var(--muted);
+        text-align:center;
+    }
+    .highlight{
+        background:var(--accent-soft);
+        border-radius:10px;
+        padding:8px 10px;
+        border:1px solid #bfdbfe;
+        font-size:0.87rem;
+        margin:6px 0 2px;
+    }
+    .flex-row{
+        display:flex;
+        flex-wrap:wrap;
+        gap:12px;
+    }
+    .half{
+        flex:1 1 220px;
+    }
+    table{
+        width:100%;
+        border-collapse:collapse;
+        font-size:0.85rem;
+        margin-top:8px;
+    }
+    th,td{
+        padding:6px 8px;
+        border:1px solid #e2e8f0;
+        vertical-align:top;
+    }
+    th{
+        background:#eff6ff;
+        text-align:left;
+    }
+    .badge{
+        display:inline-block;
+        padding:2px 8px;
+        border-radius:999px;
+        font-size:0.7rem;
+        background:#ecfeff;
+        border:1px solid #a5f3fc;
+        color:#0369a1;
+        margin-left:4px;
+    }
+    footer{
+        max-width:1100px;
+        margin:0 auto 24px;
+        padding:0 12px;
+        font-size:0.8rem;
+        color:var(--muted);
+    }
+    .bottom-nav{
+        display:flex;
+        justify-content:space-between;
+        gap:8px;
+        flex-wrap:wrap;
+        margin-top:8px;
+    }
+    .bottom-nav a{
+        padding:6px 10px;
+        border-radius:999px;
+        border:1px solid var(--border);
+        background:#f8fafc;
+        text-decoration:none;
+        font-size:0.8rem;
+        color:var(--text);
+    }
 </style>
 </head>
-
 <body>
 
-<a href="index.html" class="back-btn">⬅ Back to POCUS</a>
-<a href="../index.html" class="home-btn">🏠 Home</a>
+<header>
+    <div class="header-inner">
+        <div class="title-block">
+            <h1>Lung POCUS Guide</h1>
+            <p>Quick, bedside lung ultrasound patterns for dyspnea, hypoxemia & shock.</p>
+        </div>
+        <nav class="nav-links">
+            <a href="../index.html"><span class="icon">🏠</span><span>Home</span></a>
+            <a href="index.html"><span class="icon">🩻</span><span>POCUS Home</span></a>
+        </nav>
+    </div>
+</header>
 
-<h1>Lung POCUS – Complete Guide</h1>
+<main>
 
-<!-- INDICATIONS -->
-<section>
-<details open>
-<summary>Indications for Lung POCUS</summary>
-<ul>
-<li>Dyspnea or respiratory distress</li>
-<li>Suspected pneumonia or consolidation</li>
-<li>Pulmonary edema vs COPD</li>
-<li>Pneumothorax</li>
-<li>Pleural effusion</li>
-<li>ARDS / interstitial syndrome</li>
-</ul>
-</details>
-</section>
+    <section class="intro">
+        <h2>How to Use This Page</h2>
+        <p>
+            This Lung POCUS article is organized by <strong>basic signs</strong> (A-lines, B-lines, lung sliding, PLAPS)
+            and then by <strong>clinical syndromes</strong> (pneumothorax, pneumonia, pulmonary edema, ARDS, COPD/asthma, PE).
+            Every key sign has a short explanation of <em>what it is</em>, <em>why it happens</em>,
+            and <em>how to interpret it at the bedside</em>.
+        </p>
+        <div class="pill-row">
+            <div class="pill">Probe: usually curvilinear or phased &rarr; linear for pleura detail</div>
+            <div class="pill">Depth: 6–10 cm (adjust by body habitus)</div>
+            <div class="pill">Always correlate with clinical picture & other imaging</div>
+        </div>
+    </section>
 
-<!-- NORMAL -->
-<section>
-<details>
-<summary>Normal Lung – A-Lines & Sliding</summary>
+    <section class="toc">
+        <h3>Quick Navigation</h3>
+        <ul>
+            <li><a href="#landmarks">Basic Landmarks &amp; Batwing Sign</a></li>
+            <li><a href="#lung-sliding">Lung Sliding &amp; Seashore / Barcode</a></li>
+            <li><a href="#a-lines">A-Lines (Normal Aerated Lung)</a></li>
+            <li><a href="#plaps">PLAPS &amp; Curtain Sign</a></li>
+            <li><a href="#b-lines">B-Lines &amp; Interstitial Syndromes</a></li>
+            <li><a href="#consolidation">Consolidation, Subpleural Foci &amp; Shred Sign</a></li>
+            <li><a href="#air-bronchograms">Air Bronchograms: Dynamic vs Static</a></li>
+            <li><a href="#effusion">Pleural Effusion Signs</a></li>
+            <li><a href="#pneumothorax">Pneumothorax Ultrasound Profile</a></li>
+            <li><a href="#pneumonia">Ultrasound Profile of Pneumonia</a></li>
+            <li><a href="#pathology-table">Pulmonary Pathology Summary Table</a></li>
+        </ul>
+    </section>
 
-<img src="lung/lung_normal.png" alt="Normal lung">
+    <!-- Landmarks & Batwing -->
+    <section id="landmarks">
+        <h2>1. Basic Landmarks – “Batwing Sign”</h2>
+        <p>
+            Place the probe in an intercostal space in the anterior chest (usually 2nd–4th intercostal space, mid-clavicular).
+            You should see two rib shadows with the pleural line between them – this is the classic
+            <strong>“batwing sign”</strong>.
+        </p>
+        <div class="flex-row">
+            <div class="half">
+                <figure>
+                    <img src="lung/rib-shadows-batwing.png" alt="Two rib shadows with pleural line (batwing sign)">
+                    <figcaption>Two rib shadows (“wings”) with the horizontal pleural line in between (“body”).</figcaption>
+                </figure>
+            </div>
+            <div class="half">
+                <figure>
+                    <img src="lung/batwing-sign.png" alt="Batwing sign labeled">
+                    <figcaption>Labeled batwing sign – ribs, pleural line, and expected location of artifacts.</figcaption>
+                </figure>
+            </div>
+        </div>
+        <div class="highlight">
+            <strong>Key idea:</strong> Always identify ribs &amp; pleural line first. Everything else (A-lines, B-lines, lung sliding)
+            is interpreted relative to this line.
+        </div>
+    </section>
 
-<ul>
-<li>Pleural line visible</li>
-<li>Horizontal A-lines repeating downward</li>
-<li>Lung sliding present (shimmering motion)</li>
-</ul>
+    <!-- Lung sliding & seashore -->
+    <section id="lung-sliding">
+        <h2>2. Lung Sliding &amp; Seashore / Barcode Sign</h2>
 
-<p><b>A-profile = normal aeration</b></p>
+        <h3>What is lung sliding and why does it occur?</h3>
+        <p>
+            <strong>Lung sliding</strong> is the shimmering, to-and-fro motion of the visceral pleura
+            against the parietal pleura with each breath. It requires:
+        </p>
+        <ul>
+            <li>The lung to be <strong>inflated and opposed</strong> to the chest wall</li>
+            <li>No significant air or thick fluid separating pleural layers</li>
+            <li>At least some tidal ventilation in that region</li>
+        </ul>
 
-</details>
-</section>
+        <div class="flex-row">
+            <div class="half">
+                <figure>
+                    <img src="lung/lung-sliding.gif" alt="Lung sliding on B-mode">
+                    <figcaption>B-mode: shimmering of the pleural line with each respiratory cycle.</figcaption>
+                </figure>
+            </div>
+            <div class="half">
+                <figure>
+                    <img src="lung/lung-sliding-linear-probe.gif" alt="Lung sliding with linear probe">
+                    <figcaption>Lung sliding with a linear probe – higher resolution view of the pleural line.</figcaption>
+                </figure>
+            </div>
+        </div>
 
-<!-- BLINES -->
-<section>
-<details>
-<summary>B-Lines – Interstitial / Edema</summary>
+        <h3>Seashore Sign (Normal) vs Barcode/Stratosphere Sign (Absent Sliding)</h3>
+        <p>
+            On M-mode, place the M-mode cursor through the pleural line:
+        </p>
+        <ul>
+            <li><strong>Seashore sign:</strong> static chest wall above (horizontal lines) and speckled granular pattern
+                below the pleura (moving lung) – suggests <strong>normal lung sliding</strong>.</li>
+            <li><strong>Barcode / Stratosphere sign:</strong> only parallel horizontal lines above and below the pleural line,
+                indicating <strong>no motion</strong> – seen in pneumothorax and also in apnea, mainstem intubation,
+                lung overdistension, pleural adhesions, or very shallow breathing.</li>
+        </ul>
 
-<div class="small-title"><b>Few B-Lines (focal)</b></div>
-<img src="lung/lung_few_b_lines.png" alt="Few B lines">
+        <div class="flex-row">
+            <div class="half">
+                <figure>
+                    <img src="lung/seashore-sign.png" alt="Seashore sign B-mode lung ultrasound">
+                    <figcaption>Seashore sign – typical look of a normal sliding lung on M-mode.</figcaption>
+                </figure>
+            </div>
+            <div class="half">
+                <figure>
+                    <img src="lung/seashore-sign-mmode.png" alt="Seashore sign M-mode lung ultrasound">
+                    <figcaption>Seashore sign on M-mode: “waves” (superficial tissues) over “sand” (moving lung).</figcaption>
+                </figure>
+            </div>
+        </div>
 
-<div class="small-title"><b>Confluent B-Lines (edema)</b></div>
-<img src="lung/lung_confluent_b_lines.jpg" alt="Confluent B lines">
+        <div class="flex-row">
+            <div class="half">
+                <figure>
+                    <img src="lung/barcode-stratosphere-sign-mmode.gif" alt="Barcode or stratosphere sign M-mode">
+                    <figcaption>Barcode/stratosphere sign – absence of lung sliding in pneumothorax or other causes.</figcaption>
+                </figure>
+            </div>
+            <div class="half">
+                <figure>
+                    <img src="lung/absent-lung-sliding-bmode.gif" alt="Absent lung sliding on B-mode">
+                    <figcaption>B-mode appearance when lung sliding is absent – pleural line is static.</figcaption>
+                </figure>
+            </div>
+        </div>
 
-<ul>
-<li>B-lines = vertical hyperechoic lines from pleura to bottom</li>
-<li>Move with pleura</li>
-<li>Erase A-lines</li>
-</ul>
+        <div class="highlight">
+            <strong>Clinical note:</strong> Absence of lung sliding is <em>not</em> specific for pneumothorax.
+            Combine with A-line pattern, lung point, and clinical context.
+        </div>
+    </section>
 
-<p><b>Many B-lines = pulmonary edema or interstitial syndrome</b></p>
+    <!-- A-lines -->
+    <section id="a-lines">
+        <h2>3. A-Lines – Reverberation of Normal Aerated Lung</h2>
+        <p>
+            <strong>A-lines</strong> are horizontal, regularly spaced reverberation artifacts that repeat
+            at equal intervals below the pleural line. They occur because ultrasound reflects back and forth
+            between the pleura and the probe over highly aerated lung.
+        </p>
 
-</details>
-</section>
+        <div class="flex-row">
+            <div class="half">
+                <figure>
+                    <img src="lung/a-line-illustration.png" alt="A-line illustration">
+                    <figcaption>Illustration showing pleural line and horizontal reverberation (A-lines).</figcaption>
+                </figure>
+            </div>
+            <div class="half">
+                <figure>
+                    <img src="lung/a-lines-a1-a2-a3.gif" alt="A1 A2 A3 A lines">
+                    <figcaption>A-lines (A1, A2, A3) — repeating horizontal artifacts deep to the pleura.</figcaption>
+                </figure>
+            </div>
+        </div>
 
-<!-- PNEUMOTHORAX -->
-<section>
-<details>
-<summary>Pneumothorax</summary>
+        <p>
+            A predominance of A-lines usually indicates <strong>normal lung aeration</strong> or conditions with
+            <strong>hyperinflation / air trapping</strong> (COPD, asthma) or <strong>pneumothorax</strong>
+            (when combined with absent sliding).
+        </p>
 
-<img src="lung/lung_pneumothorax.jpg" alt="Pneumothorax">
+        <div class="highlight">
+            <strong>Think A-lines:</strong> normal lung, COPD/asthma, early/compensated ARDS in spared regions, or pneumothorax
+            (if <em>no</em> lung sliding and possibly lung point).
+        </div>
+    </section>
 
-<ul>
-<li>No lung sliding</li>
-<li>Only A-lines</li>
-<li>No B-lines</li>
-</ul>
+    <!-- PLAPS & curtain -->
+    <section id="plaps">
+        <h2>4. Posterolateral Alveolar and/or Pleural Syndrome (PLAPS) &amp; Curtain Sign</h2>
+        <p>
+            The <strong>PLAPS point</strong> is the dependent, posterolateral region where effusions,
+            consolidations, and atelectasis frequently collect. Scan the right and left PLAPS points
+            in semirecumbent or supine patients.
+        </p>
 
-<div class="small-title"><b>Lung Point (pathognomonic)</b></div>
-<img src="lung/lung_point.jpg" alt="Lung point">
+        <div class="flex-row">
+            <div class="half">
+                <figure>
+                    <img src="lung/right-plap-point.png" alt="Right PLAPS point">
+                    <figcaption>Right PLAPS location – intersection of posterior axillary line and diaphragm area.</figcaption>
+                </figure>
+            </div>
+            <div class="half">
+                <figure>
+                    <img src="lung/left-plap-point.png" alt="Left PLAPS point">
+                    <figcaption>Left PLAPS point – useful for detecting effusion, consolidation or atelectasis.</figcaption>
+                </figure>
+            </div>
+        </div>
 
-<p><b>Lung point = 100% specific for pneumothorax</b></p>
+        <h3>Curtain Sign</h3>
+        <p>
+            Over the diaphragm and upper abdomen, the aerated lung creates a moving “curtain” that
+            covers and uncovers the liver or spleen during inspiration. This is the <strong>curtain sign</strong>,
+            and it implies an aerated, normally expanding lung base.
+        </p>
+        <figure>
+            <img src="lung/curtain-sign.gif" alt="Curtain sign over diaphragm">
+            <figcaption>Curtain sign – aerated lung sweeping over liver/spleen and hiding the abdominal organs with inspiration.</figcaption>
+        </figure>
 
-</details>
-</section>
+        <div class="highlight">
+            <strong>Loss of curtain sign</strong> at the base suggests consolidation, effusion, or diaphragmatic paralysis
+            preventing the lung from moving over the abdominal organs.
+        </div>
+    </section>
 
-<!-- PLEURAL EFFUSION -->
-<section>
-<details>
-<summary>Pleural Effusion</summary>
+    <!-- B-lines -->
+    <section id="b-lines">
+        <h2>5. B-Lines – Why They Happen &amp; How to Interpret Them</h2>
 
-<img src="lung/lung_effusion.jpg" alt="Pleural Effusion">
+        <h3>What is a B-line and why does it occur?</h3>
+        <p>
+            <strong>B-lines</strong> are vertical, hyperechoic artifacts that:
+        </p>
+        <ul>
+            <li>Originate at the pleural line</li>
+            <li>Extend to the bottom of the screen without fading</li>
+            <li>Move synchronously with lung sliding</li>
+            <li>Erase A-lines</li>
+        </ul>
+        <p>
+            They represent ultrasound scattering from <strong>thickened interlobular septa or increased fluid</strong>
+            in the subpleural interstitium and alveoli – essentially an interstitial or alveolar-interstitial syndrome.
+        </p>
 
-<ul>
-<li>Anechoic dark fluid above diaphragm</li>
-<li>Lung may “float” (jellyfish sign)</li>
-<li>Use posterior axillary line</li>
-</ul>
+        <div class="flex-row">
+            <div class="half">
+                <figure>
+                    <img src="lung/b-lines-few.gif" alt="Few scattered B lines">
+                    <figcaption>Few scattered B-lines – can be normal at lung bases or early interstitial involvement.</figcaption>
+                </figure>
+            </div>
+            <div class="half">
+                <figure>
+                    <img src="lung/b-lines-confluent.gif" alt="Confluent B lines">
+                    <figcaption>Confluent B-lines – suggest more severe interstitial or alveolar edema/consolidation.</figcaption>
+                </figure>
+            </div>
+        </div>
 
-</details>
-</section>
+        <p>
+            Interpretation depends on the pattern:
+        </p>
+        <ul>
+            <li><strong>Isolated/Basal B-lines:</strong> may be normal, or due to dependent atelectasis, mild edema.</li>
+            <li><strong>Focal B-lines:</strong> near a consolidation or focal pneumonia.</li>
+            <li><strong>Diffuse, bilateral B-lines:</strong> consider cardiogenic pulmonary edema or ARDS;
+                integrate with lung sliding, PLAPS findings, and clinical context.</li>
+        </ul>
+    </section>
 
-<!-- CONSOLIDATION -->
-<section>
-<details>
-<summary>Pneumonia / Consolidation</summary>
+    <!-- Consolidation & shred -->
+    <section id="consolidation">
+        <h2>6. Consolidation &amp; Subpleural Foci – “Shred Sign”</h2>
+        <p>
+            When alveoli fill with fluid, pus, or cells, the lung becomes tissue-like and “hepatized.”
+            On ultrasound, this appears as a <strong>consolidation</strong> with a tissue echotexture similar to liver.
+        </p>
 
-<img src="lung/lung_consolidation.jpg" alt="Consolidation">
+        <div class="flex-row">
+            <div class="half">
+                <figure>
+                    <img src="lung/lung-consolidation.gif" alt="Lung consolidation ultrasound">
+                    <figcaption>Large consolidation – tissue-like echotexture with possible air bronchograms.</figcaption>
+                </figure>
+            </div>
+            <div class="half">
+                <figure>
+                    <img src="lung/subpleural-consolidation.gif" alt="Subpleural consolidation">
+                    <figcaption>Subpleural consolidation – small peripheral focus abutting the pleural line.</figcaption>
+                </figure>
+            </div>
+        </div>
 
-<ul>
-<li>Lung becomes tissue-like (“hepatization”)</li>
-<li>Dynamic air bronchograms = pneumonia</li>
-<li>Static air bronchograms = atelectasis</li>
-</ul>
+        <h3>Shred Sign</h3>
+        <p>
+            The <strong>shred sign</strong> is the irregular, shredded deep border between consolidated lung and aerated lung.
+            It reflects an uneven transition zone between solid and aerated tissue, typical of pneumonia.
+        </p>
+        <figure>
+            <img src="lung/shred-sign.png" alt="Shred sign">
+            <figcaption>Shred sign – irregular, “shredded” interface between consolidation and normal aerated lung.</figcaption>
+        </figure>
 
-</details>
-</section>
+        <div class="highlight">
+            <strong>Think pneumonia</strong> when you see a consolidation with shred sign, focal B-lines, and dynamic air bronchograms,
+            especially at a PLAPS point.
+        </div>
+    </section>
 
-<!-- ZONES -->
-<section>
-<details>
-<summary>Lung Zones (Where to Scan)</summary>
+    <!-- Air bronchograms -->
+    <section id="air-bronchograms">
+        <h2>7. Air Bronchograms – Dynamic vs Static</h2>
+        <p>
+            <strong>Air bronchograms</strong> are hyperechoic, branching foci of air within consolidated lung tissue.
+        </p>
+        <ul>
+            <li><strong>Static air bronchograms:</strong> do not move with respiration – seen in dense atelectasis
+                where air is trapped and no longer ventilated.</li>
+            <li><strong>Dynamic air bronchograms:</strong> move with inspiration and expiration, reflecting air
+                being pushed in and out of patent bronchi within consolidation – highly suggestive of <strong>pneumonia</strong>.</li>
+        </ul>
 
-<img src="lung/lung_zones.png" alt="Lung zones">
+        <figure>
+            <img src="lung/air-bronchogram-dynamic.gif" alt="Dynamic air bronchogram">
+            <figcaption>Dynamic air bronchograms – echogenic foci moving with the respiratory cycle inside consolidation.</figcaption>
+        </figure>
 
-<ul>
-<li>Anterior zones best for pneumothorax</li>
-<li>Lateral/inferior zones best for effusion</li>
-<li>Posterior zones best for pneumonia</li>
-</ul>
+        <div class="highlight">
+            <strong>Key distinction:</strong> Dynamic air bronchogram → pneumonia; static air bronchogram → atelectasis
+            (e.g., from obstruction or compression).
+        </div>
+    </section>
 
-</details>
-</section>
+    <!-- Pleural effusion -->
+    <section id="effusion">
+        <h2>8. Pleural Effusion on Ultrasound</h2>
+        <p>
+            Scan the posterior or lateral bases (PLAPS points). Pleural effusions appear as <strong>anechoic or hypoechoic fluid</strong>
+            between the parietal and visceral pleura. Multiple classic signs help confirm and characterize effusions.
+        </p>
+
+        <h3>Key Pleural Effusion Signs</h3>
+
+        <h3>8.1 Spine Sign</h3>
+        <p>
+            Normally, the spine is only seen <em>below</em> the diaphragm. When fluid is present above the diaphragm,
+            the spine can be traced higher into the thorax – the <strong>spine sign</strong>.
+        </p>
+        <figure>
+            <img src="lung/spine-sign.gif" alt="Spine sign in pleural effusion">
+            <figcaption>Spine sign – posterior acoustic enhancement of fluid allows the thoracic spine to be seen above the diaphragm.</figcaption>
+        </figure>
+
+        <h3>8.2 Jellyfish Sign</h3>
+        <p>
+            The partially collapsed lung flapping within surrounding pleural fluid resembles a jellyfish.
+        </p>
+        <figure>
+            <img src="lung/jellyfish-sign.gif" alt="Jellyfish sign pleural effusion">
+            <figcaption>Jellyfish sign – atelectatic lung floating and moving within a large effusion.</figcaption>
+        </figure>
+
+        <h3>8.3 Sinusoid Sign</h3>
+        <p>
+            On M-mode, the visceral pleura/lung tissue oscillates toward and away from the parietal pleura
+            inside an effusion, creating a sinusoidal pattern.
+        </p>
+        <figure>
+            <img src="lung/sinusoid-sign.png" alt="Sinusoid sign">
+            <figcaption>Sinusoid sign – respiratory motion of lung within an anechoic effusion.</figcaption>
+        </figure>
+
+        <h3>8.4 Quad Sign</h3>
+        <p>
+            The effusion is bounded by the pleural line, lung line, and two rib shadows, forming a quadrilateral.
+        </p>
+        <div class="flex-row">
+            <div class="half">
+                <figure>
+                    <img src="lung/quad-sign.png" alt="Quad sign unlabeled">
+                    <figcaption>Quad sign – anechoic fluid pocket forming a quadrilateral between pleura, lung, and ribs.</figcaption>
+                </figure>
+            </div>
+            <div class="half">
+                <figure>
+                    <img src="lung/quad-sign-labeled.png" alt="Quad sign labeled">
+                    <figcaption>Quad sign (labeled) – helps confirm true pleural effusion vs other fluid collections.</figcaption>
+                </figure>
+            </div>
+        </div>
+
+        <h3>8.5 Plankton Sign</h3>
+        <p>
+            Low-amplitude echogenic particles moving within the effusion (protein, cells, debris) give a
+            “plankton” appearance, often indicating an exudative or complicated effusion.
+        </p>
+        <figure>
+            <img src="lung/plankton-sign.gif" alt="Plankton sign">
+            <figcaption>Plankton sign – swirling echogenic particles within an effusion.</figcaption>
+        </figure>
+
+        <h3>8.6 Hematocrit Sign</h3>
+        <p>
+            Layering echogenic material with a dependent-fluid level can indicate a hemothorax or very dense exudate.
+        </p>
+        <figure>
+            <img src="lung/hematocrit-sign.png" alt="Hematocrit sign pleural effusion">
+            <figcaption>Hematocrit sign – layering of blood products or dense debris within pleural fluid.</figcaption>
+        </figure>
+
+        <h3>8.7 Loculated Pleural Effusions</h3>
+        <p>
+            Septations or loculations within the pleural space suggest complicated parapneumonic effusion or empyema.
+            They may affect drainage strategy and chest tube placement.
+        </p>
+        <figure>
+            <img src="lung/loculated-effusion.gif" alt="Loculated pleural effusion">
+            <figcaption>Loculated effusion – internal septations and non-free-flowing fluid.</figcaption>
+        </figure>
+    </section>
+
+    <!-- Pneumothorax -->
+    <section id="pneumothorax">
+        <h2>9. Pneumothorax – Ultrasound Profile</h2>
+        <p>
+            Ultrasound is more sensitive than chest X-ray for detecting pneumothorax in supine or critically ill patients.
+            Scan anteriorly in a supine patient, moving laterally as needed.
+        </p>
+
+        <h3>Key Findings</h3>
+        <ul>
+            <li><strong>No lung sliding</strong> on B-mode at an anterior position</li>
+            <li><strong>Barcode / stratosphere sign</strong> on M-mode</li>
+            <li><strong>A-lines pattern</strong> (highly aerated lung)</li>
+            <li><strong>Lung point</strong> – transition point where sliding reappears (very specific)</li>
+        </ul>
+
+        <div class="flex-row">
+            <div class="half">
+                <figure>
+                    <img src="lung/absent-lung-sliding-bmode.gif" alt="No lung sliding">
+                    <figcaption>No lung sliding – pleural line remains static despite cardiac motion.</figcaption>
+                </figure>
+            </div>
+            <div class="half">
+                <figure>
+                    <img src="lung/barcode-stratosphere-sign-mmode.gif" alt="Barcode sign">
+                    <figcaption>Barcode / stratosphere sign on M-mode – absence of granular lung pattern.</figcaption>
+                </figure>
+            </div>
+        </div>
+
+        <h3>Lung Point</h3>
+        <p>
+            The <strong>lung point</strong> is the location where pneumothorax air intermittently gives way to
+            normal apposed lung with sliding during the respiratory cycle. It is considered highly specific
+            for pneumothorax if found.
+        </p>
+
+        <div class="flex-row">
+            <div class="half">
+                <figure>
+                    <img src="lung/lung-point-bmode.gif" alt="Lung point B-mode">
+                    <figcaption>Lung point on B-mode – alternating appearance of sliding and no sliding at the same location.</figcaption>
+                </figure>
+            </div>
+            <div class="half">
+                <figure>
+                    <img src="lung/lung-point-mmode.png" alt="Lung point M-mode">
+                    <figcaption>M-mode of lung point – alternating seashore and barcode patterns along the same line.</figcaption>
+                </figure>
+            </div>
+        </div>
+
+        <div class="highlight">
+            <strong>Summary for pneumothorax:</strong> No lung sliding + A-lines + barcode sign <span class="badge">suggestive</span>.
+            Finding a lung point is <span class="badge">highly specific</span>.
+        </div>
+    </section>
+
+    <!-- Pneumonia profile -->
+    <section id="pneumonia">
+        <h2>10. Ultrasound Profile of Pneumonia</h2>
+        <p>
+            Pneumonia often localizes to dependent or posterior lung regions and is well captured at PLAPS points.
+        </p>
+        <ul>
+            <li><strong>Consolidation or hepatization of lung</strong> (often wedge-shaped, abutting pleura)</li>
+            <li><strong>Subpleural consolidations</strong> in more peripheral disease</li>
+            <li><strong>Shred sign</strong> at deep border between consolidated and aerated lung</li>
+            <li><strong>B-lines:</strong> unilateral (bacterial) or bilateral (viral or multifocal)</li>
+            <li><strong>Dynamic air bronchograms</strong> within consolidation</li>
+            <li><strong>Possible small pleural effusion</strong> adjacent to the consolidation</li>
+            <li><strong>Reduced lung sliding</strong> over areas of dense pleural thickening in severe disease</li>
+        </ul>
+
+        <div class="flex-row">
+            <div class="half">
+                <figure>
+                    <img src="lung/subpleural-consolidation.gif" alt="Subpleural consolidation pneumonia">
+                    <figcaption>Subpleural consolidation associated with focal B-lines.</figcaption>
+                </figure>
+            </div>
+            <div class="half">
+                <figure>
+                    <img src="lung/air-bronchogram-dynamic.gif" alt="Dynamic air bronchogram in pneumonia">
+                    <figcaption>Dynamic air bronchograms within consolidation – strongly supports pneumonia.</figcaption>
+                </figure>
+            </div>
+        </div>
+
+        <figure>
+            <img src="lung/shred-sign.png" alt="Shred sign in pneumonia">
+            <figcaption>Shred sign – irregular border between consolidated and aerated lung typical of pneumonia.</figcaption>
+        </figure>
+
+        <div class="highlight">
+            <strong>Pneumonia profile:</strong> Consolidation + shred sign + dynamic air bronchograms ± small effusion, usually focal.
+        </div>
+    </section>
+
+    <!-- Pathology summary table -->
+    <section id="pathology-table">
+        <h2>11. Pulmonary Pathology – Lung Ultrasound Patterns</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Pulmonary Pathology</th>
+                    <th>Lung Ultrasound Findings</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Pneumothorax</strong></td>
+                    <td>
+                        – No lung sliding with barcode/stratosphere sign<br>
+                        – A-lines pattern (highly aerated lung)<br>
+                        – Lung point (if found) is highly specific<br>
+                        – Absence of B-lines over the air pocket
+                    </td>
+                </tr>
+                <tr>
+                    <td><strong>Pneumonia</strong></td>
+                    <td>
+                        – Consolidation / “hepatization of the lung”<br>
+                        – Subpleural consolidations<br>
+                        – Shred sign at interface<br>
+                        – Unilateral or focal B-lines; bilateral in viral/multifocal disease<br>
+                        – Dynamic air bronchograms (vs static in atelectasis)<br>
+                        – Often small adjacent pleural effusion<br>
+                        – Lung sliding may be reduced over dense pleural disease
+                    </td>
+                </tr>
+                <tr>
+                    <td><strong>Cardiogenic Pulmonary Edema</strong></td>
+                    <td>
+                        – Widespread, bilateral B-lines in a relatively homogeneous pattern<br>
+                        – Preserved lung sliding<br>
+                        – A-lines may persist at apices or spared zones<br>
+                        – Possible bilateral pleural effusions depending on severity
+                    </td>
+                </tr>
+                <tr>
+                    <td><strong>Acute Respiratory Distress Syndrome (ARDS)</strong></td>
+                    <td>
+                        – Patchy bilateral B-lines with spared areas (A-lines)<br>
+                        – Subpleural consolidations and pleural line irregularity<br>
+                        – Lung sliding may be normal or reduced<br>
+                        – Often small effusions
+                    </td>
+                </tr>
+                <tr>
+                    <td><strong>COPD or Asthma</strong></td>
+                    <td>
+                        – Bilateral A-lines (hyperinflated, dry lung)<br>
+                        – Lung sliding often present but may be reduced due to hyperinflation<br>
+                        – No consolidations or pathologic B-line patterns<br>
+                        – Helps differentiate from pulmonary edema in acute dyspnea
+                    </td>
+                </tr>
+                <tr>
+                    <td><strong>Pulmonary Embolism (PE)</strong></td>
+                    <td>
+                        – Often bilateral A-line pattern with normal lung sliding<br>
+                        – May see peripheral, wedge-shaped subpleural infarcts or small consolidations<br>
+                        – Integrate with Leg/arm DVT ultrasound and right heart views (RV dilation, McConnell sign)<br>
+                        – Lung US is supportive; diagnosis still based on full clinical workup
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </section>
+
+</main>
+
+<footer>
+    <div class="bottom-nav">
+        <a href="../index.html">← Back to Home</a>
+        <a href="index.html">← Back to POCUS Home</a>
+    </div>
+    <p>
+        This Lung POCUS guide is intended as a bedside adjunct to clinical judgment, not a stand-alone diagnostic tool.
+        Always correlate with history, exam, other imaging, and local protocols.
+    </p>
+</footer>
 
 </body>
 </html>
