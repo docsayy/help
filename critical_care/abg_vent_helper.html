@@ -482,7 +482,6 @@ function computeVentPlan() {
     const height = readNumber("height");
 
     const scenario = document.getElementById("scenario").value;
-
     const pbw = calcPBW(gender, height);
 
     let planLines = [];
@@ -502,6 +501,28 @@ function computeVentPlan() {
     planLines.push("• FiO₂: " + (fio2 !== null ? fio2 + "%" : "not specified"));
     planLines.push("• PEEP: " + (peep !== null ? peep + " cmH₂O" : "not specified"));
     planLines.push("");
+
+    // --- Acid-base & CO2 target ---
+    let metabolicAcidosis = false;
+    if (ph !== null && hco3 !== null && ph < 7.35 && hco3 < 18) {
+        metabolicAcidosis = true;
+    }
+
+    let goalCO2 = null;
+    if (metabolicAcidosis) {
+        const winter = 1.5 * hco3 + 8;
+        goalCO2 = winter;
+        rationale.push("Metabolic acidosis: using Winter’s formula expected pCO₂ ≈ " + winter.toFixed(1) + " mmHg as a guide (do not fully normalize to 40).");
+    } else if (scenario === "copd") {
+        goalCO2 = 45;
+        rationale.push("COPD/asthma: permissive hypercapnia; pCO₂ goal around 45–55 mmHg acceptable if pH tolerable.");
+    } else if (scenario === "neuro") {
+        goalCO2 = 40;
+        rationale.push("Neuro/ICP: aim normocapnia (PaCO₂ ~35–40). Avoid prolonged hyperventilation.");
+    } else {
+        goalCO2 = 40;
+        rationale.push("Default CO₂ goal ~40 mmHg in absence of special conditions.");
+    }
 
     // --- Tidal volume / PBW ---
     let vtTargetMin = null;
@@ -525,60 +546,78 @@ function computeVentPlan() {
         planLines.push("Tidal volume targets:");
         planLines.push("• Min: " + vtTargetMin.toFixed(0) + " mL");
         planLines.push("• Max: " + vtTargetMax.toFixed(0) + " mL");
+
         if (vt !== null) {
-            if (vt > vtTargetMax + 20) {
-                changes.push("Reduce tidal volume from " + vt.toFixed(0) + " → ~" + vtRecommended.toFixed(0) + " mL.");
-                rationale.push("Current Vt above safe range for PBW – risk of volutrauma.");
+            // TIDAL VOLUME SAFETY & AVOIDING INAPPROPRIATE INCREASES
+            if (ph !== null && pco2 !== null && goalCO2 !== null && ph > 7.45 && pco2 < goalCO2) {
+                // Respiratory alkalosis / over-ventilation → never increase Vt
+                rationale.push("Respiratory alkalosis detected (high pH + low PaCO₂) → avoid increasing tidal volume.");
+                if (vt > vtTargetMax) {
+                    changes.push("Reduce tidal volume from " + vt.toFixed(0) + " → ~" + vtTargetMin.toFixed(0) + " mL to correct over-ventilation.");
+                } else {
+                    rationale.push("Tidal volume appears acceptable; reducing RR is preferred to correct alkalosis.");
+                }
+            } else if (vt > vtTargetMax + 20) {
+                // Vt clearly too high
+                changes.push("Reduce tidal volume from " + vt.toFixed(0) + " → ~" + vtTargetMin.toFixed(0) + " mL.");
+                rationale.push("Current Vt above safe PBW range — risk of volutrauma.");
             } else if (vt < vtTargetMin - 20) {
-                changes.push("Consider increasing tidal volume towards " + vtRecommended.toFixed(0) + " mL if not in severe ARDS.");
-                rationale.push("Very low Vt may cause severe hypercapnia unless intentional (e.g., ultra-protective ARDS).");
+                // Very low Vt, consider increase only if hypercapnic / acidotic
+                if (pco2 !== null && goalCO2 !== null && pco2 > goalCO2 && (ph === null || ph < 7.45)) {
+                    changes.push("Increase tidal volume toward ~" + vtRecommended.toFixed(0) + " mL to improve ventilation.");
+                    rationale.push("Low tidal volume likely contributing to hypercapnia.");
+                } else {
+                    rationale.push("Low tidal volume detected, but Vt increase avoided due to normal/low PaCO₂ or alkalosis.");
+                }
             } else {
-                rationale.push("Vt already within acceptable PBW range.");
+                rationale.push("Tidal volume within acceptable PBW range.");
             }
+        } else {
+            rationale.push("Vt not entered – PBW range shown for reference only.");
         }
+
         planLines.push("");
     } else {
         rationale.push("PBW not available – cannot evaluate Vt safety precisely.");
     }
 
-    // --- CO2 / RR logic ---
-    let goalCO2 = null;
-    let metabolicAcidosis = false;
-
-    if (ph !== null && hco3 !== null && ph < 7.35 && hco3 < 18) {
-        metabolicAcidosis = true;
-        const winter = 1.5 * hco3 + 8; // expected pCO2
-        goalCO2 = winter;
-        rationale.push("Metabolic acidosis: using Winter’s formula expected pCO₂ ≈ " + winter.toFixed(1) + " mmHg as a guide.");
-    } else if (scenario === "copd") {
-        goalCO2 = 45; // permissive
-        rationale.push("COPD/asthma: permissive hypercapnia; pCO₂ goal around 45–55 mmHg acceptable if pH tolerable.");
-    } else if (scenario === "neuro") {
-        goalCO2 = 40;
-        rationale.push("Neuro/ICP: aim normocapnia (PaCO₂ ~35–40). Avoid prolonged hyperventilation.");
-    } else {
-        goalCO2 = 40;
-        rationale.push("Default CO₂ goal ~40 mmHg in absence of special conditions.");
-    }
-
+    // --- CO₂ / RR logic ---
     if (pco2 !== null && rr !== null && goalCO2 !== null && pco2 > 0 && goalCO2 > 0) {
-        const newRRraw = rr * (pco2 / goalCO2);
-        let newRR = Math.round(newRRraw);
-        if (newRR < 8) newRR = 8;
-        if (newRR > 35) newRR = 35;
-
-        if (Math.abs(newRR - rr) >= 1) {
-            if (newRR > rr) {
-                changes.push("Increase RR from " + rr + " → " + newRR + " breaths/min to improve CO₂ clearance.");
-            } else if (newRR < rr) {
-                changes.push("Decrease RR from " + rr + " → " + newRR + " breaths/min to avoid over-ventilation.");
-            }
-        } else {
-            rationale.push("Current RR already close to calculated CO₂ target.");
-        }
-
         if (metabolicAcidosis) {
-            rationale.push("Avoid dropping RR below compensatory requirement in metabolic acidosis – do not normalize pCO₂ to 40.");
+            const diff = pco2 - goalCO2;
+            if (diff > 2) {
+                // Patient under-ventilating relative to Winter → increase RR
+                let newRRraw = rr * (pco2 / goalCO2);
+                let newRR = Math.round(newRRraw);
+                if (newRR < 6) newRR = 6;
+                if (newRR > 35) newRR = 35;
+
+                if (newRR > rr) {
+                    changes.push("Increase RR from " + rr + " → " + newRR + " breaths/min to better match metabolic acidosis compensation.");
+                } else {
+                    rationale.push("RR already high; further increases for compensation should be weighed against barotrauma risk.");
+                }
+            } else if (diff < -2) {
+                rationale.push("PaCO₂ lower than Winter’s expected value – patient may be hyperventilating beyond compensation; avoid reducing RR unless clinically necessary.");
+            } else {
+                rationale.push("PaCO₂ close to Winter’s expected compensation for metabolic acidosis.");
+            }
+            rationale.push("Do not fully normalize PaCO₂ to 40 in metabolic acidosis; preserve physiologic respiratory compensation.");
+        } else {
+            let newRRraw = rr * (pco2 / goalCO2);
+            let newRR = Math.round(newRRraw);
+            if (newRR < 6) newRR = 6;
+            if (newRR > 35) newRR = 35;
+
+            if (Math.abs(newRR - rr) >= 1) {
+                if (newRR > rr) {
+                    changes.push("Increase RR from " + rr + " → " + newRR + " breaths/min to improve CO₂ clearance.");
+                } else if (newRR < rr) {
+                    changes.push("Decrease RR from " + rr + " → " + newRR + " breaths/min to avoid over-ventilation and correct alkalosis.");
+                }
+            } else {
+                rationale.push("Current RR already close to calculated CO₂ target.");
+            }
         }
     } else {
         rationale.push("Insufficient data (RR / pCO₂) to recommend specific RR change.");
