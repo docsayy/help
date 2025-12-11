@@ -1,116 +1,150 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Cardiology – Clinical Tools</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Medical Decision Support</title>
 
 <style>
-body {
-    font-family: Arial, sans-serif;
-    background: #ffffff;
-    margin: 20px;
-    color: #111;
-}
+    body {
+        margin: 0;
+        font-family: Arial, sans-serif;
+        background: #f5f9fc;
+        padding: 20px;
+    }
 
-h1 {
-    color: #f97316;
-    font-size: 2rem;
-    margin-bottom: 10px;
-}
+    h1 {
+        text-align: center;
+        color: #003b70;
+        margin-bottom: 25px;
+    }
 
-.section-title {
-    margin-top: 26px;
-    font-size: 1.3rem;
-    font-weight: bold;
-    color: #f97316;
-}
+    .system-section {
+        background: white;
+        border-radius: 14px;
+        padding: 20px;
+        margin-bottom: 25px;
+        box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+    }
 
-.tool-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit,minmax(260px,1fr));
-    gap: 12px;
-    margin-top: 12px;
-}
+    .system-title {
+        font-size: 24px;
+        font-weight: bold;
+        margin-bottom: 15px;
+        color: #003b70;
+    }
 
-.tool-btn {
-    display: block;
-    padding: 14px;
-    background: #f97316;
-    color: white;
-    text-decoration: none;
-    border-radius: 10px;
-    font-size: 1rem;
-    font-weight: bold;
-    text-align: center;
-    transition: 0.15s;
-}
+    /* UNIVERSAL BUTTON STYLE (Critical Care / POCUS) */
+    a.main-btn {
+        display: block;
+        width: 100%;
+        background: #fff;
+        border: 2px solid #003b70;
+        color: #003b70;
+        padding: 16px;
+        border-radius: 12px;
+        font-size: 18px;
+        font-weight: bold;
+        text-align: center;
+        text-decoration: none;
+        transition: 0.2s;
+        margin-top: 12px;
+        box-sizing: border-box;
+    }
 
-.tool-btn:hover {
-    background: #fb923c;
-}
+    a.main-btn:hover {
+        background: #003b70;
+        color: white;
+    }
 
-.home-btn {
-    display: inline-block;
-    margin-bottom: 16px;
-    padding: 10px 14px;
-    background: #f97316;
-    color: white;
-    text-decoration: none;
-    border-radius: 8px;
-    font-size: 0.95rem;
-}
+    .special-buttons {
+        margin-top: 30px;
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(200px,1fr));
+        gap: 15px;
+    }
+
+    footer {
+        margin-top: 40px;
+        text-align: center;
+        font-size: 14px;
+        color: #555;
+        padding-bottom: 20px;
+    }
 </style>
-</head>
 
+</head>
 <body>
 
-<a href="../index.html" class="home-btn">🏠 Home</a>
+<h1>Medical Decision Support</h1>
 
-<h1>Cardiology Tools</h1>
-<p>Select one of the tools below. More cardiology calculators will be added over time.</p>
-
-<!-- CHEST PAIN TOOLS -->
-<div class="section-title">Chest Pain & ACS</div>
-<div class="tool-grid">
-    <a class="tool-btn" href="cardiology/chest_pain_scores.html">HEART + TIMI Score</a>
-    <a class="tool-btn" href="cardiology/grace_acs.html">GRACE ACS Risk</a>
-    <a class="tool-btn" href="cardiology/stemi_reperfusion.html">STEMI Reperfusion Tool</a>
+<!-- ────────────────── CARDIOLOGY ────────────────── -->
+<div class="system-section">
+    <div class="system-title">Cardiology</div>
+    <a class="main-btn" href="cardiology.html">Cardiology Home</a>
 </div>
 
-<!-- ARRHYTHMIA TOOLS -->
-<div class="section-title">Atrial Fibrillation</div>
-<div class="tool-grid">
-    <a class="tool-btn" href="cardiology/afib_risk.html">CHA₂DS₂-VASc + HAS-BLED</a>
-    <a class="tool-btn" href="cardiology/af_rate_rhythm.html">AF Rate vs Rhythm Helper</a>
+<!-- ────────────────── PULMONARY ────────────────── -->
+<div class="system-section">
+    <div class="system-title">Pulmonary</div>
+    <a class="main-btn" href="pulmonary.html">Pulmonary Home</a>
 </div>
 
-<!-- PREVENTION -->
-<div class="section-title">Cardiovascular Prevention</div>
-<div class="tool-grid">
-    <a class="tool-btn" href="cardiology/ascvd.html">ASCVD 10-Year Risk</a>
-    <a class="tool-btn" href="cardiology/statin_selector.html">Statin Selector</a>
+<!-- ────────────────── RENAL ────────────────── -->
+<div class="system-section">
+    <div class="system-title">Renal</div>
+    <a class="main-btn" href="renal.html">Renal Home</a>
 </div>
 
-<!-- HEART FAILURE -->
-<div class="section-title">Heart Failure</div>
-<div class="tool-grid">
-    <a class="tool-btn" href="cardiology/hf_gdmt.html">HF GDMT Initiation Tool</a>
-    <a class="tool-btn" href="cardiology/nyha_class.html">NYHA Class Calculator</a>
+<!-- ────────────────── HEMATOLOGY ────────────────── -->
+<div class="system-section">
+    <div class="system-title">Hematology</div>
+    <a class="main-btn" href="hematology.html">Hematology Home</a>
 </div>
 
-<!-- BLOOD PRESSURE -->
-<div class="section-title">Hypertension Management</div>
-<div class="tool-grid">
-    <a class="tool-btn" href="cardiology/bp_selector.html">BP Medication Selector</a>
+<!-- ────────────────── ENDOCRINE ────────────────── -->
+<div class="system-section">
+    <div class="system-title">Endocrine</div>
+    <a class="main-btn" href="endocrine.html">Endocrine Home</a>
 </div>
 
-<!-- EKG -->
-<div class="section-title">Electrocardiography</div>
-<div class="tool-grid">
-    <a class="tool-btn" href="cardiology/ekg_guide.html">EKG Stepwise Guide</a>
-    <a class="tool-btn" href="cardiology/ekg_interpreter.html">EKG Interpreter</a>
+<!-- ────────────────── INFECTIOUS DISEASE ────────────────── -->
+<div class="system-section">
+    <div class="system-title">Infectious Disease</div>
+    <a class="main-btn" href="infectious.html">Infectious Disease Home</a>
 </div>
+
+<!-- ────────────────── EMR ────────────────── -->
+<div class="system-section">
+    <div class="system-title">EMR Tools</div>
+    <a class="main-btn" href="emr.html">EMR Orders & Templates</a>
+</div>
+
+<!-- ────────────────── MAIN SPECIAL BUTTONS ────────────────── -->
+<div class="special-buttons">
+    <a class="main-btn" href="critical.html">Critical Care</a>
+    <a class="main-btn" href="pocus/index.html">POCUS</a>
+</div>
+
+<footer>
+    <div id="date"></div>
+    <div>Created by <strong>Mohammad Sayyar</strong> for educational purposes only.</div>
+    <div>Total Visits: <span id="visitCount"></span></div>
+</footer>
+
+<script>
+    // Show today's date
+    const today = new Date();
+    document.getElementById("date").innerText =
+        "Date: " + today.toLocaleDateString();
+
+    // Local visit counter (works on GitHub Pages)
+    let visits = localStorage.getItem("visitCount");
+    if (!visits) visits = 0;
+    visits++;
+    localStorage.setItem("visitCount", visits);
+    document.getElementById("visitCount").innerText = visits;
+</script>
 
 </body>
 </html>
