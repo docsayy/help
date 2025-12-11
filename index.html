@@ -32,28 +32,27 @@
         font-weight: bold;
         margin-bottom: 15px;
         color: #003b70;
-        text-align: left;
     }
 
-    /* Uniform button style (Critical Care style) */
-    a.tool-btn, a.special-btn {
+    /* UNIVERSAL BUTTON STYLE (Critical Care / POCUS) */
+    a.main-btn {
         display: block;
         width: 100%;
-        background: #ffffff;
+        background: #fff;
         border: 2px solid #003b70;
         color: #003b70;
-        padding: 14px;
+        padding: 16px;
         border-radius: 12px;
         font-size: 18px;
         font-weight: bold;
         text-align: center;
         text-decoration: none;
         transition: 0.2s;
+        margin-top: 12px;
         box-sizing: border-box;
-        margin-top: 10px;
     }
 
-    a.tool-btn:hover, a.special-btn:hover {
+    a.main-btn:hover {
         background: #003b70;
         color: white;
     }
@@ -70,6 +69,7 @@
         text-align: center;
         font-size: 14px;
         color: #555;
+        padding-bottom: 20px;
     }
 </style>
 
@@ -81,49 +81,49 @@
 <!-- ────────────────── CARDIOLOGY ────────────────── -->
 <div class="system-section">
     <div class="system-title">Cardiology</div>
-    <a class="tool-btn" href="cardiology.html">Cardiology Home</a>
+    <a class="main-btn" href="cardiology.html">Cardiology Home</a>
 </div>
 
 <!-- ────────────────── PULMONARY ────────────────── -->
 <div class="system-section">
     <div class="system-title">Pulmonary</div>
-    <a class="tool-btn" href="pulmonary.html">Pulmonary Home</a>
+    <a class="main-btn" href="pulmonary.html">Pulmonary Home</a>
 </div>
 
 <!-- ────────────────── RENAL ────────────────── -->
 <div class="system-section">
     <div class="system-title">Renal</div>
-    <a class="tool-btn" href="renal.html">Renal Home</a>
+    <a class="main-btn" href="renal.html">Renal Home</a>
 </div>
 
 <!-- ────────────────── HEMATOLOGY ────────────────── -->
 <div class="system-section">
     <div class="system-title">Hematology</div>
-    <a class="tool-btn" href="hematology.html">Hematology Home</a>
+    <a class="main-btn" href="hematology.html">Hematology Home</a>
 </div>
 
 <!-- ────────────────── ENDOCRINE ────────────────── -->
 <div class="system-section">
     <div class="system-title">Endocrine</div>
-    <a class="tool-btn" href="endocrine.html">Endocrine Home</a>
+    <a class="main-btn" href="endocrine.html">Endocrine Home</a>
 </div>
 
 <!-- ────────────────── INFECTIOUS DISEASE ────────────────── -->
 <div class="system-section">
     <div class="system-title">Infectious Disease</div>
-    <a class="tool-btn" href="infectious.html">Infectious Disease Home</a>
+    <a class="main-btn" href="infectious.html">Infectious Disease Home</a>
 </div>
 
-<!-- ────────────────── EMR Tools ────────────────── -->
+<!-- ────────────────── EMR ────────────────── -->
 <div class="system-section">
     <div class="system-title">EMR Tools</div>
-    <a class="tool-btn" href="emr.html">EMR Orders & Templates</a>
+    <a class="main-btn" href="emr.html">EMR Orders & Templates</a>
 </div>
 
-<!-- ────────────────── SPECIAL MAIN BUTTONS ────────────────── -->
+<!-- ────────────────── MAIN SPECIAL BUTTONS ────────────────── -->
 <div class="special-buttons">
-    <a class="special-btn" href="critical.html">Critical Care</a>
-    <a class="special-btn" href="pocus/index.html">POCUS</a>
+    <a class="main-btn" href="critical.html">Critical Care</a>
+    <a class="main-btn" href="pocus/index.html">POCUS</a>
 </div>
 
 <footer>
@@ -138,7 +138,7 @@
     document.getElementById("date").innerText =
         "Date: " + today.toLocaleDateString();
 
-    // Simple visit counter (localStorage – works on GitHub Pages)
+    // Local visit counter (works on GitHub Pages)
     let visits = localStorage.getItem("visitCount");
     if (!visits) visits = 0;
     visits++;
