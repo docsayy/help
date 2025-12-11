@@ -30,41 +30,34 @@
     .system-title {
         font-size: 24px;
         font-weight: bold;
-        display: flex;
-        align-items: center;
-        gap: 10px;
         margin-bottom: 15px;
         color: #003b70;
+        text-align: left;
     }
 
-    .system-title img {
-        width: 30px;
-        height: 30px;
-    }
-
-    .tool-buttons {
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
-        gap: 12px;
-    }
-
-    a.tool-btn {
-        text-decoration: none;
-        padding: 14px;
-        background: #eaf3ff;
+    /* Uniform button style (Critical Care style) */
+    a.tool-btn, a.special-btn {
+        display: block;
+        width: 100%;
+        background: #ffffff;
+        border: 2px solid #003b70;
         color: #003b70;
-        border-radius: 10px;
+        padding: 14px;
+        border-radius: 12px;
+        font-size: 18px;
         font-weight: bold;
         text-align: center;
-        border: 1px solid #d8e7ff;
+        text-decoration: none;
         transition: 0.2s;
+        box-sizing: border-box;
+        margin-top: 10px;
     }
 
-    a.tool-btn:hover {
-        background: #d4e7ff;
+    a.tool-btn:hover, a.special-btn:hover {
+        background: #003b70;
+        color: white;
     }
 
-    /* POCUS + Critical Care main buttons */
     .special-buttons {
         margin-top: 30px;
         display: grid;
@@ -72,22 +65,11 @@
         gap: 15px;
     }
 
-    a.special-btn {
-        background: #fff;
-        border: 2px solid #003b70;
-        color: #003b70;
-        padding: 16px;
-        border-radius: 12px;
-        font-size: 18px;
-        font-weight: bold;
+    footer {
+        margin-top: 40px;
         text-align: center;
-        text-decoration: none;
-        transition: 0.2s;
-    }
-
-    a.special-btn:hover {
-        background: #003b70;
-        color: white;
+        font-size: 14px;
+        color: #555;
     }
 </style>
 
@@ -98,57 +80,43 @@
 
 <!-- ────────────────── CARDIOLOGY ────────────────── -->
 <div class="system-section">
-    <div class="system-title">
-        <img src="icons/heart.png" alt=""> Cardiology
-    </div>
+    <div class="system-title">Cardiology</div>
     <a class="tool-btn" href="cardiology.html">Cardiology Home</a>
 </div>
 
 <!-- ────────────────── PULMONARY ────────────────── -->
 <div class="system-section">
-    <div class="system-title">
-        <img src="icons/lungs.png" alt=""> Pulmonary
-    </div>
+    <div class="system-title">Pulmonary</div>
     <a class="tool-btn" href="pulmonary.html">Pulmonary Home</a>
 </div>
 
 <!-- ────────────────── RENAL ────────────────── -->
 <div class="system-section">
-    <div class="system-title">
-        <img src="icons/kidney.png" alt=""> Renal
-    </div>
+    <div class="system-title">Renal</div>
     <a class="tool-btn" href="renal.html">Renal Home</a>
 </div>
 
 <!-- ────────────────── HEMATOLOGY ────────────────── -->
 <div class="system-section">
-    <div class="system-title">
-        <img src="icons/blood.png" alt=""> Hematology
-    </div>
+    <div class="system-title">Hematology</div>
     <a class="tool-btn" href="hematology.html">Hematology Home</a>
 </div>
 
 <!-- ────────────────── ENDOCRINE ────────────────── -->
 <div class="system-section">
-    <div class="system-title">
-        <img src="icons/endocrine.png" alt=""> Endocrine
-    </div>
+    <div class="system-title">Endocrine</div>
     <a class="tool-btn" href="endocrine.html">Endocrine Home</a>
 </div>
 
 <!-- ────────────────── INFECTIOUS DISEASE ────────────────── -->
 <div class="system-section">
-    <div class="system-title">
-        <img src="icons/microbe.png" alt=""> Infectious Disease
-    </div>
+    <div class="system-title">Infectious Disease</div>
     <a class="tool-btn" href="infectious.html">Infectious Disease Home</a>
 </div>
 
 <!-- ────────────────── EMR Tools ────────────────── -->
 <div class="system-section">
-    <div class="system-title">
-        <img src="icons/emr.png" alt=""> EMR Tools
-    </div>
+    <div class="system-title">EMR Tools</div>
     <a class="tool-btn" href="emr.html">EMR Orders & Templates</a>
 </div>
 
@@ -158,7 +126,25 @@
     <a class="special-btn" href="pocus/index.html">POCUS</a>
 </div>
 
-<br><br>
+<footer>
+    <div id="date"></div>
+    <div>Created by <strong>Mohammad Sayyar</strong> for educational purposes only.</div>
+    <div>Total Visits: <span id="visitCount"></span></div>
+</footer>
+
+<script>
+    // Show today's date
+    const today = new Date();
+    document.getElementById("date").innerText =
+        "Date: " + today.toLocaleDateString();
+
+    // Simple visit counter (localStorage – works on GitHub Pages)
+    let visits = localStorage.getItem("visitCount");
+    if (!visits) visits = 0;
+    visits++;
+    localStorage.setItem("visitCount", visits);
+    document.getElementById("visitCount").innerText = visits;
+</script>
 
 </body>
 </html>
