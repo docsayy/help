@@ -10,7 +10,6 @@
   --cardiology-main: #e53935;
   --cardiology-light: #ffebee;
   --cardiology-accent: #c62828;
-  --bg: #fdfdfd;
   --text-main: #222;
   --text-muted: #555;
   --card-shadow: 0 4px 12px rgba(0,0,0,0.08);
@@ -35,8 +34,10 @@ body {
   background: rgba(255,255,255,0.97);
   border-radius: 20px;
   box-shadow: var(--card-shadow);
-  padding: 20px 16px 28px;
+  padding: 22px 18px 28px;
 }
+
+/* ---------- Header ---------- */
 
 header {
   display: flex;
@@ -92,6 +93,8 @@ h1 {
   border: none;
 }
 
+/* ---------- Cards ---------- */
+
 .card {
   background: #fff;
   border-radius: var(--radius-lg);
@@ -124,8 +127,11 @@ ul {
   margin: 6px 0 10px 18px;
 }
 
+/* ---------- Images ---------- */
+
 .image-block {
-  margin: 12px 0;
+  margin: 12px auto;
+  max-width: 520px; /* KEY FIX */
   border-radius: 12px;
   border: 1px solid rgba(198,40,40,0.25);
   background: #fff;
@@ -137,6 +143,7 @@ ul {
   height: auto;
   border-radius: 8px;
   display: block;
+  cursor: zoom-in;
 }
 
 .image-caption {
@@ -144,6 +151,35 @@ ul {
   font-size: 0.75rem;
   color: #555;
   text-align: center;
+}
+
+/* ---------- Modal ---------- */
+
+#imageModal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.85);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+
+#imageModal img {
+  max-width: 92%;
+  max-height: 92%;
+  border-radius: 10px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+}
+
+#modalClose {
+  position: fixed;
+  top: 18px;
+  right: 22px;
+  font-size: 36px;
+  color: #fff;
+  cursor: pointer;
+  font-weight: 700;
 }
 </style>
 </head>
@@ -171,7 +207,7 @@ ul {
 <section class="card">
   <h2><span class="step-badge">1</span> Rhythm & sinus check</h2>
   <div class="step-body">
-    Look for a P wave before every QRS, upright in leads I and II.
+    Look for a P wave before every QRS and upright P waves in leads I and II.
     <ul>
       <li>Regular P–QRS–T → sinus rhythm</li>
       <li>Irregularly irregular → atrial fibrillation</li>
@@ -179,11 +215,8 @@ ul {
   </div>
 
   <div class="image-block">
-    <img src="ekg_images/basic_waves_p_qrs_t.png"
-         alt="ECG showing labeled P wave, QRS complex, and T wave">
-    <div class="image-caption">
-      Basic ECG waveform components: P wave, QRS complex, and T wave.
-    </div>
+    <img src="ekg_images/basic_waves_p_qrs_t.png" alt="P wave QRS T wave ECG">
+    <div class="image-caption">P wave, QRS complex, and T wave</div>
   </div>
 </section>
 
@@ -191,16 +224,12 @@ ul {
 <section class="card">
   <h2><span class="step-badge">2</span> Heart rate</h2>
   <div class="step-body">
-    For regular rhythms, use the 300 rule. For irregular rhythms, count beats in
-    10 seconds × 6.
+    Use the 300 rule for regular rhythms or count beats in 10 seconds × 6.
   </div>
 
   <div class="image-block">
-    <img src="ekg_images/rate_300_rule.png"
-         alt="ECG illustrating the 300 rule for heart rate calculation">
-    <div class="image-caption">
-      Heart rate estimation using the 300 rule.
-    </div>
+    <img src="ekg_images/rate_300_rule.png" alt="300 rule ECG">
+    <div class="image-caption">Heart rate estimation using the 300 rule</div>
   </div>
 </section>
 
@@ -215,11 +244,8 @@ ul {
   </div>
 
   <div class="image-block">
-    <img src="ekg_images/p_mitrale_p_pulmonale.jpg"
-         alt="Comparison of P pulmonale and P mitrale patterns">
-    <div class="image-caption">
-      Atrial enlargement patterns: P pulmonale vs P mitrale.
-    </div>
+    <img src="ekg_images/p_mitrale_p_pulmonale.jpg" alt="P mitrale and P pulmonale">
+    <div class="image-caption">P mitrale vs P pulmonale</div>
   </div>
 </section>
 
@@ -227,31 +253,22 @@ ul {
 <section class="card">
   <h2><span class="step-badge">4</span> PR interval</h2>
   <div class="step-body">
-    Normal PR is 0.12–0.20 seconds.
+    Normal PR is 0.12–0.20 s. Short PR with delta wave suggests WPW.
   </div>
 
   <div class="image-block">
-    <img src="ekg_images/short_pr_delta_wpw.webp"
-         alt="Short PR interval with delta wave consistent with WPW">
-    <div class="image-caption">
-      Short PR interval with delta wave (WPW pattern).
-    </div>
+    <img src="ekg_images/short_pr_delta_wpw.webp" alt="WPW delta wave ECG">
+    <div class="image-caption">Short PR interval with delta wave (WPW)</div>
   </div>
 </section>
 
 <!-- STEP 5 -->
 <section class="card">
   <h2><span class="step-badge">5</span> Axis</h2>
-  <div class="step-body">
-    Use leads I and aVF for a quick axis check.
-  </div>
 
   <div class="image-block">
-    <img src="ekg_images/axis_circle_cabrera.png"
-         alt="ECG axis diagram using Cabrera circle">
-    <div class="image-caption">
-      Frontal plane axis determination (Cabrera circle).
-    </div>
+    <img src="ekg_images/axis_circle_cabrera.png" alt="ECG axis diagram">
+    <div class="image-caption">Frontal plane axis (Cabrera circle)</div>
   </div>
 </section>
 
@@ -260,19 +277,13 @@ ul {
   <h2><span class="step-badge">6–8</span> QRS, rotation & hypertrophy</h2>
 
   <div class="image-block">
-    <img src="ekg_images/precordial_normal_v1_v6.png"
-         alt="Normal R wave progression from V1 to V6">
-    <div class="image-caption">
-      Normal precordial R-wave progression.
-    </div>
+    <img src="ekg_images/precordial_normal_v1_v6.png" alt="Normal R wave progression">
+    <div class="image-caption">Normal R-wave progression V1–V6</div>
   </div>
 
   <div class="image-block">
-    <img src="ekg_images/lvh_voltage_example.jpeg"
-         alt="ECG demonstrating LVH voltage criteria">
-    <div class="image-caption">
-      Voltage criteria consistent with LVH.
-    </div>
+    <img src="ekg_images/lvh_voltage_example.jpeg" alt="LVH ECG voltage">
+    <div class="image-caption">Voltage criteria for LVH</div>
   </div>
 </section>
 
@@ -281,19 +292,13 @@ ul {
   <h2><span class="step-badge">9–10</span> Infarction & ST–T changes</h2>
 
   <div class="image-block">
-    <img src="ekg_images/stemi_inferior_example.png"
-         alt="Inferior STEMI ECG example">
-    <div class="image-caption">
-      Inferior STEMI pattern (II, III, aVF).
-    </div>
+    <img src="ekg_images/stemi_inferior_example.png" alt="Inferior STEMI ECG">
+    <div class="image-caption">Inferior STEMI pattern</div>
   </div>
 
   <div class="image-block">
-    <img src="ekg_images/st_patterns_panel.png"
-         alt="Comparison of ST elevation, ST depression, and T wave inversion">
-    <div class="image-caption">
-      Common ST-segment and T-wave patterns.
-    </div>
+    <img src="ekg_images/st_patterns_panel.png" alt="ST segment patterns">
+    <div class="image-caption">Common ST–T patterns</div>
   </div>
 </section>
 
@@ -302,22 +307,42 @@ ul {
   <h2><span class="step-badge">11</span> QT & electrolytes</h2>
 
   <div class="image-block">
-    <img src="ekg_images/hyperkalemia_tall_t.png"
-         alt="Tall peaked T waves seen in hyperkalemia">
-    <div class="image-caption">
-      Tall peaked T waves in hyperkalemia.
-    </div>
+    <img src="ekg_images/hyperkalemia_tall_t.png" alt="Hyperkalemia ECG">
+    <div class="image-caption">Hyperkalemia: tall peaked T waves</div>
   </div>
 
   <div class="image-block">
-    <img src="ekg_images/hypokalemia_u_wave.png"
-         alt="Prominent U waves seen in hypokalemia">
-    <div class="image-caption">
-      Prominent U waves in hypokalemia.
-    </div>
+    <img src="ekg_images/hypokalemia_u_wave.png" alt="Hypokalemia ECG">
+    <div class="image-caption">Hypokalemia: prominent U waves</div>
   </div>
 </section>
 
 </div>
+
+<!-- MODAL -->
+<div id="imageModal">
+  <span id="modalClose">&times;</span>
+  <img id="modalImg" />
+</div>
+
+<script>
+document.querySelectorAll(".image-block img").forEach(img => {
+  img.addEventListener("click", () => {
+    document.getElementById("modalImg").src = img.src;
+    document.getElementById("imageModal").style.display = "flex";
+  });
+});
+
+document.getElementById("modalClose").onclick = () => {
+  document.getElementById("imageModal").style.display = "none";
+};
+
+document.getElementById("imageModal").onclick = e => {
+  if (e.target.id === "imageModal") {
+    e.currentTarget.style.display = "none";
+  }
+};
+</script>
+
 </body>
 </html>
