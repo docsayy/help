@@ -4,83 +4,146 @@
 <meta charset="UTF-8" />
 <title>ECG Stepwise Guide</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
 <style>
-/* --- SAME CSS AS YOUR ORIGINAL, UNCHANGED --- */
 :root {
-  --cardiology-main:#e53935;
-  --cardiology-light:#ffebee;
-  --cardiology-accent:#c62828;
-  --text-main:#222;
-  --text-muted:#555;
-  --card-shadow:0 4px 12px rgba(0,0,0,0.08);
-  --radius-lg:14px;
-  --radius-pill:999px;
+  --cardiology-main: #e53935;
+  --cardiology-light: #ffebee;
+  --cardiology-accent: #c62828;
+  --bg: #fdfdfd;
+  --text-main: #222;
+  --text-muted: #555;
+  --card-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  --radius-lg: 14px;
+  --radius-pill: 999px;
 }
-*{box-sizing:border-box}
-body{
-  margin:0;
-  font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
-  background:linear-gradient(135deg,#fff,#ffeef0);
-  color:var(--text-main);
-  padding:16px;
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+    Roboto, sans-serif;
+  background: linear-gradient(135deg, #fff, #ffeef0);
+  color: var(--text-main);
+  padding: 16px;
 }
-.page{
-  max-width:1100px;
-  margin:0 auto 32px;
-  background:rgba(255,255,255,0.96);
-  border-radius:20px;
-  box-shadow:var(--card-shadow);
-  padding:20px 16px 24px;
+
+.page {
+  max-width: 1100px;
+  margin: 0 auto 32px;
+  background: rgba(255,255,255,0.97);
+  border-radius: 20px;
+  box-shadow: var(--card-shadow);
+  padding: 20px 16px 28px;
 }
-.card{
-  background:#fff;
-  border-radius:var(--radius-lg);
-  box-shadow:var(--card-shadow);
-  padding:16px;
-  margin-bottom:16px;
+
+header {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 14px;
+  margin-bottom: 20px;
 }
-.step-badge{
-  display:inline-flex;
-  align-items:center;
-  justify-content:center;
-  min-width:26px;
-  height:26px;
-  border-radius:999px;
-  background:var(--cardiology-main);
-  color:#fff;
-  font-size:.85rem;
-  font-weight:700;
-  margin-right:8px;
+
+.title-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--cardiology-light);
+  color: var(--cardiology-accent);
+  padding: 4px 10px;
+  border-radius: var(--radius-pill);
+  font-size: 0.8rem;
+  font-weight: 600;
 }
-.step-body{
-  font-size:.9rem;
-  color:var(--text-muted);
-  line-height:1.35;
-  margin-bottom:6px;
+
+h1 {
+  margin: 6px 0 0;
+  font-size: 1.9rem;
 }
-ul{
-  margin:6px 0 6px 18px;
-  font-size:.88rem;
-  color:var(--text-muted);
+
+.subtitle {
+  margin-top: 4px;
+  font-size: 0.9rem;
+  color: var(--text-muted);
 }
-.image-block{
-  margin:10px auto 6px;
-  max-width:520px;
-  border-radius:12px;
-  border:1px solid rgba(198,40,40,.25);
-  background:#fff;
-  padding:8px;
+
+.nav-buttons {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
 }
-.image-block img{
-  width:100%;
-  border-radius:8px;
-  cursor:zoom-in;
+
+.btn {
+  border-radius: var(--radius-pill);
+  padding: 8px 14px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-decoration: none;
+  border: 1px solid rgba(198,40,40,0.2);
+  color: var(--cardiology-accent);
+  background: #fff;
 }
-.image-caption{
-  margin-top:6px;
-  font-size:.75rem;
-  color:#555;
-  text-align:center;
+
+.btn-primary {
+  background: var(--cardiology-main);
+  color: #fff;
+  border: none;
+}
+
+.card {
+  background: #fff;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--card-shadow);
+  padding: 16px;
+  margin-bottom: 18px;
+}
+
+h2 {
+  margin: 0 0 10px;
+  font-size: 1.2rem;
+}
+
+.step-badge {
+  background: var(--cardiology-main);
+  color: #fff;
+  border-radius: 999px;
+  padding: 4px 10px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  margin-right: 6px;
+}
+
+.step-body {
+  font-size: 0.9rem;
+  color: var(--text-muted);
+}
+
+ul {
+  margin: 6px 0 10px 18px;
+}
+
+.image-block {
+  margin: 12px 0;
+  border-radius: 12px;
+  border: 1px solid rgba(198,40,40,0.25);
+  background: #fff;
+  padding: 8px;
+}
+
+.image-block img {
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+  display: block;
+}
+
+.image-caption {
+  margin-top: 6px;
+  font-size: 0.75rem;
+  color: #555;
+  text-align: center;
 }
 </style>
 </head>
@@ -88,175 +151,171 @@ ul{
 <body>
 <div class="page">
 
+<header>
+  <div>
+    <div class="title-pill">❤️ Cardiology · ECG</div>
+    <h1>ECG Stepwise Guide</h1>
+    <div class="subtitle">
+      Rhythm → Rate → Axis → Intervals → Hypertrophy → Ischemia → QT & electrolytes
+    </div>
+  </div>
+
+  <div class="nav-buttons">
+    <a href="../index.html" class="btn">🏠 Home</a>
+    <a href="../cardiology.html" class="btn">⬅ Cardiology</a>
+    <a href="ekg_interpreter.html" class="btn btn-primary">🧮 ECG Interpreter</a>
+  </div>
+</header>
+
 <!-- STEP 1 -->
 <section class="card">
-<h2><span class="step-badge">1</span> Rhythm & sinus check</h2>
-<div class="step-body">
-Rhythm identifies where impulses originate and whether atrial activity is organized or chaotic.
-</div>
-<ul>
-<li>P wave before every QRS?</li>
-<li>P upright in leads I and II?</li>
-<li>Regular RR intervals?</li>
-</ul>
-<div class="image-block">
-<img src="ekg_images/basic_waves_p_qrs_t.png" />
-<div class="image-caption">P–QRS–T relationship</div>
-</div>
+  <h2><span class="step-badge">1</span> Rhythm & sinus check</h2>
+  <div class="step-body">
+    Look for a P wave before every QRS, upright in leads I and II.
+    <ul>
+      <li>Regular P–QRS–T → sinus rhythm</li>
+      <li>Irregularly irregular → atrial fibrillation</li>
+    </ul>
+  </div>
+
+  <div class="image-block">
+    <img src="ekg_images/basic_waves_p_qrs_t.png"
+         alt="ECG showing labeled P wave, QRS complex, and T wave">
+    <div class="image-caption">
+      Basic ECG waveform components: P wave, QRS complex, and T wave.
+    </div>
+  </div>
 </section>
 
 <!-- STEP 2 -->
 <section class="card">
-<h2><span class="step-badge">2</span> Heart rate</h2>
-<div class="step-body">
-Decide early whether the rate itself explains the patient’s symptoms or instability.
-</div>
-<ul>
-<li>300 rule for regular rhythms</li>
-<li>10-second count ×6 for irregular rhythms</li>
-</ul>
-<div class="image-block">
-<img src="ekg_images/rate_300_rule.png" />
-<div class="image-caption">300-rule example</div>
-</div>
+  <h2><span class="step-badge">2</span> Heart rate</h2>
+  <div class="step-body">
+    For regular rhythms, use the 300 rule. For irregular rhythms, count beats in
+    10 seconds × 6.
+  </div>
+
+  <div class="image-block">
+    <img src="ekg_images/rate_300_rule.png"
+         alt="ECG illustrating the 300 rule for heart rate calculation">
+    <div class="image-caption">
+      Heart rate estimation using the 300 rule.
+    </div>
+  </div>
 </section>
 
 <!-- STEP 3 -->
 <section class="card">
-<h2><span class="step-badge">3</span> P waves & atrial size</h2>
-<div class="step-body">
-P-wave morphology reflects chronic atrial pressure and volume load.
-</div>
-<ul>
-<li>P pulmonale → RAE</li>
-<li>P mitrale → LAE</li>
-</ul>
-<div class="image-block">
-<img src="ekg_images/p_mitrale_p_pulmonale.jpg" />
-<div class="image-caption">RAE vs LAE</div>
-</div>
+  <h2><span class="step-badge">3</span> P waves & atrial enlargement</h2>
+  <div class="step-body">
+    <ul>
+      <li>P pulmonale → right atrial enlargement</li>
+      <li>P mitrale → left atrial enlargement</li>
+    </ul>
+  </div>
+
+  <div class="image-block">
+    <img src="ekg_images/p_mitrale_p_pulmonale.jpg"
+         alt="Comparison of P pulmonale and P mitrale patterns">
+    <div class="image-caption">
+      Atrial enlargement patterns: P pulmonale vs P mitrale.
+    </div>
+  </div>
 </section>
 
 <!-- STEP 4 -->
 <section class="card">
-<h2><span class="step-badge">4</span> PR interval</h2>
-<div class="step-body">
-The PR interval localizes AV nodal delay or accessory pathway physiology.
-</div>
-<ul>
-<li>Normal: 0.12–0.20 s</li>
-<li>Prolonged → 1° AV block</li>
-<li>Short PR ± delta → WPW</li>
-</ul>
-<div class="image-block">
-<img src="ekg_images/short_pr_delta_wpw.webp" />
-<div class="image-caption">Short PR with delta wave</div>
-</div>
+  <h2><span class="step-badge">4</span> PR interval</h2>
+  <div class="step-body">
+    Normal PR is 0.12–0.20 seconds.
+  </div>
+
+  <div class="image-block">
+    <img src="ekg_images/short_pr_delta_wpw.webp"
+         alt="Short PR interval with delta wave consistent with WPW">
+    <div class="image-caption">
+      Short PR interval with delta wave (WPW pattern).
+    </div>
+  </div>
 </section>
 
 <!-- STEP 5 -->
 <section class="card">
-<h2><span class="step-badge">5</span> Axis</h2>
-<div class="step-body">
-Axis helps localize pathology and reflects chronic chamber pressure or conduction disease.
-</div>
-<ul>
-<li>I & II positive → normal</li>
-<li>LAD / RAD / extreme axis patterns</li>
-</ul>
-<div class="image-block">
-<img src="ekg_images/axis_circle_cabrera.png" />
-<div class="image-caption">Axis determination</div>
-</div>
+  <h2><span class="step-badge">5</span> Axis</h2>
+  <div class="step-body">
+    Use leads I and aVF for a quick axis check.
+  </div>
+
+  <div class="image-block">
+    <img src="ekg_images/axis_circle_cabrera.png"
+         alt="ECG axis diagram using Cabrera circle">
+    <div class="image-caption">
+      Frontal plane axis determination (Cabrera circle).
+    </div>
+  </div>
 </section>
 
-<!-- STEP 6 -->
+<!-- STEP 6–8 -->
 <section class="card">
-<h2><span class="step-badge">6</span> QRS duration</h2>
-<div class="step-body">
-QRS width tells you whether depolarization uses the His–Purkinje system or myocardium.
-</div>
-<ul>
-<li>Narrow &lt;0.10 s</li>
-<li>BBB ≥0.12 s</li>
-</ul>
+  <h2><span class="step-badge">6–8</span> QRS, rotation & hypertrophy</h2>
+
+  <div class="image-block">
+    <img src="ekg_images/precordial_normal_v1_v6.png"
+         alt="Normal R wave progression from V1 to V6">
+    <div class="image-caption">
+      Normal precordial R-wave progression.
+    </div>
+  </div>
+
+  <div class="image-block">
+    <img src="ekg_images/lvh_voltage_example.jpeg"
+         alt="ECG demonstrating LVH voltage criteria">
+    <div class="image-caption">
+      Voltage criteria consistent with LVH.
+    </div>
+  </div>
 </section>
 
-<!-- STEP 7 -->
+<!-- STEP 9–10 -->
 <section class="card">
-<h2><span class="step-badge">7</span> Precordial transition</h2>
-<div class="step-body">
-Precordial transition reflects ventricular orientation and chamber dominance.
-</div>
-<ul>
-<li>Normal V3–V4</li>
-<li>Early vs late transition</li>
-</ul>
-<div class="image-block">
-<img src="ekg_images/precordial_normal_v1_v6.png" />
-<div class="image-caption">Normal R-wave progression</div>
-</div>
-</section>
+  <h2><span class="step-badge">9–10</span> Infarction & ST–T changes</h2>
 
-<!-- STEP 8 -->
-<section class="card">
-<h2><span class="step-badge">8</span> Voltage & hypertrophy</h2>
-<div class="step-body">
-Voltage patterns suggest chronic pressure or volume overload.
-</div>
-<ul>
-<li>LVH ± strain</li>
-<li>RVH with RAD</li>
-</ul>
-<div class="image-block">
-<img src="ekg_images/lvh_voltage_example.jpeg" />
-<div class="image-caption">LVH example</div>
-</div>
-</section>
+  <div class="image-block">
+    <img src="ekg_images/stemi_inferior_example.png"
+         alt="Inferior STEMI ECG example">
+    <div class="image-caption">
+      Inferior STEMI pattern (II, III, aVF).
+    </div>
+  </div>
 
-<!-- STEP 9 -->
-<section class="card">
-<h2><span class="step-badge">9</span> Infarction</h2>
-<div class="step-body">
-This step asks whether myocardial necrosis is present and where.
-</div>
-<ul>
-<li>Inferior / anterior / lateral patterns</li>
-</ul>
-<div class="image-block">
-<img src="ekg_images/stemi_inferior_example.png" />
-<div class="image-caption">Inferior STEMI</div>
-</div>
-</section>
-
-<!-- STEP 10 -->
-<section class="card">
-<h2><span class="step-badge">10</span> ST–T changes</h2>
-<div class="step-body">
-ST–T abnormalities reflect ischemia, injury, or secondary repolarization changes.
-</div>
-<ul>
-<li>ST elevation, depression, T inversion</li>
-</ul>
-<div class="image-block">
-<img src="ekg_images/st_patterns_panel.png" />
-<div class="image-caption">ST–T patterns</div>
-</div>
+  <div class="image-block">
+    <img src="ekg_images/st_patterns_panel.png"
+         alt="Comparison of ST elevation, ST depression, and T wave inversion">
+    <div class="image-caption">
+      Common ST-segment and T-wave patterns.
+    </div>
+  </div>
 </section>
 
 <!-- STEP 11 -->
 <section class="card">
-<h2><span class="step-badge">11</span> QT & electrolytes</h2>
-<div class="step-body">
-QT abnormalities predict arrhythmia risk and electrolyte toxicity.
-</div>
-<ul>
-<li>HyperK, HypoK, QT prolongation</li>
-</ul>
-<div class="image-block">
-<img src="ekg_images/qt_long_short_examples.png" />
-<div class="image-caption">QT examples</div>
-</div>
+  <h2><span class="step-badge">11</span> QT & electrolytes</h2>
+
+  <div class="image-block">
+    <img src="ekg_images/hyperkalemia_tall_t.png"
+         alt="Tall peaked T waves seen in hyperkalemia">
+    <div class="image-caption">
+      Tall peaked T waves in hyperkalemia.
+    </div>
+  </div>
+
+  <div class="image-block">
+    <img src="ekg_images/hypokalemia_u_wave.png"
+         alt="Prominent U waves seen in hypokalemia">
+    <div class="image-caption">
+      Prominent U waves in hypokalemia.
+    </div>
+  </div>
 </section>
 
 </div>
