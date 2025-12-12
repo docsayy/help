@@ -1,1 +1,581 @@
-pleural_effusion_advanced.html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Pleural Effusion – Advanced Analyzer</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+:root {
+  --pulm-main:#00796b;
+  --pulm-soft:#e0f2f1;
+  --pulm-accent:#004d40;
+  --danger:#c62828;
+  --warning:#f9a825;
+  --ok:#2e7d32;
+  --card:#ffffff;
+  --bg:#f3f7fb;
+  --radius:14px;
+  --shadow:0 4px 12px rgba(0,0,0,0.08);
+}
+*{box-sizing:border-box;}
+body{
+  margin:0;
+  font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  background:var(--bg);
+  color:#102a43;
+}
+header{
+  background:linear-gradient(135deg,var(--pulm-main),var(--pulm-accent));
+  color:#fff;
+  padding:16px 20px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+header h1{
+  margin:0;
+  font-size:20px;
+}
+.nav-buttons{
+  display:flex;
+  gap:8px;
+}
+.nav-buttons button{
+  border:none;
+  border-radius:999px;
+  padding:6px 14px;
+  font-size:13px;
+  cursor:pointer;
+  background:#ffffff;
+  color:var(--pulm-accent);
+  font-weight:600;
+}
+main{
+  max-width:1100px;
+  margin:20px auto 32px;
+  padding:0 12px;
+}
+.card{
+  background:var(--card);
+  border-radius:var(--radius);
+  box-shadow:var(--shadow);
+  padding:18px 16px 20px;
+  margin-bottom:18px;
+}
+.card-title{
+  font-weight:700;
+  font-size:17px;
+  margin-bottom:10px;
+  color:var(--pulm-accent);
+}
+.grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(190px,1fr));
+  gap:10px 14px;
+}
+label{
+  font-size:13px;
+  color:#35516b;
+  display:block;
+  margin-bottom:3px;
+}
+input[type="number"], select{
+  width:100%;
+  padding:6px 8px;
+  border-radius:8px;
+  border:1px solid #c4d4e3;
+  font-size:14px;
+}
+input[type="number"]:focus, select:focus{
+  outline:none;
+  border-color:var(--pulm-main);
+  box-shadow:0 0 0 1px rgba(0,121,107,0.28);
+}
+.checkbox-row{
+  display:flex;
+  align-items:center;
+  gap:6px;
+  margin-bottom:4px;
+}
+.checkbox-row input{
+  transform:scale(1.1);
+}
+.checkbox-row span{
+  font-size:13px;
+  color:#35516b;
+}
+.section-subtitle{
+  font-size:13px;
+  color:#60758a;
+  margin-bottom:6px;
+}
+.helper-text{
+  font-size:11px;
+  color:#60758a;
+  margin-top:2px;
+}
+button.calculate{
+  margin-top:10px;
+  border:none;
+  border-radius:999px;
+  padding:10px 18px;
+  font-size:14px;
+  font-weight:600;
+  cursor:pointer;
+  background:var(--pulm-main);
+  color:#fff;
+}
+button.calculate:hover{
+  background:var(--pulm-accent);
+}
+.tag{
+  display:inline-block;
+  padding:4px 10px;
+  border-radius:999px;
+  font-size:11px;
+  font-weight:600;
+  margin-right:4px;
+  margin-bottom:4px;
+}
+.tag.exudate{background:#ffebee;color:#b71c1c;}
+.tag.transudate{background:#e8f5e9;color:#1b5e20;}
+.tag.borderline{background:#fff8e1;color:#f57f17;}
+.tag.emergent{background:#ffebee;color:#b71c1c;}
+.tag.complicated{background:#fff3e0;color:#e65100;}
+.tag.uncomplicated{background:#e8f5e9;color:#1b5e20;}
+.section-header{
+  font-size:15px;
+  font-weight:700;
+  margin:8px 0 4px;
+  color:#163a5a;
+}
+ul{
+  padding-left:18px;
+  margin:4px 0 0;
+}
+.summary-block{
+  margin-top:8px;
+  font-size:14px;
+}
+.bad{color:var(--danger);font-weight:600;}
+.warn{color:var(--warning);font-weight:600;}
+.good{color:var(--ok);font-weight:600;}
+</style>
+</head>
+<body>
+<header>
+  <h1>Pleural Effusion – Advanced Analyzer</h1>
+  <div class="nav-buttons">
+    <button onclick="location.href='../index.html'">🏠 Home</button>
+    <button onclick="location.href='../pulmonary.html'">⬅ Back to Pulmonary</button>
+  </div>
+</header>
+
+<main>
+  <div class="card">
+    <div class="card-title">1. Clinical Context</div>
+    <div class="grid">
+      <div>
+        <label for="symptomDyspnea">Symptoms</label>
+        <div class="checkbox-row">
+          <input type="checkbox" id="symptomDyspnea">
+          <span>Dyspnea</span>
+        </div>
+        <div class="checkbox-row">
+          <input type="checkbox" id="symptomPleuritic">
+          <span>Pleuritic chest pain</span>
+        </div>
+        <div class="checkbox-row">
+          <input type="checkbox" id="symptomFever">
+          <span>Fever</span>
+        </div>
+        <div class="checkbox-row">
+          <input type="checkbox" id="symptomWeightLoss">
+          <span>Weight loss / night sweats</span>
+        </div>
+      </div>
+      <div>
+        <label>Known Conditions</label>
+        <div class="checkbox-row">
+          <input type="checkbox" id="hxCHF">
+          <span>Known CHF</span>
+        </div>
+        <div class="checkbox-row">
+          <input type="checkbox" id="hxCirrhosis">
+          <span>Cirrhosis / portal HTN</span>
+        </div>
+        <div class="checkbox-row">
+          <input type="checkbox" id="hxMalignancy">
+          <span>Known malignancy</span>
+        </div>
+        <div class="checkbox-row">
+          <input type="checkbox" id="hxPneumonia">
+          <span>Recent / current pneumonia</span>
+        </div>
+        <div class="checkbox-row">
+          <input type="checkbox" id="hxTB">
+          <span>TB exposure / risk</span>
+        </div>
+      </div>
+      <div>
+        <label>Other Factors</label>
+        <div class="checkbox-row">
+          <input type="checkbox" id="hxTrauma">
+          <span>Recent trauma / procedure</span>
+        </div>
+        <div class="checkbox-row">
+          <input type="checkbox" id="hxSurgery">
+          <span>Recent thoracic / abdominal surgery</span>
+        </div>
+        <div class="checkbox-row">
+          <input type="checkbox" id="hxPancreatitis">
+          <span>Pancreatitis / esophageal rupture concern</span>
+        </div>
+      </div>
+      <div>
+        <label for="effusionSide">Effusion Side</label>
+        <select id="effusionSide">
+          <option value="">-- Select --</option>
+          <option value="right">Right</option>
+          <option value="left">Left</option>
+          <option value="bilateral">Bilateral</option>
+        </select>
+        <label for="effusionSize" style="margin-top:8px;">Size (imaging)</label>
+        <select id="effusionSize">
+          <option value="">-- Select --</option>
+          <option value="small">Small</option>
+          <option value="moderate">Moderate</option>
+          <option value="large">Large</option>
+          <option value="massive">Massive</option>
+        </select>
+        <div class="checkbox-row" style="margin-top:6px;">
+          <input type="checkbox" id="loculated">
+          <span>Loculated / septated</span>
+        </div>
+        <div class="checkbox-row">
+          <input type="checkbox" id="airFluid">
+          <span>Air-fluid level / hydropneumothorax</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">2. Serum & Pleural Fluid Studies</div>
+    <div class="grid">
+      <div>
+        <label for="serumProtein">Serum Protein (g/dL)</label>
+        <input type="number" id="serumProtein" step="0.1" min="0">
+      </div>
+      <div>
+        <label for="serumLDH">Serum LDH (U/L)</label>
+        <input type="number" id="serumLDH" step="1" min="0">
+      </div>
+      <div>
+        <label for="serumLDHUpper">Serum LDH Upper Normal (U/L)</label>
+        <input type="number" id="serumLDHUpper" step="1" min="0">
+        <div class="helper-text">Optional – for 3rd Light’s criterion</div>
+      </div>
+      <div>
+        <label for="serumAlb">Serum Albumin (g/dL)</label>
+        <input type="number" id="serumAlb" step="0.1" min="0">
+      </div>
+      <div>
+        <label for="pfProtein">Pleural Protein (g/dL)</label>
+        <input type="number" id="pfProtein" step="0.1" min="0">
+      </div>
+      <div>
+        <label for="pfLDH">Pleural LDH (U/L)</label>
+        <input type="number" id="pfLDH" step="1" min="0">
+      </div>
+      <div>
+        <label for="pfGlucose">Pleural Glucose (mg/dL)</label>
+        <input type="number" id="pfGlucose" step="1" min="0">
+      </div>
+      <div>
+        <label for="pfPH">Pleural pH</label>
+        <input type="number" id="pfPH" step="0.01" min="6.5" max="8">
+      </div>
+      <div>
+        <label for="pfAlb">Pleural Albumin (g/dL)</label>
+        <input type="number" id="pfAlb" step="0.1" min="0">
+      </div>
+      <div>
+        <label for="pfWBC">Pleural WBC (/µL)</label>
+        <input type="number" id="pfWBC" step="1" min="0">
+      </div>
+      <div>
+        <label for="pfNeut">Neutrophils (%)</label>
+        <input type="number" id="pfNeut" step="1" min="0" max="100">
+      </div>
+      <div>
+        <label for="pfLymph">Lymphocytes (%)</label>
+        <input type="number" id="pfLymph" step="1" min="0" max="100">
+      </div>
+      <div>
+        <label for="pfRBC">Pleural RBC (/µL)</label>
+        <input type="number" id="pfRBC" step="1" min="0">
+      </div>
+      <div>
+        <label for="pfADA">ADA (U/L)</label>
+        <input type="number" id="pfADA" step="1" min="0">
+      </div>
+      <div>
+        <label for="pfTG">Triglycerides (mg/dL)</label>
+        <input type="number" id="pfTG" step="1" min="0">
+      </div>
+      <div>
+        <label for="pfAmylase">Pleural Amylase (U/L)</label>
+        <input type="number" id="pfAmylase" step="1" min="0">
+      </div>
+      <div>
+        <label for="ntProBNP">NT-proBNP (pg/mL)</label>
+        <input type="number" id="ntProBNP" step="1" min="0">
+        <div class="helper-text">Optional – supports cardiac effusion if markedly elevated</div>
+      </div>
+      <div>
+        <label for="cytology">Cytology</label>
+        <select id="cytology">
+          <option value="">Not done / pending</option>
+          <option value="negative">Negative</option>
+          <option value="suspicious">Suspicious / atypical</option>
+          <option value="positive">Positive for malignancy</option>
+        </select>
+      </div>
+      <div>
+        <label for="culture">Gram stain / culture</label>
+        <select id="culture">
+          <option value="">Not done / pending</option>
+          <option value="negative">No organisms</option>
+          <option value="positive">Organisms identified</option>
+        </select>
+      </div>
+    </div>
+    <button class="calculate" onclick="calculateAdvanced()">Analyze Pleural Effusion</button>
+    <div id="advancedResult" class="summary-block"></div>
+  </div>
+</main>
+
+<script>
+function n(id){
+  const v = document.getElementById(id).value;
+  return v === "" ? null : Number(v);
+}
+function isChecked(id){return document.getElementById(id).checked;}
+function val(id){return document.getElementById(id).value;}
+
+function classifyExudate(serumProt, serumLDH, serumLDHUpper, pfProt, pfLDH){
+  let criteriaMet = 0;
+  let notes = [];
+  let protRatio = null, ldhRatio = null;
+
+  if (pfProt != null && serumProt != null && serumProt > 0){
+    protRatio = pfProt / serumProt;
+    if (protRatio > 0.5){criteriaMet++; notes.push("Protein ratio (PF/Serum) > 0.5.");}
+  }
+  if (pfLDH != null && serumLDH != null && serumLDH > 0){
+    ldhRatio = pfLDH / serumLDH;
+    if (ldhRatio > 0.6){criteriaMet++; notes.push("LDH ratio (PF/Serum) > 0.6.");}
+  }
+  if (pfLDH != null && serumLDHUpper != null && serumLDHUpper > 0){
+    if (pfLDH > (2/3 * serumLDHUpper)){
+      criteriaMet++; notes.push("Pleural LDH > 2/3 upper limit of normal.");
+    }
+  }
+
+  let classification = "undetermined";
+  if (criteriaMet >= 1) classification = "exudate";
+  else if (criteriaMet === 0 && protRatio !== null && ldhRatio !== null) classification = "transudate";
+
+  return {classification, criteriaMet, notes, protRatio, ldhRatio};
+}
+
+function calculateAdvanced(){
+  // clinical
+  const dyspnea = isChecked("symptomDyspnea");
+  const pleuritic = isChecked("symptomPleuritic");
+  const fever = isChecked("symptomFever");
+  const weightLoss = isChecked("symptomWeightLoss");
+
+  const hxCHF = isChecked("hxCHF");
+  const hxCirrhosis = isChecked("hxCirrhosis");
+  const hxMalignancy = isChecked("hxMalignancy");
+  const hxPneumonia = isChecked("hxPneumonia");
+  const hxTB = isChecked("hxTB");
+  const hxTrauma = isChecked("hxTrauma");
+  const hxSurgery = isChecked("hxSurgery");
+  const hxPancreatitis = isChecked("hxPancreatitis");
+
+  const effSide = val("effusionSide");
+  const effSize = val("effusionSize");
+  const loculated = isChecked("loculated");
+  const airFluid = isChecked("airFluid");
+
+  // labs
+  const serumProt = n("serumProtein");
+  const serumLDH = n("serumLDH");
+  const serumLDHUpper = n("serumLDHUpper");
+  const serumAlb = n("serumAlb");
+  const pfProt = n("pfProtein");
+  const pfLDH = n("pfLDH");
+  const pfGlucose = n("pfGlucose");
+  const pfPH = n("pfPH");
+  const pfAlb = n("pfAlb");
+  const pfWBC = n("pfWBC");
+  const pfNeut = n("pfNeut");
+  const pfLymph = n("pfLymph");
+  const pfRBC = n("pfRBC");
+  const pfADA = n("pfADA");
+  const pfTG = n("pfTG");
+  const pfAmylase = n("pfAmylase");
+  const ntProBNP = n("ntProBNP");
+  const cytology = val("cytology");
+  const culture = val("culture");
+
+  let html = "";
+
+  // 1. Transudate vs Exudate
+  const lightResult = classifyExudate(serumProt, serumLDH, serumLDHUpper, pfProt, pfLDH);
+  let tagClass="borderline", tagLabel="Insufficient data";
+  if (lightResult.classification === "exudate"){tagClass="exudate"; tagLabel="Exudative effusion (Light’s criteria)";}
+  else if (lightResult.classification === "transudate"){tagClass="transudate"; tagLabel="Transudative effusion (Light’s criteria)";}
+
+  // Albumin gradient
+  let gradText="", grad=null;
+  if (serumAlb != null && pfAlb != null){
+    grad = serumAlb - pfAlb;
+    gradText = `Serum–pleural albumin gradient: ${grad.toFixed(2)} g/dL. `;
+    if (grad >= 1.2 && lightResult.classification === "exudate"){
+      gradText += "This suggests a pseudo-exudate (underlying transudative physiology, e.g. CHF on diuresis).";
+      tagClass="borderline"; tagLabel="Exudate by Light; gradient suggests transudate";
+    } else if (grad >= 1.2){
+      gradText += "Supports transudative physiology.";
+    } else if (grad < 1.2){
+      gradText += "Supports exudative physiology.";
+    }
+  }
+
+  html += `<div class="section-header">Overall Classification</div>`;
+  html += `<div class="summary-block"><span class="tag ${tagClass}">${tagLabel}</span></div>`;
+  if (lightResult.protRatio !== null){
+    html += `<div class="summary-block">Protein ratio (PF/Serum): ${lightResult.protRatio.toFixed(2)}</div>`;
+  }
+  if (lightResult.ldhRatio !== null){
+    html += `<div class="summary-block">LDH ratio (PF/Serum): ${lightResult.ldhRatio.toFixed(2)}</div>`;
+  }
+  if (gradText){
+    html += `<div class="summary-block">${gradText}</div>`;
+  }
+  if (lightResult.notes.length){
+    html += `<ul>`;
+    lightResult.notes.forEach(n => {html += `<li>${n}</li>`;});
+    html += `</ul>`;
+  }
+
+  // 2. Complicated vs uncomplicated & emergent flags
+  let complicated = false;
+  let emergent = false;
+  let redFlags = [];
+
+  if (pfPH != null && pfPH < 7.2){
+    complicated = true;
+    redFlags.push("<span class='bad'>pH &lt; 7.20 – complicated parapneumonic effusion, drainage usually indicated.</span>");
+  }
+  if (pfGlucose != null && pfGlucose < 60){
+    complicated = true;
+    redFlags.push("<span class='bad'>Glucose &lt; 60 mg/dL – infection, malignancy, or rheumatoid effusion.</span>");
+  }
+  if (pfLDH != null && pfLDH > 1000){
+    complicated = true;
+    redFlags.push("<span class='bad'>LDH &gt; 1000 U/L – suggests empyema or highly inflammatory exudate.</span>");
+  }
+  if (pfWBC != null && pfNeut != null && pfWBC > 1000 && pfNeut > 50){
+    redFlags.push("<span class='warn'>Neutrophil predominant exudate – parapneumonic / empyema likely.</span>");
+  }
+  if (pfWBC != null && pfLymph != null && pfWBC > 500 && pfLymph > 50){
+    redFlags.push("<span class='warn'>Lymphocyte predominant – consider malignancy or TB.</span>");
+  }
+  if (pfRBC != null && pfRBC > 100000){
+    redFlags.push("<span class='warn'>Hemorrhagic effusion – consider malignancy, PE, trauma, or iatrogenic bleed.</span>");
+  }
+  if (pfTG != null && pfTG > 110){
+    redFlags.push("<span class='warn'>Triglycerides &gt; 110 mg/dL – chylothorax likely.</span>");
+  }
+  if (pfADA != null && pfADA >= 40){
+    redFlags.push("<span class='warn'>ADA ≥ 40 U/L – TB effusion strongly suggested in the right clinical setting.</span>");
+  }
+  if (airFluid){
+    redFlags.push("<span class='bad'>Air–fluid level / hydropneumothorax – think bronchopleural fistula, rupture, or complicated infection.</span>");
+  }
+  if (culture === "positive"){
+    complicated = true;
+    redFlags.push("<span class='bad'>Pleural fluid culture positive – empyema; urgent drainage required.</span>");
+  }
+
+  // emergent flags – tension, massive symptomatic effusion, hemothorax
+  if ((effSize === "large" || effSize === "massive") && dyspnea){
+    emergent = true;
+  }
+  if (pfRBC != null && pfRBC > 1000000){
+    emergent = true;
+    redFlags.push("<span class='bad'>Very high RBC count – consider hemothorax; may require urgent tube thoracostomy.</span>");
+  }
+
+  html += `<div class="section-header">Risk Features & Complexity</div>`;
+  let tagCompClass = complicated ? "complicated" : "uncomplicated";
+  let tagCompText = complicated ? "Complicated / high-risk effusion" : "No strong markers of complicated effusion entered";
+  html += `<div class="summary-block"><span class="tag ${tagCompClass}">${tagCompText}</span>`;
+  if (emergent){
+    html += ` <span class="tag emergent">Potentially emergent – consider urgent drainage / escalation</span>`;
+  }
+  html += `</div>`;
+
+  if (redFlags.length){
+    html += `<ul>`;
+    redFlags.forEach(r => html += `<li>${r}</li>`);
+    html += `</ul>`;
+  } else {
+    html += `<div class="summary-block good">No major high-risk pleural fluid or imaging features documented.</div>`;
+  }
+
+  // 3. Etiology scoring
+  let etiologies = {
+    "CHF-related effusion":0,
+    "Hepatic hydrothorax":0,
+    "Parapneumonic effusion / empyema":0,
+    "Malignant effusion":0,
+    "Tuberculous effusion":0,
+    "Chylothorax":0,
+    "Pancreatic / esophageal rupture effusion":0,
+    "Hemothorax":0
+  };
+
+  // CHF
+  if (hxCHF) etiologies["CHF-related effusion"] += 2;
+  if (effSide === "bilateral") etiologies["CHF-related effusion"] += 2;
+  if (lightResult.classification === "transudate") etiologies["CHF-related effusion"] += 2;
+  if (grad != null && grad >= 1.2) etiologies["CHF-related effusion"] += 2;
+  if (ntProBNP != null && ntProBNP > 1500) etiologies["CHF-related effusion"] += 3;
+
+  // Hepatic hydrothorax
+  if (hxCirrhosis) etiologies["Hepatic hydrothorax"] += 3;
+  if (effSide === "right") etiologies["Hepatic hydrothorax"] += 1;
+  if (lightResult.classification === "transudate") etiologies["Hepatic hydrothorax"] += 2;
+  if (grad != null && grad >= 1.2) etiologies["Hepatic hydrothorax"] += 2;
+
+  // Parapneumonic / empyema
+  if (hxPneumonia) etiologies["Parapneumonic effusion / empyema"] += 3;
+  if (fever || pleuritic) etiologies["Parapneumonic effusion / empyema"] += 1;
+  if (lightResult.classification === "exudate") etiologies["Parapneumonic effusion / empyema"] += 2;
+  if (pfPH != null && pfPH < 7.2) etiologies["Parapneumonic effusion / empyema"] += 3;
+  if (pfGlucose != null && pfGlucose < 60) etiologies["Parapneumonic effusion / empyema"] += 2;
+  if (pfLDH != null && pfLDH > 1000) etiologies["Parapneumonic effusion / empyema"] += 2;
+  if (pfWBC != null && pfNeut != null && pfWBC > 1000 && pfNeut > 50) etiologies["Parapneumonic effusion / empyema"] += 2;
+  if (culture === "positive") etiologies["Parapneumonic effusion / empyema"] += 3;
+  if (loculated) etiologies["Parapneumonic effusion / empyema"] += 1;
+
+  // Malignant
+  if (hxMalignancy) etiologies["Malignant effusion"] += 3;
+  if (effSide === "unilateral" || effSide === "right" || effSide === "left") etiologies["Malignant effusion"] += 1;
+  if (lightResult.classification === "exudate") etiologies["Malignant effusion"] += 2;
+  if (pfWBC != null && pfLymph != null && pfWBC > 500 && pfLymph > 50) etiologies["Malignant]()
