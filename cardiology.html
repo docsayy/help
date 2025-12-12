@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Cardiology – Medical Decision Support</title>
+<style>
+:root{
+  --bg:#fff6f6;
+  --card:#ffffff;
+  --accent:#c62828;
+  --accent-soft:#ffebee;
+  --text:#1f2937;
+  --muted:#6b7280;
+  --border:#f2c9c9;
+  --shadow:0 6px 18px rgba(0,0,0,0.08);
+  --r:16px;
+}
+*{box-sizing:border-box}
+body{
+  margin:0;
+  font-family: system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;
+  background: radial-gradient(circle at top, var(--accent-soft) 0%, var(--bg) 48%, #ffffff 100%);
+  color:var(--text);
+}
+header{
+  padding:20px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  flex-wrap:wrap;
+  gap:12px;
+}
+h1{margin:0;font-size:26px;color:var(--accent)}
+.subtitle{margin-top:4px;font-size:14px;color:var(--muted);max-width:950px;line-height:1.35}
+.actions{display:flex;gap:10px;flex-wrap:wrap}
+.btn{
+  text-decoration:none;
+  padding:10px 14px;
+  border-radius:999px;
+  font-weight:800;
+  font-size:14px;
+  border:1px solid var(--border);
+}
+.btn.secondary{background:white;color:var(--accent)}
+main{
+  max-width:1200px;
+  margin:0 auto;
+  padding:0 20px 30px;
+}
+.grid{
+  display:grid;
+  grid-template-columns: repeat(auto-fit,minmax(300px,1fr));
+  gap:18px;
+}
+.category{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:var(--r);
+  box-shadow:var(--shadow);
+  padding:16px;
+}
+.category h2{
+  margin:0 0 8px;
+  font-size:18px;
+  color:var(--accent);
+}
+.category p{
+  margin:0 0 14px;
+  font-size:13px;
+  color:var(--muted);
+  line-height:1.35;
+}
+.tool{
+  display:block;
+  text-decoration:none;
+  padding:12px;
+  border-radius:14px;
+  border:1px solid #f1d0d0;
+  background:#fffafa;
+  margin-bottom:10px;
+  color:#111827;
+}
+.tool:hover{
+  background:var(--accent-soft);
+  border-color:var(--accent);
+}
+.tool-title{
+  font-weight:900;
+  font-size:14px;
+  margin-bottom:4px;
+}
+.tool-desc{
+  font-size:12.5px;
+  color:#374151;
+  line-height:1.35;
+}
+.tool-desc ul{
+  margin:6px 0 0 18px;
+  padding:0;
+}
+.tool-desc li{
+  margin:4px 0;
+}
+footer{
+  text-align:center;
+  font-size:12px;
+  color:var(--muted);
+  padding:10px 20px 20px;
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div>
+    <h1>Cardiology</h1>
+    <div class="subtitle">
+      Decision‑focused cardiology tools designed for real clinical workflow.
+      These tools emphasize risk stratification, action thresholds, and clear next steps.
+    </div>
+  </div>
+  <div class="actions">
+    <a class="btn secondary" href="index.html">🏠 Home</a>
+  </div>
+</header>
+
+<main>
+  <div class="grid">
+
+    <div class="category">
+      <h2>Chest Pain & ACS</h2>
+      <p>Initial evaluation, risk stratification, and reperfusion decisions.</p>
+
+      <a class="tool" href="cardiology/chest_pain_scores.html">
+        <div class="tool-title">HEART & TIMI – Chest Pain Scores</div>
+        <div class="tool-desc">
+          <b>What it does:</b>
+          <ul>
+            <li>HEART score for ED chest pain risk stratification</li>
+            <li>TIMI score for UA/NSTEMI</li>
+          </ul>
+          <b>Clinical use:</b> Frontline “can I send this patient home or not?” tool.
+        </div>
+      </a>
+
+      <a class="tool" href="cardiology/grace_acs.html">
+        <div class="tool-title">GRACE ACS Risk Calculator</div>
+        <div class="tool-desc">
+          <b>What it does:</b>
+          <ul>
+            <li>Estimates mortality risk in ACS</li>
+            <li>Identifies high‑risk NSTEMI</li>
+          </ul>
+          <b>Clinical use:</b> Guides invasive vs conservative strategy.
+        </div>
+      </a>
+
+      <a class="tool" href="cardiology/stemi_reperfusion.html">
+        <div class="tool-title">STEMI Reperfusion Strategy</div>
+        <div class="tool-desc">
+          <b>What it does:</b>
+          <ul>
+            <li>PCI vs fibrinolysis decision support</li>
+            <li>Time‑based reperfusion logic</li>
+          </ul>
+          <b>Clinical use:</b> Rapid, protocol‑driven STEMI decisions.
+        </div>
+      </a>
+    </div>
+
+    <div class="category">
+      <h2>Arrhythmias – Atrial Fibrillation</h2>
+      <p>Stroke prevention and rhythm vs rate strategy.</p>
+
+      <a class="tool" href="cardiology/af_risk.html">
+        <div class="tool-title">CHA₂DS₂‑VASc – Stroke Risk</div>
+        <div class="tool-desc">
+          <b>What it does:</b>
+          <ul>
+            <li>Estimates thromboembolic risk in AF</li>
+          </ul>
+          <b>Clinical use:</b> Anticoagulation decision support.
+        </div>
+      </a>
+
+      <a class="tool" href="cardiology/af_rate_rhythm.html">
+        <div class="tool-title">AF Rate vs Rhythm Control Helper</div>
+        <div class="tool-desc">
+          <b>What it does:</b>
+          <ul>
+            <li>Compares rate vs rhythm strategies</li>
+          </ul>
+          <b>Clinical use:</b> Initial AF management framing.
+        </div>
+      </a>
+    </div>
+
+    <div class="category">
+      <h2>Heart Failure</h2>
+      <p>Functional classification and guideline‑directed therapy.</p>
+
+      <a class="tool" href="cardiology/nyha_class.html">
+        <div class="tool-title">NYHA Functional Class</div>
+        <div class="tool-desc">
+          <b>What it does:</b>
+          <ul>
+            <li>Classifies HF symptom severity (I–IV)</li>
+          </ul>
+          <b>Clinical use:</b> Therapy escalation and prognostication.
+        </div>
+      </a>
+
+      <a class="tool" href="cardiology/hf_gdmt.html">
+        <div class="tool-title">Heart Failure GDMT Framework</div>
+        <div class="tool-desc">
+          <b>What it does:</b>
+          <ul>
+            <li>Organizes guideline‑directed medical therapy</li>
+          </ul>
+          <b>Clinical use:</b> Ensures core HF therapies are addressed.
+        </div>
+      </a>
+    </div>
+
+    <div class="category">
+      <h2>Imaging – Echocardiography</h2>
+      <p>Structured echo interpretation.</p>
+
+      <a class="tool" href="cardiology/tte_interpreter.html">
+        <div class="tool-title">TTE Interpreter / Echo Read Tool</div>
+        <div class="tool-desc">
+          <b>What it does:</b>
+          <ul>
+            <li>Interprets LV, RV, diastology, valves, PASP, pericardium</li>
+            <li>Functions even with missing parameters</li>
+          </ul>
+          <b>Clinical use:</b> Generates a cardiologist‑style echo impression.
+        </div>
+      </a>
+    </div>
+
+    <div class="category">
+      <h2>ECG</h2>
+      <p>Stepwise ECG reading.</p>
+
+      <a class="tool" href="cardiology/ekg_guide.html">
+        <div class="tool-title">ECG Stepwise Guide</div>
+        <div class="tool-desc">
+          <b>What it does:</b>
+          <ul>
+            <li>Systematic ECG interpretation framework</li>
+          </ul>
+          <b>Clinical use:</b> Teaching and bedside consistency.
+        </div>
+      </a>
+
+      <a class="tool" href="cardiology/ekg_interpreter.html">
+        <div class="tool-title">ECG Interpreter</div>
+        <div class="tool-desc">
+          <b>What it does:</b>
+          <ul>
+            <li>Identifies rhythm and major ECG abnormalities</li>
+          </ul>
+          <b>Clinical use:</b> Rapid ECG interpretation support.
+        </div>
+      </a>
+    </div>
+
+    <div class="category">
+      <h2>Prevention & Lipids</h2>
+      <p>Primary and secondary prevention.</p>
+
+      <a class="tool" href="cardiology/ascvd.html">
+        <div class="tool-title">ASCVD Risk Calculator</div>
+        <div class="tool-desc">
+          <b>What it does:</b>
+          <ul>
+            <li>Estimates 10‑year ASCVD risk</li>
+          </ul>
+          <b>Clinical use:</b> Risk‑based prevention discussions.
+        </div>
+      </a>
+
+      <a class="tool" href="cardiology/statin_selector.html">
+        <div class="tool-title">Statin Selection Tool</div>
+        <div class="tool-desc">
+          <b>What it does:</b>
+          <ul>
+            <li>Selects statin intensity based on indication</li>
+          </ul>
+          <b>Clinical use:</b> Guideline‑concordant lipid therapy.
+        </div>
+      </a>
+    </div>
+
+    <div class="category">
+      <h2>Hypertension</h2>
+      <p>Blood pressure treatment selection.</p>
+
+      <a class="tool" href="cardiology/bp_selector.html">
+        <div class="tool-title">BP Medication Selector</div>
+        <div class="tool-desc">
+          <b>What it does:</b>
+          <ul>
+            <li>Chooses antihypertensive classes based on comorbidities</li>
+          </ul>
+          <b>Clinical use:</b> Rational first‑line and add‑on therapy.
+        </div>
+      </a>
+    </div>
+
+  </div>
+</main>
+
+<footer>
+  These tools provide decision support, not medical orders. Always integrate patient context and current guidelines.
+</footer>
+
+</body>
+</html>
