@@ -1,1 +1,361 @@
-pleural_fluid_basic.html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Pleural Fluid Study – Basic Calculator</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+:root {
+  --pulm-main:#0288d1;
+  --pulm-soft:#e1f5fe;
+  --pulm-accent:#01579b;
+  --danger:#c62828;
+  --warning:#f9a825;
+  --ok:#2e7d32;
+  --card:#ffffff;
+  --bg:#f3f7fb;
+  --radius:14px;
+  --shadow:0 4px 12px rgba(0,0,0,0.08);
+}
+*{box-sizing:border-box;}
+body{
+  margin:0;
+  font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  background:var(--bg);
+  color:#123047;
+}
+header{
+  background:linear-gradient(135deg,var(--pulm-main),var(--pulm-accent));
+  color:#fff;
+  padding:16px 20px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+header h1{
+  margin:0;
+  font-size:20px;
+}
+.nav-buttons{
+  display:flex;
+  gap:8px;
+}
+.nav-buttons button{
+  border:none;
+  border-radius:999px;
+  padding:6px 14px;
+  font-size:13px;
+  cursor:pointer;
+  background:#ffffff;
+  color:var(--pulm-accent);
+  font-weight:600;
+}
+main{
+  max-width:980px;
+  margin:20px auto 32px;
+  padding:0 12px;
+}
+.card{
+  background:var(--card);
+  border-radius:var(--radius);
+  box-shadow:var(--shadow);
+  padding:18px 16px 20px;
+  margin-bottom:18px;
+}
+.card-title{
+  font-weight:700;
+  font-size:17px;
+  margin-bottom:10px;
+  color:var(--pulm-accent);
+}
+.grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(170px,1fr));
+  gap:10px 14px;
+}
+label{
+  font-size:13px;
+  color:#35516b;
+  display:block;
+  margin-bottom:3px;
+}
+input[type="number"]{
+  width:100%;
+  padding:6px 8px;
+  border-radius:8px;
+  border:1px solid #c4d4e3;
+  font-size:14px;
+}
+input[type="number"]:focus{
+  outline:none;
+  border-color:var(--pulm-main);
+  box-shadow:0 0 0 1px rgba(2,136,209,0.25);
+}
+.helper-text{
+  font-size:11px;
+  color:#60758a;
+  margin-top:2px;
+}
+button.calculate{
+  margin-top:10px;
+  border:none;
+  border-radius:999px;
+  padding:10px 18px;
+  font-size:14px;
+  font-weight:600;
+  cursor:pointer;
+  background:var(--pulm-main);
+  color:#fff;
+}
+button.calculate:hover{
+  background:var(--pulm-accent);
+}
+.result-section{
+  margin-top:8px;
+}
+.tag{
+  display:inline-block;
+  padding:4px 10px;
+  border-radius:999px;
+  font-size:11px;
+  font-weight:600;
+  margin-right:4px;
+  margin-bottom:4px;
+}
+.tag.exudate{background:#ffebee;color:#b71c1c;}
+.tag.transudate{background:#e8f5e9;color:#1b5e20;}
+.tag.borderline{background:#fff8e1;color:#f57f17;}
+.bad{color:var(--danger);font-weight:600;}
+.warn{color:var(--warning);font-weight:600;}
+.good{color:var(--ok);font-weight:600;}
+ul{
+  padding-left:18px;
+  margin:4px 0 0;
+}
+h3{
+  margin:8px 0 4px;
+  font-size:15px;
+  color:#163a5a;
+}
+.summary-line{
+  font-size:14px;
+  margin-bottom:4px;
+}
+</style>
+</head>
+<body>
+<header>
+  <h1>Pleural Fluid Study – Basic</h1>
+  <div class="nav-buttons">
+    <button onclick="location.href='../index.html'">🏠 Home</button>
+    <button onclick="location.href='../pulmonary.html'">⬅ Back to Pulmonary</button>
+  </div>
+</header>
+
+<main>
+  <div class="card">
+    <div class="card-title">1. Serum Values</div>
+    <div class="grid">
+      <div>
+        <label for="serumProtein">Serum Protein (g/dL)</label>
+        <input type="number" id="serumProtein" step="0.1" min="0">
+      </div>
+      <div>
+        <label for="serumLDH">Serum LDH (U/L)</label>
+        <input type="number" id="serumLDH" step="1" min="0">
+      </div>
+      <div>
+        <label for="serumLDHUpper">Serum LDH Upper Normal (U/L)</label>
+        <input type="number" id="serumLDHUpper" step="1" min="0">
+        <div class="helper-text">Optional – used for Light’s 3rd criterion</div>
+      </div>
+      <div>
+        <label for="serumAlb">Serum Albumin (g/dL)</label>
+        <input type="number" id="serumAlb" step="0.1" min="0">
+        <div class="helper-text">Optional – for serum–pleural albumin gradient</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">2. Pleural Fluid Values</div>
+    <div class="grid">
+      <div>
+        <label for="pfProtein">Pleural Fluid Protein (g/dL)</label>
+        <input type="number" id="pfProtein" step="0.1" min="0">
+      </div>
+      <div>
+        <label for="pfLDH">Pleural Fluid LDH (U/L)</label>
+        <input type="number" id="pfLDH" step="1" min="0">
+      </div>
+      <div>
+        <label for="pfGlucose">Pleural Glucose (mg/dL)</label>
+        <input type="number" id="pfGlucose" step="1" min="0">
+      </div>
+      <div>
+        <label for="pfPH">Pleural pH</label>
+        <input type="number" id="pfPH" step="0.01" min="6.5" max="8">
+      </div>
+      <div>
+        <label for="pfAlb">Pleural Albumin (g/dL)</label>
+        <input type="number" id="pfAlb" step="0.1" min="0">
+        <div class="helper-text">Optional – for albumin gradient</div>
+      </div>
+      <div>
+        <label for="pfWBC">Pleural WBC (/µL)</label>
+        <input type="number" id="pfWBC" step="1" min="0">
+      </div>
+      <div>
+        <label for="pfNeut">Neutrophils (%)</label>
+        <input type="number" id="pfNeut" step="1" min="0" max="100">
+      </div>
+      <div>
+        <label for="pfLymph">Lymphocytes (%)</label>
+        <input type="number" id="pfLymph" step="1" min="0" max="100">
+      </div>
+      <div>
+        <label for="pfRBC">Pleural RBC (/µL)</label>
+        <input type="number" id="pfRBC" step="1" min="0">
+      </div>
+    </div>
+    <button class="calculate" onclick="calculateBasic()">Calculate Interpretation</button>
+
+    <div id="basicResult" class="result-section"></div>
+  </div>
+</main>
+
+<script>
+function toNum(id){
+  const v = document.getElementById(id).value;
+  return v === "" ? null : Number(v);
+}
+
+function calculateBasic(){
+  const serumProt = toNum("serumProtein");
+  const serumLDH = toNum("serumLDH");
+  const serumLDHUpper = toNum("serumLDHUpper");
+  const serumAlb = toNum("serumAlb");
+
+  const pfProt = toNum("pfProtein");
+  const pfLDH = toNum("pfLDH");
+  const pfGlucose = toNum("pfGlucose");
+  const pfPH = toNum("pfPH");
+  const pfAlb = toNum("pfAlb");
+  const pfWBC = toNum("pfWBC");
+  const pfNeut = toNum("pfNeut");
+  const pfLymph = toNum("pfLymph");
+  const pfRBC = toNum("pfRBC");
+
+  let html = "";
+
+  // Light's criteria
+  let criteriaMet = 0;
+  let notes = [];
+
+  let protRatio = null, ldhRatio = null;
+
+  if (pfProt != null && serumProt != null && serumProt > 0){
+    protRatio = pfProt / serumProt;
+    if (protRatio > 0.5) {
+      criteriaMet++;
+      notes.push("Protein ratio > 0.5 (exudate criterion met).");
+    }
+  }
+
+  if (pfLDH != null && serumLDH != null && serumLDH > 0){
+    ldhRatio = pfLDH / serumLDH;
+    if (ldhRatio > 0.6){
+      criteriaMet++;
+      notes.push("LDH ratio > 0.6 (exudate criterion met).");
+    }
+  }
+
+  if (pfLDH != null && serumLDHUpper != null && serumLDHUpper > 0){
+    if (pfLDH > (2/3 * serumLDHUpper)){
+      criteriaMet++;
+      notes.push("Pleural LDH > 2/3 upper limit of normal (exudate criterion met).");
+    }
+  }
+
+  let classification = "undetermined";
+  let tagClass = "borderline";
+  let tagLabel = "Insufficient Data";
+
+  if (criteriaMet >= 1){
+    classification = "exudate";
+    tagClass = "exudate";
+    tagLabel = "Exudative by Light’s criteria";
+  } else if (criteriaMet === 0 && protRatio !== null && ldhRatio !== null){
+    classification = "transudate";
+    tagClass = "transudate";
+    tagLabel = "Transudative by Light’s criteria";
+  }
+
+  // Albumin gradient
+  let gradientNote = "";
+  if (serumAlb != null && pfAlb != null){
+    const grad = serumAlb - pfAlb;
+    gradientNote = `Serum–pleural albumin gradient: ${grad.toFixed(2)} g/dL. `;
+    if (grad >= 1.2 && classification === "exudate"){
+      gradientNote += "Pattern suggests pseudo-exudate (likely transudative, e.g. CHF on diuresis).";
+      tagClass = "borderline";
+      tagLabel = "Exudate by Light; gradient suggests transudate";
+    } else if (grad >= 1.2){
+      gradientNote += "Supports transudative physiology.";
+    } else if (grad < 1.2){
+      gradientNote += "Supports exudative physiology.";
+    }
+  }
+
+  html += `<div class="summary-line"><span class="tag ${tagClass}">${tagLabel}</span></div>`;
+
+  if (protRatio !== null){
+    html += `<div class="summary-line">Protein ratio (PF/Serum): ${protRatio.toFixed(2)}</div>`;
+  }
+  if (ldhRatio !== null){
+    html += `<div class="summary-line">LDH ratio (PF/Serum): ${ldhRatio.toFixed(2)}</div>`;
+  }
+  if (gradientNote){
+    html += `<div class="summary-line">${gradientNote}</div>`;
+  }
+
+  if (notes.length){
+    html += "<h3>Light’s Criteria Notes</h3><ul>";
+    notes.forEach(n => html += `<li>${n}</li>`);
+    html += "</ul>";
+  }
+
+  // Red flags
+  let redFlags = [];
+  if (pfPH != null && pfPH < 7.2) redFlags.push("<span class='bad'>pH &lt; 7.20 – complicated parapneumonic effusion / empyema likely, drainage usually indicated.</span>");
+  if (pfGlucose != null && pfGlucose < 60) redFlags.push("<span class='bad'>Glucose &lt; 60 mg/dL – infection, malignancy, or rheumatoid effusion.</span>");
+  if (pfLDH != null && pfLDH > 1000) redFlags.push("<span class='bad'>LDH &gt; 1000 U/L – suggests empyema or very active exudate.</span>");
+  if (pfWBC != null && pfNeut != null && pfWBC > 1000 && pfNeut > 50) redFlags.push("<span class='warn'>Neutrophil-predominant exudate – parapneumonic / empyema likely.</span>");
+  if (pfWBC != null && pfLymph != null && pfWBC > 500 && pfLymph > 50) redFlags.push("<span class='warn'>Lymphocyte-predominant – consider malignancy or TB effusion.</span>");
+  if (pfRBC != null && pfRBC > 100000) redFlags.push("<span class='warn'>Hemorrhagic fluid (RBC &gt; 100,000/µL) – consider malignancy, PE, or trauma.</span>");
+
+  if (redFlags.length){
+    html += "<h3>Red Flag Features</h3><ul>";
+    redFlags.forEach(r => html += `<li>${r}</li>`);
+    html += "</ul>";
+  } else {
+    html += "<h3>Red Flag Features</h3><div class='good'>No major high-risk pleural fluid features entered.</div>";
+  }
+
+  // Simple suggested differential
+  html += "<h3>Simple Interpretation / Possible Etiologies</h3>";
+  if (classification === "transudate"){
+    html += "<ul><li>Pattern most compatible with <b>transudative effusion</b> – think CHF, cirrhosis (hepatic hydrothorax), or nephrotic syndrome.</li>";
+    html += "<li>Correlate with volume status, BNP, and liver function.</li></ul>";
+  } else if (classification === "exudate"){
+    html += "<ul><li>Pattern most compatible with <b>exudative effusion</b> – think parapneumonic, malignancy, TB, PE, pancreatitis, etc.</li>";
+    html += "<li>Use clinical context, imaging, and further tests (ADA, cytology, CT) to refine etiology.</li></ul>";
+  } else {
+    html += "<div>Unable to classify – please enter at least serum + pleural protein and LDH values.</div>";
+  }
+
+  document.getElementById("basicResult").innerHTML = html;
+}
+</script>
+</body>
+</html>
