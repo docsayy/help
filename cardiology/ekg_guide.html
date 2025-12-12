@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>ECG Stepwise Guide</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    :root {
+      --cardiology-main: #e53935;
+      --cardiology-light: #ffebee;
+      --cardiology-accent: #c62828;
+      --text-main: #222;
+      --text-muted: #555;
+      --card-shadow: 0 4px 12px rgba(0,0,0,0.08);
+      --radius-lg: 14px;
+      --radius-pill: 999px;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: linear-gradient(135deg, #fff, #ffeef0);
+      color: var(--text-main);
+      padding: 16px;
+    }
+    .page {
+      max-width: 1100px;
+      margin: 0 auto 32px;
+      background: rgba(255,255,255,0.96);
+      border-radius: 20px;
+      box-shadow: var(--card-shadow);
+      padding: 20px 16px 24px;
+    }
+    .card {
+      background: #fff;
+      border-radius: var(--radius-lg);
+      box-shadow: var(--card-shadow);
+      padding: 16px;
+      margin-bottom: 16px;
+    }
+    h2 {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin: 0 0 6px;
+      font-size: 1.15rem;
+    }
+    .step-badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 26px;
+      height: 26px;
+      border-radius: 999px;
+      background: var(--cardiology-main);
+      color: #fff;
+      font-size: 0.85rem;
+      font-weight: 700;
+    }
+    .step-body {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      line-height: 1.35;
+      margin-bottom: 4px;
+    }
+    ul {
+      margin: 6px 0 6px 18px;
+      font-size: 0.88rem;
+      color: var(--text-muted);
+    }
+  </style>
+</head>
+<body>
+<div class="page">
+
+<section class="card">
+<h2><span class="step-badge">5</span> QRS axis</h2>
+<div class="step-body">
+Axis helps localize pathology and reflects chronic pressure, conduction disease, or prior infarction.
+</div>
+<ul>
+<li>I & II positive → normal axis</li>
+<li>I positive, II negative → left axis deviation</li>
+<li>I negative, aVF positive → right axis deviation</li>
+<li>I negative, aVF negative → extreme axis</li>
+</ul>
+</section>
+
+<section class="card">
+<h2><span class="step-badge">6</span> QRS duration & bundle branch block</h2>
+<div class="step-body">
+QRS width tells you whether depolarization is using the His–Purkinje system or spreading through myocardium.
+</div>
+<ul>
+<li>&lt;0.10 s: narrow</li>
+<li>0.10–0.12 s: incomplete BBB</li>
+<li>≥0.12 s: complete BBB</li>
+</ul>
+</section>
+
+<section class="card">
+<h2><span class="step-badge">7</span> Precordial transition</h2>
+<div class="step-body">
+Precordial transition reflects ventricular orientation and may suggest chamber enlargement or lead misplacement.
+</div>
+<ul>
+<li>Normal transition: V3–V4</li>
+<li>Late transition: clockwise rotation</li>
+<li>Early transition: counterclockwise rotation</li>
+</ul>
+</section>
+
+<section class="card">
+<h2><span class="step-badge">8</span> Voltage & hypertrophy</h2>
+<div class="step-body">
+Voltage patterns suggest chronic pressure or volume overload but must be interpreted clinically.
+</div>
+<ul>
+<li>LVH: high voltage ± strain</li>
+<li>RVH: tall R in V1 with RAD</li>
+<li>Low voltage: effusion, COPD, obesity</li>
+</ul>
+</section>
+
+<section class="card">
+<h2><span class="step-badge">9</span> Infarction & localization</h2>
+<div class="step-body">
+This step asks whether myocardial necrosis is present and where it is located.
+</div>
+<ul>
+<li>Inferior: II, III, aVF</li>
+<li>Anterior: V1–V4</li>
+<li>Lateral: I, aVL, V5–V6</li>
+</ul>
+</section>
+
+<section class="card">
+<h2><span class="step-badge">10</span> ST segment & T waves</h2>
+<div class="step-body">
+ST–T abnormalities reflect ischemia, injury, or secondary repolarization changes.
+</div>
+<ul>
+<li>Convex ST elevation: STEMI</li>
+<li>ST depression/T inversion: ischemia</li>
+<li>Diffuse concave ST elevation: pericarditis</li>
+</ul>
+</section>
+
+<section class="card">
+<h2><span class="step-badge">11</span> QT interval & electrolytes</h2>
+<div class="step-body">
+QT abnormalities predict arrhythmia risk and often reflect electrolyte or medication effects.
+</div>
+<ul>
+<li>Hyperkalemia: peaked T waves</li>
+<li>Hypokalemia: U waves</li>
+<li>Hypocalcemia: prolonged QT</li>
+</ul>
+</section>
+
+</div>
+</body>
+</html>
