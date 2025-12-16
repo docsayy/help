@@ -17,48 +17,26 @@
   --shadow:0 4px 12px rgba(0,0,0,.08);
 }
 *{box-sizing:border-box;}
-body{
-  margin:0;
-  font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
-  background:var(--bg);
-  color:#123047;
-}
+body{margin:0;font-family:system-ui,-apple-system;background:var(--bg);color:#123047;}
 header{
   background:linear-gradient(135deg,var(--pulm-main),var(--pulm-accent));
-  color:#fff;
-  padding:16px 20px;
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
+  color:#fff;padding:16px 20px;
+  display:flex;justify-content:space-between;align-items:center;
 }
 header h1{margin:0;font-size:20px;}
 .nav-buttons{display:flex;gap:8px;}
 .nav-buttons button{
-  border:none;
-  border-radius:999px;
-  padding:6px 14px;
-  font-size:13px;
-  cursor:pointer;
-  background:#fff;
-  color:var(--pulm-accent);
-  font-weight:600;
+  border:none;border-radius:999px;padding:6px 14px;
+  font-size:13px;background:#fff;color:var(--pulm-accent);
+  font-weight:600;cursor:pointer;
 }
-main{
-  max-width:980px;
-  margin:20px auto 32px;
-  padding:0 12px;
-}
+main{max-width:980px;margin:20px auto 32px;padding:0 12px;}
 .card{
-  background:var(--card);
-  border-radius:var(--radius);
-  box-shadow:var(--shadow);
-  padding:18px 16px 20px;
-  margin-bottom:18px;
+  background:var(--card);border-radius:var(--radius);
+  box-shadow:var(--shadow);padding:18px;margin-bottom:18px;
 }
 .card-title{
-  font-weight:700;
-  font-size:17px;
-  margin-bottom:10px;
+  font-weight:700;font-size:17px;margin-bottom:10px;
   color:var(--pulm-accent);
 }
 .grid{
@@ -66,37 +44,19 @@ main{
   grid-template-columns:repeat(auto-fit,minmax(170px,1fr));
   gap:10px 14px;
 }
-label{
-  font-size:13px;
-  color:#35516b;
-  display:block;
-  margin-bottom:3px;
-}
+label{font-size:13px;color:#35516b;margin-bottom:3px;display:block;}
 input,select{
-  width:100%;
-  padding:6px 8px;
-  border-radius:8px;
-  border:1px solid #c4d4e3;
-  font-size:14px;
+  width:100%;padding:6px 8px;border-radius:8px;
+  border:1px solid #c4d4e3;font-size:14px;
 }
 button.calculate{
-  margin-top:10px;
-  border:none;
-  border-radius:999px;
-  padding:10px 18px;
-  font-size:14px;
-  font-weight:600;
-  cursor:pointer;
-  background:var(--pulm-main);
-  color:#fff;
+  margin-top:10px;border:none;border-radius:999px;
+  padding:10px 18px;font-size:14px;font-weight:600;
+  background:var(--pulm-main);color:#fff;cursor:pointer;
 }
 .tag{
-  display:inline-block;
-  padding:4px 10px;
-  border-radius:999px;
-  font-size:11px;
-  font-weight:600;
-  margin-bottom:6px;
+  display:inline-block;padding:4px 10px;border-radius:999px;
+  font-size:11px;font-weight:600;margin-bottom:6px;
 }
 .tag.exudate{background:#ffebee;color:#b71c1c;}
 .tag.transudate{background:#e8f5e9;color:#1b5e20;}
@@ -106,7 +66,7 @@ button.calculate{
 .warn{color:var(--warning);font-weight:600;}
 .good{color:var(--ok);font-weight:600;}
 ul{padding-left:18px;margin:4px 0;}
-h3{margin:8px 0 4px;font-size:15px;color:#163a5a;}
+h3{margin:10px 0 4px;font-size:15px;color:#163a5a;}
 </style>
 </head>
 
@@ -177,38 +137,69 @@ function calculate(){
   const ada=n("ada"), amy=n("amy"), tg=n("tg"), bnp=n("bnp");
   const side=document.getElementById("side").value;
 
-  let html="", crit=0, notes=[], tag="borderline", label="Indeterminate";
+  let html="", crit=0, tag="borderline", label="Indeterminate";
 
-  let pr=null, lr=null;
+  html += `<h3>Light’s Criteria (PFO³)</h3>`;
 
-  if(sProt&&pProt){ pr=pProt/sProt; if(pr>0.5){crit++; notes.push("Protein ratio > 0.5");}}
-  if(sLDH&&pLDH){ lr=pLDH/sLDH; if(lr>0.6){crit++; notes.push("LDH ratio > 0.6");}}
-  if(pLDH&&ULN){ if(pLDH>(2/3*ULN)){crit++; notes.push("Pleural LDH > 2/3 ULN");}}
+  // Protein ratio
+  if(sProt && pProt){
+    const pr=pProt/sProt;
+    const met=pr>0.5;
+    if(met) crit++;
+    html+=`<div class="summary-line">
+      Protein ratio = ${pr.toFixed(2)} (cutoff > 0.50) 
+      ${met?'<span class="bad">✔</span>':'<span class="good">✘</span>'}
+    </div>`;
+  }
+
+  // LDH ratio
+  if(sLDH && pLDH){
+    const lr=pLDH/sLDH;
+    const met=lr>0.6;
+    if(met) crit++;
+    html+=`<div class="summary-line">
+      LDH ratio = ${lr.toFixed(2)} (cutoff > 0.60)
+      ${met?'<span class="bad">✔</span>':'<span class="good">✘</span>'}
+    </div>`;
+  }
+
+  // LDH absolute
+  if(pLDH && ULN){
+    const cutoff=(2/3*ULN).toFixed(0);
+    const met=pLDH>(2/3*ULN);
+    if(met) crit++;
+    html+=`<div class="summary-line">
+      Pleural LDH = ${pLDH} U/L (cutoff > ${cutoff})
+      ${met?'<span class="bad">✔</span>':'<span class="good">✘</span>'}
+    </div>`;
+  }
 
   if(crit>=1){tag="exudate";label="Exudative by Light’s criteria";}
-  else if(pr!==null&&lr!==null){tag="transudate";label="Transudative by Light’s criteria";}
+  else if(sProt&&pProt&&sLDH&&pLDH){tag="transudate";label="Transudative by Light’s criteria";}
 
   html+=`<div class="summary-line"><span class="tag ${tag}">${label}</span></div>`;
-  if(pr!==null) html+=`<div class="summary-line">Protein ratio: ${pr.toFixed(2)}</div>`;
-  if(lr!==null) html+=`<div class="summary-line">LDH ratio: ${lr.toFixed(2)}</div>`;
 
-  if(sAlb!==null&&pAlb!==null){
+  // SEAG
+  if(sAlb!==null && pAlb!==null){
     const seag=(sAlb-pAlb).toFixed(2);
-    html+=`<div class="summary-line">SEAG: ${seag} g/dL</div>`;
+    html+=`<div class="summary-line">
+      SEAG = ${seag} g/dL (cutoff ≥ 1.2 → transudate)
+    </div>`;
     if(seag>=1.2 && tag==="exudate"){
       html+=`<div class="warn">Pseudo-exudate likely (e.g. CHF on diuretics)</div>`;
     }
   }
 
+  // Etiology refinement
   let eti=[];
-  if(ada>=40) eti.push("High ADA → Tuberculous pleuritis");
-  if(amy>100) eti.push("High amylase → Pancreatitis, esophageal rupture, malignancy");
+  if(ada>=40) eti.push("ADA ≥ 40 → Tuberculous pleuritis");
+  if(amy>100) eti.push("High amylase → Pancreatic / esophageal / malignant");
   if(tg>=110) eti.push("Triglycerides ≥110 → Chylothorax");
-  if(bnp>=1500) eti.push("High NT-proBNP → Cardiac effusion despite Light’s");
+  if(bnp>=1500) eti.push("High NT-proBNP → Cardiac effusion");
   if(glu<60) eti.push("Low glucose → Infection, malignancy, rheumatoid");
-  if(side==="Left") eti.push("Left-sided → Pancreatic or malignant process");
-  if(side==="Right") eti.push("Right-sided → Hepatic hydrothorax");
-  if(side==="Bilateral") eti.push("Bilateral → Systemic disease (CHF, renal, cirrhosis)");
+  if(side==="Left") eti.push("Left-sided predominance → Pancreatic or malignant");
+  if(side==="Right") eti.push("Right-sided predominance → Hepatic hydrothorax");
+  if(side==="Bilateral") eti.push("Bilateral → Systemic process");
 
   html+=`<h3>What this looks like</h3>`;
   if(eti.length){
@@ -219,9 +210,9 @@ function calculate(){
 
   html+=`<h3>What to do next</h3>`;
   if(tag==="transudate"){
-    html+=`<ul><li>Treat underlying systemic cause</li><li>No routine cytology unless atypical</li></ul>`;
+    html+=`<ul><li>Treat underlying systemic disease</li></ul>`;
   } else if(tag==="exudate"){
-    html+=`<ul><li>Cytology ± ADA</li><li>Contrast CT chest</li><li>Drain if infected or symptomatic</li></ul>`;
+    html+=`<ul><li>Cytology ± ADA</li><li>CT chest</li><li>Drain if complicated</li></ul>`;
   } else {
     html+=`<div>Complete Light’s criteria inputs</div>`;
   }
