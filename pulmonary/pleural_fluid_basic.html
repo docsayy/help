@@ -2,12 +2,11 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Pleural Fluid Study – Basic Calculator</title>
+<title>Pleural Fluid Study – Calculator</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <style>
-:root {
+:root{
   --pulm-main:#0288d1;
-  --pulm-soft:#e1f5fe;
   --pulm-accent:#01579b;
   --danger:#c62828;
   --warning:#f9a825;
@@ -15,7 +14,7 @@
   --card:#ffffff;
   --bg:#f3f7fb;
   --radius:14px;
-  --shadow:0 4px 12px rgba(0,0,0,0.08);
+  --shadow:0 4px 12px rgba(0,0,0,.08);
 }
 *{box-sizing:border-box;}
 body{
@@ -35,11 +34,20 @@ header{
 header h1{margin:0;font-size:20px;}
 .nav-buttons{display:flex;gap:8px;}
 .nav-buttons button{
-  border:none;border-radius:999px;padding:6px 14px;
-  font-size:13px;cursor:pointer;
-  background:#fff;color:var(--pulm-accent);font-weight:600;
+  border:none;
+  border-radius:999px;
+  padding:6px 14px;
+  font-size:13px;
+  cursor:pointer;
+  background:#fff;
+  color:var(--pulm-accent);
+  font-weight:600;
 }
-main{max-width:980px;margin:20px auto 32px;padding:0 12px;}
+main{
+  max-width:980px;
+  margin:20px auto 32px;
+  padding:0 12px;
+}
 .card{
   background:var(--card);
   border-radius:var(--radius);
@@ -48,7 +56,9 @@ main{max-width:980px;margin:20px auto 32px;padding:0 12px;}
   margin-bottom:18px;
 }
 .card-title{
-  font-weight:700;font-size:17px;margin-bottom:10px;
+  font-weight:700;
+  font-size:17px;
+  margin-bottom:10px;
   color:var(--pulm-accent);
 }
 .grid{
@@ -56,25 +66,44 @@ main{max-width:980px;margin:20px auto 32px;padding:0 12px;}
   grid-template-columns:repeat(auto-fit,minmax(170px,1fr));
   gap:10px 14px;
 }
-label{font-size:13px;color:#35516b;margin-bottom:3px;display:block;}
-input[type="number"]{
-  width:100%;padding:6px 8px;border-radius:8px;
-  border:1px solid #c4d4e3;font-size:14px;
+label{
+  font-size:13px;
+  color:#35516b;
+  display:block;
+  margin-bottom:3px;
+}
+input,select{
+  width:100%;
+  padding:6px 8px;
+  border-radius:8px;
+  border:1px solid #c4d4e3;
+  font-size:14px;
 }
 button.calculate{
-  margin-top:10px;border:none;border-radius:999px;
-  padding:10px 18px;font-size:14px;font-weight:600;
-  cursor:pointer;background:var(--pulm-main);color:#fff;
+  margin-top:10px;
+  border:none;
+  border-radius:999px;
+  padding:10px 18px;
+  font-size:14px;
+  font-weight:600;
+  cursor:pointer;
+  background:var(--pulm-main);
+  color:#fff;
 }
 .tag{
-  display:inline-block;padding:4px 10px;border-radius:999px;
-  font-size:11px;font-weight:600;margin-bottom:6px;
+  display:inline-block;
+  padding:4px 10px;
+  border-radius:999px;
+  font-size:11px;
+  font-weight:600;
+  margin-bottom:6px;
 }
 .tag.exudate{background:#ffebee;color:#b71c1c;}
 .tag.transudate{background:#e8f5e9;color:#1b5e20;}
 .tag.borderline{background:#fff8e1;color:#f57f17;}
 .summary-line{font-size:14px;margin-bottom:4px;}
 .bad{color:var(--danger);font-weight:600;}
+.warn{color:var(--warning);font-weight:600;}
 .good{color:var(--ok);font-weight:600;}
 ul{padding-left:18px;margin:4px 0;}
 h3{margin:8px 0 4px;font-size:15px;color:#163a5a;}
@@ -83,7 +112,7 @@ h3{margin:8px 0 4px;font-size:15px;color:#163a5a;}
 
 <body>
 <header>
-  <h1>Pleural Fluid Study – Basic</h1>
+  <h1>Pleural Fluid Study – Calculator</h1>
   <div class="nav-buttons">
     <button onclick="location.href='../index.html'">🏠 Home</button>
     <button onclick="location.href='../pulmonary.html'">⬅ Pulmonary</button>
@@ -95,64 +124,60 @@ h3{margin:8px 0 4px;font-size:15px;color:#163a5a;}
 <div class="card">
   <div class="card-title">1. Serum</div>
   <div class="grid">
-    <div>
-      <label>Serum Protein (g/dL)</label>
-      <input type="number" id="sProt" step="0.1">
-    </div>
-    <div>
-      <label>Serum Albumin (g/dL)</label>
-      <input type="number" id="sAlb" step="0.1">
-    </div>
-    <div>
-      <label>Serum LDH (U/L)</label>
-      <input type="number" id="sLDH">
-    </div>
-    <div>
-      <label>LDH Upper Normal (U/L)</label>
-      <input type="number" id="sLDH_ULN">
-    </div>
+    <div><label>Serum Protein (g/dL)</label><input type="number" id="sProt" step="0.1"></div>
+    <div><label>Serum Albumin (g/dL)</label><input type="number" id="sAlb" step="0.1"></div>
+    <div><label>Serum LDH (U/L)</label><input type="number" id="sLDH"></div>
+    <div><label>LDH Upper Normal (U/L)</label><input type="number" id="sULN"></div>
   </div>
 </div>
 
 <div class="card">
   <div class="card-title">2. Pleural Fluid</div>
   <div class="grid">
+    <div><label>Pleural Protein (g/dL)</label><input type="number" id="pProt" step="0.1"></div>
+    <div><label>Pleural LDH (U/L)</label><input type="number" id="pLDH"></div>
+    <div><label>Pleural Albumin (g/dL)</label><input type="number" id="pAlb" step="0.1"></div>
+    <div><label>Pleural Glucose (mg/dL)</label><input type="number" id="pGlu"></div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-title">3. Etiology Refinement (Optional)</div>
+  <div class="grid">
+    <div><label>ADA (U/L)</label><input type="number" id="ada"></div>
+    <div><label>Amylase (U/L)</label><input type="number" id="amy"></div>
+    <div><label>Triglycerides (mg/dL)</label><input type="number" id="tg"></div>
+    <div><label>NT-proBNP (pg/mL)</label><input type="number" id="bnp"></div>
     <div>
-      <label>Pleural Protein (g/dL)</label>
-      <input type="number" id="pProt" step="0.1">
-    </div>
-    <div>
-      <label>Pleural LDH (U/L)</label>
-      <input type="number" id="pLDH">
-    </div>
-    <div>
-      <label>Pleural Albumin (g/dL)</label>
-      <input type="number" id="pAlb" step="0.1">
-    </div>
-    <div>
-      <label>Pleural Glucose (mg/dL)</label>
-      <input type="number" id="pGlu">
+      <label>Effusion Side</label>
+      <select id="side">
+        <option value="">—</option>
+        <option>Left</option>
+        <option>Right</option>
+        <option>Bilateral</option>
+      </select>
     </div>
   </div>
-
-  <button class="calculate" onclick="calc()">Calculate</button>
+  <button class="calculate" onclick="calculate()">Calculate Interpretation</button>
   <div id="out"></div>
 </div>
 
 </main>
 
 <script>
-function num(id){
+function n(id){
   const v=document.getElementById(id).value;
   return v===""?null:Number(v);
 }
 
-function calc(){
-  const sProt=num("sProt"), pProt=num("pProt");
-  const sLDH=num("sLDH"), pLDH=num("pLDH"), ULN=num("sLDH_ULN");
-  const sAlb=num("sAlb"), pAlb=num("pAlb"), glu=num("pGlu");
+function calculate(){
+  const sProt=n("sProt"), pProt=n("pProt");
+  const sLDH=n("sLDH"), pLDH=n("pLDH"), ULN=n("sULN");
+  const sAlb=n("sAlb"), pAlb=n("pAlb"), glu=n("pGlu");
+  const ada=n("ada"), amy=n("amy"), tg=n("tg"), bnp=n("bnp");
+  const side=document.getElementById("side").value;
 
-  let html="", crit=0, notes=[];
+  let html="", crit=0, notes=[], tag="borderline", label="Indeterminate";
 
   let pr=null, lr=null;
 
@@ -160,12 +185,10 @@ function calc(){
   if(sLDH&&pLDH){ lr=pLDH/sLDH; if(lr>0.6){crit++; notes.push("LDH ratio > 0.6");}}
   if(pLDH&&ULN){ if(pLDH>(2/3*ULN)){crit++; notes.push("Pleural LDH > 2/3 ULN");}}
 
-  let tag="borderline", label="Indeterminate";
-  if(crit>=1){tag="exudate";label="Exudative by Light (PFO³)";}
-  else if(pr!==null&&lr!==null){tag="transudate";label="Transudative by Light";}
+  if(crit>=1){tag="exudate";label="Exudative by Light’s criteria";}
+  else if(pr!==null&&lr!==null){tag="transudate";label="Transudative by Light’s criteria";}
 
   html+=`<div class="summary-line"><span class="tag ${tag}">${label}</span></div>`;
-
   if(pr!==null) html+=`<div class="summary-line">Protein ratio: ${pr.toFixed(2)}</div>`;
   if(lr!==null) html+=`<div class="summary-line">LDH ratio: ${lr.toFixed(2)}</div>`;
 
@@ -173,31 +196,39 @@ function calc(){
     const seag=(sAlb-pAlb).toFixed(2);
     html+=`<div class="summary-line">SEAG: ${seag} g/dL</div>`;
     if(seag>=1.2 && tag==="exudate"){
-      html+=`<div class="bad">Pseudo-exudate likely (e.g. CHF on diuresis)</div>`;
-      tag="borderline";
+      html+=`<div class="warn">Pseudo-exudate likely (e.g. CHF on diuretics)</div>`;
     }
   }
 
-  if(glu!==null&&glu<60){
-    html+=`<div class="bad">Low glucose – think infection, malignancy, rheumatoid</div>`;
-  }
+  let eti=[];
+  if(ada>=40) eti.push("High ADA → Tuberculous pleuritis");
+  if(amy>100) eti.push("High amylase → Pancreatitis, esophageal rupture, malignancy");
+  if(tg>=110) eti.push("Triglycerides ≥110 → Chylothorax");
+  if(bnp>=1500) eti.push("High NT-proBNP → Cardiac effusion despite Light’s");
+  if(glu<60) eti.push("Low glucose → Infection, malignancy, rheumatoid");
+  if(side==="Left") eti.push("Left-sided → Pancreatic or malignant process");
+  if(side==="Right") eti.push("Right-sided → Hepatic hydrothorax");
+  if(side==="Bilateral") eti.push("Bilateral → Systemic disease (CHF, renal, cirrhosis)");
 
   html+=`<h3>What this looks like</h3>`;
-  if(tag==="transudate")
-    html+=`<ul><li>Hydrostatic/oncotic problem (CHF, cirrhosis, nephrotic)</li></ul>`;
-  else if(tag==="exudate")
-    html+=`<ul><li>Inflammatory pleural disease (parapneumonic, malignancy, TB, PE)</li></ul>`;
-  else
-    html+=`<div>Insufficient data – Light’s criteria incomplete</div>`;
+  if(eti.length){
+    html+="<ul>"; eti.forEach(e=>html+=`<li>${e}</li>`); html+="</ul>";
+  } else {
+    html+=`<div>No strong etiology markers entered</div>`;
+  }
 
   html+=`<h3>What to do next</h3>`;
-  if(tag==="transudate")
-    html+=`<ul><li>Treat underlying systemic disease</li><li>No routine cytology unless atypical</li></ul>`;
-  else
-    html+=`<ul><li>Send cytology ± ADA</li><li>Contrast CT chest</li><li>Drain if infected or symptomatic</li></ul>`;
+  if(tag==="transudate"){
+    html+=`<ul><li>Treat underlying systemic cause</li><li>No routine cytology unless atypical</li></ul>`;
+  } else if(tag==="exudate"){
+    html+=`<ul><li>Cytology ± ADA</li><li>Contrast CT chest</li><li>Drain if infected or symptomatic</li></ul>`;
+  } else {
+    html+=`<div>Complete Light’s criteria inputs</div>`;
+  }
 
   document.getElementById("out").innerHTML=html;
 }
 </script>
+
 </body>
 </html>
