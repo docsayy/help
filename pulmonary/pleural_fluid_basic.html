@@ -32,29 +32,14 @@ header{
   justify-content:space-between;
   align-items:center;
 }
-header h1{
-  margin:0;
-  font-size:20px;
-}
-.nav-buttons{
-  display:flex;
-  gap:8px;
-}
+header h1{margin:0;font-size:20px;}
+.nav-buttons{display:flex;gap:8px;}
 .nav-buttons button{
-  border:none;
-  border-radius:999px;
-  padding:6px 14px;
-  font-size:13px;
-  cursor:pointer;
-  background:#ffffff;
-  color:var(--pulm-accent);
-  font-weight:600;
+  border:none;border-radius:999px;padding:6px 14px;
+  font-size:13px;cursor:pointer;
+  background:#fff;color:var(--pulm-accent);font-weight:600;
 }
-main{
-  max-width:980px;
-  margin:20px auto 32px;
-  padding:0 12px;
-}
+main{max-width:980px;margin:20px auto 32px;padding:0 12px;}
 .card{
   background:var(--card);
   border-radius:var(--radius);
@@ -63,9 +48,7 @@ main{
   margin-bottom:18px;
 }
 .card-title{
-  font-weight:700;
-  font-size:17px;
-  margin-bottom:10px;
+  font-weight:700;font-size:17px;margin-bottom:10px;
   color:var(--pulm-accent);
 }
 .grid{
@@ -73,288 +56,147 @@ main{
   grid-template-columns:repeat(auto-fit,minmax(170px,1fr));
   gap:10px 14px;
 }
-label{
-  font-size:13px;
-  color:#35516b;
-  display:block;
-  margin-bottom:3px;
-}
+label{font-size:13px;color:#35516b;margin-bottom:3px;display:block;}
 input[type="number"]{
-  width:100%;
-  padding:6px 8px;
-  border-radius:8px;
-  border:1px solid #c4d4e3;
-  font-size:14px;
-}
-input[type="number"]:focus{
-  outline:none;
-  border-color:var(--pulm-main);
-  box-shadow:0 0 0 1px rgba(2,136,209,0.25);
-}
-.helper-text{
-  font-size:11px;
-  color:#60758a;
-  margin-top:2px;
+  width:100%;padding:6px 8px;border-radius:8px;
+  border:1px solid #c4d4e3;font-size:14px;
 }
 button.calculate{
-  margin-top:10px;
-  border:none;
-  border-radius:999px;
-  padding:10px 18px;
-  font-size:14px;
-  font-weight:600;
-  cursor:pointer;
-  background:var(--pulm-main);
-  color:#fff;
-}
-button.calculate:hover{
-  background:var(--pulm-accent);
-}
-.result-section{
-  margin-top:8px;
+  margin-top:10px;border:none;border-radius:999px;
+  padding:10px 18px;font-size:14px;font-weight:600;
+  cursor:pointer;background:var(--pulm-main);color:#fff;
 }
 .tag{
-  display:inline-block;
-  padding:4px 10px;
-  border-radius:999px;
-  font-size:11px;
-  font-weight:600;
-  margin-right:4px;
-  margin-bottom:4px;
+  display:inline-block;padding:4px 10px;border-radius:999px;
+  font-size:11px;font-weight:600;margin-bottom:6px;
 }
 .tag.exudate{background:#ffebee;color:#b71c1c;}
 .tag.transudate{background:#e8f5e9;color:#1b5e20;}
 .tag.borderline{background:#fff8e1;color:#f57f17;}
+.summary-line{font-size:14px;margin-bottom:4px;}
 .bad{color:var(--danger);font-weight:600;}
-.warn{color:var(--warning);font-weight:600;}
 .good{color:var(--ok);font-weight:600;}
-ul{
-  padding-left:18px;
-  margin:4px 0 0;
-}
-h3{
-  margin:8px 0 4px;
-  font-size:15px;
-  color:#163a5a;
-}
-.summary-line{
-  font-size:14px;
-  margin-bottom:4px;
-}
+ul{padding-left:18px;margin:4px 0;}
+h3{margin:8px 0 4px;font-size:15px;color:#163a5a;}
 </style>
 </head>
+
 <body>
 <header>
   <h1>Pleural Fluid Study – Basic</h1>
   <div class="nav-buttons">
     <button onclick="location.href='../index.html'">🏠 Home</button>
-    <button onclick="location.href='../pulmonary.html'">⬅ Back to Pulmonary</button>
+    <button onclick="location.href='../pulmonary.html'">⬅ Pulmonary</button>
   </div>
 </header>
 
 <main>
-  <div class="card">
-    <div class="card-title">1. Serum Values</div>
-    <div class="grid">
-      <div>
-        <label for="serumProtein">Serum Protein (g/dL)</label>
-        <input type="number" id="serumProtein" step="0.1" min="0">
-      </div>
-      <div>
-        <label for="serumLDH">Serum LDH (U/L)</label>
-        <input type="number" id="serumLDH" step="1" min="0">
-      </div>
-      <div>
-        <label for="serumLDHUpper">Serum LDH Upper Normal (U/L)</label>
-        <input type="number" id="serumLDHUpper" step="1" min="0">
-        <div class="helper-text">Optional – used for Light’s 3rd criterion</div>
-      </div>
-      <div>
-        <label for="serumAlb">Serum Albumin (g/dL)</label>
-        <input type="number" id="serumAlb" step="0.1" min="0">
-        <div class="helper-text">Optional – for serum–pleural albumin gradient</div>
-      </div>
+
+<div class="card">
+  <div class="card-title">1. Serum</div>
+  <div class="grid">
+    <div>
+      <label>Serum Protein (g/dL)</label>
+      <input type="number" id="sProt" step="0.1">
+    </div>
+    <div>
+      <label>Serum Albumin (g/dL)</label>
+      <input type="number" id="sAlb" step="0.1">
+    </div>
+    <div>
+      <label>Serum LDH (U/L)</label>
+      <input type="number" id="sLDH">
+    </div>
+    <div>
+      <label>LDH Upper Normal (U/L)</label>
+      <input type="number" id="sLDH_ULN">
+    </div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-title">2. Pleural Fluid</div>
+  <div class="grid">
+    <div>
+      <label>Pleural Protein (g/dL)</label>
+      <input type="number" id="pProt" step="0.1">
+    </div>
+    <div>
+      <label>Pleural LDH (U/L)</label>
+      <input type="number" id="pLDH">
+    </div>
+    <div>
+      <label>Pleural Albumin (g/dL)</label>
+      <input type="number" id="pAlb" step="0.1">
+    </div>
+    <div>
+      <label>Pleural Glucose (mg/dL)</label>
+      <input type="number" id="pGlu">
     </div>
   </div>
 
-  <div class="card">
-    <div class="card-title">2. Pleural Fluid Values</div>
-    <div class="grid">
-      <div>
-        <label for="pfProtein">Pleural Fluid Protein (g/dL)</label>
-        <input type="number" id="pfProtein" step="0.1" min="0">
-      </div>
-      <div>
-        <label for="pfLDH">Pleural Fluid LDH (U/L)</label>
-        <input type="number" id="pfLDH" step="1" min="0">
-      </div>
-      <div>
-        <label for="pfGlucose">Pleural Glucose (mg/dL)</label>
-        <input type="number" id="pfGlucose" step="1" min="0">
-      </div>
-      <div>
-        <label for="pfPH">Pleural pH</label>
-        <input type="number" id="pfPH" step="0.01" min="6.5" max="8">
-      </div>
-      <div>
-        <label for="pfAlb">Pleural Albumin (g/dL)</label>
-        <input type="number" id="pfAlb" step="0.1" min="0">
-        <div class="helper-text">Optional – for albumin gradient</div>
-      </div>
-      <div>
-        <label for="pfWBC">Pleural WBC (/µL)</label>
-        <input type="number" id="pfWBC" step="1" min="0">
-      </div>
-      <div>
-        <label for="pfNeut">Neutrophils (%)</label>
-        <input type="number" id="pfNeut" step="1" min="0" max="100">
-      </div>
-      <div>
-        <label for="pfLymph">Lymphocytes (%)</label>
-        <input type="number" id="pfLymph" step="1" min="0" max="100">
-      </div>
-      <div>
-        <label for="pfRBC">Pleural RBC (/µL)</label>
-        <input type="number" id="pfRBC" step="1" min="0">
-      </div>
-    </div>
-    <button class="calculate" onclick="calculateBasic()">Calculate Interpretation</button>
+  <button class="calculate" onclick="calc()">Calculate</button>
+  <div id="out"></div>
+</div>
 
-    <div id="basicResult" class="result-section"></div>
-  </div>
 </main>
 
 <script>
-function toNum(id){
-  const v = document.getElementById(id).value;
-  return v === "" ? null : Number(v);
+function num(id){
+  const v=document.getElementById(id).value;
+  return v===""?null:Number(v);
 }
 
-function calculateBasic(){
-  const serumProt = toNum("serumProtein");
-  const serumLDH = toNum("serumLDH");
-  const serumLDHUpper = toNum("serumLDHUpper");
-  const serumAlb = toNum("serumAlb");
+function calc(){
+  const sProt=num("sProt"), pProt=num("pProt");
+  const sLDH=num("sLDH"), pLDH=num("pLDH"), ULN=num("sLDH_ULN");
+  const sAlb=num("sAlb"), pAlb=num("pAlb"), glu=num("pGlu");
 
-  const pfProt = toNum("pfProtein");
-  const pfLDH = toNum("pfLDH");
-  const pfGlucose = toNum("pfGlucose");
-  const pfPH = toNum("pfPH");
-  const pfAlb = toNum("pfAlb");
-  const pfWBC = toNum("pfWBC");
-  const pfNeut = toNum("pfNeut");
-  const pfLymph = toNum("pfLymph");
-  const pfRBC = toNum("pfRBC");
+  let html="", crit=0, notes=[];
 
-  let html = "";
+  let pr=null, lr=null;
 
-  // Light's criteria
-  let criteriaMet = 0;
-  let notes = [];
+  if(sProt&&pProt){ pr=pProt/sProt; if(pr>0.5){crit++; notes.push("Protein ratio > 0.5");}}
+  if(sLDH&&pLDH){ lr=pLDH/sLDH; if(lr>0.6){crit++; notes.push("LDH ratio > 0.6");}}
+  if(pLDH&&ULN){ if(pLDH>(2/3*ULN)){crit++; notes.push("Pleural LDH > 2/3 ULN");}}
 
-  let protRatio = null, ldhRatio = null;
+  let tag="borderline", label="Indeterminate";
+  if(crit>=1){tag="exudate";label="Exudative by Light (PFO³)";}
+  else if(pr!==null&&lr!==null){tag="transudate";label="Transudative by Light";}
 
-  if (pfProt != null && serumProt != null && serumProt > 0){
-    protRatio = pfProt / serumProt;
-    if (protRatio > 0.5) {
-      criteriaMet++;
-      notes.push("Protein ratio > 0.5 (exudate criterion met).");
+  html+=`<div class="summary-line"><span class="tag ${tag}">${label}</span></div>`;
+
+  if(pr!==null) html+=`<div class="summary-line">Protein ratio: ${pr.toFixed(2)}</div>`;
+  if(lr!==null) html+=`<div class="summary-line">LDH ratio: ${lr.toFixed(2)}</div>`;
+
+  if(sAlb!==null&&pAlb!==null){
+    const seag=(sAlb-pAlb).toFixed(2);
+    html+=`<div class="summary-line">SEAG: ${seag} g/dL</div>`;
+    if(seag>=1.2 && tag==="exudate"){
+      html+=`<div class="bad">Pseudo-exudate likely (e.g. CHF on diuresis)</div>`;
+      tag="borderline";
     }
   }
 
-  if (pfLDH != null && serumLDH != null && serumLDH > 0){
-    ldhRatio = pfLDH / serumLDH;
-    if (ldhRatio > 0.6){
-      criteriaMet++;
-      notes.push("LDH ratio > 0.6 (exudate criterion met).");
-    }
+  if(glu!==null&&glu<60){
+    html+=`<div class="bad">Low glucose – think infection, malignancy, rheumatoid</div>`;
   }
 
-  if (pfLDH != null && serumLDHUpper != null && serumLDHUpper > 0){
-    if (pfLDH > (2/3 * serumLDHUpper)){
-      criteriaMet++;
-      notes.push("Pleural LDH > 2/3 upper limit of normal (exudate criterion met).");
-    }
-  }
+  html+=`<h3>What this looks like</h3>`;
+  if(tag==="transudate")
+    html+=`<ul><li>Hydrostatic/oncotic problem (CHF, cirrhosis, nephrotic)</li></ul>`;
+  else if(tag==="exudate")
+    html+=`<ul><li>Inflammatory pleural disease (parapneumonic, malignancy, TB, PE)</li></ul>`;
+  else
+    html+=`<div>Insufficient data – Light’s criteria incomplete</div>`;
 
-  let classification = "undetermined";
-  let tagClass = "borderline";
-  let tagLabel = "Insufficient Data";
+  html+=`<h3>What to do next</h3>`;
+  if(tag==="transudate")
+    html+=`<ul><li>Treat underlying systemic disease</li><li>No routine cytology unless atypical</li></ul>`;
+  else
+    html+=`<ul><li>Send cytology ± ADA</li><li>Contrast CT chest</li><li>Drain if infected or symptomatic</li></ul>`;
 
-  if (criteriaMet >= 1){
-    classification = "exudate";
-    tagClass = "exudate";
-    tagLabel = "Exudative by Light’s criteria";
-  } else if (criteriaMet === 0 && protRatio !== null && ldhRatio !== null){
-    classification = "transudate";
-    tagClass = "transudate";
-    tagLabel = "Transudative by Light’s criteria";
-  }
-
-  // Albumin gradient
-  let gradientNote = "";
-  if (serumAlb != null && pfAlb != null){
-    const grad = serumAlb - pfAlb;
-    gradientNote = `Serum–pleural albumin gradient: ${grad.toFixed(2)} g/dL. `;
-    if (grad >= 1.2 && classification === "exudate"){
-      gradientNote += "Pattern suggests pseudo-exudate (likely transudative, e.g. CHF on diuresis).";
-      tagClass = "borderline";
-      tagLabel = "Exudate by Light; gradient suggests transudate";
-    } else if (grad >= 1.2){
-      gradientNote += "Supports transudative physiology.";
-    } else if (grad < 1.2){
-      gradientNote += "Supports exudative physiology.";
-    }
-  }
-
-  html += `<div class="summary-line"><span class="tag ${tagClass}">${tagLabel}</span></div>`;
-
-  if (protRatio !== null){
-    html += `<div class="summary-line">Protein ratio (PF/Serum): ${protRatio.toFixed(2)}</div>`;
-  }
-  if (ldhRatio !== null){
-    html += `<div class="summary-line">LDH ratio (PF/Serum): ${ldhRatio.toFixed(2)}</div>`;
-  }
-  if (gradientNote){
-    html += `<div class="summary-line">${gradientNote}</div>`;
-  }
-
-  if (notes.length){
-    html += "<h3>Light’s Criteria Notes</h3><ul>";
-    notes.forEach(n => html += `<li>${n}</li>`);
-    html += "</ul>";
-  }
-
-  // Red flags
-  let redFlags = [];
-  if (pfPH != null && pfPH < 7.2) redFlags.push("<span class='bad'>pH &lt; 7.20 – complicated parapneumonic effusion / empyema likely, drainage usually indicated.</span>");
-  if (pfGlucose != null && pfGlucose < 60) redFlags.push("<span class='bad'>Glucose &lt; 60 mg/dL – infection, malignancy, or rheumatoid effusion.</span>");
-  if (pfLDH != null && pfLDH > 1000) redFlags.push("<span class='bad'>LDH &gt; 1000 U/L – suggests empyema or very active exudate.</span>");
-  if (pfWBC != null && pfNeut != null && pfWBC > 1000 && pfNeut > 50) redFlags.push("<span class='warn'>Neutrophil-predominant exudate – parapneumonic / empyema likely.</span>");
-  if (pfWBC != null && pfLymph != null && pfWBC > 500 && pfLymph > 50) redFlags.push("<span class='warn'>Lymphocyte-predominant – consider malignancy or TB effusion.</span>");
-  if (pfRBC != null && pfRBC > 100000) redFlags.push("<span class='warn'>Hemorrhagic fluid (RBC &gt; 100,000/µL) – consider malignancy, PE, or trauma.</span>");
-
-  if (redFlags.length){
-    html += "<h3>Red Flag Features</h3><ul>";
-    redFlags.forEach(r => html += `<li>${r}</li>`);
-    html += "</ul>";
-  } else {
-    html += "<h3>Red Flag Features</h3><div class='good'>No major high-risk pleural fluid features entered.</div>";
-  }
-
-  // Simple suggested differential
-  html += "<h3>Simple Interpretation / Possible Etiologies</h3>";
-  if (classification === "transudate"){
-    html += "<ul><li>Pattern most compatible with <b>transudative effusion</b> – think CHF, cirrhosis (hepatic hydrothorax), or nephrotic syndrome.</li>";
-    html += "<li>Correlate with volume status, BNP, and liver function.</li></ul>";
-  } else if (classification === "exudate"){
-    html += "<ul><li>Pattern most compatible with <b>exudative effusion</b> – think parapneumonic, malignancy, TB, PE, pancreatitis, etc.</li>";
-    html += "<li>Use clinical context, imaging, and further tests (ADA, cytology, CT) to refine etiology.</li></ul>";
-  } else {
-    html += "<div>Unable to classify – please enter at least serum + pleural protein and LDH values.</div>";
-  }
-
-  document.getElementById("basicResult").innerHTML = html;
+  document.getElementById("out").innerHTML=html;
 }
 </script>
 </body>
