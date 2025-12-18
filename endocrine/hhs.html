@@ -1,0 +1,814 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Hyperglycemic Hyperosmolar State (HHS) – Collapsible Guide (US units)</title>
+<style>
+  :root{
+    --bg:#f7fbff;
+    --card:#ffffff;
+    --ink:#13233a;
+    --muted:#4b5b70;
+    --accent:#0b6aa8;
+    --accentSoft:#e7f3ff;
+    --border:#d6e2ef;
+    --danger:#b42318;
+    --warn:#b45309;
+    --shadow:0 6px 18px rgba(16,24,40,.08);
+    --radius:16px;
+    --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0;
+    font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+    background: radial-gradient(circle at 10% 0%, #eef7ff 0%, var(--bg) 45%, #ffffff 100%);
+    color:var(--ink);
+    line-height:1.45;
+  }
+  header{
+    padding:18px 16px 10px;
+    position:sticky; top:0;
+    background: rgba(247,251,255,.88);
+    backdrop-filter: blur(8px);
+    border-bottom:1px solid var(--border);
+    z-index:5;
+  }
+  .topbar{
+    max-width:1000px;
+    margin:0 auto;
+    display:flex;
+    gap:10px;
+    align-items:center;
+    justify-content:space-between;
+    flex-wrap:wrap;
+  }
+  .titlewrap{ display:flex; align-items:baseline; gap:10px; flex-wrap:wrap; }
+  h1{ font-size:20px; margin:0; letter-spacing:.2px; }
+  .subtitle{ color:var(--muted); font-size:13px; }
+  .nav{ display:flex; gap:8px; flex-wrap:wrap; }
+  .btn{
+    display:inline-flex; align-items:center; gap:8px;
+    padding:10px 12px;
+    border:1px solid var(--border);
+    border-radius:999px;
+    background:var(--card);
+    color:var(--ink);
+    text-decoration:none;
+    box-shadow: 0 2px 8px rgba(16,24,40,.06);
+    font-size:13px;
+  }
+  .btn:hover{ border-color:#b7cee6; transform: translateY(-1px); }
+  main{ padding:18px 16px 40px; }
+  .container{ max-width:1000px; margin:0 auto; }
+  .card{
+    background:var(--card);
+    border:1px solid var(--border);
+    border-radius:var(--radius);
+    box-shadow:var(--shadow);
+    padding:16px;
+    margin:14px 0;
+  }
+  .note{
+    background:#fff7ed;
+    border:1px solid #fed7aa;
+    color:#7c2d12;
+    border-radius:14px;
+    padding:12px 14px;
+    font-size:13px;
+  }
+  .pill{
+    display:inline-block;
+    padding:4px 10px;
+    border-radius:999px;
+    background:var(--accentSoft);
+    border:1px solid #cfe6ff;
+    color:var(--accent);
+    font-size:12px;
+    margin-right:6px;
+    white-space:nowrap;
+  }
+  details{
+    border:1px solid var(--border);
+    border-radius:14px;
+    background:#fbfdff;
+    margin:10px 0;
+    overflow:hidden;
+  }
+  summary{
+    cursor:pointer;
+    list-style:none;
+    padding:12px 14px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:10px;
+    font-weight:650;
+  }
+  summary::-webkit-details-marker{ display:none; }
+  .chev{
+    width:26px; height:26px;
+    border-radius:999px;
+    border:1px solid var(--border);
+    display:grid; place-items:center;
+    background:var(--card);
+    flex:0 0 auto;
+  }
+  details[open] .chev{ transform: rotate(180deg); }
+  .content{ padding: 0 14px 14px; }
+  .content p{ margin:10px 0; }
+  .content ul{ margin:8px 0 8px 18px; }
+  .content li{ margin:6px 0; }
+  .muted{ color:var(--muted); }
+  .mono{ font-family: var(--mono); }
+  .grid{
+    display:grid;
+    grid-template-columns: 1fr;
+    gap:12px;
+  }
+  @media (min-width: 900px){
+    .grid{ grid-template-columns: 1fr 1fr; }
+  }
+  .mini-card{
+    border:1px dashed #cfe0f2;
+    background:#ffffff;
+    border-radius:14px;
+    padding:12px 12px;
+  }
+  .tbl{
+    width:100%;
+    border-collapse: collapse;
+    overflow:hidden;
+    border-radius:12px;
+    border:1px solid var(--border);
+    background:#fff;
+    margin-top:10px;
+  }
+  .tbl th, .tbl td{
+    border-bottom:1px solid var(--border);
+    padding:10px 10px;
+    font-size:13px;
+    vertical-align:top;
+  }
+  .tbl th{
+    text-align:left;
+    background:var(--accentSoft);
+    color:var(--accent);
+    font-weight:700;
+  }
+  .figure{
+    border:1px dashed #b9d7f5;
+    background:#f4f9ff;
+    border-radius:14px;
+    padding:12px;
+    margin:12px 0;
+  }
+  .figure strong{ color:var(--accent); }
+  .figure img{
+    width:100%;
+    height:auto;
+    border-radius:12px;
+    border:1px solid #cfe6ff;
+    background:#fff;
+    display:block;
+    margin-top:10px;
+  }
+  .small{ font-size:12.5px; color:var(--muted); }
+  .anchorlinks{
+    max-width:1000px;
+    margin:10px auto 0;
+    display:flex; flex-wrap:wrap; gap:8px;
+  }
+  .anchorlinks a{
+    font-size:12.5px;
+    color:var(--accent);
+    text-decoration:none;
+    border:1px solid #cfe6ff;
+    background:#ffffff;
+    padding:7px 10px;
+    border-radius:999px;
+  }
+  .anchorlinks a:hover{ background:var(--accentSoft); }
+  .badge{
+    display:inline-block;
+    padding:3px 8px;
+    border-radius:999px;
+    font-size:12px;
+    border:1px solid var(--border);
+    background:#fff;
+    color:var(--ink);
+    white-space:nowrap;
+  }
+  .badge-danger{ border-color:#fecaca; background:#fee2e2; color:#7f1d1d; }
+  .badge-warn{ border-color:#fed7aa; background:#fff7ed; color:#7c2d12; }
+  footer{
+    padding:18px 16px 30px;
+    color:var(--muted);
+    text-align:center;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="topbar">
+    <div class="titlewrap">
+      <h1>Hyperglycemic Hyperosmolar State (HHS)</h1>
+    </div>
+    <div class="nav">
+      <a class="btn" href="../index.html">🏠 Home</a>
+      <a class="btn" href="index.html">↩︎ Back to Diabetes</a>
+    </div>
+  </div>
+
+  <div class="anchorlinks">
+    <a href="#def">Definition</a>
+    <a href="#epi">Epidemiology</a>
+    <a href="#path">Pathophysiology</a>
+    <a href="#precip">Precipitants</a>
+    <a href="#features">Clinical features</a>
+    <a href="#dx">Diagnosis</a>
+    <a href="#invest">Investigations</a>
+    <a href="#mgmt">Management</a>
+    <a href="#severity">Severity</a>
+    <a href="#fluids">IV fluids</a>
+    <a href="#insulin">Insulin</a>
+    <a href="#elect">Electrolytes</a>
+    <a href="#monitor">Monitoring</a>
+    <a href="#targets">Targets</a>
+    <a href="#care">Continuing care</a>
+    <a href="#comp">Complications</a>
+  </div>
+</header>
+
+<main>
+  <div class="container">
+
+
+    <div class="card" id="def">
+      <span class="pill">Definition & classification</span>
+      <p>
+        Hyperglycaemic hyperosmolar state (HHS) is an acute diabetic emergency that occurs in patients with type 2 diabetes mellitus.
+        HHS occurs insidiously over several days with dehydration and metabolic disturbances that are more extreme than diabetic ketoacidosis (DKA).
+      </p>
+
+      <details open>
+        <summary>Characteristic features <span class="chev">⌄</span></summary>
+        <div class="content">
+          <ul>
+            <li><strong>Hypovolaemia</strong></li>
+            <li><strong>Hyperglycaemia</strong>: <span class="mono">&gt; 540 mg/dL (&gt; 30 mmol/L)</span></li>
+            <li><strong>Mild or absent ketonaemia</strong>: <span class="mono">blood ketones &lt; 3 mmol/L</span></li>
+            <li><strong>High osmolality</strong>: <span class="mono">&gt; 320 mOsm/kg</span></li>
+          </ul>
+          <p>
+            HHS is clinically distinct to DKA and requires a different approach to treatment. Patients are usually elderly with multiple co-morbidities, and as a result may be very unwell.
+          </p>
+        </div>
+      </details>
+
+      <p class="small">
+        Previously termed <em>Hyperglycaemic Hyperosmolar Non-ketotic Coma (HONK)</em>. Terminology changed as most patients do not present in coma, though they may be extremely unwell.
+      </p>
+    </div>
+
+    <div class="card" id="epi">
+      <span class="pill">Epidemiology</span>
+      <p>
+        HHS is a life-threatening condition, which usually occurs in the elderly but is increasingly recognised in younger patients.
+      </p>
+      <ul>
+        <li>Estimated to account for ~1% of diabetic hospital admissions.</li>
+        <li>Average age of presentation ~60 years.</li>
+        <li>Associated with <strong>15–20% mortality</strong>.</li>
+        <li>Often the first presentation of type 2 diabetes mellitus in up to 20–30% of cases.</li>
+      </ul>
+    </div>
+
+    <div class="card" id="path">
+      <span class="pill">Pathophysiology</span>
+
+      <details open>
+        <summary>Mechanism<span class="chev">⌄</span></summary>
+        <div class="content">
+          <p>
+            In HHS, the relative lack of insulin is coupled with a rise in counter-regulatory hormones (e.g. cortisol, growth hormone, glucagon) that leads to a profound rise in glucose.
+            These patients retain a certain level of insulin, which prevents the development of ketosis that epitomises DKA.
+            However, the level of insulin is inadequate to prevent profound hyperglycaemia.
+          </p>
+          <p>
+            The excessive glucose leads to massive osmotic diuresis within the kidneys with the loss of essential electrolytes such as sodium and potassium.
+            This is because the proximal tubules within the kidneys only have a certain capacity for reabsorption of glucose. Once this is reached, the remaining glucose is passed through the renal nephrons causing diuresis.
+          </p>
+          <p>
+            As water is lost, there is profound dehydration and reduced circulating volume, resulting in hyperosmolarity and marked hyperglycaemia.
+            Patients with HHS may have up to a 9 litre deficit of water.
+          </p>
+          <p>
+            Increased osmolality triggers compensatory mechanisms (ADH release and thirst), but if these cannot compensate (e.g. elderly patients with co-morbidities),
+            hypovolaemia develops with progression to acute kidney injury, electrolyte disturbances, hypotension and coma.
+          </p>
+          <p>
+            The hyperosmolar state leads to hyperviscosity, increasing the risk of arterial and venous thrombosis (e.g. stroke, DVT).
+          </p>
+
+          <div class="figure">
+            <strong>HHS pathophysiology</strong>
+            <img src="images/hhs_pathophysiology.jpg" alt="HHS pathophysiology diagram (placeholder)" />
+          </div>
+        </div>
+      </details>
+    </div>
+
+    <div class="card" id="precip">
+      <span class="pill">Precipitants</span>
+      <p class="muted">A number of underlying conditions are known to precipitate HHS (many cases are new T2DM diagnoses).</p>
+      <ul>
+        <li>Infection</li>
+        <li>High-dose steroids</li>
+        <li>Myocardial infarction</li>
+        <li>Vomiting</li>
+        <li>Stroke</li>
+        <li>Poor treatment concordance</li>
+      </ul>
+    </div>
+
+    <div class="card" id="features">
+      <span class="pill">Clinical features</span>
+
+      <details open>
+        <summary>Symptoms & signs <span class="chev">⌄</span></summary>
+        <div class="content">
+          <p>
+            Onset is usually insidious with dehydration over days to weeks. Early features may include polyuria, polydipsia and nausea;
+            late features include altered mental status, seizures and possibly coma.
+          </p>
+
+          <div class="grid">
+            <div class="mini-card">
+              <strong>Symptoms</strong>
+              <ul>
+                <li>Polydipsia</li>
+                <li>Polyuria</li>
+                <li>Nausea</li>
+                <li>Vomiting</li>
+                <li>Muscle cramps</li>
+                <li>Weakness</li>
+                <li>Altered mental status</li>
+                <li>Seizures</li>
+                <li>Coma</li>
+              </ul>
+            </div>
+            <div class="mini-card">
+              <strong>Signs</strong>
+              <ul>
+                <li>Dehydration (dry mucous membranes, sunken eyes, reduced capillary refill, decreased skin turgor)</li>
+                <li>Hypotension</li>
+                <li>Decreased urine output</li>
+                <li>Decreased conscious level</li>
+                <li>Coma</li>
+                <li>Focal neurology signs</li>
+                <li>Features of precipitating cause</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="figure">
+            <strong>HHS symptoms/signs</strong>
+            <img src="images/hhs_features.jpg" alt="HHS clinical features image (placeholder)" />
+          </div>
+        </div>
+      </details>
+    </div>
+
+    <div class="card" id="dx">
+      <span class="pill">Diagnosis</span>
+
+      <details open>
+        <summary>Diagnostic criteria (take in clinical context) <span class="chev">⌄</span></summary>
+        <div class="content">
+          <p>
+            Diagnosis is based on marked hyperglycaemia, raised serum osmolality, and mild/absent ketonaemia,
+            interpreted in context of the patient’s clinical state (i.e. hypovolaemia/dehydration).
+          </p>
+
+          <table class="tbl">
+            <thead>
+              <tr><th>Parameter</th><th>Threshold</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>Laboratory glucose</td><td class="mono">&gt; 540 mg/dL (&gt; 30 mmol/L)</td></tr>
+              <tr><td>Serum osmolality</td><td class="mono">&gt; 320 mOsm/kg</td></tr>
+              <tr><td>Ketones (urine)</td><td class="mono">Negative / trace / 1+</td></tr>
+              <tr><td>Ketones (blood)</td><td class="mono">&lt; 3 mmol/L</td></tr>
+            </tbody>
+          </table>
+
+          <details>
+            <summary>Osmolality formulas<span class="chev">⌄</span></summary>
+            <div class="content">
+              <p class="muted">If measured plasma osmolality isn’t available, use a calculated surrogate.</p>
+
+              <div class="mono">Calculated osmolality ≈ 2×Na (mEq/L) + Glucose/18 + BUN/2.8</div>
+
+            </div>
+          </details>
+        </div>
+      </details>
+    </div>
+
+    <div class="card" id="invest">
+      <span class="pill">Investigations</span>
+
+      <details open>
+        <summary>Key + additional investigations <span class="chev">⌄</span></summary>
+        <div class="content">
+          <p class="muted">Key tests: glucose, urea & electrolytes, blood gas (VBG/ABG), and blood or urinary ketones.</p>
+
+          <div class="grid">
+            <div class="mini-card">
+              <strong>Bedside tests</strong>
+              <ul>
+                <li>ECG</li>
+                <li>Urinalysis ± MSU/urine culture</li>
+                <li>Urinary pregnancy test (as indicated)</li>
+              </ul>
+            </div>
+            <div class="mini-card">
+              <strong>Blood tests</strong>
+              <ul>
+                <li>FBC/CBC</li>
+                <li>U&Es/BMP/CMP</li>
+                <li>CRP</li>
+                <li>LFTs</li>
+                <li>Blood cultures</li>
+                <li>Troponin</li>
+                <li>Amylase</li>
+                <li>CK</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="mini-card" style="margin-top:12px;">
+            <strong>Imaging</strong>
+            <ul>
+              <li>Chest X-ray</li>
+              <li>CT head (if reduced GCS or focal neurology)</li>
+            </ul>
+          </div>
+        </div>
+      </details>
+    </div>
+
+    <div class="card" id="mgmt">
+      <span class="pill">Management</span>
+
+      <details open>
+        <summary>Core goals <span class="chev">⌄</span></summary>
+        <div class="content">
+          <p class="muted">Management facets: aggressive fluid resuscitation plus normalization of glucose and osmolality.</p>
+          <ul>
+            <li>Normalise osmolality</li>
+            <li>Normalise blood glucose</li>
+            <li>Replace fluid and electrolytes</li>
+            <li>Prevention of arterial/venous thrombosis</li>
+            <li>Prevention of complications & foot ulceration</li>
+          </ul>
+
+          <div class="figure">
+            <strong>HHS management algorithm</strong>
+            <img src="images/hhs_management.jpg" alt="HHS management flowchart (placeholder)" />
+          </div>
+        </div>
+      </details>
+
+      <details>
+        <summary>Initial assessment (ABCDE) <span class="chev">⌄</span></summary>
+        <div class="content">
+          <p class="muted">All patients should undergo ABCDE assessment with formal GCS and full observations.</p>
+          <ul>
+            <li>IV access (x2 large-bore cannula)</li>
+            <li>Blood/urinary ketones</li>
+            <li>Capillary & plasma blood glucose</li>
+            <li>CBC, electrolytes (BMP/CMP), venous blood gas, plasma osmolality</li>
+            <li>Blood cultures</li>
+            <li>Urinalysis ± MSU, pregnancy test (as indicated)</li>
+            <li>ECG</li>
+            <li>CXR</li>
+            <li>Urinary catheter (for accurate monitoring when needed)</li>
+            <li>Additional tests as indicated (e.g. troponin, CT head)</li>
+          </ul>
+        </div>
+      </details>
+    </div>
+
+    <div class="card" id="severity">
+      <span class="pill">Severity</span>
+
+      <details open>
+        <summary>Markers of severity (higher level of care) <span class="chev">⌄</span></summary>
+        <div class="content">
+          <p>
+            Patients with HHS are often elderly with multiple co-morbidities and can be extremely unwell. Ideally, manage in a high-dependency environment (level 2 care and above).
+          </p>
+          <p class="muted">Markers that warrant high-level care:</p>
+          <ul>
+            <li>Osmolality <span class="mono">&gt; 350 mOsm/kg</span></li>
+            <li>Sodium <span class="mono">&gt; 160 mEq/L (160 mmol/L)</span></li>
+            <li>pH <span class="mono">&lt; 7.1</span></li>
+            <li>GCS <span class="mono">&lt; 12</span></li>
+            <li>Systolic BP <span class="mono">&lt; 90 mmHg</span></li>
+            <li>Serum creatinine <span class="mono">&gt; 2.26 mg/dL (&gt; 200 μmol/L)</span></li>
+            <li>Macrovascular event (e.g., MI, CVA)</li>
+            <li>Severe electrolyte abnormalities (e.g., hyper/hypokalaemia)</li>
+          </ul>
+        </div>
+      </details>
+    </div>
+
+    <div class="card" id="fluids">
+      <span class="pill">Intravenous fluids</span>
+
+      <details open>
+        <summary>Fluid strategy (slow correction) <span class="chev">⌄</span></summary>
+        <div class="content">
+          <p>
+            Patients with HHS can have a tremendous fluid deficit. Initial management requires fluid resuscitation to restore circulating volume.
+            Initial fluid of choice is <strong>0.9% sodium chloride (normal saline)</strong>; give at least 1 liter over 1 hour (faster if significant hypotension).
+          </p>
+          <p>
+            Further fluids are guided by urine output and clinical response. A proposed target is <span class="mono">+2–3 liters</span> by 6 hours.
+          </p>
+          <p>
+            Normal saline may cause a transient rise in sodium; if osmolality is falling appropriately this is not an indication for hypotonic saline (e.g., 0.45%).
+            Rapid correction is not advisable because of osmolar shifts leading to cerebral oedema — generally aim for around <span class="mono">+4 liters</span> in the first 24 hours.
+          </p>
+        </div>
+      </details>
+    </div>
+
+    <div class="card" id="insulin">
+      <span class="pill">Insulin therapy</span>
+
+      <details open>
+        <summary>When to start insulin (delayed and selective) <span class="chev">⌄</span></summary>
+        <div class="content">
+          <p>
+            Insulin use in HHS should be led by a specialist or senior clinician with experience of HHS management.
+          </p>
+          <ul>
+            <li>Start insulin only if there is evidence of significant ketonaemia (<span class="mono">&gt; 1 mmol/L</span>) or ketonuria (<span class="mono">2+</span> or more).</li>
+            <li>Another indication is when glucose is falling less than <span class="mono">90 mg/dL/hr (5 mmol/L/hr)</span>.</li>
+            <li>Assess and ensure adequate fluid balance before prescribing insulin.</li>
+          </ul>
+
+          <details>
+            <summary>Fixed-rate IV insulin infusion (FRIII concept) <span class="chev">⌄</span></summary>
+            <div class="content">
+              <ul>
+                <li>If indicated: FRIII at <span class="mono">0.05 units/kg/hr</span> (half the dose used in DKA).</li>
+                <li>Maintain glucose between <span class="mono">180–270 mg/dL (10–15 mmol/L)</span> in the first 24 hours.</li>
+                <li>Use 5% or 10% dextrose if levels fall <span class="mono">252 mg/dL (14 mmol/L)</span>.</li>
+              </ul>
+            </div>
+          </details>
+
+          <div class="note" style="margin-top:12px;">
+            <strong>Practical warning (why the delay matters):</strong>
+            In HHS, rapid glucose reduction can drive a rapid drop in plasma osmolality → <span class="badge badge-danger">cerebral oedema risk</span>.
+            Fluids are the primary therapy early.
+          </div>
+        </div>
+      </details>
+    </div>
+
+    <div class="card" id="elect">
+      <span class="pill">Electrolyte replacement</span>
+
+      <details open>
+        <summary>Electrolytes + potassium rules <span class="chev">⌄</span></summary>
+        <div class="content">
+          <p>
+            Electrolytes including sodium, potassium, phosphate and magnesium should be monitored regularly (minimum q4h) and replaced as necessary.
+            Potassium is especially important if insulin is started, because insulin drives potassium intracellularly → low plasma potassium → dangerous arrhythmias.
+          </p>
+
+          <table class="tbl">
+            <thead><tr><th>Serum K⁺</th><th>General rule</th></tr></thead>
+            <tbody>
+              <tr><td class="mono">&gt; 5.5 mEq/L (mmol/L)</td><td>Nil potassium replacement</td></tr>
+              <tr><td class="mono">3.5–5.5 mEq/L (mmol/L)</td><td>40 mmol potassium replacement</td></tr>
+              <tr><td class="mono">&lt; 3.5 mEq/L (mmol/L)</td><td>Senior review for more invasive potassium replacement</td></tr>
+            </tbody>
+          </table>
+
+          <p class="small">
+            Potassium administration concentration/rate depends on peripheral vs central access and renal function (follow hospital protocol).
+          </p>
+        </div>
+      </details>
+    </div>
+
+    <div class="card" id="monitor">
+      <span class="pill">Monitoring</span>
+
+      <details open>
+        <summary>Monitoring schedule and safety checks <span class="chev">⌄</span></summary>
+        <div class="content">
+          <p>Patients should be on cardiac monitoring and assessed at regular intervals.</p>
+          <ul>
+            <li>Every hour: blood glucose, urea & electrolytes, and laboratory or calculated plasma osmolality for first 6 hours.</li>
+            <li>If satisfactory fall in osmolality (3–8 mOsm/kg/hr) and glucose (≥ 5 mmol/L/hr), blood sampling can be reduced to 2-hourly.</li>
+            <li>Maintain accurate fluid balance; urine output documented hourly.</li>
+            <li>As parameters improve: reduce to 4-hourly, then 12-hourly monitoring.</li>
+            <li>Continuously assess for complications (stroke, DVT, cerebral oedema) and treat precipitant (infection, MI, etc.).</li>
+          </ul>
+        </div>
+      </details>
+    </div>
+
+    <div class="card" id="targets">
+      <span class="pill">Metabolic treatment targets</span>
+
+      <details open>
+        <summary>Targets (what “good progress” looks like) <span class="chev">⌄</span></summary>
+        <div class="content">
+          <p>Two main metabolic treatment targets should be achieved:</p>
+          <ul>
+            <li><strong>Plasma osmolality:</strong> falling by <span class="mono">3–8 mOsm/kg/hr</span></li>
+            <li><strong>Blood glucose:</strong> falling by at least <span class="mono">90 mg/dL/hr (5 mmol/L/hr)</span></li>
+          </ul>
+        </div>
+      </details>
+    </div>
+
+    <div class="card" id="care">
+      <span class="pill">Continuing care</span>
+
+      <details open>
+        <summary>Specialist involvement + prevention steps <span class="chev">⌄</span></summary>
+        <div class="content">
+          <ul>
+            <li>Inform specialist diabetes team; ideally assess within 24 hours.</li>
+            <li>Start prophylactic LMWH unless contraindicated (high thrombotic risk).</li>
+            <li>Regular foot assessment for ulceration; encourage early mobilization; remove catheter when appropriate.</li>
+            <li>After initial phase: minimum daily urinalysis, electrolytes, and regular capillary glucose.</li>
+            <li>Ongoing need for FRIII vs transition to SQ insulin is managed with specialist team.</li>
+            <li>If FRIII started: do not stop until glucose is within target and patient is over acute episode.</li>
+            <li>If still not tolerating oral intake: may convert to VRIII in interim period (per institutional protocol).</li>
+          </ul>
+        </div>
+      </details>
+    </div>
+
+    <div class="card" id="comp">
+      <span class="pill">Complications</span>
+
+      <details open>
+        <summary>Major complications (disease + treatment related) <span class="chev">⌄</span></summary>
+        <div class="content">
+          <ul>
+            <li>
+              <strong>Myocardial infarction:</strong> hypovolaemia, hyperviscosity and severe illness strain the heart (often with pre-existing CAD).
+            </li>
+            <li>
+              <strong>Thrombotic complications:</strong> hyperviscosity + hypovolaemia predispose to DVT, PE, stroke. Prophylactic LMWH reduces risk if no contraindications.
+            </li>
+            <li>
+              <strong>Cerebral oedema:</strong> may occur from rapid correction of hyperglycaemia with rapid fall in plasma osmolarity → headache, reduced GCS, and untreated can lead to death.
+            </li>
+          </ul>
+        </div>
+      </details>
+    </div>
+
+
+        <div class="container">
+
+        <div class="card">
+        <span class="pill">DKA vs HHS, at a glance</span>
+        <table class="tbl">
+        <thead>
+        <tr><th>Feature</th><th>DKA</th><th>HHS</th></tr>
+        </thead>
+        <tbody>
+        <tr>
+        <td>Typical diabetes</td>
+        <td>Type 1 (also T2DM)</td>
+        <td>Type 2</td>
+        </tr>
+        <tr>
+        <td>Onset</td>
+        <td>Hours–1–2 days</td>
+        <td>Days–weeks</td>
+        </tr>
+        <tr>
+        <td>Glucose</td>
+        <td class="mono">&gt; 200 mg/dL (&gt; 11 mmol/L)</td>
+        <td class="mono">&gt; 540 mg/dL (&gt; 30 mmol/L)</td>
+        </tr>
+        <tr>
+        <td>Ketones</td>
+        <td class="mono">≥ 3 mmol/L</td>
+        <td class="mono">&lt; 3 mmol/L (often absent)</td>
+        </tr>
+        <tr>
+        <td>Acidosis</td>
+        <td><span class="badge badge-danger">Present</span></td>
+        <td><span class="badge badge-ok">Minimal/absent</span></td>
+        </tr>
+        <tr>
+        <td>Effective osmolality</td>
+        <td>Variable</td>
+        <td class="mono">&gt; 320 mOsm/kg</td>
+        </tr>
+        <tr>
+        <td>Primary threat</td>
+        <td>Ketoacidosis</td>
+        <td>Hyperosmolality & dehydration</td>
+        </tr>
+        <tr>
+        <td>Mortality</td>
+        <td>&lt; 1%</td>
+        <td><span class="badge badge-danger">15–20%</span></td>
+        </tr>
+        </tbody>
+        </table>
+        </div>
+
+        <div class="card">
+        <span class="pill">Management priorities (don’t mix these up)</span>
+
+        <details open>
+        <summary>Fluids</summary>
+        <div class="content">
+        <ul>
+        <li><strong>DKA:</strong> Aggressive early fluids + insulin to stop ketogenesis.</li>
+        <li><strong>HHS:</strong> <strong>Fluids first, slow correction</strong>; massive deficits (often 6–9 L).</li>
+        </ul>
+        </div>
+        </details>
+
+        <details open>
+        <summary>Insulin</summary>
+        <div class="content">
+        <ul>
+        <li><strong>DKA:</strong> Start early – <span class="mono">0.1 units/kg/hr</span>.</li>
+        <li><strong>HHS:</strong> <span class="badge badge-warn">Do NOT start early</span> unless ketones present or glucose not falling with fluids.
+          If needed: <span class="mono">0.05 units/kg/hr</span>.</li>
+        </ul>
+        </div>
+        </details>
+
+        <details open>
+        <summary>Potassium</summary>
+        <div class="content">
+        <ul>
+        <li><strong>Both:</strong> Total body K⁺ depleted.</li>
+        <li><strong>Insulin → intracellular shift</strong> → dangerous hypokalemia.</li>
+        <li>Target <span class="mono">4.0–5.5 mEq/L</span> in both conditions.</li>
+        </ul>
+        </div>
+        </details>
+
+        <details open>
+        <summary>Osmolality</summary>
+        <div class="content">
+        <ul>
+        <li><strong>DKA:</strong> Not the main treatment target.</li>
+        <li><strong>HHS:</strong> <strong>Primary target</strong>; fall by <span class="mono">3–8 mOsm/kg/hr</span>.</li>
+        <li>Rapid correction → <span class="badge badge-danger">cerebral edema</span>.</li>
+        </ul>
+        </div>
+        </details>
+        </div>
+
+        <div class="card">
+        <span class="pill">Common pitfalls</span>
+        <ul>
+        <li>Starting insulin too early in HHS → rapid osmolar shift.</li>
+        <li>Stopping IV insulin before SQ overlap in DKA.</li>
+        <li>Under‑replacing potassium once insulin starts.</li>
+        <li>Ignoring thrombotic risk in HHS (LMWH is essential).</li>
+        </ul>
+        </div>
+
+        <div class="card">
+        <span class="pill">Quick formulas</span>
+        <ul>
+        <li><strong>Effective osmolality:</strong> <span class="mono">2 × Na + Glucose</span> (mmol/L)</li>
+        <li><strong>Glucose conversion:</strong> <span class="mono">mmol/L × 18 ≈ mg/dL</span></li>
+        </ul>
+        </div>
+      </div>
+
+  </div>
+</main>
+
+<footer>
+  Offline-ready • Static HTML • US units first (UK units in brackets where useful)
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,793 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Diabetic Ketoacidosis (DKA) – Collapsible Guide (US units)</title>
+<style>
+  :root{
+    --bg:#f7fbff;
+    --card:#ffffff;
+    --ink:#13233a;
+    --muted:#4b5b70;
+    --accent:#0b6aa8;
+    --accentSoft:#e7f3ff;
+    --border:#d6e2ef;
+    --danger:#b42318;
+    --warn:#b45309;
+    --shadow:0 6px 18px rgba(16,24,40,.08);
+    --radius:16px;
+    --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0;
+    font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+    background: radial-gradient(circle at 10% 0%, #eef7ff 0%, var(--bg) 45%, #ffffff 100%);
+    color:var(--ink);
+    line-height:1.45;
+  }
+  header{
+    padding:18px 16px 10px;
+    position:sticky; top:0;
+    background: rgba(247,251,255,.85);
+    backdrop-filter: blur(8px);
+    border-bottom:1px solid var(--border);
+    z-index:5;
+  }
+  .topbar{
+    max-width:1000px;
+    margin:0 auto;
+    display:flex;
+    gap:10px;
+    align-items:center;
+    justify-content:space-between;
+    flex-wrap:wrap;
+  }
+  .titlewrap{ display:flex; align-items:baseline; gap:10px; flex-wrap:wrap; }
+  h1{ font-size:20px; margin:0; letter-spacing:.2px; }
+  .subtitle{ color:var(--muted); font-size:13px; }
+  .nav{ display:flex; gap:8px; flex-wrap:wrap; }
+  .btn{
+    display:inline-flex; align-items:center; gap:8px;
+    padding:10px 12px;
+    border:1px solid var(--border);
+    border-radius:999px;
+    background:var(--card);
+    color:var(--ink);
+    text-decoration:none;
+    box-shadow: 0 2px 8px rgba(16,24,40,.06);
+    font-size:13px;
+  }
+  .btn:hover{ border-color:#b7cee6; transform: translateY(-1px); }
+  main{ padding:18px 16px 40px; }
+  .container{ max-width:1000px; margin:0 auto; }
+  .card{
+    background:var(--card);
+    border:1px solid var(--border);
+    border-radius:var(--radius);
+    box-shadow:var(--shadow);
+    padding:16px;
+    margin:14px 0;
+  }
+  .note{
+    background:#fff7ed;
+    border:1px solid #fed7aa;
+    color:#7c2d12;
+    border-radius:14px;
+    padding:12px 14px;
+    font-size:13px;
+  }
+  .pill{
+    display:inline-block;
+    padding:4px 10px;
+    border-radius:999px;
+    background:var(--accentSoft);
+    border:1px solid #cfe6ff;
+    color:var(--accent);
+    font-size:12px;
+    margin-right:6px;
+    white-space:nowrap;
+  }
+  details{
+    border:1px solid var(--border);
+    border-radius:14px;
+    background:#fbfdff;
+    margin:10px 0;
+    overflow:hidden;
+  }
+  summary{
+    cursor:pointer;
+    list-style:none;
+    padding:12px 14px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:10px;
+    font-weight:650;
+  }
+  summary::-webkit-details-marker{ display:none; }
+  .chev{
+    width:26px; height:26px;
+    border-radius:999px;
+    border:1px solid var(--border);
+    display:grid; place-items:center;
+    background:var(--card);
+    flex:0 0 auto;
+  }
+  details[open] .chev{ transform: rotate(180deg); }
+  .content{ padding: 0 14px 14px; }
+  .content p{ margin:10px 0; }
+  .content ul{ margin:8px 0 8px 18px; }
+  .content li{ margin:6px 0; }
+  .muted{ color:var(--muted); }
+  .mono{ font-family: var(--mono); }
+  .grid{
+    display:grid;
+    grid-template-columns: 1fr;
+    gap:12px;
+  }
+  @media (min-width: 900px){
+    .grid{ grid-template-columns: 1fr 1fr; }
+  }
+  .mini-card{
+    border:1px dashed #cfe0f2;
+    background:#ffffff;
+    border-radius:14px;
+    padding:12px 12px;
+  }
+  .tbl{
+    width:100%;
+    border-collapse: collapse;
+    overflow:hidden;
+    border-radius:12px;
+    border:1px solid var(--border);
+    background:#fff;
+    margin-top:10px;
+  }
+  .tbl th, .tbl td{
+    border-bottom:1px solid var(--border);
+    padding:10px 10px;
+    font-size:13px;
+    vertical-align:top;
+  }
+  .tbl th{
+    text-align:left;
+    background:var(--accentSoft);
+    color:var(--accent);
+    font-weight:700;
+  }
+  .figure{
+    border:1px dashed #b9d7f5;
+    background:#f4f9ff;
+    border-radius:14px;
+    padding:12px;
+    margin:12px 0;
+  }
+  .figure strong{ color:var(--accent); }
+  .figure img{
+    width:100%;
+    height:auto;
+    border-radius:12px;
+    border:1px solid #cfe6ff;
+    background:#fff;
+    display:block;
+    margin-top:10px;
+  }
+  .small{ font-size:12.5px; color:var(--muted); }
+  .anchorlinks{
+    max-width:1000px;
+    margin:10px auto 0;
+    display:flex; flex-wrap:wrap; gap:8px;
+  }
+  .anchorlinks a{
+    font-size:12.5px;
+    color:var(--accent);
+    text-decoration:none;
+    border:1px solid #cfe6ff;
+    background:#ffffff;
+    padding:7px 10px;
+    border-radius:999px;
+  }
+  .anchorlinks a:hover{ background:var(--accentSoft); }
+  footer{
+    padding:18px 16px 30px;
+    color:var(--muted);
+    text-align:center;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="topbar">
+    <div class="titlewrap">
+      <h1>Diabetic Ketoacidosis (DKA)</h1>
+    </div>
+    <div class="nav">
+      <a class="btn" href="../index.html">🏠 Home</a>
+      <a class="btn" href="index.html">↩︎ Back to Diabetes</a>
+    </div>
+  </div>
+
+  <div class="anchorlinks">
+    <a href="#intro">Introduction</a>
+    <a href="#epi">Epidemiology</a>
+    <a href="#path">Pathophysiology</a>
+    <a href="#precip">Precipitants</a>
+    <a href="#features">Clinical features</a>
+    <a href="#dx">Diagnosis</a>
+    <a href="#unusual">Unusual presentations</a>
+    <a href="#invest">Investigations</a>
+    <a href="#mgmt">Management</a>
+    <a href="#monitor">Monitoring & targets</a>
+    <a href="#resolve">Resolution & transition</a>
+    <a href="#comp">Complications</a>
+  </div>
+</header>
+
+<main>
+  <div class="container">
+
+
+    <div class="card" id="intro">
+      <span class="pill">Introduction</span>
+      <p>
+        Diabetic ketoacidosis (DKA) is a <strong>life‑threatening diabetic emergency</strong>.
+        It is a severe metabolic complication of diabetes, typically seen in type 1 diabetes (new presentation, missed insulin, or intercurrent illness),
+        but it can also occur in type 2 diabetes in specific settings.
+      </p>
+      <p>
+        Hyperglycemia causes <strong>osmotic diuresis</strong> leading to volume depletion and electrolyte abnormalities, requiring prompt recognition and management.
+      </p>
+
+      <details open>
+        <summary>Biochemical triad (diagnostic concept) <span class="chev">⌄</span></summary>
+        <div class="content">
+          <table class="tbl">
+            <thead>
+              <tr><th>Component</th><th>Threshold (US with UK in brackets)</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Hyperglycemia</strong></td>
+                <td class="mono">&gt; 200 mg/dL (&gt; 11.0 mmol/L) <span class="muted">or known diabetes</span></td>
+              </tr>
+              <tr>
+                <td><strong>Ketonaemia / ketonuria</strong></td>
+                <td class="mono">β‑hydroxybutyrate ≥ 3 mmol/L or significant ketonuria (&gt; 2+)</td>
+              </tr>
+              <tr>
+                <td><strong>Acidosis</strong></td>
+                <td class="mono">HCO₃⁻ &lt; 15 mEq/L (mmol/L) and/or venous pH &lt; 7.30</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </details>
+    </div>
+
+    <div class="card" id="epi">
+      <span class="pill">Epidemiology</span>
+      <ul>
+        <li>DKA is a common acute hyperglycemic complication among type 1 diabetes patients.</li>
+        <li>Increasingly recognized in type 2 diabetes (see “Unusual presentations”).</li>
+        <li>Estimated ~4% of patients with T1DM develop DKA annually; up to ~14% of diabetes-related hospital admissions may be due to DKA.</li>
+      </ul>
+    </div>
+
+    <div class="card" id="path">
+      <span class="pill">Pathophysiology</span>
+      <details open>
+        <summary>Mechanism (stepwise) <span class="chev">⌄</span></summary>
+        <div class="content">
+          <ul>
+            <li><strong>Insulin deficiency</strong> → inability to utilize glucose → rising serum glucose (hyperglycemia).</li>
+            <li>Glucose cannot be used → ↑ hepatic glucose production via <strong>glycogenolysis</strong> and <strong>gluconeogenesis</strong>.</li>
+            <li>Counter‑regulatory hormones (e.g., cortisol, glucagon, growth hormone) rise → worsens hyperglycemia and drives alternative fuel use.</li>
+            <li>↑ Lipolysis → ↑ free fatty acids → hepatic <strong>ketogenesis</strong>.</li>
+            <li>Ketone bodies (acetone, acetoacetate, and predominantly <strong>β‑hydroxybutyrate</strong>) rise → ketonemia.</li>
+            <li>Ketones are weak acids → metabolic acidosis; progressive illness with increasing ketone burden.</li>
+            <li>Hyperglycemia → osmotic diuresis + vomiting → profound hypovolemia → electrolyte derangements, reduced consciousness, death if untreated.</li>
+          </ul>
+        </div>
+      </details>
+    </div>
+
+    <div class="card" id="precip">
+      <span class="pill">Precipitants</span>
+      <p class="muted">
+        In patients with established diabetes, there is usually an underlying trigger. Treat DKA <em>and</em> treat the precipitant.
+      </p>
+      <table class="tbl">
+        <thead><tr><th>Common precipitants</th><th>Approx frequency</th></tr></thead>
+        <tbody>
+          <tr><td>Infection</td><td>30–40%</td></tr>
+          <tr><td>Insulin non‑adherence</td><td>~25%</td></tr>
+          <tr><td>Inappropriate dose alteration</td><td>~13%</td></tr>
+          <tr><td>New diagnosis of diabetes</td><td>10–20%</td></tr>
+          <tr><td>Myocardial infarction</td><td>~1%</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="card" id="features">
+      <span class="pill">Clinical features</span>
+
+      <details open>
+        <summary>Symptoms and signs <span class="chev">⌄</span></summary>
+        <div class="content">
+          <p>
+            DKA often starts with insidious <strong>polyuria</strong> and <strong>polydipsia</strong>.
+            As it progresses: malaise, nausea/vomiting, abdominal pain, dehydration, confusion, reduced GCS.
+          </p>
+
+          <div class="grid">
+            <div class="mini-card">
+              <strong>Symptoms</strong>
+              <ul>
+                <li>Nausea</li>
+                <li>Vomiting</li>
+                <li>Polyuria</li>
+                <li>Polydipsia</li>
+                <li>Abdominal pain</li>
+                <li>Leg cramps</li>
+                <li>Headache</li>
+              </ul>
+            </div>
+            <div class="mini-card">
+              <strong>Signs</strong>
+              <ul>
+                <li>Abdominal tenderness</li>
+                <li>Dehydration</li>
+                <li>Hypotension</li>
+                <li><strong>Kussmaul breathing</strong> (deep “sighing” respirations)</li>
+                <li>Ketotic/fruity breath</li>
+                <li>Reduced consciousness → coma</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="figure">
+            <strong>Symptoms/signs infographic</strong>
+            <img src="images/dka_features.jpg" alt="DKA symptoms and signs infographic (placeholder)" />
+          </div>
+        </div>
+      </details>
+    </div>
+
+    <div class="card" id="dx">
+      <span class="pill">Diagnosis</span>
+
+      <details open>
+        <summary>Immediate diagnostic investigations <span class="chev">⌄</span></summary>
+        <div class="content">
+          <ul>
+            <li><strong>Serum glucose</strong>: &gt; <span class="mono">200 mg/dL (11.0 mmol/L)</span></li>
+            <li><strong>VBG/ABG</strong>: pH &lt; <span class="mono">7.30</span> or bicarbonate &lt; <span class="mono">15 mEq/L (15 mmol/L)</span></li>
+            <li><strong>Ketones</strong>: capillary blood ketone ≥ <span class="mono">3 mmol/L</span> or urinary ketones <span class="mono">+++</span> or above</li>
+          </ul>
+        </div>
+      </details>
+    </div>
+
+    <div class="card" id="unusual">
+      <span class="pill">Unusual presentations</span>
+
+      <details open>
+        <summary>Ketosis‑prone T2DM and euglycemic DKA <span class="chev">⌄</span></summary>
+        <div class="content">
+          <ul>
+            <li><strong>Ketosis‑prone T2DM:</strong> some T2DM patients can present in DKA. (Higher reported risk in some groups; clinically: assess any acutely ill diabetic for DKA.)</li>
+            <li><strong>Euglycemic DKA:</strong> DKA with normal/near‑normal glucose. Recognize early; may have higher mortality.</li>
+          </ul>
+          <p><strong>Common euglycemic DKA contexts:</strong></p>
+          <ul>
+            <li>Depleted hepatic glycogen: prolonged vomiting, alcohol use, malnutrition/starvation.</li>
+            <li>SGLT‑2 inhibitors (increasingly recognized in practice).</li>
+          </ul>
+        </div>
+      </details>
+    </div>
+
+    <div class="card" id="invest">
+      <span class="pill">Investigations</span>
+
+      <details open>
+        <summary>Bedside, blood tests, and imaging <span class="chev">⌄</span></summary>
+        <div class="content">
+          <div class="grid">
+            <div class="mini-card">
+              <strong>Bedside tests</strong>
+              <ul>
+                <li>ECG</li>
+                <li>Urinalysis ± urine culture</li>
+                <li>Pregnancy test (when applicable)</li>
+              </ul>
+            </div>
+            <div class="mini-card">
+              <strong>Blood tests</strong>
+              <ul>
+                <li>CBC</li>
+                <li>BMP/CMP (electrolytes + renal function)</li>
+                <li>CRP (if used locally)</li>
+                <li>LFTs</li>
+                <li>Blood cultures (if infection suspected)</li>
+                <li>Troponin (if ischemia suspected)</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="mini-card" style="margin-top:12px;">
+            <strong>Imaging</strong>
+            <ul>
+              <li>Chest X‑ray when clinically indicated</li>
+            </ul>
+            <div class="small">Tailor additional testing to the suspected precipitant and complications (e.g., AKI, electrolyte derangements).</div>
+          </div>
+        </div>
+      </details>
+    </div>
+
+    <div class="card" id="mgmt">
+      <span class="pill">Management</span>
+
+      <details open>
+        <summary>Goals of therapy <span class="chev">⌄</span></summary>
+        <div class="content">
+          <ul>
+            <li>Restore circulating volume and tissue perfusion</li>
+            <li>Clear ketones and halt ketogenesis</li>
+            <li>Decrease glucose toward normal</li>
+            <li>Correct electrolyte derangements (especially potassium)</li>
+            <li>Identify and treat the precipitant</li>
+          </ul>
+
+          <div class="figure">
+            <strong>DKA pathway / flowchart</strong>
+            <img src="images/dka_flowchart.jpg" alt="DKA management algorithm (placeholder)" />
+          </div>
+        </div>
+      </details>
+
+      <details>
+        <summary>Initial assessment (ED/ICU style) <span class="chev">⌄</span></summary>
+        <div class="content">
+          <ul>
+            <li>ABCDE with formal <strong>GCS</strong> and full vitals (HR, T, RR, BP, SpO₂)</li>
+            <li>IV access: <strong>x2 large‑bore</strong></li>
+            <li>Check blood/urine ketones</li>
+            <li>Check capillary + serum glucose</li>
+            <li>Send labs: CBC, BMP/CMP, VBG; consider cultures, troponin; obtain ECG; start monitoring</li>
+            <li>Establish usual diabetes regimen (basal insulin history matters)</li>
+          </ul>
+        </div>
+      </details>
+
+      <details>
+        <summary>Severity assessment and level of care <span class="chev">⌄</span></summary>
+        <div class="content">
+          <p class="muted">Any one of the following suggests severe DKA and higher level monitoring (e.g., ICU/stepdown depending on institution):</p>
+          <ul>
+            <li>Blood ketones &gt; <span class="mono">6 mmol/L</span></li>
+            <li>Bicarbonate &lt; <span class="mono">5 mEq/L</span></li>
+            <li>pH &lt; <span class="mono">7.0</span></li>
+            <li>GCS ≤ <span class="mono">12</span></li>
+            <li>Systolic BP &lt; <span class="mono">90 mmHg</span></li>
+            <li>Potassium &lt; <span class="mono">3.5 mEq/L</span> on admission</li>
+          </ul>
+        </div>
+      </details>
+
+      <details>
+        <summary>Fluid resuscitation <span class="chev">⌄</span></summary>
+        <div class="content">
+          <p>
+            Patients are intravascularly depleted and require IV fluids. Assess volume clinically + with labs; consider Foley for accurate I/O when needed.
+          </p>
+          <ul>
+            <li>Initial fluid: <strong>0.9% normal saline</strong> (especially if SBP &lt; 90 mmHg).</li>
+            <li>If SBP does not improve after fluids, escalate—consider other causes of shock.</li>
+          </ul>
+
+          <details>
+            <summary>Example fluid regimen from the provided protocol <span class="chev">⌄</span></summary>
+            <div class="content">
+              <ul>
+                <li>1 L NS over 1 hour</li>
+                <li>Then 1 L over 2 hours (repeat x2 = 2 L over 4 hours)</li>
+                <li>Then 1 L over 4 hours (repeat x2 = 2 L over 8 hours)</li>
+              </ul>
+              <p class="small">
+                Typical water deficit cited: <span class="mono">~100 mL/kg</span> (e.g., up to ~7 L in a 70‑kg person). Adjust to patient (HF/CKD/elderly require caution).
+              </p>
+            </div>
+          </details>
+        </div>
+      </details>
+
+      <details>
+        <summary>Potassium replacement <span class="chev">⌄</span></summary>
+        <div class="content">
+          <p>
+            Insulin therapy drives potassium into cells → can cause dangerous hypokalemia. Monitor and replace early.
+          </p>
+          <p><strong>Maintain serum K⁺ between</strong> <span class="mono">4.0–5.5 mEq/L (mmol/L)</span>.</p>
+
+          <table class="tbl">
+            <thead><tr><th>K⁺ level</th><th>Action (US practice framing)</th></tr></thead>
+            <tbody>
+              <tr>
+                <td class="mono">&lt; 3.3</td>
+                <td><strong>Hold insulin</strong>; replete K⁺ aggressively; recheck frequently.</td>
+              </tr>
+              <tr>
+                <td class="mono">3.3–5.2</td>
+                <td>Add KCl to IV fluids (dose per institution) and monitor.</td>
+              </tr>
+              <tr>
+                <td class="mono">&gt; 5.2</td>
+                <td>No replacement initially; monitor closely (levels often fall once insulin starts).</td>
+              </tr>
+            </tbody>
+          </table>
+          <p class="small">
+            Dosing specifics vary by hospital protocol (central vs peripheral line, renal function, ECG changes).
+          </p>
+        </div>
+      </details>
+
+      <details>
+        <summary>Intravenous insulin therapy <span class="chev">⌄</span></summary>
+        <div class="content">
+          <p>
+            Start a fixed‑rate IV insulin infusion (FRIII concept) based on patient weight.
+          </p>
+          <ul>
+            <li><strong>Insulin rate:</strong> <span class="mono">0.1 units/kg/hr</span> (e.g., 60 kg → 6 units/hr)</li>
+            <li>If patient uses long‑acting basal insulin, <strong>continue basal</strong> during IV insulin; hold prandial/short‑acting insulin.</li>
+            <li>Newly diagnosed: a basal insulin may be started at <span class="mono">0.25 units/kg</span> SQ per protocol.</li>
+          </ul>
+
+          <details>
+            <summary>Dextrose “crossover” and insulin reduction <span class="chev">⌄</span></summary>
+            <div class="content">
+              <p>
+                When glucose falls below <span class="mono">250 mg/dL (14 mmol/L)</span>:
+              </p>
+              <ul>
+                <li>Start IV dextrose (e.g., D10 at ~125 mL/hr per referenced protocol) <strong>in addition to</strong> NS + insulin (does not replace NS).</li>
+                <li>Consider reducing insulin infusion to <span class="mono">0.05 units/kg/hr</span> to prevent hypoglycemia and hypokalemia while continuing to clear ketones.</li>
+              </ul>
+              <p class="small">
+                Key idea: you keep insulin running to stop ketogenesis; dextrose prevents hypoglycemia while ketones clear.
+              </p>
+            </div>
+          </details>
+        </div>
+      </details>
+    </div>
+
+    <div class="card" id="monitor">
+      <span class="pill">Monitoring & metabolic targets</span>
+
+      <details open>
+        <summary>Monitoring schedule <span class="chev">⌄</span></summary>
+        <div class="content">
+          <ul>
+            <li><strong>Hourly:</strong> blood ketones and blood glucose</li>
+            <li>If capillary glucose &gt; <span class="mono">360 mg/dL (20 mmol/L)</span> or “HI”, send formal lab glucose</li>
+            <li><strong>VBG:</strong> at 1 hr and 2 hr, then every 2 hrs thereafter (for pH and bicarbonate)</li>
+            <li><strong>Potassium:</strong> at least every 4 hrs in first 24 hrs (sooner if abnormal)</li>
+            <li>Severe DKA: continuous cardiac and SpO₂ monitoring</li>
+            <li>Strict fluid balance; consider urinary catheter if anuria/incontinence prevents accurate monitoring</li>
+          </ul>
+        </div>
+      </details>
+
+      <details open>
+        <summary>Treatment targets (what “good progress” looks like) <span class="chev">⌄</span></summary>
+        <div class="content">
+          <table class="tbl">
+            <thead><tr><th>Marker</th><th>Target trend</th></tr></thead>
+            <tbody>
+              <tr>
+                <td>Blood ketones</td>
+                <td>Fall by ≥ <span class="mono">0.5 mmol/L/hr</span></td>
+              </tr>
+              <tr>
+                <td>Bicarbonate</td>
+                <td>Rise by ≥ <span class="mono">3.0 mEq/L/hr</span></td>
+              </tr>
+              <tr>
+                <td>Blood glucose</td>
+                <td>Fall by ≥ <span class="mono">54 mg/dL/hr (3.0 mmol/L/hr)</span></td>
+              </tr>
+              <tr>
+                <td>Serum potassium</td>
+                <td>Maintain <span class="mono">4.0–5.5 mEq/L</span></td>
+              </tr>
+            </tbody>
+          </table>
+          <p class="small">
+            Blood ketones are the most useful marker; if unavailable, use bicarbonate and glucose trends.
+          </p>
+        </div>
+      </details>
+    </div>
+
+    <div class="card" id="resolve">
+      <span class="pill">Resolution & transition</span>
+
+      <details open>
+        <summary>When to stop IV insulin <span class="chev">⌄</span></summary>
+        <div class="content">
+          <p>Continue IV insulin until ketoacidosis has resolved:</p>
+          <ul>
+            <li>Ketones &lt; <span class="mono">0.6 mmol/L</span></li>
+            <li>Venous pH &gt; <span class="mono">7.30</span> and/or bicarbonate &gt; <span class="mono">18 mEq/L</span></li>
+          </ul>
+          <p>
+            If glucose &lt; <span class="mono">250 mg/dL (14.0 mmol/L)</span>, continue D10 (or institutional equivalent) alongside IV insulin + NS ± KCl.
+          </p>
+        </div>
+      </details>
+
+      <details>
+        <summary>Transition to subcutaneous insulin <span class="chev">⌄</span></summary>
+        <div class="content">
+          <ul>
+            <li>Inform diabetes/endocrine team early; aim review within ~24 hours where available.</li>
+            <li>When resolved and patient is eating/drinking: transition to SQ insulin.</li>
+            <li><strong>Overlap is mandatory:</strong> give SQ insulin with a meal, then stop IV insulin ~1 hour later.</li>
+            <li>If not eating/drinking: consider transition to a variable‑rate insulin infusion per institutional protocol.</li>
+          </ul>
+        </div>
+      </details>
+    </div>
+
+    <div class="card" id="comp">
+      <span class="pill">Complications</span>
+
+      <details open>
+        <summary>Major complications and why they happen <span class="chev">⌄</span></summary>
+        <div class="content">
+          <ul>
+            <li><strong>Hypokalemia</strong> (major cause of mortality): total body K depletion + insulin shift → rapid drop.</li>
+            <li><strong>ARDS</strong> and other critical illness complications.</li>
+            <li><strong>Co‑morbid precipitants</strong>: sepsis or MI drive mortality risk.</li>
+            <li><strong>Cerebral edema</strong>: more common in pediatrics; rare but catastrophic.</li>
+            <li><strong>Hypoglycemia</strong>: from insulin without adequate dextrose crossover.</li>
+            <li><strong>AKI</strong>: from severe dehydration (pre‑renal injury); worsened by ongoing osmotic diuresis.</li>
+          </ul>
+
+          <p class="small">
+            Potassium disturbances are central: dehydration → AKI; acidosis → transmembrane K shifts (often elevated at presentation);
+            insulin therapy → intracellular shift → dangerous hypokalemia unless replaced.
+          </p>
+        </div>
+      </details>
+    </div>
+
+    <div class="container">
+
+    <div class="card">
+    <span class="pill">DKA vs HHS, at a glance</span>
+    <table class="tbl">
+    <thead>
+    <tr><th>Feature</th><th>DKA</th><th>HHS</th></tr>
+    </thead>
+    <tbody>
+    <tr>
+    <td>Typical diabetes</td>
+    <td>Type 1 (also T2DM)</td>
+    <td>Type 2</td>
+    </tr>
+    <tr>
+    <td>Onset</td>
+    <td>Hours–1–2 days</td>
+    <td>Days–weeks</td>
+    </tr>
+    <tr>
+    <td>Glucose</td>
+    <td class="mono">&gt; 200 mg/dL (&gt; 11 mmol/L)</td>
+    <td class="mono">&gt; 540 mg/dL (&gt; 30 mmol/L)</td>
+    </tr>
+    <tr>
+    <td>Ketones</td>
+    <td class="mono">≥ 3 mmol/L</td>
+    <td class="mono">&lt; 3 mmol/L (often absent)</td>
+    </tr>
+    <tr>
+    <td>Acidosis</td>
+    <td><span class="badge badge-danger">Present</span></td>
+    <td><span class="badge badge-ok">Minimal/absent</span></td>
+    </tr>
+    <tr>
+    <td>Effective osmolality</td>
+    <td>Variable</td>
+    <td class="mono">&gt; 320 mOsm/kg</td>
+    </tr>
+    <tr>
+    <td>Primary threat</td>
+    <td>Ketoacidosis</td>
+    <td>Hyperosmolality & dehydration</td>
+    </tr>
+    <tr>
+    <td>Mortality</td>
+    <td>&lt; 1%</td>
+    <td><span class="badge badge-danger">15–20%</span></td>
+    </tr>
+    </tbody>
+    </table>
+    </div>
+
+    <div class="card">
+    <span class="pill">Management priorities (don’t mix these up)</span>
+
+    <details open>
+    <summary>Fluids</summary>
+    <div class="content">
+    <ul>
+    <li><strong>DKA:</strong> Aggressive early fluids + insulin to stop ketogenesis.</li>
+    <li><strong>HHS:</strong> <strong>Fluids first, slow correction</strong>; massive deficits (often 6–9 L).</li>
+    </ul>
+    </div>
+    </details>
+
+    <details open>
+    <summary>Insulin</summary>
+    <div class="content">
+    <ul>
+    <li><strong>DKA:</strong> Start early – <span class="mono">0.1 units/kg/hr</span>.</li>
+    <li><strong>HHS:</strong> <span class="badge badge-warn">Do NOT start early</span> unless ketones present or glucose not falling with fluids.
+      If needed: <span class="mono">0.05 units/kg/hr</span>.</li>
+    </ul>
+    </div>
+    </details>
+
+    <details open>
+    <summary>Potassium</summary>
+    <div class="content">
+    <ul>
+    <li><strong>Both:</strong> Total body K⁺ depleted.</li>
+    <li><strong>Insulin → intracellular shift</strong> → dangerous hypokalemia.</li>
+    <li>Target <span class="mono">4.0–5.5 mEq/L</span> in both conditions.</li>
+    </ul>
+    </div>
+    </details>
+
+    <details open>
+    <summary>Osmolality</summary>
+    <div class="content">
+    <ul>
+    <li><strong>DKA:</strong> Not the main treatment target.</li>
+    <li><strong>HHS:</strong> <strong>Primary target</strong>; fall by <span class="mono">3–8 mOsm/kg/hr</span>.</li>
+    <li>Rapid correction → <span class="badge badge-danger">cerebral edema</span>.</li>
+    </ul>
+    </div>
+    </details>
+    </div>
+
+    <div class="card">
+    <span class="pill">Common pitfalls</span>
+    <ul>
+    <li>Starting insulin too early in HHS → rapid osmolar shift.</li>
+    <li>Stopping IV insulin before SQ overlap in DKA.</li>
+    <li>Under‑replacing potassium once insulin starts.</li>
+    <li>Ignoring thrombotic risk in HHS (LMWH is essential).</li>
+    </ul>
+    </div>
+
+    <div class="card">
+    <span class="pill">Quick formulas</span>
+    <ul>
+    <li><strong>Effective osmolality:</strong> <span class="mono">2 × Na + Glucose</span> (mmol/L)</li>
+    <li><strong>Glucose conversion:</strong> <span class="mono">mmol/L × 18 ≈ mg/dL</span></li>
+    </ul>
+    </div>
+  </div>
+</main>
+
+</body>
+</html>

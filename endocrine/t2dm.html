@@ -1,0 +1,647 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Type 2 Diabetes – Collapsible Study Notes (US units with UK in brackets)</title>
+<style>
+  :root{
+    --bg:#f7fbff;
+    --card:#ffffff;
+    --ink:#13233a;
+    --muted:#4b5b70;
+    --accent:#0b6aa8;
+    --accentSoft:#e7f3ff;
+    --border:#d6e2ef;
+    --warn:#b45309;
+    --shadow:0 6px 18px rgba(16,24,40,.08);
+    --radius:16px;
+    --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0;
+    font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+    background: radial-gradient(circle at 10% 0%, #eef7ff 0%, var(--bg) 45%, #ffffff 100%);
+    color:var(--ink);
+    line-height:1.45;
+  }
+  header{
+    padding:18px 16px 10px;
+    position:sticky; top:0;
+    background: rgba(247,251,255,.85);
+    backdrop-filter: blur(8px);
+    border-bottom:1px solid var(--border);
+    z-index:5;
+  }
+  .topbar{
+    max-width:1000px;
+    margin:0 auto;
+    display:flex;
+    gap:10px;
+    align-items:center;
+    justify-content:space-between;
+    flex-wrap:wrap;
+  }
+  .titlewrap{
+    display:flex; align-items:baseline; gap:10px; flex-wrap:wrap;
+  }
+  h1{
+    font-size:20px; margin:0;
+    letter-spacing:.2px;
+  }
+  .subtitle{
+    color:var(--muted);
+    font-size:13px;
+  }
+  .nav{
+    display:flex; gap:8px; flex-wrap:wrap;
+  }
+  .btn{
+    display:inline-flex; align-items:center; gap:8px;
+    padding:10px 12px;
+    border:1px solid var(--border);
+    border-radius:999px;
+    background:var(--card);
+    color:var(--ink);
+    text-decoration:none;
+    box-shadow: 0 2px 8px rgba(16,24,40,.06);
+    font-size:13px;
+  }
+  .btn:hover{ border-color:#b7cee6; transform: translateY(-1px); }
+  main{ padding:18px 16px 40px; }
+  .container{ max-width:1000px; margin:0 auto; }
+  .card{
+    background:var(--card);
+    border:1px solid var(--border);
+    border-radius:var(--radius);
+    box-shadow:var(--shadow);
+    padding:16px;
+    margin:14px 0;
+  }
+  .note{
+    background: #fff7ed;
+    border:1px solid #fed7aa;
+    color:#7c2d12;
+    border-radius:14px;
+    padding:12px 14px;
+    font-size:13px;
+  }
+  .pill{
+    display:inline-block;
+    padding:4px 10px;
+    border-radius:999px;
+    background:var(--accentSoft);
+    border:1px solid #cfe6ff;
+    color:var(--accent);
+    font-size:12px;
+    margin-right:6px;
+    white-space:nowrap;
+  }
+
+  details{
+    border:1px solid var(--border);
+    border-radius:14px;
+    background: #fbfdff;
+    margin:10px 0;
+    overflow:hidden;
+  }
+  summary{
+    cursor:pointer;
+    list-style:none;
+    padding:12px 14px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:10px;
+    font-weight:650;
+  }
+  summary::-webkit-details-marker{ display:none; }
+  .chev{
+    width:26px; height:26px;
+    border-radius:999px;
+    border:1px solid var(--border);
+    display:grid; place-items:center;
+    background:var(--card);
+    flex:0 0 auto;
+  }
+  details[open] .chev{ transform: rotate(180deg); }
+  .content{
+    padding: 0 14px 14px;
+    color:var(--ink);
+  }
+  .content p{ margin:10px 0; color:var(--ink); }
+  .content ul{ margin:8px 0 8px 18px; }
+  .content li{ margin:6px 0; color:var(--ink); }
+  .muted{ color:var(--muted); }
+  .mono{ font-family: var(--mono); }
+  .grid{
+    display:grid;
+    grid-template-columns: 1fr;
+    gap:12px;
+  }
+  @media (min-width: 900px){
+    .grid{ grid-template-columns: 1fr 1fr; }
+  }
+  .mini-card{
+    border:1px dashed #cfe0f2;
+    background:#ffffff;
+    border-radius:14px;
+    padding:12px 12px;
+  }
+  .tbl{
+    width:100%;
+    border-collapse: collapse;
+    overflow:hidden;
+    border-radius:12px;
+    border:1px solid var(--border);
+    background:#fff;
+  }
+  .tbl th, .tbl td{
+    border-bottom:1px solid var(--border);
+    padding:10px 10px;
+    font-size:13px;
+    vertical-align:top;
+  }
+  .tbl th{
+    text-align:left;
+    background:var(--accentSoft);
+    color:var(--accent);
+    font-weight:700;
+  }
+  .kicker{
+    font-size:12px;
+    color:var(--muted);
+    margin-top:6px;
+  }
+  .figure{
+    border:1px dashed #b9d7f5;
+    background:#f4f9ff;
+    border-radius:14px;
+    padding:12px;
+    margin:12px 0;
+  }
+  .figure strong{ color:var(--accent); }
+  .figure img{
+    width:100%;
+    height:auto;
+    border-radius:12px;
+    border:1px solid #cfe6ff;
+    background:#fff;
+    display:block;
+    margin-top:10px;
+  }
+  .small{ font-size:12.5px; color:var(--muted); }
+  footer{
+    padding:18px 16px 30px;
+    color:var(--muted);
+    text-align:center;
+  }
+  .anchorlinks{
+    display:flex; flex-wrap:wrap; gap:8px;
+    margin-top:10px;
+  }
+  .anchorlinks a{
+    font-size:12.5px;
+    color:var(--accent);
+    text-decoration:none;
+    border:1px solid #cfe6ff;
+    background:#ffffff;
+    padding:7px 10px;
+    border-radius:999px;
+  }
+  .anchorlinks a:hover{ background:var(--accentSoft); }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="topbar">
+    <div class="titlewrap">
+      <h1>Type 2 Diabetes</h1>
+    <div class="nav">
+      <a class="btn" href="../index.html">🏠 Home</a>
+      <a class="btn" href="index.html">↩︎ Back to Endocrine/Diabetes</a>
+    </div>
+  </div>
+  <div class="container">
+    <div class="anchorlinks">
+      <a href="#overview">Overview</a>
+      <a href="#path">Pathophysiology</a>
+      <a href="#dx">Diagnosis</a>
+      <a href="#mgmt">Management</a>
+      <a href="#targets">Targets & Monitoring</a>
+      <a href="#comp">Complications</a>
+    </div>
+  </div>
+</header>
+
+<main>
+  <div class="container">
+
+    <div class="card" id="overview">
+      <span class="pill">What this is</span>
+      <p class="muted">
+        Type 2 diabetes mellitus (T2DM) is driven by <strong>insulin resistance</strong> plus <strong>progressive beta-cell dysfunction</strong>,
+        strongly linked to obesity and the metabolic syndrome.
+      </p>
+
+      <details>
+        <summary>
+          Diabetes mellitus: main groups (quick framework)
+          <span class="chev">⌄</span>
+        </summary>
+        <div class="content">
+          <ul>
+            <li><strong>Type 1:</strong> autoimmune beta-cell destruction → absolute insulin deficiency.</li>
+            <li><strong>Type 2:</strong> insulin resistance + inadequate insulin secretion.</li>
+            <li><strong>Gestational:</strong> diabetes first recognized in pregnancy.</li>
+            <li><strong>Other:</strong> genetic (e.g., MODY) and acquired (e.g., steroids, pancreatitis, pancreatic tumors).</li>
+          </ul>
+        </div>
+      </details>
+
+      <details>
+        <summary>
+          Aetiology & risk factors (genetic + environmental)
+          <span class="chev">⌄</span>
+        </summary>
+        <div class="content">
+          <div class="grid">
+            <div class="mini-card">
+              <strong>Genetic risk</strong>
+              <ul>
+                <li>Polygenic; many variants contribute to risk.</li>
+                <li>Family history matters (risk higher if both parents affected).</li>
+                <li>Some ethnicities (e.g., Asian/African ancestry) have higher risk.</li>
+              </ul>
+            </div>
+            <div class="mini-card">
+              <strong>Environmental risk</strong>
+              <ul>
+                <li>Obesity + inactivity are major drivers.</li>
+                <li>Diet (low fiber, high glycemic index), low birth weight.</li>
+                <li>Medications, PCOS, history of gestational diabetes.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </details>
+
+      <details>
+        <summary>
+          Clinical features (how it shows up)
+          <span class="chev">⌄</span>
+        </summary>
+        <div class="content">
+          <ul>
+            <li>Lethargy/fatigue</li>
+            <li>Polyuria, polydipsia</li>
+            <li>Unintentional weight loss</li>
+            <li>Recurrent infections (e.g., thrush, balanitis)</li>
+            <li>Or incidental finding on routine testing</li>
+          </ul>
+
+        </div>
+      </details>
+    </div>
+
+    <div class="card" id="path">
+      <span class="pill">Mechanisms</span>
+      <p class="muted">Two core processes: <strong>peripheral insulin resistance</strong> and <strong>inadequate insulin secretion</strong>.</p>
+
+      <details>
+        <summary>
+          Insulin resistance (what breaks physiologically)
+          <span class="chev">⌄</span>
+        </summary>
+        <div class="content">
+          <ul>
+            <li>Normally, insulin promotes glucose uptake in muscle and adipose via <strong>GLUT-4 translocation</strong>.</li>
+            <li>It also has anabolic effects: ↓ lipolysis/proteolysis, ↓ hepatic gluconeogenesis, ↑ glycogen synthesis.</li>
+            <li>With insulin resistance: impaired uptake + ↑ gluconeogenesis → hyperglycemia; catabolic drift (↑ lipolysis/proteolysis).</li>
+          </ul>
+          <p>
+            Early on you can see abnormal glucose regulation post-meal (<strong>impaired glucose tolerance</strong>, IGT) and/or fasting
+            (<strong>impaired fasting glucose</strong>, IFG). These are often lumped as “pre-diabetes.”
+          </p>
+        </div>
+      </details>
+
+      <details>
+        <summary>
+          Beta-cell dysfunction & “glucotoxicity”
+          <span class="chev">⌄</span>
+        </summary>
+        <div class="content">
+          <p>
+            As glucose rises, beta-cells must increase insulin output (hyperinsulinemia). Over time, high glucose (and lipids) may damage beta-cells
+            (“glucotoxicity”), with progressive loss of beta-cell mass and eventual secretory failure.
+          </p>
+          <p class="small">
+            Clinical translation: the longer T2DM runs uncontrolled, the more likely you’ll eventually need insulin support—not because “you failed,”
+            but because beta-cells are finite biological hardware.
+          </p>
+        </div>
+      </details>
+    </div>
+
+    <div class="card" id="dx">
+      <span class="pill">Diagnosis</span>
+      <p class="muted">Key tests: <strong>HbA1c</strong>, fasting plasma glucose, random glucose, and sometimes OGTT.</p>
+
+      <details open>
+        <summary>
+          Diagnostic thresholds (US units with UK in brackets)
+          <span class="chev">⌄</span>
+        </summary>
+        <div class="content">
+          <table class="tbl">
+            <thead>
+              <tr>
+                <th>Test</th>
+                <th>Diabetes threshold</th>
+                <th>Prediabetes / at-risk</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>HbA1c</strong></td>
+                <td><span class="mono">≥ 6.5% (≥ 48 mmol/mol)</span></td>
+                <td><span class="mono">6.0–6.4% (42–47 mmol/mol)</span> in the source article’s framework</td>
+              </tr>
+              <tr>
+                <td><strong>Fasting plasma glucose</strong></td>
+                <td><span class="mono">≥ 126 mg/dL (≥ 7.0 mmol/L)</span></td>
+                <td><span class="mono">108–124 mg/dL (6.0–6.9 mmol/L)</span> = IFG</td>
+              </tr>
+              <tr>
+                <td><strong>Random plasma glucose</strong></td>
+                <td><span class="mono">≥ 200 mg/dL (≥ 11.1 mmol/L)</span></td>
+                <td class="muted">Not typically used alone for diagnosis in the source notes</td>
+              </tr>
+              <tr>
+                <td><strong>OGTT (2-hour)</strong></td>
+                <td><span class="mono">≥ 200 mg/dL (≥ 11.1 mmol/L)</span></td>
+                <td><span class="mono">140–199 mg/dL (7.8–11.0 mmol/L)</span> = IGT</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <p class="small">
+            Note: mg/dL conversions use <span class="mono">mg/dL ≈ mmol/L × 18</span>. Values are rounded so they match how clinicians talk.
+          </p>
+        </div>
+      </details>
+
+      <details>
+        <summary>
+          How to interpret HbA1c (and when it lies to you)
+          <span class="chev">⌄</span>
+        </summary>
+        <div class="content">
+          <p>
+            HbA1c reflects average glycemia over ~3 months. In the source notes, a single diagnostic HbA1c can be sufficient in <strong>symptomatic</strong>
+            patients; if <strong>asymptomatic</strong>, confirm with a second abnormal result (HbA1c or an additional test such as fasting glucose).
+          </p>
+          <p><strong>Use caution / consider alternatives</strong> when red cell biology is altered:</p>
+          <ul>
+            <li>Changed erythropoiesis (e.g., iron deficiency, EPO use)</li>
+            <li>Hemoglobin variants/hemoglobinopathies</li>
+            <li>Altered glycation environments (e.g., CKD, alcoholism) per source notes</li>
+            <li>Altered red cell survival (e.g., hemolysis, post-splenectomy)</li>
+          </ul>
+        </div>
+      </details>
+    </div>
+
+    <div class="card" id="mgmt">
+      <span class="pill">Management</span>
+      <p class="muted">Core pillars: education + lifestyle + meds + monitoring for complications.</p>
+
+      <details>
+        <summary>
+          Lifestyle (the part that’s annoyingly powerful)
+          <span class="chev">⌄</span>
+        </summary>
+        <div class="content">
+          <ul>
+            <li>Diet: more fiber, lower glycemic index carbs, moderate high-fat foods; weight loss strategies if overweight.</li>
+            <li>Exercise: improves glucose utilization by muscle; aim for regular moderate-intensity activity.</li>
+            <li>Alcohol moderation and smoking cessation.</li>
+          </ul>
+        </div>
+      </details>
+
+      <details open>
+        <summary>
+          Medication ladder (as shown in the source article)
+          <span class="chev">⌄</span>
+        </summary>
+        <div class="content">
+          <p><strong>Baseline:</strong> Metformin (unless contraindicated or not tolerated).</p>
+
+          <table class="tbl">
+            <thead>
+              <tr><th>Step</th><th>What the source notes suggest</th><th>HbA1c targets (US% with UK in brackets)</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Step 1</strong></td>
+                <td>Standard-release metformin; titrate; monitor renal function; consider modified-release if GI side effects.</td>
+                <td><span class="mono">&lt; 6.5% (&lt; 48 mmol/mol)</span></td>
+              </tr>
+              <tr>
+                <td><strong>Step 2</strong><br/><span class="muted">1st intensification</span></td>
+                <td>Dual therapy if HbA1c rises above <span class="mono">7.5% (58 mmol/mol)</span>: metformin + one of SU, DPP-4i, pioglitazone, SGLT2i.</td>
+                <td><span class="mono">&lt; 7.0% (&lt; 53 mmol/mol)</span></td>
+              </tr>
+              <tr>
+                <td><strong>Step 3</strong><br/><span class="muted">2nd intensification</span></td>
+                <td>Triple therapy or insulin-based regimen if HbA1c remains above <span class="mono">7.5% (58 mmol/mol)</span>.</td>
+                <td><span class="mono">&lt; 7.0% (&lt; 53 mmol/mol)</span></td>
+              </tr>
+              <tr>
+                <td><strong>Step 4</strong></td>
+                <td>Further intensification: consider metformin + SU + GLP-1 RA (with criteria in the source notes); if already on insulin-based therapy, seek specialist advice.</td>
+                <td class="muted">Individualize</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <div class="figure">
+            <img src="images/treatment_t2dm.jpg" alt="T2DM treatment ladder flowchart (placeholder)" />
+          </div>
+
+          <div class="figure">
+            <strong>Alternative ladder if metformin contraindicated</strong>
+            <img src="images/t2dm_management.jpg" alt="Alternative ladder if metformin contraindicated (placeholder)" />
+          </div>
+
+        </div>
+      </details>
+
+      <details>
+        <summary>
+          Insulin in T2DM (when and how the source frames it)
+          <span class="chev">⌄</span>
+        </summary>
+        <div class="content">
+          <p>
+            The source notes emphasize considering insulin earlier when glycemic control is poor despite dual therapy, while balancing hypoglycemia risk,
+            weight gain concerns, and practical constraints (education, monitoring, driving rules, etc.).
+          </p>
+          <ul>
+            <li>NPH (intermediate-acting) once/twice daily</li>
+            <li>Intermediate-acting + short-acting (separate injections or premix)</li>
+            <li>Long-acting basal (e.g., glargine, detemir) — used when NPH hypoglycemia is problematic or injection support needed</li>
+            <li>Basal–bolus conversion if premix still inadequate</li>
+          </ul>
+        </div>
+      </details>
+    </div>
+
+    <div class="card" id="targets">
+      <span class="pill">Targets & Follow-up</span>
+      <p class="muted">Targets are HbA1c-based, but should be individualized.</p>
+
+      <details open>
+        <summary>
+          HbA1c monitoring frequency + typical targets
+          <span class="chev">⌄</span>
+        </summary>
+        <div class="content">
+          <ul>
+            <li>Poor control: HbA1c every <strong>3 months</strong></li>
+            <li>Stable disease: HbA1c every <strong>6 months</strong></li>
+          </ul>
+          <table class="tbl">
+            <thead>
+              <tr><th>Situation</th><th>Target in US% (UK mmol/mol)</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>Lifestyle only</td><td class="mono">&lt; 6.5% (&lt; 48 mmol/mol)</td></tr>
+              <tr><td>Lifestyle + single agent</td><td class="mono">&lt; 6.5% (&lt; 48 mmol/mol)</td></tr>
+              <tr><td>On hypoglycemia-associated drug (e.g., sulfonylurea)</td><td class="mono">&lt; 7.0% (&lt; 53 mmol/mol)</td></tr>
+              <tr><td>Higher intensification regimens</td><td class="mono">&lt; 7.0% (&lt; 53 mmol/mol)</td></tr>
+            </tbody>
+          </table>
+          <p class="small">
+            Individualize targets for hypoglycemia risk, limited life expectancy, comorbidity burden, and expected long-term benefit.
+          </p>
+        </div>
+      </details>
+
+      <details>
+        <summary>
+          Annual review checklist (what to screen for)
+          <span class="chev">⌄</span>
+        </summary>
+        <div class="content">
+          <ul>
+            <li>BMI, smoking status, psychosocial screening (anxiety/depression)</li>
+            <li>Retinopathy: annual retinal screening</li>
+            <li>Nephropathy: eGFR + urine albumin/creatinine ratio</li>
+            <li>Neuropathy/foot: exam, monofilament, vascular assessment ± Dopplers</li>
+            <li>CV risk: BP + lipids optimization; prevention strategy</li>
+          </ul>
+        </div>
+      </details>
+    </div>
+
+    <div class="card" id="comp">
+      <span class="pill">Complications</span>
+      <p class="muted">Think microvascular (eyes, kidneys, nerves) and macrovascular (atherosclerosis).</p>
+
+      <details>
+        <summary>
+          Acute complications: hypoglycemia, HHS, and sometimes DKA
+          <span class="chev">⌄</span>
+        </summary>
+        <div class="content">
+          <ul>
+            <li><strong>Hypoglycemia</strong></li>
+            <li><strong>Hyperosmolar hyperglycemic state (HHS)</strong></li>
+            <li><strong>DKA can occur</strong> in some T2DM patients with marked insulin deficiency; evaluate ketones, pH, bicarbonate in unwell presentations.</li>
+          </ul>
+        </div>
+      </details>
+
+      <details open>
+        <summary>
+          Microvascular: retinopathy, nephropathy, neuropathy, diabetic foot
+          <span class="chev">⌄</span>
+        </summary>
+        <div class="content">
+          <div class="grid">
+            <div class="mini-card">
+              <strong>Retinopathy (NSC-UK classification in source)</strong>
+              <ul>
+                <li>R1 background: dot/blot hemorrhages, hard exudates, cotton-wool spots</li>
+                <li>R2 pre-proliferative: IRMA, venous beading</li>
+                <li>R3 proliferative: new vessels (NVD/NVE), fibrosis, traction retinal detachment</li>
+                <li>Maculopathy: exudates/edema, NVE</li>
+              </ul>
+              <div class="small">Photocoagulation reduces ischemic drive (e.g., VEGF) in proliferative disease.</div>
+            </div>
+
+            <div class="mini-card">
+              <strong>Nephropathy</strong>
+              <p class="small">UK uses ACR in <span class="mono">mg/mmol</span>; US commonly uses <span class="mono">mg/g</span>.</p>
+              <table class="tbl">
+                <thead><tr><th>Category</th><th>US mg/g (UK mg/mmol)</th></tr></thead>
+                <tbody>
+                  <tr><td>A1 (normal–mild)</td><td class="mono">&lt; 27 mg/g (&lt; 3 mg/mmol)</td></tr>
+                  <tr><td>A2 (moderately increased)</td><td class="mono">27–265 mg/g (3–30 mg/mmol)</td></tr>
+                  <tr><td>A3 (severely increased)</td><td class="mono">&gt; 265 mg/g (&gt; 30 mg/mmol)</td></tr>
+                </tbody>
+              </table>
+              <p class="small">
+                Approx conversion: <span class="mono">mg/g ≈ mg/mmol × 8.84</span> (rounded).
+              </p>
+              <p class="small">
+                Note: the source text mentions “eGFR &lt; 60 mmol/L” which is a unit typo; clinically this is <span class="mono">eGFR &lt; 60 mL/min/1.73m²</span>.
+              </p>
+            </div>
+
+            <div class="mini-card">
+              <strong>Neuropathy</strong>
+              <ul>
+                <li>Symmetric polyneuropathy (stocking distribution sensory loss)</li>
+                <li>Mononeuropathy (e.g., CN III palsy)</li>
+                <li>Diabetic amyotrophy (lumbosacral plexopathy)</li>
+                <li>Autonomic neuropathy: orthostasis, gastroparesis, diarrhea, bladder dysfunction, ED</li>
+              </ul>
+            </div>
+
+            <div class="mini-card">
+              <strong>Diabetic foot</strong>
+              <ul>
+                <li>Neuropathy + ischemia → ulcers, infection (cellulitis/osteomyelitis), necrosis, amputation risk</li>
+                <li><strong>Charcot joint</strong>: neuropathic arthropathy with microtrauma → remodeling, swelling, deformity</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </details>
+
+      <details>
+        <summary>
+          Macrovascular: ASCVD risk and prevention
+          <span class="chev">⌄</span>
+        </summary>
+        <div class="content">
+          <p>
+            Diabetes increases atherosclerosis risk. Prevention focuses on smoking cessation, exercise/nutrition support,
+            lipid management (e.g., statin therapy), and blood pressure control (often ACE inhibitor/ARB where indicated).
+          </p>
+        </div>
+      </details>
+    </div>
+
+
+  </div>
+</main>
+
+</body>
+</html>
