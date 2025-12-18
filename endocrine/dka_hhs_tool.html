@@ -1,422 +1,232 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>DKA Rapid Assessment & Management</title>
 
 <style>
-  :root {
-    --primary: #9b5de5;
-    --secondary: #f7c948;
-    --bg1: #fdf7ff;
-    --bg2: #f3eaff;
-    --card-bg: #ffffff;
-    --text: #3a2a4c;
-    --radius: 14px;
-  }
-
-  body {
-    margin: 0;
-    font-family: Arial, sans-serif;
-    background: linear-gradient(135deg, var(--bg1), var(--bg2));
-    padding: 20px;
-    color: var(--text);
-  }
-
-  h1 {
-    text-align: center;
-    color: var(--primary);
-    font-size: 28px;
-    margin-bottom: 20px;
-  }
-
-  .card {
-    background: var(--card-bg);
-    border-radius: var(--radius);
-    padding: 20px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-    max-width: 720px;
-    margin: 0 auto 25px auto;
-  }
-
-  label {
-    font-weight: bold;
-    display: block;
-    margin-top: 12px;
-  }
-
-  input {
-    width: 100%;
-    padding: 10px;
-    border-radius: var(--radius);
-    border: 1px solid #ccc;
-    margin-top: 5px;
-    font-size: 16px;
-  }
-
-  button {
-    width: 100%;
-    padding: 14px;
-    margin-top: 18px;
-    background: var(--primary);
-    color: white;
-    font-size: 18px;
-    border: none;
-    border-radius: var(--radius);
-    cursor: pointer;
-    transition: 0.2s;
-  }
-
-  button:hover {
-    background: #8649d6;
-  }
-
-  h2 {
-    color: var(--primary);
-    margin-top: 18px;
-  }
-
-  .output {
-    white-space: pre-line;
-    padding: 15px;
-    background: #fff7e6;
-    border-left: 5px solid var(--secondary);
-    border-radius: var(--radius);
-    margin-top: 10px;
-  }
-
-  .muted {
-    font-size: 13px;
-    color: #5a4a70;
-    margin-top: 6px;
-  }
-
-  .grid2 {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 14px;
-  }
-
-  @media (max-width: 720px) {
-    .grid2 { grid-template-columns: 1fr; }
-  }
-
-  .pill {
-    display: inline-block;
-    background: #efe4ff;
-    color: #4a2a7a;
-    border: 1px solid #d9c7ff;
-    padding: 6px 10px;
-    border-radius: 999px;
-    font-weight: bold;
-    margin: 6px 6px 0 0;
-    font-size: 13px;
-  }
-
-  hr { border: none; border-top: 1px solid #e8ddff; margin: 18px 0; }
+:root {
+    --primary:#9b5de5;
+    --secondary:#f7c948;
+    --bg1:#fdf7ff;
+    --bg2:#f3eaff;
+    --card:#ffffff;
+    --text:#3a2a4c;
+    --radius:14px;
+}
+body {
+    margin:0;
+    font-family:Arial,sans-serif;
+    background:linear-gradient(135deg,var(--bg1),var(--bg2));
+    padding:20px;
+    color:var(--text);
+}
+h1 { text-align:center; color:var(--primary); }
+.card {
+    background:var(--card);
+    border-radius:var(--radius);
+    padding:20px;
+    max-width:650px;
+    margin:auto;
+    box-shadow:0 4px 12px rgba(0,0,0,0.1);
+}
+label { font-weight:bold; margin-top:10px; display:block; }
+input {
+    width:100%;
+    padding:10px;
+    border-radius:var(--radius);
+    border:1px solid #ccc;
+    margin-top:5px;
+}
+button {
+    width:100%;
+    margin-top:20px;
+    padding:14px;
+    background:var(--primary);
+    color:white;
+    font-size:18px;
+    border:none;
+    border-radius:var(--radius);
+    cursor:pointer;
+}
+.output {
+    white-space:pre-line;
+    background:#fff7e6;
+    padding:14px;
+    border-left:5px solid var(--secondary);
+    border-radius:var(--radius);
+    margin-top:10px;
+}
 </style>
 </head>
 
 <body>
+
 <h1>DKA Rapid Assessment & Management</h1>
 
 <div class="card">
-  <h2 style="margin-top:0;">Inputs</h2>
 
-  <div class="grid2">
-    <div>
-      <label>pH</label>
-      <input id="ph" type="number" step="0.01" placeholder="e.g., 7.12">
-    </div>
-    <div>
-      <label>HCO₃⁻ (mEq/L)</label>
-      <input id="hco3" type="number" step="0.1" placeholder="e.g., 10">
-    </div>
-  </div>
+<label>pH</label><input id="ph" type="number" step="0.01">
+<label>HCO₃⁻ (mEq/L)</label><input id="hco3" type="number">
+<label>Glucose (mg/dL)</label><input id="glucose" type="number">
+<label>Sodium (mEq/L)</label><input id="na" type="number">
 
-  <div class="grid2">
-    <div>
-      <label>Glucose (mg/dL)</label>
-      <input id="glucose" type="number" step="1" placeholder="e.g., 520">
-    </div>
-    <div>
-      <label>Serum Osmolality (mOsm/kg) (optional)</label>
-      <input id="osm" type="number" step="1" placeholder="e.g., 315">
-    </div>
-  </div>
+<label>Chloride (mEq/L) <span style="font-weight:normal">(optional)</span></label>
+<input id="cl" type="number">
 
-  <div class="grid2">
-    <div>
-      <label>Sodium Na⁺ (mEq/L)</label>
-      <input id="na" type="number" step="1" placeholder="e.g., 130">
-    </div>
-    <div>
-      <label>Chloride Cl⁻ (mEq/L) <span class="muted">(needed for anion gap)</span></label>
-      <input id="cl" type="number" step="1" placeholder="e.g., 95">
-    </div>
-  </div>
+<label>Anion Gap (reported by lab) <span style="font-weight:normal">(optional)</span></label>
+<input id="ag_lab" type="number">
 
-  <div class="grid2">
-    <div>
-      <label>Potassium K⁺ (mEq/L)</label>
-      <input id="k" type="number" step="0.1" placeholder="e.g., 4.2">
-    </div>
-    <div>
-      <label>Phosphate (mg/dL) (optional)</label>
-      <input id="phos" type="number" step="0.1" placeholder="e.g., 1.2">
-    </div>
-  </div>
+<label>Potassium (mEq/L)</label><input id="k" type="number" step="0.1">
+<label>β-Hydroxybutyrate (mmol/L)</label><input id="bhb" type="number" step="0.1">
+<label>Serum Osmolality</label><input id="osm" type="number">
+<label>Albumin (optional)</label><input id="albumin" type="number" step="0.1">
 
-  <div class="grid2">
-    <div>
-      <label>β-Hydroxybutyrate (mmol/L) (optional)</label>
-      <input id="bhb" type="number" step="0.1" placeholder="e.g., 5.6">
-    </div>
-    <div>
-      <label>Albumin (g/dL) (optional) <span class="muted">(for corrected AG)</span></label>
-      <input id="albumin" type="number" step="0.1" placeholder="e.g., 3.0">
-    </div>
-  </div>
+<button onclick="analyze()">Analyze</button>
 
-  <label>Weight (kg) (optional) <span class="muted">(for SQ insulin dosing)</span></label>
-  <input id="wt" type="number" step="0.1" placeholder="e.g., 80">
+<h2>Assessment</h2>
+<div id="assessment" class="output"></div>
 
-  <button onclick="analyze()">Analyze</button>
+<h2>Management Plan</h2>
+<div id="plan" class="output"></div>
 
-  <h2>Auto-calculations</h2>
-  <div id="calcs" class="output"></div>
+<h2>Copy-Forward Plan</h2>
+<button onclick="copyPlan()">Copy to Clipboard</button>
+<div id="copy" class="output"></div>
 
-  <h2>Assessment</h2>
-  <div id="assessment" class="output"></div>
-
-  <h2>Management Recommendations</h2>
-  <div id="plan" class="output"></div>
-
-  <h2>Transition to Subcutaneous Insulin</h2>
-  <div id="transition" class="output"></div>
-
-  <h2>Copy to Clipboard</h2>
-  <button onclick="copyPlan()">Copy A/P</button>
-  <div id="copy" class="output"></div>
 </div>
 
 <script>
-function num(id) {
-  const v = document.getElementById(id).value;
-  if (v === "" || v === null || v === undefined) return null;
-  const n = parseFloat(v);
-  return Number.isFinite(n) ? n : null;
-}
-
-function fmt(n, d=1) {
-  if (n === null || n === undefined || !Number.isFinite(n)) return "N/A";
-  return n.toFixed(d);
-}
-
 function analyze() {
-  const ph = num("ph");
-  const hco3 = num("hco3");
-  const glucose = num("glucose");
-  const na = num("na");
-  const cl = num("cl");
-  const k = num("k");
-  const bhb = num("bhb");
-  const osm = num("osm");
-  const albumin = num("albumin");
-  const phos = num("phos");
-  const wt = num("wt");
 
-  // Required minimums to do anything meaningful
-  const requiredMissing = [];
-  if (ph === null) requiredMissing.push("pH");
-  if (hco3 === null) requiredMissing.push("HCO₃");
-  if (glucose === null) requiredMissing.push("Glucose");
-  if (na === null) requiredMissing.push("Na");
-  if (cl === null) requiredMissing.push("Cl");
-  if (k === null) requiredMissing.push("K");
+const ph = parseFloat(document.getElementById("ph").value);
+const hco3 = parseFloat(document.getElementById("hco3").value);
+const glu = parseFloat(document.getElementById("glucose").value);
+const na = parseFloat(document.getElementById("na").value);
+const k = parseFloat(document.getElementById("k").value);
+const bhb = parseFloat(document.getElementById("bhb").value);
+const osm = parseFloat(document.getElementById("osm").value);
 
-  if (requiredMissing.length) {
-    alert("Missing required inputs: " + requiredMissing.join(", "));
+const clVal = document.getElementById("cl").value;
+const agLabVal = document.getElementById("ag_lab").value;
+const albVal = document.getElementById("albumin").value;
+
+if ([ph,hco3,glu,na,k].some(v => isNaN(v))) {
+    alert("Please enter pH, HCO₃, glucose, sodium, and potassium.");
     return;
-  }
+}
 
-  // Corrected sodium (classic correction factor)
-  const correctedNa = na + 1.6 * ((glucose - 100) / 100);
+const cl = clVal ? parseFloat(clVal) : null;
+const agLab = agLabVal ? parseFloat(agLabVal) : null;
+const alb = albVal ? parseFloat(albVal) : null;
 
-  // Anion gap
-  const ag = na - (cl + hco3);
-  const correctedAG = (albumin !== null) ? (ag + 2.5 * (4 - albumin)) : null;
+// Corrected sodium
+const corrNa = na + 1.6 * ((glu - 100) / 100);
 
-  // Basic DKA flagging (not a diagnosis engine; it’s a structured assistant)
-  const hasAcidosis = ph < 7.30 || hco3 < 18;
-  const likelyKetosis = (bhb !== null) ? (bhb >= 3.0) : null;
-  const highAG = ag > 12;
+// Anion gap logic
+let agCalc = null;
+let agUsed = null;
+let agSource = "";
 
-  // Severity (common bedside stratification)
-  let severity = "Mild";
-  if (ph < 7.00 || hco3 < 10) severity = "Severe";
-  else if (ph < 7.24 || hco3 < 15) severity = "Moderate";
+if (cl !== null) {
+    agCalc = na - (cl + hco3);
+}
 
-  // Calculations display
-  const calcLines = [];
-  calcLines.push(`Anion gap (AG) = Na - (Cl + HCO₃) = ${fmt(ag,1)}`);
-  if (correctedAG !== null) calcLines.push(`Albumin-corrected AG = ${fmt(correctedAG,1)} (Alb ${fmt(albumin,1)})`);
-  calcLines.push(`Corrected Na⁺ = ${fmt(correctedNa,1)} mEq/L`);
-  if (osm !== null) calcLines.push(`Measured osmolality = ${fmt(osm,0)} mOsm/kg`);
-  calcLines.push("");
-  calcLines.push(`Quick flags: ${hasAcidosis ? "Acidosis present" : "No acidosis"} | ${highAG ? "High AG" : "AG not high"} | BHB: ${bhb !== null ? fmt(bhb,1) : "N/A"}`);
+if (agCalc !== null) {
+    agUsed = agCalc;
+    agSource = agLab !== null ? "Calculated (lab AG also provided)" : "Calculated";
+} else if (agLab !== null) {
+    agUsed = agLab;
+    agSource = "Reported by lab";
+}
 
-  document.getElementById("calcs").innerText = calcLines.join("\n");
+// Corrected AG (if albumin)
+let cag = null;
+if (agUsed !== null && alb !== null) {
+    cag = agUsed + 2.5 * (4 - alb);
+}
 
-  // Assessment text
-  let assessment = [];
-  if (hasAcidosis && highAG) {
-    assessment.push(`High anion gap metabolic acidosis pattern → consistent with DKA physiology (AG >12).`);
-  } else if (hasAcidosis && !highAG) {
-    assessment.push(`Acidosis present but AG not high → consider mixed picture / hyperchloremic acidosis / other causes.`);
-  } else {
-    assessment.push(`pH/HCO₃ do not meet typical DKA acidosis thresholds; interpret in clinical context.`);
-  }
+// Severity
+let severity = "Mild";
+if (ph < 7.0 || hco3 < 10) severity = "Severe";
+else if (ph < 7.24 || hco3 < 15) severity = "Moderate";
 
-  if (likelyKetosis !== null) {
-    assessment.push(likelyKetosis ? `BHB ≥3 supports ketoacidosis.` : `BHB <3 argues against significant ketoacidosis.`);
-  } else {
-    assessment.push(`BHB not provided (if available, use for trend/resolution).`);
-  }
+// Assessment
+let assess = [];
+assess.push(`DKA severity: ${severity}`);
+assess.push(`pH ${ph}, HCO₃ ${hco3}, Glucose ${glu}`);
+assess.push(`Corrected Na⁺: ${corrNa.toFixed(1)} mEq/L`);
+if (agUsed !== null) assess.push(`Anion gap: ${agUsed.toFixed(1)} (${agSource})`);
+if (cag !== null) assess.push(`Albumin-corrected AG: ${cag.toFixed(1)}`);
+assess.push(`β-Hydroxybutyrate: ${bhb}`);
+assess.push(`Serum osmolality: ${osm}`);
 
-  assessment.push(`Severity estimate: ${severity} DKA (based on pH/HCO₃).`);
-  document.getElementById("assessment").innerText = assessment.join("\n");
+document.getElementById("assessment").innerText = assess.join("\n");
 
-  // Plan logic
-  let plan = [];
+// Plan
+let plan = [];
 
-  // Fluids
-  plan.push("1) Fluids");
-  plan.push("• Start with isotonic resuscitation (balanced crystalloid like LR is reasonable; NS also acceptable).");
-  plan.push("• Typical initial rate: 1–1.5 L in first hour (adjust for CHF/ESRD/elderly).");
+// Fluids
+plan.push("IV Fluids:");
+if (corrNa < 135) {
+    plan.push("• LR or NS 1–1.5 L in first hour (low corrected Na).");
+} else {
+    plan.push("• After initial bolus → transition to 0.45% NS.");
+}
 
-  if (correctedNa >= 135) {
-    plan.push(`• Corrected Na is normal/high (${fmt(correctedNa,1)}) → after initial bolus, consider 0.45% NS to avoid worsening hypernatremia.`);
-  } else {
-    plan.push(`• Corrected Na is low (${fmt(correctedNa,1)}) → continue isotonic fluid (LR/NS) after bolus.`);
-  }
+// Potassium
+plan.push("\nPotassium:");
+if (k < 3.3) {
+    plan.push("• K <3.3 → HOLD insulin; replete 20–30 mEq/hr.");
+} else if (k <= 5.2) {
+    plan.push("• Add 20–30 mEq KCl per liter of fluid.");
+} else {
+    plan.push("• No K replacement initially; monitor q2–4h.");
+}
 
-  if (glucose < 250) {
-    plan.push("• Glucose <250 → switch to dextrose-containing fluids (e.g., D5-0.45% NS) to allow ongoing insulin while clearing ketones.");
-  } else {
-    plan.push("• When glucose approaches 200–250 → add dextrose and keep insulin running (do NOT stop insulin early).");
-  }
+// Insulin
+plan.push("\nInsulin:");
+if (k < 3.3) {
+    plan.push("• Do NOT start insulin until K ≥3.3.");
+} else {
+    plan.push(severity === "Mild"
+        ? "• Start insulin infusion 0.05 units/kg/hr."
+        : "• Start insulin infusion 0.1 units/kg/hr."
+    );
+}
 
-  // Potassium gating
-  plan.push("\n2) Potassium (critical gating step before insulin)");
-  if (k < 3.3) {
-    plan.push(`• K = ${fmt(k,1)} (<3.3): HOLD insulin. Replete K first.`);
-    plan.push("• Typical repletion: KCl 20–30 mEq/hour with telemetry until K ≥3.3, then start insulin.");
-  } else if (k <= 5.2) {
-    plan.push(`• K = ${fmt(k,1)} (3.3–5.2): start insulin + add potassium to fluids.`);
-    plan.push("• Add KCl 20–30 mEq per liter of IV fluid; target serum K ~4–5.");
-  } else {
-    plan.push(`• K = ${fmt(k,1)} (>5.2): start insulin, but DO NOT give K initially; recheck frequently.`);
-  }
+// Glucose
+if (glu < 250) {
+    plan.push("\n• Glucose <250 → add D5 (D5-0.45% NS).");
+}
 
-  // Phosphate
-  plan.push("\n3) Phosphate (optional, but useful)");
-  if (phos === null) {
-    plan.push("• Phosphate not provided. Consider checking if severe DKA, weakness, respiratory failure risk, or prolonged course.");
-  } else if (phos < 1.0) {
-    plan.push(`• Phos = ${fmt(phos,1)} (<1.0): consider phosphate replacement (often as KPhos) especially if weakness/resp failure/cardiac dysfunction.`);
-  } else if (phos < 2.0) {
-    plan.push(`• Phos = ${fmt(phos,1)} (low): replacement may be reasonable if symptomatic or high-risk; avoid over-replacement.`);
-  } else {
-    plan.push(`• Phos = ${fmt(phos,1)}: no routine replacement needed.`);
-  }
+// Bicarbonate
+if (ph < 6.9) {
+    plan.push("\nBicarbonate:");
+    plan.push("• Consider bicarbonate infusion (ICU only).");
+}
 
-  // Insulin dose choice
-  plan.push("\n4) Insulin infusion");
-  if (k < 3.3) {
-    plan.push("• Insulin: HOLD until K ≥3.3.");
-  } else {
-    if (severity === "Mild") {
-      plan.push("• Mild DKA: start insulin infusion 0.05 units/kg/hour (reasonable for mild/stable patients).");
-    } else {
-      plan.push(`• ${severity} DKA: start insulin infusion 0.1 units/kg/hour.`);
-    }
-    plan.push("• Goal: close the anion gap / clear ketones (glucose falling alone is NOT resolution).");
-  }
+// Resolution
+plan.push("\nResolution targets:");
+plan.push("• Glucose <200 mg/dL");
+plan.push("• HCO₃ ≥15 and pH >7.3");
+plan.push("• Anion gap ≤12");
 
-  // Bicarbonate
-  plan.push("\n5) Bicarbonate");
-  if (ph < 6.9) {
-    plan.push(`• pH = ${fmt(ph,2)} (<6.9): consider bicarbonate in ICU setting (very severe acidemia).`);
-    plan.push("• Watch K closely (bicarb can drop potassium).");
-  } else {
-    plan.push(`• pH = ${fmt(ph,2)}: bicarbonate generally not recommended (treat with fluids + insulin).`);
-  }
+document.getElementById("plan").innerText = plan.join("\n");
 
-  // Monitoring
-  plan.push("\n6) Monitoring / targets");
-  plan.push("• Recheck BMP/AG (and BHB if available) about q2–4h early; replace electrolytes proactively.");
-  plan.push("• Resolution (typical): glucose <200 AND HCO₃ ≥15 AND pH >7.3 AND anion gap closed.");
-
-  document.getElementById("plan").innerText = plan.join("\n");
-
-  // Transition to SQ insulin logic
-  let trans = [];
-  const resolved = (glucose < 200) && (hco3 >= 15) && (ph > 7.3) && (ag <= 12);
-
-  trans.push(`Resolution check: ${resolved ? "MEETS typical resolution criteria ✅" : "NOT yet resolved ❌"}`);
-  trans.push(`(Glucose ${fmt(glucose,0)}, HCO₃ ${fmt(hco3,1)}, pH ${fmt(ph,2)}, AG ${fmt(ag,1)})`);
-  trans.push("");
-
-  trans.push("Transition steps (once resolved AND patient can eat):");
-  trans.push("• Give basal (long-acting) insulin first, then continue IV insulin overlap for 2–4 hours to prevent rebound DKA."); // ADA overlap
-  trans.push("• Start prandial/correction insulin with meals once eating.");
-  trans.push("• Do NOT stop IV insulin until the overlap window is complete.");
-
-  if (wt !== null && wt > 0) {
-    // Conservative default TDD for insulin-naïve; user can modify per context
-    const tddLow = 0.3 * wt;
-    const tddHigh = 0.5 * wt;
-    const basalLow = 0.5 * tddLow;
-    const basalHigh = 0.5 * tddHigh;
-
-    trans.push("");
-    trans.push(`Weight-based option (if insulin-naïve; adjust for age/CKD/insulin sensitivity):`);
-    trans.push(`• Estimate TDD ~0.3–0.5 U/kg/day → ${fmt(tddLow,0)}–${fmt(tddHigh,0)} units/day (wt ${fmt(wt,1)} kg).`);
-    trans.push(`• Basal ~50% of TDD → ${fmt(basalLow,0)}–${fmt(basalHigh,0)} units once daily.`);
-    trans.push("• Prandial total ~50% split across meals + correction scale.");
-  } else {
-    trans.push("");
-    trans.push("Dosing note:");
-    trans.push("• If patient has a home regimen, resume/adjust it.");
-    trans.push("• If insulin-naïve: typical total daily dose range is ~0.3–0.5 U/kg/day (needs weight to calculate).");
-  }
-
-  document.getElementById("transition").innerText = trans.join("\n");
-
-  // Copy-forward text
-  const copy =
+// Copy
+document.getElementById("copy").innerText =
 `Assessment:
-- ${assessment.join("\n- ")}
-
-Auto-calcs:
-- AG: ${fmt(ag,1)}${correctedAG !== null ? " | Corrected AG: " + fmt(correctedAG,1) : ""}
-- Corrected Na: ${fmt(correctedNa,1)}
+${assess.join("\n")}
 
 Plan:
-${plan.join("\n")}
-
-Transition to SQ:
-${trans.join("\n")}`;
-
-  document.getElementById("copy").innerText = copy;
+${plan.join("\n")}`;
 }
 
 function copyPlan() {
-  const text = document.getElementById("copy").innerText;
-  navigator.clipboard.writeText(text);
-  alert("Copied!");
+navigator.clipboard.writeText(document.getElementById("copy").innerText);
+alert("Copied!");
 }
 </script>
 
