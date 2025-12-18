@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Arterial Supply to the Brain – Clinical Stroke-Oriented Guide</title>
+
+<style>
+:root {
+  --neuro-main: #4a90e2;
+  --neuro-light: #eef5ff;
+  --neuro-accent: #2f6fb3;
+  --bg: #f7f9fc;
+  --card: #ffffff;
+  --text-main: #1f2933;
+  --text-muted: #52606d;
+  --border: #dce3ee;
+  --radius: 14px;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  background: var(--bg);
+  color: var(--text-main);
+}
+
+header {
+  background: linear-gradient(135deg, var(--neuro-main), var(--neuro-accent));
+  color: white;
+  padding: 20px;
+}
+
+header h1 {
+  margin: 0 0 6px 0;
+  font-size: 22px;
+}
+
+header p {
+  margin: 0;
+  font-size: 14px;
+  opacity: 0.95;
+}
+
+.nav-buttons {
+  display: flex;
+  gap: 10px;
+  margin-top: 14px;
+}
+
+.nav-buttons a {
+  text-decoration: none;
+  background: rgba(255,255,255,0.15);
+  color: white;
+  padding: 6px 12px;
+  border-radius: 999px;
+  font-size: 13px;
+}
+
+main {
+  padding: 20px;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.card {
+  background: var(--card);
+  border-radius: var(--radius);
+  padding: 18px;
+  margin-bottom: 18px;
+  border: 1px solid var(--border);
+}
+
+.card h2, .card h3 {
+  margin-top: 0;
+  color: var(--neuro-accent);
+}
+
+figure {
+  margin: 12px 0 16px 0;
+}
+
+figure img {
+  width: 100%;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+}
+
+figcaption {
+  font-size: 13px;
+  color: var(--text-muted);
+  margin-top: 6px;
+}
+
+ul { margin: 8px 0 10px 18px; }
+
+/* ===== FIXED / MISSING STYLES ===== */
+
+.rule {
+  background: #ffffff;
+  border: 1px dashed #b7cff0;
+  border-radius: 12px;
+  padding: 12px 14px;
+  margin-top: 12px;
+  font-size: 14px;
+}
+
+.badge {
+  display: inline-block;
+  font-size: 12px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: var(--neuro-light);
+  color: var(--neuro-accent);
+  border: 1px solid #d6e7ff;
+  margin-left: 8px;
+}
+
+details {
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 12px 14px;
+  margin-bottom: 12px;
+  background: #fbfdff;
+}
+
+details summary {
+  cursor: pointer;
+  font-weight: 600;
+  color: var(--neuro-accent);
+  list-style: none;
+}
+
+details summary::-webkit-details-marker {
+  display: none;
+}
+
+.kv {
+  display: grid;
+  grid-template-columns: 160px 1fr;
+  gap: 8px 12px;
+  margin-top: 10px;
+}
+
+.k {
+  color: var(--text-muted);
+  font-weight: 600;
+  font-size: 13px;
+}
+
+.v {
+  font-size: 14px;
+}
+
+.pearl {
+  background: var(--neuro-light);
+  border-left: 4px solid var(--neuro-main);
+  padding: 10px 12px;
+  border-radius: 10px;
+  font-size: 14px;
+  margin-top: 10px;
+}
+
+.footer-note {
+  text-align: center;
+  font-size: 13px;
+  color: var(--text-muted);
+  margin: 30px 0 10px;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <h1>Arterial Supply to the Brain</h1>
+  <p>Clinically oriented review for stroke localization and bedside reasoning</p>
+  <div class="nav-buttons">
+    <a href="../index.html">Home</a>
+    <a href="../neurology.html">Back to Neurology</a>
+  </div>
+</header>
+
+<main>
+
+  <div class="card">
+    <h2>Purpose of This Guide</h2>
+    <p>
+      Use this page to connect <strong>symptoms → brain territory → likely vessel</strong>.
+      The goal is not to memorize everything, but to have a reliable mental map during stroke alerts.
+    </p>
+    <div class="rule">
+      <strong>One-line rule:</strong> <span>Anterior circulation tends to cause <strong>weakness/speech</strong>; posterior circulation tends to cause <strong>dizziness/vision/coordination</strong>.</span>
+    </div>
+  </div>
+
+<div class="card">
+  <h2>Overview of Cerebral Arterial Supply</h2>
+  <figure>
+    <img src="images/1.png" alt="ACA MCA PCA cortical territories" />
+    <figcaption>ACA (medial), MCA (lateral), and PCA (occipital/medial) cortical territories.</figcaption>
+  </figure>
+  <p>
+    The brain receives blood from two paired arterial systems:
+  </p>
+  <ul>
+    <li><strong>Internal carotid arteries</strong> (anterior circulation)</li>
+    <li><strong>Vertebral arteries</strong> (posterior circulation)</li>
+  </ul>
+  <p>
+    These arteries form an anastomotic network at the base of the brain known as the <strong>Circle of Willis</strong>, from which branches supply the cerebrum, deep structures, brainstem, and cerebellum.
+  </p>
+</div>
+
+<div class="card">
+  <h2>Anterior Circulation <span class="badge">Carotid system</span></h2>
+
+  <details>
+    <summary>Internal Carotid Artery (ICA)</summary>
+    <div class="kv">
+      <div class="k">Supplies</div>
+      <div class="v">Feeds ACA + MCA territories; deep structures via perforators (lenticulostriate arteries).</div>
+      <div class="k">Classic deficits</div>
+      <div class="v">
+        <ul>
+          <li>Large hemispheric stroke pattern</li>
+          <li>Severe contralateral weakness</li>
+          <li>Aphasia (dominant hemisphere) or neglect (non-dominant hemisphere)</li>
+          <li>May have reduced level of consciousness</li>
+        </ul>
+      </div>
+      <div class="k">Common note</div>
+      <div class="v">ICA terminus occlusions are common LVOs and often thrombectomy targets.</div>
+    </div>
+    <div class="pearl">If the deficit is big and the exam looks like “half the brain is offline,” think ICA/M1.</div>
+  </details>
+
+  <details>
+    <summary>Anterior Cerebral Artery (ACA)</summary>
+    <div class="kv">
+      <div class="k">Supplies</div>
+      <div class="v">Medial frontal/parietal lobes; leg motor & sensory cortex.</div>
+      <div class="k">Classic deficits</div>
+      <div class="v">
+        <ul>
+          <li>Contralateral <strong>leg &gt; arm</strong> weakness and sensory loss</li>
+          <li>Behavioral changes / abulia</li>
+          <li>Urinary incontinence (can occur)</li>
+        </ul>
+      </div>
+    </div>
+    <div class="pearl">Leg-predominant weakness with preserved arm strength is your ACA clue.</div>
+  </details>
+
+  <details>
+    <summary>Middle Cerebral Artery (MCA) <span class="badge">Most common</span></summary>
+    <div class="kv">
+      <div class="k">Supplies</div>
+      <div class="v">Lateral frontal, parietal, temporal lobes; face/arm motor & sensory cortex; language areas (dominant hemisphere).</div>
+      <div class="k">Classic deficits</div>
+      <div class="v">
+        <ul>
+          <li>Contralateral <strong>face/arm &gt; leg</strong> weakness and sensory loss</li>
+          <li><strong>Aphasia</strong> (left/dominant MCA)</li>
+          <li><strong>Neglect</strong> (right/non-dominant MCA)</li>
+          <li>Gaze deviation toward the lesion (common in large strokes)</li>
+        </ul>
+      </div>
+      <div class="k">LVO note</div>
+      <div class="v">MCA M1 (and proximal M2 in many centers) are common thrombectomy targets.</div>
+    </div>
+    <div class="pearl">Low NIHSS can still be disabling in MCA strokes (e.g., aphasia or hemianopsia).</div>
+  </details>
+
+</div>
+
+
+<div class="card">
+  <h2>Circle of Willis</h2>
+  <figure>
+    <img src="images/2.png" alt="Circle of Willis diagram" />
+    <figcaption>Circle of Willis showing anterior and posterior communicating arteries.</figcaption>
+  </figure>
+  <p>
+    The Circle of Willis provides potential collateral flow via the anterior and posterior communicating arteries, though it is often anatomically incomplete.
+  </p>
+</div>
+
+<div class="card">
+  <h2>Vertebral & Basilar Arteries</h2>
+  <figure>
+    <img src="images/3.png" alt="Vertebral arteries forming basilar artery" />
+    <figcaption>Vertebral arteries ascending from the subclavian arteries to form the basilar artery.</figcaption>
+  </figure>
+  <p>
+    Vertebral arteries arise from the subclavian arteries, ascend through the transverse foramina, and enter the skull via the foramen magnum. They converge to form the basilar artery.
+  </p>
+</div>
+
+<div class="card">
+  <h2>Posterior Circulation <span class="badge">Vertebrobasilar system</span></h2>
+
+  <details>
+    <summary>Vertebral Arteries</summary>
+    <div class="kv">
+      <div class="k">Supplies</div>
+      <div class="v">Brainstem and cerebellum via multiple branches; contributes to basilar artery formation.</div>
+      <div class="k">Classic deficits</div>
+      <div class="v">
+        <ul>
+          <li>Vertigo/dizziness</li>
+          <li>Ataxia</li>
+          <li>Cranial nerve findings (diplopia, dysarthria, dysphagia)</li>
+        </ul>
+      </div>
+    </div>
+    <div class="pearl">Posterior circulation strokes often present with “weird” mixed symptoms—trust the exam.</div>
+  </details>
+
+  <details>
+    <summary>PICA (Posterior Inferior Cerebellar Artery)</summary>
+    <div class="kv">
+      <div class="k">Supplies</div>
+      <div class="v">Lateral medulla and inferior cerebellum.</div>
+      <div class="k">Classic deficits</div>
+      <div class="v">
+        <ul>
+          <li>Dysphagia, hoarseness</li>
+          <li>Vertigo, nystagmus</li>
+          <li>Ipsilateral facial pain/temp loss + contralateral body pain/temp loss</li>
+        </ul>
+      </div>
+      <div class="k">Named syndrome</div>
+      <div class="v">Wallenberg (lateral medullary) syndrome.</div>
+    </div>
+    <div class="pearl">If swallowing is suddenly unsafe with vertigo and ataxia, think lateral medulla/PICA.</div>
+  </details>
+
+  <details>
+    <summary>Basilar Artery <span class="badge">High risk</span></summary>
+    <div class="kv">
+      <div class="k">Supplies</div>
+      <div class="v">Brainstem (pons), cerebellum, thalami (via branches), posterior circulation hub.</div>
+      <div class="k">Classic deficits</div>
+      <div class="v">
+        <ul>
+          <li>Decreased consciousness/coma</li>
+          <li>Quadriparesis or severe weakness</li>
+          <li>Locked-in syndrome (rare but classic)</li>
+          <li>Respiratory compromise</li>
+        </ul>
+      </div>
+      <div class="k">Clinical note</div>
+      <div class="v">Basilar occlusion is a neurologic emergency; CTA is critical.</div>
+    </div>
+    <div class="pearl">“Dizzy + can’t walk + brainstem signs” → CTA now. Basilar strokes do not wait politely.</div>
+  </details>
+
+  <details>
+    <summary>PCA (Posterior Cerebral Artery)</summary>
+    <div class="kv">
+      <div class="k">Supplies</div>
+      <div class="v">Occipital lobes (visual cortex) and thalamus.</div>
+      <div class="k">Classic deficits</div>
+      <div class="v">
+        <ul>
+          <li>Contralateral homonymous hemianopia</li>
+          <li>Memory impairment/confusion (can occur)</li>
+          <li>Often minimal weakness</li>
+        </ul>
+      </div>
+    </div>
+    <div class="pearl">Vision loss can be the main symptom—test visual fields deliberately.</div>
+  </details>
+
+</div>
+
+
+<div class="card">
+  <h2>Spinal Cord Blood Supply (Brief)</h2>
+  <ul>
+    <li>Anterior spinal artery → anterior 2/3 of cord</li>
+    <li>Posterior spinal arteries → posterior columns</li>
+    <li>Artery of Adamkiewicz supplies inferior 2/3 of cord</li>
+  </ul>
+</div>
+
+<div class="card">
+  <h2>High-Yield Clinical Summary</h2>
+  <ul>
+    <li>Anterior circulation → weakness and speech deficits</li>
+    <li>Posterior circulation → dizziness, vision loss, ataxia, cranial nerve findings</li>
+    <li>Posterior strokes may have normal early CT</li>
+    <li>Disability matters more than NIHSS score</li>
+  </ul>
+</div>
+
+<p class="footer-note">Neurology Review • Arterial Supply & Stroke Syndromes</p>
+
+</main>
+
+</body>
+</html>

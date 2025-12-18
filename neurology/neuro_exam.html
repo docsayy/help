@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Neurologic Exam Guide – Stepwise Bedside Approach</title>
+<style>
+:root {
+  --neuro-main: #4a90e2;
+  --neuro-light: #eef5ff;
+  --neuro-accent: #2f6fb3;
+  --bg: #f7f9fc;
+  --card: #ffffff;
+  --text-main: #1f2933;
+  --text-muted: #52606d;
+  --border: #dce3ee;
+  --radius: 14px;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  background: var(--bg);
+  color: var(--text-main);
+}
+header {
+  background: linear-gradient(135deg, var(--neuro-main), var(--neuro-accent));
+  color: white;
+  padding: 20px;
+}
+header h1 {
+  margin: 0 0 6px 0;
+  font-size: 22px;
+}
+header p {
+  margin: 0;
+  font-size: 14px;
+  opacity: 0.95;
+}
+.nav-buttons {
+  display: flex;
+  gap: 10px;
+  margin-top: 14px;
+}
+.nav-buttons a {
+  text-decoration: none;
+  background: rgba(255,255,255,0.15);
+  color: white;
+  padding: 6px 12px;
+  border-radius: 999px;
+  font-size: 13px;
+}
+main {
+  padding: 20px;
+  max-width: 900px;
+  margin: 0 auto;
+}
+.card {
+  background: var(--card);
+  border-radius: var(--radius);
+  padding: 18px;
+  margin-bottom: 18px;
+  border: 1px solid var(--border);
+}
+.card h2 {
+  margin-top: 0;
+  color: var(--neuro-accent);
+  font-size: 18px;
+}
+.badge {
+  display: inline-block;
+  font-size: 12px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: var(--neuro-light);
+  color: var(--neuro-accent);
+  border: 1px solid #d6e7ff;
+  margin-left: 8px;
+}
+details {
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 12px 14px;
+  margin-bottom: 12px;
+  background: #fbfdff;
+}
+details summary {
+  cursor: pointer;
+  font-weight: 700;
+  color: var(--neuro-accent);
+  list-style: none;
+}
+details summary::-webkit-details-marker { display: none; }
+.step {
+  display: inline-block;
+  font-size: 12px;
+  padding: 3px 10px;
+  border-radius: 999px;
+  background: var(--neuro-light);
+  color: var(--neuro-accent);
+  border: 1px solid #d6e7ff;
+  margin-right: 8px;
+}
+.kv {
+  display: grid;
+  grid-template-columns: 160px 1fr;
+  gap: 8px 12px;
+  margin-top: 10px;
+}
+.k {
+  color: var(--text-muted);
+  font-weight: 700;
+  font-size: 13px;
+}
+.v {
+  color: var(--text-main);
+  font-size: 14px;
+}
+ul { margin: 8px 0 10px 18px; }
+.pearl {
+  background: var(--neuro-light);
+  border-left: 4px solid var(--neuro-main);
+  padding: 10px 12px;
+  border-radius: 10px;
+  font-size: 14px;
+  margin-top: 10px;
+}
+.rule {
+  background: #ffffff;
+  border: 1px dashed #b7cff0;
+  border-radius: 12px;
+  padding: 12px 14px;
+  margin-top: 12px;
+  font-size: 14px;
+}
+.rule strong { color: var(--neuro-accent); }
+hr {
+  border: none;
+  border-top: 1px solid var(--border);
+  margin: 12px 0;
+}
+.footer-note {
+  text-align: center;
+  font-size: 13px;
+  color: var(--text-muted);
+  margin: 30px 0 10px;
+}
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Neurologic Exam – Stepwise Bedside Approach</h1>
+  <p>A smart, fast, and complete neuro exam with localization built into each step</p>
+  <div class="nav-buttons">
+    <a href="../index.html">Home</a>
+    <a href="../neurology.html">Back to Neurology</a>
+  </div>
+</header>
+
+<main>
+
+<div class="card">
+  <h2>How to Use This Guide</h2>
+  <p>
+    This is a <strong>top-to-bottom neurologic exam</strong> designed for real bedside use. Each step includes:
+    <strong>how to do it</strong>, <strong>what it tests</strong>, and <strong>how abnormal findings help localize the lesion</strong>.
+  </p>
+  <div class="rule">
+    <strong>Localization rule of thumb:</strong> 
+    <span><strong>UMN signs</strong> (hyperreflexia, spasticity, Babinski) suggest brain/spinal cord; <strong>LMN signs</strong> (atrophy, fasciculations, hyporeflexia) suggest root/nerve.</span>
+  </div>
+</div>
+
+<div class="card">
+  <h2>Stepwise Exam</h2>
+
+  <details open>
+    <summary><span class="step">Step 0</span> Safety + One-Minute Triage</summary>
+    <div class="kv">
+      <div class="k">Do this</div>
+      <div class="v">
+        <ul>
+          <li>Check airway/respiratory effort if bulbar symptoms, myasthenia, GBS.</li>
+          <li>Glucose immediately for any focal deficit or AMS.</li>
+          <li>Ask: <strong>Last known well</strong> and time course (sudden vs progressive).</li>
+        </ul>
+      </div>
+      <div class="k">What it tests</div>
+      <div class="v">Identifies reversible mimics and high-risk neuromuscular weakness.</div>
+      <div class="k">Localization clue</div>
+      <div class="v">Sudden onset suggests vascular; progressive suggests infectious/inflammatory/toxic/metabolic or compressive.</div>
+    </div>
+    <div class="pearl">If the story is sudden and focal, treat it like stroke until proven otherwise.</div>
+  </details>
+
+  <details>
+    <summary><span class="step">Step 1</span> Mental Status (Attention, Orientation, Memory)</summary>
+    <div class="kv">
+      <div class="k">Do this</div>
+      <div class="v">
+        <ul>
+          <li>Level of arousal: alert, drowsy, stuporous.</li>
+          <li>Attention: spell WORLD backward or months backward.</li>
+          <li>Orientation: person/place/time/situation.</li>
+          <li>Immediate recall (3 words), delayed recall (after 3–5 min).</li>
+        </ul>
+      </div>
+      <div class="k">What it tests</div>
+      <div class="v">Diffuse cortical function and reticular activating system (brainstem arousal network).</div>
+      <div class="k">Localization clue</div>
+      <div class="v">Primary attention impairment = delirium/diffuse encephalopathy. Profound arousal impairment suggests brainstem/thalamic involvement or severe systemic illness.</div>
+    </div>
+  </details>
+
+  <details>
+    <summary><span class="step">Step 2</span> Speech & Language (Aphasia vs Dysarthria)</summary>
+    <div class="kv">
+      <div class="k">Do this</div>
+      <div class="v">
+        <ul>
+          <li>Fluency: conversational speech.</li>
+          <li>Comprehension: follow a 2-step command.</li>
+          <li>Repetition: “No ifs, ands, or buts.”</li>
+          <li>Naming: pen, watch, badge.</li>
+          <li>Articulation: listen for slurring (dysarthria).</li>
+        </ul>
+      </div>
+      <div class="k">What it tests</div>
+      <div class="v">Dominant hemisphere language network; motor speech pathways for dysarthria.</div>
+      <div class="k">Localization clue</div>
+      <div class="v">Aphasia localizes to dominant hemisphere cortex (often MCA). Dysarthria suggests motor speech pathway, brainstem, cerebellum, or peripheral/bulbar weakness.</div>
+    </div>
+    <div class="pearl">Aphasia can be severely disabling even with low NIHSS.</div>
+  </details>
+
+  <details>
+    <summary><span class="step">Step 3</span> Cranial Nerves (CN II–XII)</summary>
+    <div class="kv">
+      <div class="k">Do this</div>
+      <div class="v">
+        <ul>
+          <li><strong>CN II:</strong> pupils, visual fields by confrontation, fundus if possible.</li>
+          <li><strong>CN III/IV/VI:</strong> EOMs, diplopia, ptosis; check for nystagmus.</li>
+          <li><strong>CN V/VII:</strong> facial sensation and facial movements (raise eyebrows, smile).</li>
+          <li><strong>CN VIII:</strong> hearing; dizziness context (see HINTS section below).</li>
+          <li><strong>CN IX/X:</strong> palate elevation, voice quality, swallow safety.</li>
+          <li><strong>CN XI:</strong> shoulder shrug.</li>
+          <li><strong>CN XII:</strong> tongue midline, fasciculations.</li>
+        </ul>
+      </div>
+      <div class="k">What it tests</div>
+      <div class="v">Brainstem nuclei/tracts and peripheral cranial nerves.</div>
+      <div class="k">Localization clue</div>
+      <div class="v">“Crossed findings” (ipsilateral cranial nerve deficit with contralateral body weakness/sensory loss) strongly suggests brainstem stroke.</div>
+    </div>
+    <div class="pearl">Diplopia + dysarthria + dysphagia + ataxia = posterior circulation until proven otherwise.</div>
+  </details>
+
+  <details>
+    <summary><span class="step">Step 4</span> Motor Exam (Strength, Tone, Drift)</summary>
+    <div class="kv">
+      <div class="k">Do this</div>
+      <div class="v">
+        <ul>
+          <li>Observe bulk: atrophy? fasciculations?</li>
+          <li>Tone: spastic vs flaccid.</li>
+          <li>Pronator drift: arms out, palms up, eyes closed.</li>
+          <li>Strength: proximal and distal in all limbs (grade if needed).</li>
+        </ul>
+      </div>
+      <div class="k">What it tests</div>
+      <div class="v">Corticospinal tract, LMN units, and neuromuscular junction/muscle patterns.</div>
+      <div class="k">Localization clue</div>
+      <div class="v">UMN pattern: spasticity + hyperreflexia. LMN pattern: atrophy/fasciculations + hyporeflexia. Proximal weakness suggests myopathy; fatigable weakness suggests NMJ.</div>
+    </div>
+    <div class="pearl">Pronator drift is one of the fastest sensitive screens for subtle UMN weakness.</div>
+  </details>
+
+  <details>
+    <summary><span class="step">Step 5</span> Reflexes (and Babinski)</summary>
+    <div class="kv">
+      <div class="k">Do this</div>
+      <div class="v">
+        <ul>
+          <li>Biceps, triceps, brachioradialis, patellar, Achilles.</li>
+          <li>Compare side-to-side.</li>
+          <li>Plantar response (Babinski).</li>
+        </ul>
+      </div>
+      <div class="k">What it tests</div>
+      <div class="v">Integrity of reflex arcs (LMN) and descending inhibition (UMN).</div>
+      <div class="k">Localization clue</div>
+      <div class="v">Hyperreflexia/Babinski = UMN (brain/spinal cord). Hyporeflexia = peripheral nerve/root, early spinal shock, or neuropathy.</div>
+    </div>
+  </details>
+
+  <details>
+    <summary><span class="step">Step 6</span> Sensory Exam (Pain, Vibration, Proprioception)</summary>
+    <div class="kv">
+      <div class="k">Do this</div>
+      <div class="v">
+        <ul>
+          <li>Light touch + pinprick in limbs.</li>
+          <li>Vibration (tuning fork) at toes/ankles if neuropathy suspected.</li>
+          <li>Proprioception at great toe.</li>
+          <li>Look for a sensory level on trunk if myelopathy suspected.</li>
+        </ul>
+      </div>
+      <div class="k">What it tests</div>
+      <div class="v">Spinothalamic (pain/temp) and dorsal columns (vibration/proprioception).</div>
+      <div class="k">Localization clue</div>
+      <div class="v">Dermatomal pattern suggests root. Stocking-glove suggests peripheral neuropathy. Sensory level suggests spinal cord lesion.</div>
+    </div>
+    <div class="pearl">A clear sensory level is spinal cord until proven otherwise—image the spine urgently if new.</div>
+  </details>
+
+  <details>
+    <summary><span class="step">Step 7</span> Coordination (Cerebellar)</summary>
+    <div class="kv">
+      <div class="k">Do this</div>
+      <div class="v">
+        <ul>
+          <li>Finger–nose–finger and heel–shin.</li>
+          <li>Rapid alternating movements.</li>
+          <li>Check for truncal ataxia (sitting balance).</li>
+        </ul>
+      </div>
+      <div class="k">What it tests</div>
+      <div class="v">Cerebellum and its connections (often posterior circulation).</div>
+      <div class="k">Localization clue</div>
+      <div class="v">Ipsilateral limb ataxia suggests cerebellar hemisphere. Severe gait/truncal ataxia suggests midline cerebellum or vestibular pathways.</div>
+    </div>
+  </details>
+
+  <details>
+    <summary><span class="step">Step 8</span> Gait (and Romberg)</summary>
+    <div class="kv">
+      <div class="k">Do this</div>
+      <div class="v">
+        <ul>
+          <li>Normal gait, tandem gait (if safe).</li>
+          <li>Heel walk and toe walk (if safe).</li>
+          <li>Romberg: feet together, eyes closed.</li>
+        </ul>
+      </div>
+      <div class="k">What it tests</div>
+      <div class="v">Integrates strength, sensation, cerebellum, vestibular function.</div>
+      <div class="k">Localization clue</div>
+      <div class="v">Romberg positive (falls with eyes closed) suggests proprioceptive loss. Wide-based gait suggests cerebellar. Shuffling suggests parkinsonism.</div>
+    </div>
+    <div class="pearl">In “dizzy” patients, inability to walk normally is a major central red flag.</div>
+  </details>
+
+</div>
+
+<div class="card">
+  <h2>HINTS Exam <span class="badge">Only for Acute Vestibular Syndrome</span></h2>
+  <p>
+    The HINTS exam is valid only in <strong>acute vestibular syndrome</strong> (continuous vertigo hours–days + spontaneous nystagmus + gait instability).
+    It is not designed for episodic or positional dizziness.
+  </p>
+
+  <details>
+    <summary><span class="step">H</span> Head Impulse</summary>
+    <div class="kv">
+      <div class="k">How</div>
+      <div class="v">Patient fixates on your nose; quickly rotate head ~15–20° to each side.</div>
+      <div class="k">Interpret</div>
+      <div class="v"><strong>Abnormal</strong> (corrective saccade) → peripheral. <strong>Normal</strong> head impulse in AVS → concerning for central stroke.</div>
+    </div>
+  </details>
+
+  <details>
+    <summary><span class="step">N</span> Nystagmus</summary>
+    <div class="kv">
+      <div class="k">How</div>
+      <div class="v">Observe primary gaze, then left/right gaze.</div>
+      <div class="k">Interpret</div>
+      <div class="v">Unidirectional horizontal → peripheral. Direction-changing, vertical, or pure torsional → central.</div>
+    </div>
+  </details>
+
+  <details>
+    <summary><span class="step">T</span> Test of Skew</summary>
+    <div class="kv">
+      <div class="k">How</div>
+      <div class="v">Alternate cover/uncover each eye; look for vertical re-fixation.</div>
+      <div class="k">Interpret</div>
+      <div class="v">Vertical corrective movement → central (brainstem) sign.</div>
+    </div>
+  </details>
+
+  <div class="pearl"><strong>Any one central sign</strong> (normal HIT, direction-changing/vertical nystagmus, or skew) → treat as posterior circulation stroke until proven otherwise.</div>
+</div>
+
+<div class="card">
+  <h2>Ultra-Fast Localization Cheatsheet</h2>
+  <ul>
+    <li><strong>Cortex:</strong> aphasia, neglect, visual field cut, seizures</li>
+    <li><strong>Internal capsule:</strong> pure motor stroke (face/arm/leg) with minimal cortical signs</li>
+    <li><strong>Brainstem:</strong> crossed findings (CN deficit + contralateral weakness/sensory loss)</li>
+    <li><strong>Spinal cord:</strong> sensory level, bilateral weakness, bowel/bladder changes</li>
+    <li><strong>Peripheral nerve:</strong> distal weakness + sensory loss in a nerve distribution</li>
+    <li><strong>NMJ:</strong> fatigable weakness, ptosis/diplopia, normal sensation</li>
+    <li><strong>Myopathy:</strong> proximal weakness, normal sensation, reflexes often preserved until late</li>
+  </ul>
+</div>
+
+<p class="footer-note">Neurology Review • Stepwise Neuro Exam</p>
+
+</main>
+
+</body>
+</html>

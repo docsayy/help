@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Stroke & Brain Imaging Guide</title>
+<style>
+:root {
+  --neuro-main: #4a90e2;
+  --neuro-light: #eef5ff;
+  --neuro-accent: #2f6fb3;
+  --bg: #f7f9fc;
+  --card: #ffffff;
+  --text-main: #1f2933;
+  --text-muted: #52606d;
+  --border: #dce3ee;
+  --radius: 14px;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  background: var(--bg);
+  color: var(--text-main);
+}
+header {
+  background: linear-gradient(135deg, var(--neuro-main), var(--neuro-accent));
+  color: white;
+  padding: 20px;
+}
+header h1 {
+  margin: 0 0 6px 0;
+  font-size: 22px;
+}
+header p {
+  margin: 0;
+  font-size: 14px;
+  opacity: 0.95;
+}
+.nav-buttons {
+  display: flex;
+  gap: 10px;
+  margin-top: 14px;
+}
+.nav-buttons a {
+  text-decoration: none;
+  background: rgba(255,255,255,0.15);
+  color: white;
+  padding: 6px 12px;
+  border-radius: 999px;
+  font-size: 13px;
+}
+main {
+  padding: 20px;
+  max-width: 900px;
+  margin: 0 auto;
+}
+.card {
+  background: var(--card);
+  border-radius: var(--radius);
+  padding: 18px;
+  margin-bottom: 18px;
+  border: 1px solid var(--border);
+}
+.card h2 {
+  margin-top: 0;
+  color: var(--neuro-accent);
+  font-size: 18px;
+}
+details {
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 12px 14px;
+  margin-bottom: 12px;
+  background: #fbfdff;
+}
+details summary {
+  cursor: pointer;
+  font-weight: 600;
+  color: var(--neuro-accent);
+  list-style: none;
+}
+details summary::-webkit-details-marker { display: none; }
+details p {
+  margin: 10px 0 6px 0;
+  color: var(--text-main);
+}
+details ul {
+  margin: 6px 0 10px 18px;
+  color: var(--text-main);
+}
+.pearl {
+  background: var(--neuro-light);
+  border-left: 4px solid var(--neuro-main);
+  padding: 10px 12px;
+  border-radius: 10px;
+  font-size: 14px;
+  margin-top: 10px;
+}
+.footer-note {
+  text-align: center;
+  font-size: 13px;
+  color: var(--text-muted);
+  margin: 30px 0 10px;
+}
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Stroke & Brain Imaging</h1>
+  <p>What each imaging study tells you and how it guides acute stroke decisions</p>
+  <div class="nav-buttons">
+    <a href="../index.html">Home</a>
+    <a href="../neurology.html">Back to Neurology</a>
+  </div>
+</header>
+
+<main>
+
+<div class="card">
+  <h2>Purpose of This Guide</h2>
+  <p>
+    This page is a rapid review for understanding <strong>why specific brain imaging is ordered in stroke</strong>
+    and <strong>what clinical decision each study unlocks</strong>. It is designed for internal medicine residents
+    working in stroke centers and community hospitals.
+  </p>
+</div>
+
+<div class="card">
+  <h2>Imaging Modalities</h2>
+
+  <details>
+    <summary>CT Head (Non-Contrast)</summary>
+    <p><strong>What it answers:</strong></p>
+    <ul>
+      <li>Is there intracranial hemorrhage?</li>
+      <li>Is there a large established infarct?</li>
+    </ul>
+    <p><strong>What it does NOT do:</strong></p>
+    <ul>
+      <li>Does not rule out early ischemic stroke</li>
+      <li>Poor sensitivity for posterior circulation stroke</li>
+    </ul>
+    <p><strong>Clinical role:</strong> Determines safety of thrombolysis.</p>
+    <div class="pearl">A normal CT head does <strong>not</strong> mean there is no stroke.</div>
+  </details>
+
+  <details>
+    <summary>CTA Head & Neck</summary>
+    <p><strong>What it answers:</strong></p>
+    <ul>
+      <li>Is there a large vessel occlusion (LVO)?</li>
+      <li>Is there arterial dissection or critical stenosis?</li>
+    </ul>
+    <p><strong>Key vessels to recognize:</strong></p>
+    <ul>
+      <li>Internal carotid artery (ICA)</li>
+      <li>MCA M1 / proximal M2</li>
+      <li>Basilar artery</li>
+      <li>Vertebral arteries</li>
+      <li>PCA P1</li>
+    </ul>
+    <p><strong>Clinical role:</strong> Determines thrombectomy eligibility and need for transfer.</p>
+    <div class="pearl">CTA frequently changes management even when CT head is normal.</div>
+  </details>
+
+  <details>
+    <summary>CT Perfusion</summary>
+    <p><strong>What it answers:</strong></p>
+    <ul>
+      <li>How much brain is already infarcted (core)?</li>
+      <li>How much brain is salvageable (penumbra)?</li>
+    </ul>
+    <p><strong>Conceptual interpretation:</strong></p>
+    <ul>
+      <li>Low blood flow + low blood volume → infarct core</li>
+      <li>Delayed flow with preserved volume → penumbra</li>
+    </ul>
+    <p><strong>Clinical role:</strong> Extends thrombectomy window (6–24 hours).</p>
+    <div class="pearl">Modern stroke care treats <strong>tissue</strong>, not just the clock.</div>
+  </details>
+
+  <details>
+    <summary>MRI DWI (Diffusion-Weighted Imaging)</summary>
+    <p><strong>What it answers:</strong></p>
+    <ul>
+      <li>Has acute infarction occurred?</li>
+    </ul>
+    <p><strong>Key concept:</strong></p>
+    <ul>
+      <li>Restricted diffusion = infarcted tissue</li>
+      <li>Becomes positive within minutes of ischemia</li>
+    </ul>
+    <p><strong>Clinical role:</strong> Confirms acute ischemic stroke and differentiates mimics.</p>
+  </details>
+
+  <details>
+    <summary>MRI FLAIR</summary>
+    <p><strong>What it answers:</strong></p>
+    <ul>
+      <li>How old is the infarct?</li>
+    </ul>
+    <p><strong>Key concept:</strong></p>
+    <ul>
+      <li>FLAIR positive → older injury</li>
+      <li>FLAIR negative → recent stroke</li>
+    </ul>
+  </details>
+
+  <details>
+    <summary>DWI–FLAIR Mismatch</summary>
+    <p><strong>Meaning:</strong></p>
+    <ul>
+      <li>DWI positive with FLAIR negative suggests recent stroke</li>
+    </ul>
+    <p><strong>Clinical role:</strong> Allows thrombolysis in wake-up or unknown-onset strokes.</p>
+  </details>
+
+</div>
+
+<div class="card">
+  <h2>Key Takeaways</h2>
+  <ul>
+    <li><strong>CT</strong> → Is there blood?</li>
+    <li><strong>CTA</strong> → Is there a blocked artery?</li>
+    <li><strong>Perfusion / MRI</strong> → Is brain dead or salvageable?</li>
+  </ul>
+</div>
+
+<p class="footer-note">Neurology Review • Stroke Imaging</p>
+
+</main>
+
+</body>
+</html>
