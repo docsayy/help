@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Seizure & Status Epilepticus – Stepwise Clinical Guide</title>
+<style>
+:root{
+  --neuro-main:#4a90e2;
+  --neuro-light:#eef5ff;
+  --neuro-accent:#2f6fb3;
+  --bg:#f7f9fc;
+  --card:#ffffff;
+  --text-main:#1f2933;
+  --text-muted:#52606d;
+  --border:#dce3ee;
+  --radius:14px;
+}
+*{box-sizing:border-box;}
+body{
+  margin:0;
+  font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+  background:var(--bg);
+  color:var(--text-main);
+}
+header{
+  background:linear-gradient(135deg,var(--neuro-main),var(--neuro-accent));
+  color:#fff;
+  padding:20px;
+}
+header h1{margin:0 0 6px 0;font-size:22px;}
+header p{margin:0;font-size:14px;opacity:.95;}
+.nav-buttons{display:flex;gap:10px;margin-top:14px;flex-wrap:wrap;}
+.nav-buttons a{
+  text-decoration:none;
+  background:rgba(255,255,255,0.15);
+  color:#fff;
+  padding:6px 12px;
+  border-radius:999px;
+  font-size:13px;
+}
+main{padding:20px;max-width:900px;margin:0 auto;}
+.card{
+  background:var(--card);
+  border-radius:var(--radius);
+  padding:18px;
+  margin-bottom:18px;
+  border:1px solid var(--border);
+}
+.card h2{margin-top:0;color:var(--neuro-accent);font-size:18px;}
+.badge{
+  display:inline-block;
+  font-size:12px;
+  padding:4px 10px;
+  border-radius:999px;
+  background:var(--neuro-light);
+  color:var(--neuro-accent);
+  border:1px solid #d6e7ff;
+  margin-left:8px;
+}
+details{
+  border:1px solid var(--border);
+  border-radius:12px;
+  padding:12px 14px;
+  margin-bottom:12px;
+  background:#fbfdff;
+}
+details summary{
+  cursor:pointer;
+  font-weight:700;
+  color:var(--neuro-accent);
+  list-style:none;
+}
+details summary::-webkit-details-marker{display:none;}
+.step{
+  display:inline-block;
+  font-size:12px;
+  padding:3px 10px;
+  border-radius:999px;
+  background:var(--neuro-light);
+  color:var(--neuro-accent);
+  border:1px solid #d6e7ff;
+  margin-right:8px;
+}
+.kv{
+  display:grid;
+  grid-template-columns:160px 1fr;
+  gap:8px 12px;
+  margin-top:10px;
+}
+.k{color:var(--text-muted);font-weight:700;font-size:13px;}
+.v{font-size:14px;}
+ul{margin:8px 0 10px 18px;}
+.pearl{
+  background:var(--neuro-light);
+  border-left:4px solid var(--neuro-main);
+  padding:10px 12px;
+  border-radius:10px;
+  font-size:14px;
+  margin-top:10px;
+}
+.warn{
+  background:#fff5f5;
+  border-left:4px solid #d64545;
+  padding:10px 12px;
+  border-radius:10px;
+  font-size:14px;
+  margin-top:10px;
+}
+.rule{
+  background:#ffffff;
+  border:1px dashed #b7cff0;
+  border-radius:12px;
+  padding:12px 14px;
+  margin-top:12px;
+  font-size:14px;
+}
+.rule strong{color:var(--neuro-accent);}
+.table{
+  width:100%;
+  border-collapse:separate;
+  border-spacing:0;
+  overflow:hidden;
+  border:1px solid var(--border);
+  border-radius:12px;
+  margin-top:10px;
+}
+.table th, .table td{
+  text-align:left;
+  padding:10px 12px;
+  border-bottom:1px solid var(--border);
+  font-size:14px;
+  vertical-align:top;
+}
+.table th{
+  background:#fbfdff;
+  color:var(--neuro-accent);
+  font-weight:800;
+}
+.table tr:last-child td{border-bottom:none;}
+code.kg{background:var(--neuro-light);padding:2px 6px;border-radius:8px;border:1px solid #d6e7ff;}
+.footer-note{
+  text-align:center;
+  font-size:13px;
+  color:var(--text-muted);
+  margin:30px 0 10px;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <h1>Seizure & Status Epilepticus</h1>
+  <p>Stepwise bedside approach: first seizure workup, medication ladder, EEG/imaging triggers</p>
+  <div class="nav-buttons">
+    <a href="../index.html">Home</a>
+    <a href="../neurology.html">Back to Neurology</a>
+  </div>
+</header>
+
+<main>
+
+<div class="card">
+  <h2>Core Concepts</h2>
+  <ul>
+    <li><strong>Seizure</strong> = transient episode from abnormal neuronal activity.</li>
+    <li><strong>Status epilepticus (SE)</strong> = seizure that won’t stop or recurrent seizures without baseline recovery.</li>
+    <li><strong>Convulsive SE</strong> is a time emergency: treat first, refine later.</li>
+    <li><strong>Nonconvulsive SE</strong> can look like “delirium” — EEG is how you catch it.</li>
+  </ul>
+  <div class="rule">
+    <strong>Practical clock:</strong>
+    <span>If a convulsive seizure lasts > ~5 minutes, act like status and treat.</span>
+  </div>
+</div>
+
+<div class="card">
+  <h2>Stepwise Management: Convulsive Seizure / Convulsive Status</h2>
+
+  <details open>
+    <summary><span class="step">Step 0</span> ABCs + Immediate Reversible Causes</summary>
+    <div class="kv">
+      <div class="k">Do this now</div>
+      <div class="v">
+        <ul>
+          <li>Position patient, protect airway, suction, O2, monitor.</li>
+          <li><strong>Fingerstick glucose</strong> immediately.</li>
+          <li>IV access; check vitals & temperature.</li>
+          <li>Consider thiamine if malnourished/alcohol use (before dextrose if possible).</li>
+        </ul>
+      </div>
+      <div class="k">Key labs</div>
+      <div class="v">BMP/CMP, Mg, Phos, CBC; pregnancy test if relevant; tox if it changes management.</div>
+      <div class="k">Localization clue</div>
+      <div class="v">Persistent focal deficit after event → consider stroke/structural lesion.</div>
+    </div>
+    <div class="pearl">If it’s still actively convulsing, your first goal is to stop the seizure safely.</div>
+  </details>
+
+  <details>
+    <summary><span class="step">Step 1</span> First-Line: Benzodiazepine</summary>
+    <div class="kv">
+      <div class="k">Preferred routes</div>
+      <div class="v">
+        <ul>
+          <li><strong>IV lorazepam</strong> if access (common hospital choice).</li>
+          <li><strong>IM midazolam</strong> if no IV access.</li>
+        </ul>
+      </div>
+      <div class="k">Practical pearl</div>
+      <div class="v">Give an adequate dose early; under-dosing is a common reason seizures continue.</div>
+      <div class="k">If still seizing</div>
+      <div class="v">Repeat once (institution-dependent) while preparing second-line antiseizure medication.</div>
+    </div>
+    <div class="warn"><strong>Watch for:</strong> respiratory depression and hypotension, especially with repeated doses or co-ingestants.</div>
+  </details>
+
+  <details>
+    <summary><span class="step">Step 2</span> Second-Line: Load an Antiseizure Medication (ASM)</summary>
+
+    <table class="table" aria-label="Second-line antiseizure medication options">
+      <thead>
+        <tr>
+          <th>Option</th>
+          <th>When it’s useful</th>
+          <th>Key cautions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Levetiracetam (Keppra)</strong></td>
+          <td>Easy to use, minimal interactions; common first choice.</td>
+          <td>Behavioral agitation can occur; dose adjust in renal dysfunction.</td>
+        </tr>
+        <tr>
+          <td><strong>Valproate</strong></td>
+          <td>Good for generalized seizures; useful when avoiding hypotension.</td>
+          <td>Avoid in severe liver disease, pregnancy, pancreatitis; thrombocytopenia risk.</td>
+        </tr>
+        <tr>
+          <td><strong>Fosphenytoin / Phenytoin</strong></td>
+          <td>Traditional option; useful in focal seizures.</td>
+          <td>Arrhythmia/hypotension with rapid infusion; many drug interactions.</td>
+        </tr>
+        <tr>
+          <td><strong>Lacosamide</strong></td>
+          <td>Helpful for focal seizures; increasingly used.</td>
+          <td>PR prolongation; caution in conduction disease.</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="pearl">
+      Pick one second-line agent and load it promptly after benzo; don’t “wait and see” for too long if the seizure is not clearly stopping.
+    </div>
+  </details>
+
+  <details>
+    <summary><span class="step">Step 3</span> Refractory Status: ICU + Continuous Infusion</summary>
+    <div class="kv">
+      <div class="k">Definition</div>
+      <div class="v">Ongoing seizures despite benzo + appropriate second-line ASM.</div>
+      <div class="k">What happens next</div>
+      <div class="v">
+        <ul>
+          <li>ICU-level care; intubation often needed.</li>
+          <li>Continuous EEG.</li>
+          <li>Continuous anesthetic infusion per protocol (e.g., midazolam/propofol/others depending on institution).</li>
+        </ul>
+      </div>
+      <div class="k">Goal</div>
+      <div class="v">Seizure suppression on EEG and prevention of recurrence while treating the underlying cause.</div>
+    </div>
+    <div class="warn"><strong>Big picture:</strong> refractory status is often more dangerous from hypoxia, acidosis, hyperthermia, and aspiration than from the original trigger.</div>
+  </details>
+
+</div>
+
+<div class="card">
+  <h2>First Seizure (After Stabilization)</h2>
+
+  <details open>
+    <summary><span class="step">A</span> Decide Provoked vs Unprovoked</summary>
+    <div class="kv">
+      <div class="k">Provoked (acute symptomatic)</div>
+      <div class="v">
+        <ul>
+          <li>Metabolic: hypoNa, hypoCa, hypoMg, hypo/hyperglycemia, uremia, hepatic failure</li>
+          <li>Toxic/withdrawal: alcohol/benzos, stimulants, meds lowering threshold</li>
+          <li>Structural: stroke/ICH, tumor, trauma</li>
+          <li>Infection: meningitis/encephalitis</li>
+        </ul>
+      </div>
+      <div class="k">Unprovoked</div>
+      <div class="v">No acute trigger found → higher recurrence risk; consider epilepsy workup and long-term plan.</div>
+    </div>
+    <div class="pearl">Provoked seizures are treated by fixing the trigger; long-term ASMs are individualized.</div>
+  </details>
+
+  <details>
+    <summary><span class="step">B</span> Imaging: Who Needs CT Now vs MRI Later?</summary>
+    <div class="kv">
+      <div class="k">CT head now if</div>
+      <div class="v">
+        <ul>
+          <li>New focal deficit, persistent AMS, head trauma, anticoagulation, immunocompromised</li>
+          <li>Suspected hemorrhage, mass, or stroke</li>
+        </ul>
+      </div>
+      <div class="k">MRI brain (preferred) if</div>
+      <div class="v">First unprovoked seizure, focal semiology, or CT unrevealing with persistent concern.</div>
+    </div>
+  </details>
+
+  <details>
+    <summary><span class="step">C</span> EEG: When It’s High Yield</summary>
+    <div class="kv">
+      <div class="k">Get EEG if</div>
+      <div class="v">
+        <ul>
+          <li>Unexplained persistent AMS (rule out NCSE)</li>
+          <li>First unprovoked seizure (risk stratification)</li>
+          <li>Focal features or concern for subclinical seizures</li>
+        </ul>
+      </div>
+      <div class="k">What it answers</div>
+      <div class="v">Epileptiform activity, seizure burden, encephalopathy pattern.</div>
+    </div>
+  </details>
+
+</div>
+
+<div class="card">
+  <h2>Nonconvulsive Status Epilepticus (NCSE)</h2>
+  <p>
+    Think of NCSE when the patient is “not waking up right” or is persistently confused without a clear reason.
+  </p>
+  <details>
+    <summary><span class="step">Clues</span> When to suspect NCSE</summary>
+    <ul>
+      <li>Prolonged post-ictal state</li>
+      <li>Fluctuating mental status with subtle twitching, eye deviation, automatisms</li>
+      <li>Unexplained coma in ICU</li>
+      <li>Failure to improve after correcting metabolic issues</li>
+    </ul>
+    <div class="pearl">NCSE is an EEG diagnosis. If you’re worried, ask for EEG early.</div>
+  </details>
+</div>
+
+<div class="card">
+  <h2>Common Seizure Mimics (Fast Differentiation)</h2>
+  <details>
+    <summary><span class="step">Mimics</span> What looks like a seizure but isn’t</summary>
+    <ul>
+      <li><strong>Syncope</strong>: prodrome, pallor, quick recovery; can have brief myoclonic jerks</li>
+      <li><strong>Psychogenic nonepileptic events (PNES)</strong>: prolonged, asynchronous movements, eye closure, preserved awareness patterns</li>
+      <li><strong>Stroke/TIA</strong>: focal deficits without the evolving motor activity pattern</li>
+      <li><strong>Metabolic encephalopathy</strong>: tremor/asterixis, diffuse confusion</li>
+    </ul>
+    <div class="pearl">History and recovery pattern often beat “what it looked like” descriptions.</div>
+  </details>
+</div>
+
+<div class="card">
+  <h2>When to Call Neurology <span class="badge">Practical triggers</span></h2>
+  <ul>
+    <li>Status epilepticus (convulsive or suspected nonconvulsive)</li>
+    <li>First unprovoked seizure with concerning features</li>
+    <li>Persistent focal deficits, unclear diagnosis, or abnormal imaging</li>
+    <li>Need for EEG interpretation or continuous EEG</li>
+  </ul>
+</div>
+
+<p class="footer-note">Neurology Review • Seizure & Status Epilepticus</p>
+
+</main>
+</body>
+</html>
