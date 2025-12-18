@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Neuromuscular Weakness & Respiratory Failure – Clinical Guide</title>
+<style>
+:root{
+  --neuro-main:#4a90e2;
+  --neuro-light:#eef5ff;
+  --neuro-accent:#2f6fb3;
+  --bg:#f7f9fc;
+  --card:#ffffff;
+  --text-main:#1f2933;
+  --text-muted:#52606d;
+  --border:#dce3ee;
+  --radius:14px;
+}
+*{box-sizing:border-box;}
+body{
+  margin:0;
+  font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+  background:var(--bg);
+  color:var(--text-main);
+}
+header{
+  background:linear-gradient(135deg,var(--neuro-main),var(--neuro-accent));
+  color:#fff;
+  padding:20px;
+}
+header h1{margin:0 0 6px 0;font-size:22px;}
+header p{margin:0;font-size:14px;opacity:.95;}
+.nav-buttons{display:flex;gap:10px;margin-top:14px;flex-wrap:wrap;}
+.nav-buttons a{
+  text-decoration:none;
+  background:rgba(255,255,255,0.15);
+  color:#fff;
+  padding:6px 12px;
+  border-radius:999px;
+  font-size:13px;
+}
+main{padding:20px;max-width:900px;margin:0 auto;}
+.card{
+  background:var(--card);
+  border-radius:var(--radius);
+  padding:18px;
+  margin-bottom:18px;
+  border:1px solid var(--border);
+}
+.card h2{margin-top:0;color:var(--neuro-accent);font-size:18px;}
+.badge{
+  display:inline-block;
+  font-size:12px;
+  padding:4px 10px;
+  border-radius:999px;
+  background:var(--neuro-light);
+  color:var(--neuro-accent);
+  border:1px solid #d6e7ff;
+  margin-left:8px;
+}
+details{
+  border:1px solid var(--border);
+  border-radius:12px;
+  padding:12px 14px;
+  margin-bottom:12px;
+  background:#fbfdff;
+}
+details summary{
+  cursor:pointer;
+  font-weight:700;
+  color:var(--neuro-accent);
+  list-style:none;
+}
+details summary::-webkit-details-marker{display:none;}
+.step{
+  display:inline-block;
+  font-size:12px;
+  padding:3px 10px;
+  border-radius:999px;
+  background:var(--neuro-light);
+  color:var(--neuro-accent);
+  border:1px solid #d6e7ff;
+  margin-right:8px;
+}
+.kv{
+  display:grid;
+  grid-template-columns:160px 1fr;
+  gap:8px 12px;
+  margin-top:10px;
+}
+.k{color:var(--text-muted);font-weight:700;font-size:13px;}
+.v{font-size:14px;}
+ul{margin:8px 0 10px 18px;}
+.pearl{
+  background:var(--neuro-light);
+  border-left:4px solid var(--neuro-main);
+  padding:10px 12px;
+  border-radius:10px;
+  font-size:14px;
+  margin-top:10px;
+}
+.warn{
+  background:#fff5f5;
+  border-left:4px solid #d64545;
+  padding:10px 12px;
+  border-radius:10px;
+  font-size:14px;
+  margin-top:10px;
+}
+.rule{
+  background:#ffffff;
+  border:1px dashed #b7cff0;
+  border-radius:12px;
+  padding:12px 14px;
+  margin-top:12px;
+  font-size:14px;
+}
+.rule strong{color:var(--neuro-accent);}
+.footer-note{
+  text-align:center;
+  font-size:13px;
+  color:var(--text-muted);
+  margin:30px 0 10px;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <h1>Neuromuscular Weakness & Respiratory Failure</h1>
+  <p>Pattern recognition, localization, and when to intubate early</p>
+  <div class="nav-buttons">
+    <a href="../index.html">Home</a>
+    <a href="../neurology.html">Back to Neurology</a>
+  </div>
+</header>
+
+<main>
+
+<div class="card">
+  <h2>Core Principle</h2>
+  <p>
+    Neuromuscular weakness causes <strong>ventilatory failure before hypoxia</strong>.
+    Waiting for low O₂ or high CO₂ is waiting too long.
+  </p>
+  <div class="rule">
+    <strong>Golden rule:</strong>
+    <span>If you’re worried about breathing mechanics, check <strong>NIF and FVC</strong> — not just ABG.</span>
+  </div>
+</div>
+
+<div class="card">
+  <h2>Step 1: Localize the Weakness Pattern</h2>
+
+  <details open>
+    <summary><span class="step">A</span> Ascending vs Descending</summary>
+    <div class="kv">
+      <div class="k">Ascending</div>
+      <div class="v">Legs → arms → bulbar/respiratory → think <strong>GBS</strong>.</div>
+      <div class="k">Descending</div>
+      <div class="v">Cranial nerves → arms → legs → think <strong>botulism</strong>, MG.</div>
+    </div>
+  </details>
+
+  <details>
+    <summary><span class="step">B</span> Fatigable vs Fixed</summary>
+    <div class="kv">
+      <div class="k">Fatigable</div>
+      <div class="v">Worse with use, improves with rest → <strong>myasthenia gravis</strong>.</div>
+      <div class="k">Fixed/progressive</div>
+      <div class="v">Steady worsening → neuropathy, myopathy, cord.</div>
+    </div>
+  </details>
+
+  <details>
+    <summary><span class="step">C</span> UMN vs LMN</summary>
+    <div class="kv">
+      <div class="k">UMN signs</div>
+      <div class="v">Hyperreflexia, spasticity → brain/spinal cord.</div>
+      <div class="k">LMN signs</div>
+      <div class="v">Hyporeflexia, atrophy, fasciculations → nerve, NMJ, muscle.</div>
+    </div>
+  </details>
+
+</div>
+
+<div class="card">
+  <h2>Step 2: Respiratory Red Flags <span class="badge">ICU-critical</span></h2>
+  <ul>
+    <li>Use of accessory muscles, weak cough</li>
+    <li>Inability to count to 20 in one breath</li>
+    <li>Pooling secretions / dysphagia</li>
+    <li>Orthopnea or paradoxical breathing</li>
+  </ul>
+
+  <details>
+    <summary><span class="step">Numbers</span> Bedside Respiratory Metrics</summary>
+    <div class="kv">
+      <div class="k">NIF</div>
+      <div class="v">&gt; −30 cmH₂O reassuring; <strong>&lt; −20 concerning</strong>.</div>
+      <div class="k">FVC</div>
+      <div class="v">&lt; 20 mL/kg → high risk of respiratory failure.</div>
+      <div class="k">Trend</div>
+      <div class="v">Rapid decline matters more than a single value.</div>
+    </div>
+    <div class="warn">Do not wait for hypoxia or hypercapnia to intubate.</div>
+  </details>
+
+</div>
+
+<div class="card">
+  <h2>High-Yield Syndromes</h2>
+
+  <details open>
+    <summary><span class="step">GBS</span> Guillain–Barré Syndrome</summary>
+    <div class="kv">
+      <div class="k">Pattern</div>
+      <div class="v">Ascending symmetric weakness + hyporeflexia.</div>
+      <div class="k">Danger</div>
+      <div class="v">Autonomic instability, respiratory failure.</div>
+      <div class="k">Diagnostics</div>
+      <div class="v">LP: albuminocytologic dissociation; EMG later.</div>
+      <div class="k">Treatment</div>
+      <div class="v">IVIG or plasmapheresis (NOT steroids).</div>
+    </div>
+    <div class="pearl">Frequent NIF/FVC checks save lives in GBS.</div>
+  </details>
+
+  <details>
+    <summary><span class="step">MG</span> Myasthenia Gravis Crisis</summary>
+    <div class="kv">
+      <div class="k">Pattern</div>
+      <div class="v">Fatigable weakness, ptosis, diplopia, bulbar symptoms.</div>
+      <div class="k">Triggers</div>
+      <div class="v">Infection, surgery, steroids, certain meds.</div>
+      <div class="k">Treatment</div>
+      <div class="v">IVIG or plasmapheresis; hold acetylcholinesterase inhibitors if intubated.</div>
+    </div>
+    <div class="warn"><strong>Avoid:</strong> magnesium, fluoroquinolones, aminoglycosides.</div>
+  </details>
+
+  <details>
+    <summary><span class="step">Botulism</span></summary>
+    <div class="kv">
+      <div class="k">Pattern</div>
+      <div class="v">Descending paralysis, dilated pupils, autonomic symptoms.</div>
+      <div class="k">Clue</div>
+      <div class="v">GI prodrome or food exposure.</div>
+      <div class="k">Action</div>
+      <div class="v">Call public health early; antitoxin + ICU.</div>
+    </div>
+  </details>
+
+  <details>
+    <summary><span class="step">Cord</span> Cervical Spinal Cord Compression</summary>
+    <div class="kv">
+      <div class="k">Pattern</div>
+      <div class="v">Weakness below level ± sensory level ± bladder involvement.</div>
+      <div class="k">Action</div>
+      <div class="v"><strong>Emergent MRI spine</strong>.</div>
+    </div>
+  </details>
+
+</div>
+
+<div class="card">
+  <h2>What to Order (Targeted)</h2>
+  <ul>
+    <li>NIF / FVC trending</li>
+    <li>MRI brain/spine if UMN signs or sensory level</li>
+    <li>LP if GBS suspected</li>
+    <li>Autoantibodies if MG suspected (do not delay treatment)</li>
+  </ul>
+</div>
+
+<div class="card">
+  <h2>When to Call Neurology</h2>
+  <ul>
+    <li>Any rapidly progressive weakness</li>
+    <li>Declining respiratory metrics</li>
+    <li>Suspected GBS, MG crisis, or botulism</li>
+    <li>Unclear localization or need for immunotherapy</li>
+  </ul>
+</div>
+
+<p class="footer-note">Neurology Review • Neuromuscular Weakness</p>
+
+</main>
+</body>
+</html>

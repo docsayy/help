@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>TIA vs Mimics – Stepwise Clinical Guide</title>
+<style>
+:root{
+  --neuro-main:#4a90e2;
+  --neuro-light:#eef5ff;
+  --neuro-accent:#2f6fb3;
+  --bg:#f7f9fc;
+  --card:#ffffff;
+  --text-main:#1f2933;
+  --text-muted:#52606d;
+  --border:#dce3ee;
+  --radius:14px;
+}
+*{box-sizing:border-box;}
+body{margin:0;font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;background:var(--bg);color:var(--text-main);}
+header{background:linear-gradient(135deg,var(--neuro-main),var(--neuro-accent));color:#fff;padding:20px;}
+header h1{margin:0 0 6px 0;font-size:22px;}
+header p{margin:0;font-size:14px;opacity:.95;}
+.nav-buttons{display:flex;gap:10px;margin-top:14px;flex-wrap:wrap;}
+.nav-buttons a{text-decoration:none;background:rgba(255,255,255,0.15);color:#fff;padding:6px 12px;border-radius:999px;font-size:13px;}
+main{padding:20px;max-width:900px;margin:0 auto;}
+.card{background:var(--card);border-radius:var(--radius);padding:18px;margin-bottom:18px;border:1px solid var(--border);}
+.card h2{margin-top:0;color:var(--neuro-accent);font-size:18px;}
+.badge{display:inline-block;font-size:12px;padding:4px 10px;border-radius:999px;background:var(--neuro-light);color:var(--neuro-accent);border:1px solid #d6e7ff;margin-left:8px;}
+details{border:1px solid var(--border);border-radius:12px;padding:12px 14px;margin-bottom:12px;background:#fbfdff;}
+details summary{cursor:pointer;font-weight:800;color:var(--neuro-accent);list-style:none;}
+details summary::-webkit-details-marker{display:none;}
+.step{display:inline-block;font-size:12px;padding:3px 10px;border-radius:999px;background:var(--neuro-light);color:var(--neuro-accent);border:1px solid #d6e7ff;margin-right:8px;}
+.kv{display:grid;grid-template-columns:190px 1fr;gap:8px 12px;margin-top:10px;}
+.k{color:var(--text-muted);font-weight:900;font-size:13px;}
+.v{font-size:14px;}
+ul{margin:8px 0 10px 18px;}
+.pearl{background:var(--neuro-light);border-left:4px solid var(--neuro-main);padding:10px 12px;border-radius:10px;font-size:14px;margin-top:10px;}
+.warn{background:#fff5f5;border-left:4px solid #d64545;padding:10px 12px;border-radius:10px;font-size:14px;margin-top:10px;}
+.rule{background:#ffffff;border:1px dashed #b7cff0;border-radius:12px;padding:12px 14px;margin-top:12px;font-size:14px;}
+.rule strong{color:var(--neuro-accent);}
+.table{width:100%;border-collapse:separate;border-spacing:0;overflow:hidden;border:1px solid var(--border);border-radius:12px;margin-top:10px;}
+.table th,.table td{text-align:left;padding:10px 12px;border-bottom:1px solid var(--border);font-size:14px;vertical-align:top;}
+.table th{background:#fbfdff;color:var(--neuro-accent);font-weight:900;}
+.table tr:last-child td{border-bottom:none;}
+.footer-note{text-align:center;font-size:13px;color:var(--text-muted);margin:30px 0 10px;}
+.small{font-size:13px;color:var(--text-muted);}
+</style>
+</head>
+
+<body>
+<header>
+  <h1>TIA vs Mimics</h1>
+  <p>How to decide “true transient ischemia” vs migraine/seizure/syncope and what to do next</p>
+  <div class="nav-buttons">
+    <a href="../index.html">Home</a>
+    <a href="../neurology.html">Back to Neurology</a>
+  </div>
+</header>
+
+<main>
+
+<div class="card">
+  <h2>What Is a TIA (Clinically)?</h2>
+  <p>
+    A TIA is a <strong>transient focal neurologic deficit</strong> due to ischemia without persistent infarction.
+    Clinically: treat it like a <strong>stroke warning shot</strong> until proven otherwise.
+  </p>
+  <div class="rule">
+    <strong>Core rule:</strong>
+    <span><strong>Focal</strong> symptoms that are sudden and “negative” (loss of function) are more TIA-like than spreading “positive” symptoms.</span>
+  </div>
+</div>
+
+<div class="card">
+  <h2>Step 1: The 60-Second “TIA Likelihood” Screen</h2>
+
+  <details open>
+    <summary><span class="step">TIA more likely</span></summary>
+    <ul>
+      <li><strong>Sudden onset</strong> at a clear time</li>
+      <li><strong>Negative symptoms</strong>: weakness, numbness, aphasia, vision loss</li>
+      <li>All symptoms start together (not marching/spreading)</li>
+      <li>Vascular risk factors (HTN, DM, AF, smoking)</li>
+    </ul>
+  </details>
+
+  <details>
+    <summary><span class="step">Mimic more likely</span></summary>
+    <ul>
+      <li><strong>Positive symptoms</strong>: tingling that spreads, flashing lights, shimmering vision</li>
+      <li>Gradual build over minutes with “march” (migraine aura)</li>
+      <li>Recurrent stereotyped brief episodes (focal seizures)</li>
+      <li>Loss of consciousness as primary feature (syncope)</li>
+    </ul>
+  </details>
+
+</div>
+
+<div class="card">
+  <h2>Common Mimics (How to Tell)</h2>
+
+  <table class="table" aria-label="TIA mimics">
+    <thead>
+      <tr>
+        <th>Mimic</th>
+        <th>Clues</th>
+        <th>Why it’s not TIA</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Migraine aura</strong></td>
+        <td>Gradual spread over minutes; visual scintillation; sensory march</td>
+        <td>Positive symptoms + progression pattern</td>
+      </tr>
+      <tr>
+        <td><strong>Focal seizure</strong></td>
+        <td>Stereotyped episodes; automatisms; post-event confusion</td>
+        <td>Electrical event; may have Todd’s paralysis after</td>
+      </tr>
+      <tr>
+        <td><strong>Syncope</strong></td>
+        <td>Lightheadedness, pallor, diaphoresis; LOC; rapid recovery</td>
+        <td>Global hypoperfusion, not focal deficit</td>
+      </tr>
+      <tr>
+        <td><strong>Hypoglycemia</strong></td>
+        <td>Sweats, tremor, confusion; improves with glucose</td>
+        <td>Metabolic; can mimic focal deficits</td>
+      </tr>
+      <tr>
+        <td><strong>Functional</strong></td>
+        <td>Inconsistent exam; non-anatomic pattern</td>
+        <td>Diagnosis of exclusion</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="pearl">“Marching” symptoms (visual → sensory → speech) = migraine aura until proven otherwise. “All-at-once loss” = vascular until proven otherwise.</div>
+</div>
+
+<div class="card">
+  <h2>Step 2: High-Risk TIA Features (Admit / urgent workup)</h2>
+  <details open>
+    <summary><span class="step">High risk</span> Red flags</summary>
+    <ul>
+      <li>Ongoing or recurrent symptoms (“crescendo” events)</li>
+      <li>Weakness or aphasia</li>
+      <li>Suspected posterior circulation symptoms with inability to walk</li>
+      <li>New atrial fibrillation or known cardioembolic source</li>
+      <li>Carotid bruit / suspected high-grade stenosis</li>
+      <li>Anticoagulation questions or high bleeding risk decisions</li>
+    </ul>
+    <div class="warn">Posterior circulation TIAs can look “vague” but can precede basilar events. Do not dismiss persistent gait inability.</div>
+  </details>
+</div>
+
+<div class="card">
+  <h2>Step 3: What to Order (Practical Workup)</h2>
+
+  <details open>
+    <summary><span class="step">Brain</span> Imaging</summary>
+    <ul>
+      <li>Non-contrast CT head (initial bleed exclusion if acute presentation)</li>
+      <li>MRI brain with DWI preferred when available (identifies small infarcts)</li>
+    </ul>
+  </details>
+
+  <details>
+    <summary><span class="step">Vessels</span> (look for stenosis/LVO)</summary>
+    <ul>
+      <li>CTA head/neck or carotid ultrasound (institution dependent)</li>
+      <li>Consider posterior circulation imaging if symptoms suggest it</li>
+    </ul>
+  </details>
+
+  <details>
+    <summary><span class="step">Heart</span> (look for embolic source)</summary>
+    <ul>
+      <li>ECG for AF/flutter</li>
+      <li>Telemetry when indicated</li>
+      <li>Echocardiography based on suspicion/protocol</li>
+    </ul>
+  </details>
+
+  <details>
+    <summary><span class="step">Labs</span></summary>
+    <ul>
+      <li>Glucose, CBC, CMP, lipids, A1c (risk and mimics)</li>
+    </ul>
+  </details>
+
+</div>
+
+<div class="card">
+  <h2>Step 4: Immediate Management (General Principles)</h2>
+  <ul>
+    <li>Treat as vascular until proven otherwise (risk modification starts now)</li>
+    <li>Start antiplatelet therapy per local stroke protocol if no contraindication</li>
+    <li>Statin and BP optimization are often indicated (protocol-based)</li>
+    <li>Anticoagulation decisions require careful stroke-team guidance when AF suspected/confirmed</li>
+  </ul>
+  <div class="pearl">Your job is not to “score and discharge.” Your job is to prevent the next one, which may not be transient.</div>
+</div>
+
+<div class="card">
+  <h2>When to Call Neurology</h2>
+  <ul>
+    <li>Any suspected TIA with weakness, aphasia, or posterior circulation symptoms</li>
+    <li>Recurrent transient deficits (“crescendo TIAs”)</li>
+    <li>Diagnostic uncertainty between seizure/migraine vs TIA</li>
+    <li>High-risk imaging findings or need for urgent secondary prevention plan</li>
+  </ul>
+</div>
+
+<p class="footer-note">Neurology Review • TIA vs Mimics</p>
+</main>
+</body>
+</html>

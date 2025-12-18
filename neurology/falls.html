@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Falls & Recurrent Falls – Stepwise Clinical Guide</title>
+<style>
+:root{
+  --neuro-main:#4a90e2;
+  --neuro-light:#eef5ff;
+  --neuro-accent:#2f6fb3;
+  --bg:#f7f9fc;
+  --card:#ffffff;
+  --text-main:#1f2933;
+  --text-muted:#52606d;
+  --border:#dce3ee;
+  --radius:14px;
+}
+*{box-sizing:border-box;}
+body{
+  margin:0;
+  font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+  background:var(--bg);
+  color:var(--text-main);
+}
+header{
+  background:linear-gradient(135deg,var(--neuro-main),var(--neuro-accent));
+  color:#fff;
+  padding:20px;
+}
+header h1{margin:0 0 6px 0;font-size:22px;}
+header p{margin:0;font-size:14px;opacity:.95;}
+.nav-buttons{display:flex;gap:10px;margin-top:14px;flex-wrap:wrap;}
+.nav-buttons a{
+  text-decoration:none;
+  background:rgba(255,255,255,0.15);
+  color:#fff;
+  padding:6px 12px;
+  border-radius:999px;
+  font-size:13px;
+}
+main{padding:20px;max-width:900px;margin:0 auto;}
+.card{
+  background:var(--card);
+  border-radius:var(--radius);
+  padding:18px;
+  margin-bottom:18px;
+  border:1px solid var(--border);
+}
+.card h2{margin-top:0;color:var(--neuro-accent);font-size:18px;}
+.badge{
+  display:inline-block;
+  font-size:12px;
+  padding:4px 10px;
+  border-radius:999px;
+  background:var(--neuro-light);
+  color:var(--neuro-accent);
+  border:1px solid #d6e7ff;
+  margin-left:8px;
+}
+details{
+  border:1px solid var(--border);
+  border-radius:12px;
+  padding:12px 14px;
+  margin-bottom:12px;
+  background:#fbfdff;
+}
+details summary{
+  cursor:pointer;
+  font-weight:800;
+  color:var(--neuro-accent);
+  list-style:none;
+}
+details summary::-webkit-details-marker{display:none;}
+.step{
+  display:inline-block;
+  font-size:12px;
+  padding:3px 10px;
+  border-radius:999px;
+  background:var(--neuro-light);
+  color:var(--neuro-accent);
+  border:1px solid #d6e7ff;
+  margin-right:8px;
+}
+.kv{
+  display:grid;
+  grid-template-columns:170px 1fr;
+  gap:8px 12px;
+  margin-top:10px;
+}
+.k{color:var(--text-muted);font-weight:800;font-size:13px;}
+.v{font-size:14px;}
+ul{margin:8px 0 10px 18px;}
+.pearl{
+  background:var(--neuro-light);
+  border-left:4px solid var(--neuro-main);
+  padding:10px 12px;
+  border-radius:10px;
+  font-size:14px;
+  margin-top:10px;
+}
+.warn{
+  background:#fff5f5;
+  border-left:4px solid #d64545;
+  padding:10px 12px;
+  border-radius:10px;
+  font-size:14px;
+  margin-top:10px;
+}
+.rule{
+  background:#ffffff;
+  border:1px dashed #b7cff0;
+  border-radius:12px;
+  padding:12px 14px;
+  margin-top:12px;
+  font-size:14px;
+}
+.rule strong{color:var(--neuro-accent);}
+.table{
+  width:100%;
+  border-collapse:separate;
+  border-spacing:0;
+  overflow:hidden;
+  border:1px solid var(--border);
+  border-radius:12px;
+  margin-top:10px;
+}
+.table th,.table td{
+  text-align:left;
+  padding:10px 12px;
+  border-bottom:1px solid var(--border);
+  font-size:14px;
+  vertical-align:top;
+}
+.table th{
+  background:#fbfdff;
+  color:var(--neuro-accent);
+  font-weight:900;
+}
+.table tr:last-child td{border-bottom:none;}
+.footer-note{
+  text-align:center;
+  font-size:13px;
+  color:var(--text-muted);
+  margin:30px 0 10px;
+}
+.small{font-size:13px;color:var(--text-muted);}
+</style>
+</head>
+
+<body>
+
+<header>
+  <h1>Falls & Recurrent Falls</h1>
+  <p>Mechanical vs medical, older vs younger, and a history-first method to find the cause</p>
+  <div class="nav-buttons">
+    <a href="../index.html">Home</a>
+    <a href="../neurology.html">Back to Neurology</a>
+  </div>
+</header>
+
+<main>
+
+<div class="card">
+  <h2>Core Principle</h2>
+  <p>
+    A “fall” is not a diagnosis. The high-yield question is:
+    <strong>Was this a mechanical fall… or a medical event that caused a fall?</strong>
+  </p>
+  <div class="rule">
+    <strong>Rule:</strong>
+    <span>If there was <strong>loss of consciousness, amnesia, palpitations, chest pain, seizure features, or focal neuro symptoms</strong> → treat as medical until proven otherwise.</span>
+  </div>
+</div>
+
+<div class="card">
+  <h2>Step 1: Stabilize & Screen for High-Risk Injury</h2>
+  <details open>
+    <summary><span class="step">Step 0</span> Immediate priorities</summary>
+    <ul>
+      <li>Vitals, glucose, O₂ sat</li>
+      <li>Assess head/neck/hip pain; anticoagulation status</li>
+      <li>Check for focal deficits; new confusion (delirium)</li>
+      <li>ECG early (arrhythmia clues)</li>
+    </ul>
+    <div class="warn"><strong>Never miss:</strong> head bleed (especially anticoagulated), C-spine injury, hip fracture.</div>
+  </details>
+</div>
+
+<div class="card">
+  <h2>Step 2: Classify the Event (History-Based)</h2>
+  <p class="small">You can classify most falls in 60 seconds with the right questions.</p>
+
+  <details open>
+    <summary><span class="step">A</span> “Mechanical” fall (trip/slip) <span class="badge">environmental</span></summary>
+    <div class="kv">
+      <div class="k">Key story</div>
+      <div class="v">Tripped over object, slipped on surface, missed step; patient remembers the entire event.</div>
+      <div class="k">Usually</div>
+      <div class="v">No prodrome, no LOC, no confusion before fall.</div>
+      <div class="k">But still ask</div>
+      <div class="v">Why did they trip? Vision? Foot drop? Parkinsonism? Sedatives?</div>
+    </div>
+    <div class="pearl">“Mechanical” is not the end — it often hides gait, vision, neuropathy, meds, or hypotension.</div>
+  </details>
+
+  <details>
+    <summary><span class="step">B</span> Syncope / presyncope <span class="badge">cardiac/orthostatic</span></summary>
+    <div class="kv">
+      <div class="k">Key story</div>
+      <div class="v">Lightheaded, “blacked out,” woke up on ground; often amnesia for impact.</div>
+      <div class="k">Prodrome?</div>
+      <div class="v">Nausea, warmth, sweating (vasovagal) vs none (arrhythmia).</div>
+      <div class="k">Red flags</div>
+      <div class="v">No prodrome, exertional, supine, palpitations, chest pain, family SCD.</div>
+    </div>
+  </details>
+
+  <details>
+    <summary><span class="step">C</span> Seizure <span class="badge">epileptic</span></summary>
+    <div class="kv">
+      <div class="k">Key story</div>
+      <div class="v">Witnessed convulsion, eye deviation, stereotyped movements, post-ictal confusion.</div>
+      <div class="k">Supportive clues</div>
+      <div class="v">Tongue bite (lateral), incontinence, prolonged confusion, muscle soreness.</div>
+      <div class="k">Pitfall</div>
+      <div class="v">Syncope can cause brief myoclonic jerks — focus on recovery time and post-ictal state.</div>
+    </div>
+  </details>
+
+  <details>
+    <summary><span class="step">D</span> Stroke / TIA causing fall <span class="badge">central</span></summary>
+    <div class="kv">
+      <div class="k">Key story</div>
+      <div class="v">Sudden focal weakness, imbalance, diplopia, dysarthria, or new sensory loss → fall.</div>
+      <div class="k">Posterior clues</div>
+      <div class="v">“Dizzy + can’t walk,” vision symptoms, ataxia, cranial nerve findings.</div>
+    </div>
+  </details>
+
+  <details>
+    <summary><span class="step">E</span> Drop attacks / sudden leg give-way <span class="badge">mixed</span></summary>
+    <div class="kv">
+      <div class="k">Key story</div>
+      <div class="v">Sudden collapse without LOC; rapid recovery; can be vestibular, vertebrobasilar, cataplexy, or mechanical knee/hip.</div>
+      <div class="k">Approach</div>
+      <div class="v">Careful neuro + cardiac + vestibular screening; focus on triggers and recurrence pattern.</div>
+    </div>
+  </details>
+
+</div>
+
+<div class="card">
+  <h2>Step 3: Causes of Falls by Age Group</h2>
+
+  <details open>
+    <summary><span class="step">Older adults</span> Common causes</summary>
+    <ul>
+      <li><strong>Gait/balance impairment</strong> (deconditioning, neuropathy, Parkinsonism)</li>
+      <li><strong>Medications</strong> (benzos, opioids, antihypertensives, anticholinergics)</li>
+      <li><strong>Orthostatic hypotension</strong> (volume depletion, autonomic dysfunction)</li>
+      <li><strong>Vision impairment</strong></li>
+      <li><strong>Cardiac arrhythmias</strong></li>
+      <li><strong>Vestibular disorders</strong></li>
+      <li><strong>Environmental hazards</strong> (loose rugs, poor lighting)</li>
+    </ul>
+    <div class="pearl">Most older falls are <strong>multifactorial</strong>. You will usually find 2–4 contributors.</div>
+  </details>
+
+  <details>
+    <summary><span class="step">Younger adults</span> Common causes</summary>
+    <ul>
+      <li><strong>Trauma / sports / intoxication</strong></li>
+      <li><strong>Vasovagal syncope</strong> (heat, dehydration, pain, needles)</li>
+      <li><strong>Arrhythmia</strong> (rare but critical)</li>
+      <li><strong>Seizure</strong> (new-onset, substance-related, structural)</li>
+      <li><strong>Hypoglycemia</strong> (diabetes meds, poor intake)</li>
+      <li><strong>Psychogenic/functional</strong> (diagnosis of exclusion)</li>
+    </ul>
+  </details>
+
+</div>
+
+<div class="card">
+  <h2>Step 4: “Find the Cause” History (Exact Questions)</h2>
+
+  <details open>
+    <summary><span class="step">1</span> Before the fall (prodrome)</summary>
+    <ul>
+      <li>Lightheaded? tunnel vision? nausea/sweating? (vasovagal/orthostatic)</li>
+      <li>Palpitations or chest pain? (arrhythmia/ischemia)</li>
+      <li>New focal neuro symptoms? (stroke)</li>
+      <li>Vertigo? diplopia? ataxia? (posterior circulation/vestibular)</li>
+      <li>Medication/alcohol use? new dose? missed meals? (toxic/hypoglycemia)</li>
+    </ul>
+  </details>
+
+  <details>
+    <summary><span class="step">2</span> During the fall (mechanism)</summary>
+    <ul>
+      <li>Trip/slip? missed step? turning quickly? rising from bed?</li>
+      <li>Head turn triggers? (carotid sinus sensitivity in some older adults)</li>
+      <li>Was there true loss of consciousness?</li>
+      <li>Witness report: stiffening, rhythmic jerking, eye deviation, cyanosis?</li>
+    </ul>
+  </details>
+
+  <details>
+    <summary><span class="step">3</span> After the fall (recovery)</summary>
+    <ul>
+      <li>Immediate recovery (seconds) favors syncope/orthostasis.</li>
+      <li>Prolonged confusion (minutes–hours) favors seizure, head injury, metabolic.</li>
+      <li>Any focal deficit after? (stroke, subdural)</li>
+      <li>Injury pattern: face/head trauma can suggest LOC.</li>
+    </ul>
+  </details>
+
+  <details>
+    <summary><span class="step">4</span> Baseline risk & context</summary>
+    <ul>
+      <li>Prior falls? how many in last 6–12 months?</li>
+      <li>Assistive devices? baseline gait? neuropathy? Parkinsonism?</li>
+      <li>Vision/hearing issues?</li>
+      <li>Home hazards: rugs, stairs, poor lighting</li>
+      <li>Med list focus: sedatives, antihypertensives, diuretics, hypoglycemics</li>
+    </ul>
+  </details>
+
+</div>
+
+<div class="card">
+  <h2>Focused Exam (High Yield)</h2>
+
+  <details open>
+    <summary><span class="step">Vitals</span> Orthostatics + cardiac</summary>
+    <ul>
+      <li>Orthostatic BP/HR (if safe)</li>
+      <li>Heart exam, volume status</li>
+      <li>ECG for conduction disease, QT, ischemia</li>
+    </ul>
+  </details>
+
+  <details>
+    <summary><span class="step">Neuro</span> “30-second localization screen”</summary>
+    <ul>
+      <li>Pupils, extraocular movements, facial symmetry</li>
+      <li>Pronator drift, symmetric strength</li>
+      <li>Finger-to-nose, heel-to-shin, gait if safe</li>
+      <li>Sensation and proprioception (neuropathy clues)</li>
+    </ul>
+  </details>
+
+  <details>
+    <summary><span class="step">Gait</span> Observe</summary>
+    <ul>
+      <li>Wide-based? shuffling? freezing? steppage (foot drop)?</li>
+      <li>Timed Up and Go if stable (functional fall risk)</li>
+    </ul>
+  </details>
+
+</div>
+
+<div class="card">
+  <h2>What to Order (Practical)</h2>
+  <ul>
+    <li>Glucose, CBC, BMP/CMP if unclear cause or recurrent falls</li>
+    <li>ECG (almost always)</li>
+    <li>CT head if head trauma, anticoagulation, new neuro deficits, or persistent AMS</li>
+    <li>Telemetry if syncope suspected or high-risk features</li>
+  </ul>
+  <div class="pearl">The test list should follow the story. The story is the diagnostic tool.</div>
+</div>
+
+<div class="card">
+  <h2>When to Call Neurology</h2>
+  <ul>
+    <li>Fall with focal deficits or suspected posterior circulation stroke</li>
+    <li>Suspected seizure or prolonged post-event confusion</li>
+    <li>Recurrent unexplained falls with abnormal neuro exam</li>
+    <li>Concern for Parkinsonism, neuropathy, cerebellar syndrome</li>
+  </ul>
+</div>
+
+<p class="footer-note">Neurology Review • Falls & Recurrent Falls</p>
+
+</main>
+</body>
+</html>

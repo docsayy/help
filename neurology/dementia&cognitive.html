@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Dementia & Cognitive Disorders – Clinical Guide</title>
+<style>
+:root{
+  --neuro-main:#4a90e2;
+  --neuro-light:#eef5ff;
+  --neuro-accent:#2f6fb3;
+  --bg:#f7f9fc;
+  --card:#ffffff;
+  --text-main:#1f2933;
+  --text-muted:#52606d;
+  --border:#dce3ee;
+  --radius:14px;
+}
+*{box-sizing:border-box;}
+body{
+  margin:0;
+  font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+  background:var(--bg);
+  color:var(--text-main);
+}
+header{
+  background:linear-gradient(135deg,var(--neuro-main),var(--neuro-accent));
+  color:#fff;
+  padding:20px;
+}
+header h1{margin:0 0 6px 0;font-size:22px;}
+header p{margin:0;font-size:14px;opacity:.95;}
+.nav-buttons{display:flex;gap:10px;margin-top:14px;flex-wrap:wrap;}
+.nav-buttons a{
+  text-decoration:none;
+  background:rgba(255,255,255,0.15);
+  color:#fff;
+  padding:6px 12px;
+  border-radius:999px;
+  font-size:13px;
+}
+main{padding:20px;max-width:900px;margin:0 auto;}
+.card{
+  background:var(--card);
+  border-radius:var(--radius);
+  padding:18px;
+  margin-bottom:18px;
+  border:1px solid var(--border);
+}
+.card h2{margin-top:0;color:var(--neuro-accent);font-size:18px;}
+.badge{
+  display:inline-block;
+  font-size:12px;
+  padding:4px 10px;
+  border-radius:999px;
+  background:var(--neuro-light);
+  color:var(--neuro-accent);
+  border:1px solid #d6e7ff;
+  margin-left:8px;
+}
+details{
+  border:1px solid var(--border);
+  border-radius:12px;
+  padding:12px 14px;
+  margin-bottom:12px;
+  background:#fbfdff;
+}
+details summary{
+  cursor:pointer;
+  font-weight:700;
+  color:var(--neuro-accent);
+  list-style:none;
+}
+details summary::-webkit-details-marker{display:none;}
+.step{
+  display:inline-block;
+  font-size:12px;
+  padding:3px 10px;
+  border-radius:999px;
+  background:var(--neuro-light);
+  color:var(--neuro-accent);
+  border:1px solid #d6e7ff;
+  margin-right:8px;
+}
+.kv{
+  display:grid;
+  grid-template-columns:170px 1fr;
+  gap:8px 12px;
+  margin-top:10px;
+}
+.k{color:var(--text-muted);font-weight:700;font-size:13px;}
+.v{font-size:14px;}
+ul{margin:8px 0 10px 18px;}
+.pearl{
+  background:var(--neuro-light);
+  border-left:4px solid var(--neuro-main);
+  padding:10px 12px;
+  border-radius:10px;
+  font-size:14px;
+  margin-top:10px;
+}
+.warn{
+  background:#fff5f5;
+  border-left:4px solid #d64545;
+  padding:10px 12px;
+  border-radius:10px;
+  font-size:14px;
+  margin-top:10px;
+}
+.rule{
+  background:#ffffff;
+  border:1px dashed #b7cff0;
+  border-radius:12px;
+  padding:12px 14px;
+  margin-top:12px;
+  font-size:14px;
+}
+.rule strong{color:var(--neuro-accent);}
+.footer-note{
+  text-align:center;
+  font-size:13px;
+  color:var(--text-muted);
+  margin:30px 0 10px;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <h1>Dementia & Cognitive Disorders</h1>
+  <p>Stepwise differentiation, localization, and what actually matters clinically</p>
+  <div class="nav-buttons">
+    <a href="../index.html">Home</a>
+    <a href="../neurology.html">Back to Neurology</a>
+  </div>
+</header>
+
+<main>
+
+<div class="card">
+  <h2>Core Definitions</h2>
+  <ul>
+    <li><strong>Dementia</strong>: chronic, progressive cognitive decline interfering with daily function.</li>
+    <li><strong>Delirium</strong>: acute, fluctuating disturbance of attention and awareness.</li>
+    <li><strong>Depression</strong>: cognitive complaints without true neurodegeneration (“pseudodementia”).</li>
+  </ul>
+  <div class="rule">
+    <strong>First rule:</strong>
+    <span>You cannot diagnose dementia until delirium is excluded.</span>
+  </div>
+</div>
+
+<div class="card">
+  <h2>Step 1: Dementia vs Delirium vs Depression</h2>
+
+  <details open>
+    <summary><span class="step">Delirium</span></summary>
+    <div class="kv">
+      <div class="k">Onset</div>
+      <div class="v">Acute (hours–days), fluctuating.</div>
+      <div class="k">Core feature</div>
+      <div class="v"><strong>Inattention</strong>.</div>
+      <div class="k">Common causes</div>
+      <div class="v">Infection, meds, metabolic derangements, hypoxia.</div>
+    </div>
+    <div class="warn">Delirium is a medical emergency — find and fix the cause.</div>
+  </details>
+
+  <details>
+    <summary><span class="step">Depression</span></summary>
+    <div class="kv">
+      <div class="k">Pattern</div>
+      <div class="v">“I don’t know” answers, prominent mood symptoms.</div>
+      <div class="k">Testing</div>
+      <div class="v">Effort inconsistent; memory improves with cueing.</div>
+    </div>
+    <div class="pearl">Depression mimics dementia but does not destroy cortical functions.</div>
+  </details>
+
+  <details>
+    <summary><span class="step">Dementia</span></summary>
+    <div class="kv">
+      <div class="k">Pattern</div>
+      <div class="v">Insidious onset, steadily progressive.</div>
+      <div class="k">Key feature</div>
+      <div class="v">Multiple cognitive domains affected.</div>
+    </div>
+  </details>
+
+</div>
+
+<div class="card">
+  <h2>Step 2: Cortical vs Subcortical Clues</h2>
+
+  <details open>
+    <summary>Cortical Dementia</summary>
+    <ul>
+      <li>Early memory loss, aphasia, apraxia, agnosia</li>
+      <li>Disorientation, poor insight</li>
+    </ul>
+    <div class="pearl">Cortex problems → language, recognition, learned skills.</div>
+  </details>
+
+  <details>
+    <summary>Subcortical Dementia</summary>
+    <ul>
+      <li>Psychomotor slowing</li>
+      <li>Executive dysfunction</li>
+      <li>Preserved language early</li>
+    </ul>
+    <div class="pearl">Subcortex problems → speed, motivation, executive control.</div>
+  </details>
+
+</div>
+
+<div class="card">
+  <h2>Major Dementia Syndromes</h2>
+
+  <details open>
+    <summary><span class="step">AD</span> Alzheimer Disease</summary>
+    <div class="kv">
+      <div class="k">Pattern</div>
+      <div class="v">Gradual episodic memory loss → language/executive decline.</div>
+      <div class="k">Localization</div>
+      <div class="v">Medial temporal → parietal lobes.</div>
+      <div class="k">Imaging</div>
+      <div class="v">MRI: hippocampal atrophy.</div>
+    </div>
+  </details>
+
+  <details>
+    <summary><span class="step">VaD</span> Vascular Dementia</summary>
+    <div class="kv">
+      <div class="k">Pattern</div>
+      <div class="v">Stepwise decline; executive dysfunction &gt; memory.</div>
+      <div class="k">Clue</div>
+      <div class="v">Stroke history, focal signs.</div>
+      <div class="k">Imaging</div>
+      <div class="v">MRI: infarcts, white matter disease.</div>
+    </div>
+  </details>
+
+  <details>
+    <summary><span class="step">DLB</span> Dementia with Lewy Bodies</summary>
+    <div class="kv">
+      <div class="k">Triad</div>
+      <div class="v">Visual hallucinations, cognitive fluctuations, parkinsonism.</div>
+      <div class="k">Danger</div>
+      <div class="v">Severe neuroleptic sensitivity.</div>
+    </div>
+    <div class="warn">Avoid typical antipsychotics if possible.</div>
+  </details>
+
+  <details>
+    <summary><span class="step">FTD</span> Frontotemporal Dementia</summary>
+    <div class="kv">
+      <div class="k">Pattern</div>
+      <div class="v">Early personality, behavior, or language change.</div>
+      <div class="k">Age</div>
+      <div class="v">Often &lt;65.</div>
+      <div class="k">Imaging</div>
+      <div class="v">Frontal/anterior temporal atrophy.</div>
+    </div>
+  </details>
+
+</div>
+
+<div class="card">
+  <h2>Step 3: What to Order (Once)</h2>
+  <ul>
+    <li>CBC, CMP</li>
+    <li>TSH</li>
+    <li>Vitamin B12 (± folate)</li>
+    <li>Consider RPR, HIV if risk factors</li>
+    <li>MRI brain (preferred) or CT if MRI unavailable</li>
+  </ul>
+  <div class="pearl">Routine dementia labs are about finding reversible causes — not confirming Alzheimer’s.</div>
+</div>
+
+<div class="card">
+  <h2>When to Suspect Reversible or Unusual Causes</h2>
+  <ul>
+    <li>Rapid progression (weeks–months)</li>
+    <li>Early gait disturbance or incontinence (NPH)</li>
+    <li>Prominent psychiatric or visual symptoms early</li>
+    <li>Young onset (&lt;60)</li>
+  </ul>
+</div>
+
+<div class="card">
+  <h2>When to Call Neurology</h2>
+  <ul>
+    <li>Diagnostic uncertainty</li>
+    <li>Atypical or rapidly progressive dementia</li>
+    <li>Young-onset cognitive decline</li>
+    <li>Concern for inflammatory, autoimmune, or prion disease</li>
+  </ul>
+</div>
+
+<p class="footer-note">Neurology Review • Dementia & Cognitive Disorders</p>
+
+</main>
+</body>
+</html>

@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Headache Emergencies – Red Flags & Localization</title>
+<style>
+:root{
+  --neuro-main:#4a90e2;
+  --neuro-light:#eef5ff;
+  --neuro-accent:#2f6fb3;
+  --bg:#f7f9fc;
+  --card:#ffffff;
+  --text-main:#1f2933;
+  --text-muted:#52606d;
+  --border:#dce3ee;
+  --radius:14px;
+}
+*{box-sizing:border-box;}
+body{
+  margin:0;
+  font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+  background:var(--bg);
+  color:var(--text-main);
+}
+header{
+  background:linear-gradient(135deg,var(--neuro-main),var(--neuro-accent));
+  color:#fff;
+  padding:20px;
+}
+header h1{margin:0 0 6px 0;font-size:22px;}
+header p{margin:0;font-size:14px;opacity:.95;}
+.nav-buttons{display:flex;gap:10px;margin-top:14px;flex-wrap:wrap;}
+.nav-buttons a{
+  text-decoration:none;
+  background:rgba(255,255,255,0.15);
+  color:#fff;
+  padding:6px 12px;
+  border-radius:999px;
+  font-size:13px;
+}
+main{padding:20px;max-width:900px;margin:0 auto;}
+.card{
+  background:var(--card);
+  border-radius:var(--radius);
+  padding:18px;
+  margin-bottom:18px;
+  border:1px solid var(--border);
+}
+.card h2{margin-top:0;color:var(--neuro-accent);font-size:18px;}
+.badge{
+  display:inline-block;
+  font-size:12px;
+  padding:4px 10px;
+  border-radius:999px;
+  background:var(--neuro-light);
+  color:var(--neuro-accent);
+  border:1px solid #d6e7ff;
+  margin-left:8px;
+}
+details{
+  border:1px solid var(--border);
+  border-radius:12px;
+  padding:12px 14px;
+  margin-bottom:12px;
+  background:#fbfdff;
+}
+details summary{
+  cursor:pointer;
+  font-weight:700;
+  color:var(--neuro-accent);
+  list-style:none;
+}
+details summary::-webkit-details-marker{display:none;}
+.step{
+  display:inline-block;
+  font-size:12px;
+  padding:3px 10px;
+  border-radius:999px;
+  background:var(--neuro-light);
+  color:var(--neuro-accent);
+  border:1px solid #d6e7ff;
+  margin-right:8px;
+}
+.kv{
+  display:grid;
+  grid-template-columns:160px 1fr;
+  gap:8px 12px;
+  margin-top:10px;
+}
+.k{color:var(--text-muted);font-weight:700;font-size:13px;}
+.v{font-size:14px;}
+ul{margin:8px 0 10px 18px;}
+.pearl{
+  background:var(--neuro-light);
+  border-left:4px solid var(--neuro-main);
+  padding:10px 12px;
+  border-radius:10px;
+  font-size:14px;
+  margin-top:10px;
+}
+.warn{
+  background:#fff5f5;
+  border-left:4px solid #d64545;
+  padding:10px 12px;
+  border-radius:10px;
+  font-size:14px;
+  margin-top:10px;
+}
+.footer-note{
+  text-align:center;
+  font-size:13px;
+  color:var(--text-muted);
+  margin:30px 0 10px;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <h1>Headache Emergencies</h1>
+  <p>Red flags, localization clues, and what to order first</p>
+  <div class="nav-buttons">
+    <a href="../index.html">Home</a>
+    <a href="../neurology.html">Back to Neurology</a>
+  </div>
+</header>
+
+<main>
+
+<div class="card">
+  <h2>Core Principle</h2>
+  <p>
+    Most headaches are benign — neurology gets involved when the headache suggests
+    <strong>bleeding, infection, inflammation, mass effect, or pressure disorders</strong>.
+  </p>
+  <div class="pearl">
+    New headache + abnormal exam = secondary headache until proven otherwise.
+  </div>
+</div>
+
+<div class="card">
+  <h2>Step 1: Identify Red Flags <span class="badge">SNOOP</span></h2>
+  <ul>
+    <li><strong>S</strong>ystemic illness: fever, weight loss, cancer, immunosuppression</li>
+    <li><strong>N</strong>eurologic deficit: focal signs, AMS, seizure</li>
+    <li><strong>O</strong>nset sudden: “thunderclap”</li>
+    <li><strong>O</strong>lder age &gt;50 with new headache</li>
+    <li><strong>P</strong>attern change or progressive</li>
+  </ul>
+  <div class="pearl">Any SNOOP feature → imaging before reassurance.</div>
+</div>
+
+<div class="card">
+  <h2>Thunderclap Headache <span class="badge">Rule out SAH</span></h2>
+  <details open>
+    <summary><span class="step">Think</span> Subarachnoid Hemorrhage</summary>
+    <div class="kv">
+      <div class="k">Clues</div>
+      <div class="v">
+        <ul>
+          <li>Instant maximal pain (“worst headache of life”)</li>
+          <li>Neck stiffness, photophobia</li>
+          <li>Vomiting or collapse</li>
+        </ul>
+      </div>
+      <div class="k">First test</div>
+      <div class="v"><strong>Noncontrast CT head</strong> (best early)</div>
+      <div class="k">If CT negative</div>
+      <div class="v">LP (xanthochromia) or CTA depending on timing and suspicion</div>
+    </div>
+    <div class="warn">Never discharge a true thunderclap headache without ruling out SAH.</div>
+  </details>
+</div>
+
+<div class="card">
+  <h2>Headache + Fever / AMS <span class="badge">Infection</span></h2>
+  <details>
+    <summary><span class="step">Think</span> Meningitis / Encephalitis</summary>
+    <div class="kv">
+      <div class="k">Clues</div>
+      <div class="v">
+        <ul>
+          <li>Fever, neck stiffness</li>
+          <li>Altered mental status</li>
+          <li>New seizures</li>
+        </ul>
+      </div>
+      <div class="k">Next steps</div>
+      <div class="v">
+        <ul>
+          <li>Blood cultures</li>
+          <li>CT head first if focal deficit, seizure, immunocompromised</li>
+          <li>LP when safe</li>
+        </ul>
+      </div>
+    </div>
+    <div class="pearl">Start empiric antimicrobials early — don’t wait for LP perfection.</div>
+  </details>
+</div>
+
+<div class="card">
+  <h2>Headache + Vision Symptoms</h2>
+
+  <details>
+    <summary><span class="step">Think</span> Temporal Arteritis (GCA)</summary>
+    <ul>
+      <li>Age &gt;50, new headache</li>
+      <li>Jaw claudication, scalp tenderness</li>
+      <li>Vision loss or diplopia</li>
+    </ul>
+    <div class="pearl">High ESR/CRP supports diagnosis, but treat immediately if suspected.</div>
+  </details>
+
+  <details>
+    <summary><span class="step">Think</span> Idiopathic Intracranial Hypertension</summary>
+    <ul>
+      <li>Headache worse lying flat</li>
+      <li>Pulsatile tinnitus</li>
+      <li>Transient visual obscurations</li>
+      <li>Papilledema on exam</li>
+    </ul>
+    <div class="pearl">MRI/MRV → LP with opening pressure.</div>
+  </details>
+
+</div>
+
+<div class="card">
+  <h2>Headache + Focal Deficit</h2>
+  <details>
+    <summary><span class="step">Think</span> Intracerebral Hemorrhage / Mass</summary>
+    <ul>
+      <li>Progressive headache</li>
+      <li>New focal neuro signs</li>
+      <li>Vomiting, decreased consciousness</li>
+    </ul>
+    <div class="pearl">Noncontrast CT is the fastest way to identify bleeding.</div>
+  </details>
+
+  <details>
+    <summary><span class="step">Think</span> Cerebral Venous Sinus Thrombosis</summary>
+    <ul>
+      <li>Headache + seizures</li>
+      <li>Hypercoagulable states, pregnancy/postpartum</li>
+      <li>Can mimic SAH or tumor</li>
+    </ul>
+    <div class="pearl">Order MRV or CTV — plain CT can be normal.</div>
+  </details>
+</div>
+
+<div class="card">
+  <h2>When to Call Neurology</h2>
+  <ul>
+    <li>Thunderclap headache or suspected SAH</li>
+    <li>Headache with focal deficit or AMS</li>
+    <li>Suspected meningitis/encephalitis</li>
+    <li>Unclear diagnosis after initial imaging</li>
+  </ul>
+</div>
+
+<p class="footer-note">Neurology Review • Headache Emergencies</p>
+
+</main>
+</body>
+</html>

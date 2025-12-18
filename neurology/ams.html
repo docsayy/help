@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Altered Mental Status (AMS) – Stepwise Workup & Localization</title>
+<title>Altered Mental Status (AMS) – Stepwise Clinical Guide</title>
 <style>
 :root{
   --neuro-main:#4a90e2;
@@ -67,7 +67,7 @@ details{
 }
 details summary{
   cursor:pointer;
-  font-weight:700;
+  font-weight:800;
   color:var(--neuro-accent);
   list-style:none;
 }
@@ -84,12 +84,12 @@ details summary::-webkit-details-marker{display:none;}
 }
 .kv{
   display:grid;
-  grid-template-columns:160px 1fr;
+  grid-template-columns:170px 1fr;
   gap:8px 12px;
   margin-top:10px;
 }
-.k{color:var(--text-muted);font-weight:700;font-size:13px;}
-.v{color:var(--text-main);font-size:14px;}
+.k{color:var(--text-muted);font-weight:800;font-size:13px;}
+.v{font-size:14px;}
 ul{margin:8px 0 10px 18px;}
 .pearl{
   background:var(--neuro-light);
@@ -99,8 +99,16 @@ ul{margin:8px 0 10px 18px;}
   font-size:14px;
   margin-top:10px;
 }
+.warn{
+  background:#fff5f5;
+  border-left:4px solid #d64545;
+  padding:10px 12px;
+  border-radius:10px;
+  font-size:14px;
+  margin-top:10px;
+}
 .rule{
-  background:#fff;
+  background:#ffffff;
   border:1px dashed #b7cff0;
   border-radius:12px;
   padding:12px 14px;
@@ -108,20 +116,26 @@ ul{margin:8px 0 10px 18px;}
   font-size:14px;
 }
 .rule strong{color:var(--neuro-accent);}
-hr{border:none;border-top:1px solid var(--border);margin:12px 0;}
+hr.sep{
+  border:none;
+  border-top:1px solid var(--border);
+  margin:14px 0;
+}
 .footer-note{
   text-align:center;
   font-size:13px;
   color:var(--text-muted);
   margin:30px 0 10px;
 }
+.small{font-size:13px;color:var(--text-muted);}
 </style>
 </head>
+
 <body>
 
 <header>
   <h1>Altered Mental Status (AMS)</h1>
-  <p>Stepwise bedside approach, rapid workup, and “when to call Neuro” logic</p>
+  <p>Stepwise bedside approach: stabilize → identify reversible causes → don’t miss stroke/NCSE</p>
   <div class="nav-buttons">
     <a href="../index.html">Home</a>
     <a href="../neurology.html">Back to Neurology</a>
@@ -131,211 +145,205 @@ hr{border:none;border-top:1px solid var(--border);margin:12px 0;}
 <main>
 
 <div class="card">
-  <h2>Core Idea</h2>
-  <p>
-    AMS is not one diagnosis. Your job is to quickly decide whether this is:
-    <strong>(1) diffuse brain dysfunction</strong> (delirium/encephalopathy),
-    <strong>(2) focal structural disease</strong> (stroke/bleed/mass),
-    or <strong>(3) seizures/nonconvulsive status</strong>.
-  </p>
+  <h2>What AMS Means (Clinically)</h2>
+  <div class="kv">
+    <div class="k">Definition</div>
+    <div class="v">Change in <strong>arousal</strong>, <strong>attention</strong>, <strong>cognition</strong>, or <strong>behavior</strong> from baseline.</div>
+    <div class="k">First rule</div>
+    <div class="v">AMS is a <strong>symptom</strong> — your job is to rapidly separate <strong>reversible medical/toxic</strong> from <strong>structural brain</strong>.</div>
+  </div>
   <div class="rule">
-    <strong>Two high-yield questions:</strong>
-    <span>Is it <strong>focal</strong>? Is it <strong>abrupt</strong>?</span>
+    <strong>Reality check:</strong>
+    <span>You can’t diagnose “dementia” or “psychiatric” until delirium/medical causes are excluded.</span>
   </div>
 </div>
 
 <div class="card">
-  <h2>Stepwise Algorithm</h2>
+  <h2>1-Minute Safety Sweep <span class="badge">Do first</span></h2>
 
   <details open>
-    <summary><span class="step">Step 0</span> Stabilize + Reversible Mimics (60 seconds)</summary>
+    <summary><span class="step">Step 0</span> Stabilize + Immediate Reversibles</summary>
     <div class="kv">
-      <div class="k">Do this</div>
-      <div class="v">
-        <ul>
-          <li>Airway/breathing/circulation; check O2, vitals, temp.</li>
-          <li><strong>Fingerstick glucose</strong> immediately.</li>
-          <li>Consider naloxone if opioid toxicity possible (based on exam/respirations).</li>
-          <li>Look for hypoxia, hypercapnia, shock.</li>
-        </ul>
-      </div>
-      <div class="k">What it’s testing</div>
-      <div class="v">Life threats + the fastest fixable causes.</div>
-      <div class="k">Localization clue</div>
-      <div class="v">If oxygenation/ventilation or perfusion is failing, AMS is often global encephalopathy (until proven otherwise).</div>
+      <div class="k">ABCs</div>
+      <div class="v">Airway protection, oxygen, suction, monitor, IV access.</div>
+      <div class="k">Fingerstick</div>
+      <div class="v"><strong>Glucose now.</strong> Treat hypoglycemia immediately.</div>
+      <div class="k">Vitals</div>
+      <div class="v">Temp, BP/MAP, HR, RR, SpO₂.</div>
+      <div class="k">Quick neuro</div>
+      <div class="v">Pupils, gaze, face symmetry, limb drift, speech, neglect.</div>
     </div>
-    <div class="pearl">If glucose is low, everything else is trivia until corrected.</div>
-  </details>
-
-  <details>
-    <summary><span class="step">Step 1</span> Define the Phenotype: Delirium vs Aphasia vs Coma</summary>
-    <div class="kv">
-      <div class="k">Do this</div>
-      <div class="v">
-        <ul>
-          <li>Level of arousal: alert → drowsy → stupor → coma.</li>
-          <li>Attention: months backward / WORLD backward.</li>
-          <li>Language screen: naming + simple commands + repetition.</li>
-          <li>Behavior: agitation, hallucinations, disinhibition.</li>
-        </ul>
-      </div>
-      <div class="k">What it’s testing</div>
-      <div class="v">Diffuse attention network vs focal language cortex vs arousal pathways.</div>
-      <div class="k">Localization clue</div>
-      <div class="v">
-        <ul>
-          <li><strong>Primary attention deficit</strong> → delirium/encephalopathy (diffuse).</li>
-          <li><strong>True aphasia</strong> → dominant hemisphere cortex (often MCA territory).</li>
-          <li><strong>Coma</strong> → brainstem/thalamus or severe systemic/toxic/metabolic.</li>
-        </ul>
-      </div>
-    </div>
-  </details>
-
-  <details>
-    <summary><span class="step">Step 2</span> Decide: Structural vs Metabolic/Toxic vs Seizure</summary>
-    <div class="kv">
-      <div class="k">Structural clues</div>
-      <div class="v">
-        <ul>
-          <li>New focal deficit (face droop, drift, gaze deviation, field cut).</li>
-          <li>Sudden onset or “worst headache.”</li>
-          <li>New asymmetric pupils or abnormal brainstem reflexes.</li>
-        </ul>
-      </div>
-      <div class="k">Metabolic/toxic clues</div>
-      <div class="v">
-        <ul>
-          <li>Fluctuating course; inattention; diffuse myoclonus/asterixis.</li>
-          <li>Medication changes, intoxication, withdrawal.</li>
-          <li>Systemic illness (infection, renal/hepatic failure).</li>
-        </ul>
-      </div>
-      <div class="k">Seizure clues</div>
-      <div class="v">
-        <ul>
-          <li>Witnessed convulsion, tongue bite, urinary incontinence.</li>
-          <li>Unexplained prolonged post-ictal state.</li>
-          <li>Subtle rhythmic twitching, gaze deviation, unexplained agitation.</li>
-        </ul>
-      </div>
-    </div>
-    <div class="pearl">If focal + abrupt → assume structural until imaging proves otherwise.</div>
-  </details>
-
-  <details>
-    <summary><span class="step">Step 3</span> The “Must-Not-Miss” Orders Set</summary>
-    <div class="kv">
-      <div class="k">Always consider</div>
-      <div class="v">
-        <ul>
-          <li>Glucose (already), CBC, CMP, Mg/Phos.</li>
-          <li>VBG/ABG if CO2 retention, severe illness, or unexplained somnolence.</li>
-          <li>UA/urine culture if indicated; tox screen if changes management.</li>
-          <li>EKG; troponin if concern for ischemia/arrhythmia/hypoperfusion.</li>
-        </ul>
-      </div>
-      <div class="k">Imaging</div>
-      <div class="v">
-        <ul>
-          <li><strong>CT head</strong> if new focal findings, trauma, anticoagulation, severe headache, or unexplained coma.</li>
-          <li><strong>CTA head/neck</strong> if stroke suspected or focal neuro signs.</li>
-        </ul>
-      </div>
-      <div class="k">Infectious</div>
-      <div class="v">
-        <ul>
-          <li>Blood cultures + lactate if sepsis.</li>
-          <li>If meningitis/encephalitis suspected: treat early; consider LP (after CT if indicated).</li>
-        </ul>
-      </div>
-    </div>
-  </details>
-
-  <details>
-    <summary><span class="step">Step 4</span> When to Get EEG <span class="badge">Don’t miss NCSE</span></summary>
-    <div class="kv">
-      <div class="k">Get EEG if</div>
-      <div class="v">
-        <ul>
-          <li>Unexplained AMS after initial stabilization + basic labs.</li>
-          <li>Prolonged post-ictal state or recurrent unexplained confusion.</li>
-          <li>Unexplained coma, especially in ICU.</li>
-          <li>Subtle motor findings (twitching, eye deviation) or fluctuating mentation.</li>
-        </ul>
-      </div>
-      <div class="k">What EEG answers</div>
-      <div class="v">Seizure activity (including nonconvulsive status), and degree of encephalopathy.</div>
-      <div class="k">Localization clue</div>
-      <div class="v">Focal epileptiform activity may point toward focal structural lesions.</div>
-    </div>
-    <div class="pearl">Nonconvulsive status can look like “just delirium” — EEG is how you prove it.</div>
-  </details>
-
-  <details>
-    <summary><span class="step">Step 5</span> When to Do Lumbar Puncture (LP)</summary>
-    <div class="kv">
-      <div class="k">LP helps when</div>
-      <div class="v">
-        <ul>
-          <li>Fever + AMS (especially with headache, neck stiffness, photophobia).</li>
-          <li>Encephalitis signs: new seizures, focal findings, personality change.</li>
-          <li>Concern for SAH with negative CT but high suspicion (case-dependent).</li>
-        </ul>
-      </div>
-      <div class="k">CT before LP if</div>
-      <div class="v">
-        <ul>
-          <li>Focal neuro deficit, papilledema, new seizure, immunocompromised, or significantly altered level of consciousness.</li>
-        </ul>
-      </div>
-      <div class="k">What it answers</div>
-      <div class="v">Infection/inflammation, hemorrhage patterns, and opening pressure clues.</div>
-    </div>
-    <div class="pearl">If encephalitis is suspected, start empiric treatment early—don’t wait for LP perfection.</div>
-  </details>
-
-  <details>
-    <summary><span class="step">Step 6</span> When to Get MRI Brain</summary>
-    <div class="kv">
-      <div class="k">MRI helps when</div>
-      <div class="v">
-        <ul>
-          <li>CT is unrevealing but focal findings persist.</li>
-          <li>Suspected posterior circulation stroke with normal CT.</li>
-          <li>Concern for encephalitis, demyelination, vasculitis, or occult infarcts.</li>
-          <li>Persistent unexplained AMS after initial workup.</li>
-        </ul>
-      </div>
-      <div class="k">What MRI answers</div>
-      <div class="v">Small infarcts, brainstem lesions, inflammatory patterns, and diffusion restriction.</div>
-    </div>
+    <div class="warn"><strong>Never skip:</strong> glucose + oxygenation + vitals. They’re the fastest lifesavers.</div>
   </details>
 
 </div>
 
 <div class="card">
-  <h2>Ultra-Fast Localization Cheatsheet</h2>
+  <h2>Common Causes of AMS — and How to Rule Out Each</h2>
+  <p class="small">Use this as your “night-float checklist.” Start at A, move down. Don’t shotgun randomly.</p>
+
+  <details open>
+    <summary><span class="step">A</span> Immediately Life-Threatening / Rapidly Reversible</summary>
+    <div class="kv">
+      <div class="k">Hypoglycemia</div>
+      <div class="v">Rule out with bedside glucose. Treat first; confirm later.</div>
+
+      <div class="k">Hypoxia</div>
+      <div class="v">SpO₂, ABG/VBG if uncertain. Consider PE, pneumonia, edema, COPD, OSA/OHS.</div>
+
+      <div class="k">Hypercapnia</div>
+      <div class="v">VBG/ABG, clinical CO₂ narcosis (somnolence, headache). Consider COPD/OHS, sedatives.</div>
+
+      <div class="k">Shock / Hypoperfusion</div>
+      <div class="v">Vitals/MAP, lactate, bedside ultrasound if available, evaluate bleeding/sepsis/cardiogenic causes.</div>
+
+      <div class="k">Opioid toxicity</div>
+      <div class="v">Pinpoint pupils, hypoventilation. Rule out with history/meds; respond to naloxone if indicated.</div>
+    </div>
+    <div class="pearl">If the patient is sleepy + breathing poorly, think <strong>CO₂ and meds</strong> before blaming “confusion.”</div>
+  </details>
+
+  <details>
+    <summary><span class="step">B</span> Metabolic / Toxic <span class="badge">Most common on floors</span></summary>
+    <div class="kv">
+      <div class="k">Electrolytes</div>
+      <div class="v">BMP/CMP (Na, Ca), add Mg/Phos. Hyponatremia can cause seizures/AMS; hyperNa causes lethargy.</div>
+
+      <div class="k">Renal failure / Uremia</div>
+      <div class="v">BUN/Cr, asterixis, pericarditis/nausea history. Consider dialysis indications if severe.</div>
+
+      <div class="k">Hepatic encephalopathy</div>
+      <div class="v">Clinical diagnosis + LFTs, ammonia supportive (not definitive). Look for triggers: GI bleed, infection, constipation, sedatives.</div>
+
+      <div class="k">Medication effect</div>
+      <div class="v">Full med rec: opioids, benzos, anticholinergics, gabapentinoids, polypharmacy, new meds/dose changes.</div>
+
+      <div class="k">Withdrawal</div>
+      <div class="v">Alcohol/benzo withdrawal: tremor, agitation, autonomic hyperactivity, hallucinosis; confirm with history and vitals.</div>
+
+      <div class="k">Tox/ingestion</div>
+      <div class="v">Consider when story is unclear: tox screen if it changes management; check salicylates/acetaminophen when appropriate.</div>
+    </div>
+    <div class="pearl">In older patients, “new AMS” is meds until proven otherwise — especially after pain meds or sleep meds.</div>
+  </details>
+
+  <details>
+    <summary><span class="step">C</span> Infection / Inflammation</summary>
+    <div class="kv">
+      <div class="k">Sepsis</div>
+      <div class="v">Vitals, lactate, CBC, cultures, source search. Elderly can be afebrile.</div>
+
+      <div class="k">Pneumonia</div>
+      <div class="v">CXR, oxygenation, exam; consider aspiration.</div>
+
+      <div class="k">UTI</div>
+      <div class="v">UA/UCx when symptoms or systemic signs. <strong>Asymptomatic bacteriuria ≠ cause</strong> by itself.</div>
+
+      <div class="k">Meningitis/Encephalitis</div>
+      <div class="v">Red flags: fever + neck stiffness + AMS, new seizures, focal deficits. CT head first if indicated → LP. Start empiric therapy if high suspicion.</div>
+    </div>
+    <div class="warn"><strong>Do not delay treatment:</strong> if meningitis/encephalitis is truly suspected, start empiric antibiotics/antivirals while arranging LP/imaging.</div>
+  </details>
+
+  <details>
+    <summary><span class="step">D</span> Structural / Neurologic <span class="badge">Don’t miss</span></summary>
+    <div class="kv">
+      <div class="k">ICH / Large stroke</div>
+      <div class="v">Non-contrast CT head. Think when focal deficit, severe headache, vomiting, anticoagulation, depressed consciousness.</div>
+
+      <div class="k">Subdural hematoma</div>
+      <div class="v">CT head. Elderly, alcohol use, anticoagulated, remote fall; can present subacute with fluctuating AMS.</div>
+
+      <div class="k">Seizure / Post-ictal</div>
+      <div class="v">Witnessed event? Tongue bite/incontinence? Consider if unexplained AMS after shaking or staring spells.</div>
+
+      <div class="k">NCSE</div>
+      <div class="v"><strong>EEG is the test.</strong> Suspect with persistent unexplained AMS, subtle twitching/eye deviation, prolonged post-ictal, ICU coma.</div>
+
+      <div class="k">Increased ICP</div>
+      <div class="v">CT/MRI; clues: headache, vomiting, papilledema, Cushing physiology.</div>
+    </div>
+    <div class="pearl">If AMS is unexplained after glucose/oxygen/labs/CT → think <strong>EEG</strong>. NCSE hides in plain sight.</div>
+  </details>
+
+  <details>
+    <summary><span class="step">E</span> Psychiatric / Functional <span class="badge">Diagnosis of exclusion</span></summary>
+    <div class="kv">
+      <div class="k">Primary psychosis / catatonia</div>
+      <div class="v">Consider only after medical causes are addressed. Catatonia clues: waxy flexibility, mutism, rigidity, negativism.</div>
+
+      <div class="k">Dissociative / functional</div>
+      <div class="v">Normal vitals/labs/imaging, inconsistent exam; still requires careful exclusion of medical illness.</div>
+    </div>
+    <div class="warn">New AMS is medical until proven otherwise. “Psych” is not a first-pass label.</div>
+  </details>
+
+</div>
+
+<div class="card">
+  <h2>What to Order Early <span class="badge">Practical baseline</span></h2>
+
+  <details open>
+    <summary><span class="step">Labs</span> Common “first batch”</summary>
+    <ul>
+      <li>Glucose (POC), CBC, CMP/BMP</li>
+      <li>Mg, Phos</li>
+      <li>VBG/ABG if respiratory concern</li>
+      <li>UA ± culture, CXR if infection concern</li>
+      <li>EKG (silent arrhythmia/ischemia can present as “confusion”)</li>
+    </ul>
+  </details>
+
+  <details>
+    <summary><span class="step">Imaging</span> When to get CT head</summary>
+    <ul>
+      <li>Focal deficits, new seizure, anticoagulation, head trauma/fall, severe headache, markedly decreased consciousness</li>
+      <li>Concern for hemorrhage, mass, hydrocephalus</li>
+    </ul>
+    <div class="pearl">Normal CT does not rule out early ischemic posterior stroke — trust the exam.</div>
+  </details>
+
+  <details>
+    <summary><span class="step">LP</span> When to consider lumbar puncture</summary>
+    <ul>
+      <li>Suspected meningitis/encephalitis (fever + AMS, seizures, meningismus)</li>
+      <li>Subarachnoid hemorrhage when CT is negative but suspicion remains (institution dependent)</li>
+    </ul>
+  </details>
+
+  <details>
+    <summary><span class="step">EEG</span> When to order EEG</summary>
+    <ul>
+      <li>Persistent unexplained AMS after initial workup</li>
+      <li>Prolonged post-ictal state, subtle motor phenomena, ICU coma</li>
+      <li>Concern for nonconvulsive status epilepticus</li>
+    </ul>
+  </details>
+
+</div>
+
+<div class="card">
+  <h2>Common Pitfalls</h2>
   <ul>
-    <li><strong>Diffuse encephalopathy:</strong> primary inattention, fluctuating course, symmetric exam</li>
-    <li><strong>Dominant cortex:</strong> aphasia (naming/commands/repetition)</li>
-    <li><strong>Non-dominant cortex:</strong> neglect, anosognosia</li>
-    <li><strong>Brainstem:</strong> cranial nerves, crossed findings, abnormal pupils/ocular movements</li>
-    <li><strong>Seizure/NCSE:</strong> fluctuating confusion, subtle motor signs, prolonged “post-ictal” state</li>
+    <li>Stopping at “UTI” based only on bacteriuria without symptoms/systemic signs</li>
+    <li>Ignoring medication changes (opioids/benzos/anticholinergics)</li>
+    <li>Assuming “normal CT” excludes posterior stroke</li>
+    <li>Missing NCSE because there’s no obvious shaking</li>
+    <li>Calling it “dementia” during an acute illness</li>
   </ul>
 </div>
 
 <div class="card">
-  <h2>When to Call Neurology <span class="badge">Practical triggers</span></h2>
+  <h2>When to Call Neurology</h2>
   <ul>
-    <li>Any new focal deficit or suspected stroke/TIA</li>
-    <li>Concern for nonconvulsive status epilepticus (need EEG guidance)</li>
-    <li>Concern for encephalitis, unusual MRI findings, demyelination, vasculitis</li>
-    <li>Unexplained coma or rapidly worsening mental status</li>
+    <li>Any focal neuro deficits or concern for stroke/ICH</li>
+    <li>New seizure, recurrent seizures, or suspected NCSE (EEG guidance)</li>
+    <li>Unexplained persistent AMS after basic stabilization + initial workup</li>
+    <li>Concern for encephalitis, unusual presentations, or rapidly progressive decline</li>
   </ul>
 </div>
 
-<p class="footer-note">Neurology Review • AMS / Encephalopathy</p>
+<p class="footer-note">Neurology Review • AMS (Delirium & Acute Encephalopathy)</p>
 
 </main>
 </body>

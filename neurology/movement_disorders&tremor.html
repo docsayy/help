@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Movement Disorders & Tremor – Clinical Guide</title>
+<style>
+:root{
+  --neuro-main:#4a90e2;
+  --neuro-light:#eef5ff;
+  --neuro-accent:#2f6fb3;
+  --bg:#f7f9fc;
+  --card:#ffffff;
+  --text-main:#1f2933;
+  --text-muted:#52606d;
+  --border:#dce3ee;
+  --radius:14px;
+}
+*{box-sizing:border-box;}
+body{margin:0;font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;background:var(--bg);color:var(--text-main);}
+header{background:linear-gradient(135deg,var(--neuro-main),var(--neuro-accent));color:#fff;padding:20px;}
+header h1{margin:0 0 6px 0;font-size:22px;}
+header p{margin:0;font-size:14px;opacity:.95;}
+.nav-buttons{display:flex;gap:10px;margin-top:14px;flex-wrap:wrap;}
+.nav-buttons a{text-decoration:none;background:rgba(255,255,255,0.15);color:#fff;padding:6px 12px;border-radius:999px;font-size:13px;}
+main{padding:20px;max-width:900px;margin:0 auto;}
+.card{background:var(--card);border-radius:var(--radius);padding:18px;margin-bottom:18px;border:1px solid var(--border);}
+.card h2{margin-top:0;color:var(--neuro-accent);font-size:18px;}
+.badge{display:inline-block;font-size:12px;padding:4px 10px;border-radius:999px;background:var(--neuro-light);color:var(--neuro-accent);border:1px solid #d6e7ff;margin-left:8px;}
+details{border:1px solid var(--border);border-radius:12px;padding:12px 14px;margin-bottom:12px;background:#fbfdff;}
+details summary{cursor:pointer;font-weight:800;color:var(--neuro-accent);list-style:none;}
+details summary::-webkit-details-marker{display:none;}
+.step{display:inline-block;font-size:12px;padding:3px 10px;border-radius:999px;background:var(--neuro-light);color:var(--neuro-accent);border:1px solid #d6e7ff;margin-right:8px;}
+.kv{display:grid;grid-template-columns:190px 1fr;gap:8px 12px;margin-top:10px;}
+.k{color:var(--text-muted);font-weight:900;font-size:13px;}
+.v{font-size:14px;}
+ul{margin:8px 0 10px 18px;}
+.pearl{background:var(--neuro-light);border-left:4px solid var(--neuro-main);padding:10px 12px;border-radius:10px;font-size:14px;margin-top:10px;}
+.warn{background:#fff5f5;border-left:4px solid #d64545;padding:10px 12px;border-radius:10px;font-size:14px;margin-top:10px;}
+.rule{background:#ffffff;border:1px dashed #b7cff0;border-radius:12px;padding:12px 14px;margin-top:12px;font-size:14px;}
+.rule strong{color:var(--neuro-accent);}
+.small{font-size:13px;color:var(--text-muted);}
+.table{width:100%;border-collapse:separate;border-spacing:0;overflow:hidden;border:1px solid var(--border);border-radius:12px;margin-top:10px;}
+.table th,.table td{text-align:left;padding:10px 12px;border-bottom:1px solid var(--border);font-size:14px;vertical-align:top;}
+.table th{background:#fbfdff;color:var(--neuro-accent);font-weight:900;}
+.table tr:last-child td{border-bottom:none;}
+.footer-note{text-align:center;font-size:13px;color:var(--text-muted);margin:30px 0 10px;}
+</style>
+</head>
+
+<body>
+<header>
+  <h1>Movement Disorders & Tremor</h1>
+  <p>Fast pattern recognition for Parkinsonism, tremor types, and common mimics</p>
+  <div class="nav-buttons">
+    <a href="../index.html">Home</a>
+    <a href="../neurology.html">Back to Neurology</a>
+  </div>
+</header>
+
+<main>
+
+<div class="card">
+  <h2>How to Think About Movement Problems</h2>
+  <div class="rule">
+    <strong>Two big buckets:</strong>
+    <span><strong>Hypokinetic</strong> (too little movement: Parkinsonism) vs <strong>Hyperkinetic</strong> (too much: tremor/chorea/dystonia/myoclonus).</span>
+  </div>
+  <div class="pearl">Start with: <strong>When does it happen?</strong> (rest, posture, action) + <strong>what speed?</strong> (rhythmic tremor vs jerky myoclonus vs flowing chorea).</div>
+</div>
+
+<div class="card">
+  <h2>Step 1: Tremor Classification (Highest Yield)</h2>
+
+  <details open>
+    <summary><span class="step">Rest tremor</span> (appears at rest, improves with action)</summary>
+    <div class="kv">
+      <div class="k">Think</div>
+      <div class="v"><strong>Parkinson disease</strong> (classic “pill-rolling”).</div>
+      <div class="k">Clues</div>
+      <div class="v">Unilateral onset, bradykinesia, rigidity, shuffling gait.</div>
+    </div>
+  </details>
+
+  <details>
+    <summary><span class="step">Postural / Action tremor</span> (worse holding position or moving)</summary>
+    <div class="kv">
+      <div class="k">Most common</div>
+      <div class="v"><strong>Essential tremor</strong> (ET) – hands/arms, often bilateral.</div>
+      <div class="k">Clues</div>
+      <div class="v">Worse with action, better at rest; family history; improves with alcohol in some.</div>
+      <div class="k">Red flags</div>
+      <div class="v">New tremor + meds/thyroid/toxin/withdrawal.</div>
+    </div>
+  </details>
+
+  <details>
+    <summary><span class="step">Intention tremor</span> (worse near target)</summary>
+    <div class="kv">
+      <div class="k">Think</div>
+      <div class="v"><strong>Cerebellar lesion</strong> (stroke, tumor, MS, toxicity).</div>
+      <div class="k">Clues</div>
+      <div class="v">Ataxia, dysmetria, nystagmus, wide-based gait.</div>
+    </div>
+    <div class="warn">New cerebellar signs with headache/vomiting or acute onset → urgent imaging.</div>
+  </details>
+
+</div>
+
+<div class="card">
+  <h2>Step 2: Parkinsonism (Recognize + Don’t Miss Atypical)</h2>
+
+  <details open>
+    <summary><span class="step">Core features</span> Parkinsonism = bradykinesia + (rest tremor or rigidity)</summary>
+    <ul>
+      <li><strong>Bradykinesia</strong>: slow, small movements; reduced arm swing; micrographia</li>
+      <li><strong>Rigidity</strong>: cogwheel or lead-pipe</li>
+      <li><strong>Rest tremor</strong> may or may not be present</li>
+      <li><strong>Postural instability</strong> usually later in typical Parkinson disease</li>
+    </ul>
+  </details>
+
+  <details>
+    <summary><span class="step">Atypical red flags</span> (think “not classic PD”)</summary>
+    <ul>
+      <li>Early falls (first year)</li>
+      <li>Early severe autonomic dysfunction (syncope, urinary retention)</li>
+      <li>Early prominent cognitive/behavior change</li>
+      <li>Poor levodopa response</li>
+      <li>Vertical gaze palsy (PSP clue)</li>
+      <li>Marked asymmetric apraxia/alien limb (CBD clue)</li>
+    </ul>
+    <div class="pearl">If falls are early and dramatic, classic PD is less likely.</div>
+  </details>
+
+  <details>
+    <summary><span class="step">Medication-induced parkinsonism</span> (common inpatient problem)</summary>
+    <div class="kv">
+      <div class="k">Culprits</div>
+      <div class="v">Antipsychotics, metoclopramide, prochlorperazine; some antiemetics.</div>
+      <div class="k">Clue</div>
+      <div class="v">Often more symmetric; temporal relationship to med exposure.</div>
+    </div>
+  </details>
+
+</div>
+
+<div class="card">
+  <h2>Other Hyperkinetic Clues (Quick Recognition)</h2>
+
+  <table class="table" aria-label="Hyperkinetic patterns">
+    <thead>
+      <tr>
+        <th>Movement</th>
+        <th>What it looks like</th>
+        <th>Common causes</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Myoclonus</strong></td>
+        <td>Sudden, brief “jerks”</td>
+        <td>Uremia, hypoxia, meds (opioids), post-anoxic, seizures</td>
+      </tr>
+      <tr>
+        <td><strong>Chorea</strong></td>
+        <td>Flowing, irregular “dance-like” movements</td>
+        <td>Stroke (subthalamic), hyperglycemia, meds, Huntington (rare)</td>
+      </tr>
+      <tr>
+        <td><strong>Dystonia</strong></td>
+        <td>Sustained twisting posture</td>
+        <td>Drug-induced, idiopathic, Wilson (young)</td>
+      </tr>
+      <tr>
+        <td><strong>Tics</strong></td>
+        <td>Suppressible, urge-driven</td>
+        <td>Chronic tic disorder, Tourette (often younger)</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="pearl">If it’s rhythmic → tremor. If it’s jerky → myoclonus. If it’s flowing → chorea. If it’s twisting → dystonia.</div>
+</div>
+
+<div class="card">
+  <h2>Workup (Practical)</h2>
+  <details open>
+    <summary><span class="step">Always consider</span> Reversible causes</summary>
+    <ul>
+      <li>Medication review (antipsychotics, antiemetics, lithium, valproate, stimulants)</li>
+      <li>TSH (new tremor), CMP (electrolytes), glucose</li>
+      <li>Consider B12 if neuropathy/gait issues</li>
+    </ul>
+  </details>
+
+  <details>
+    <summary><span class="step">When to image</span></summary>
+    <ul>
+      <li>Acute onset movement disorder</li>
+      <li>Focal neuro deficits</li>
+      <li>New cerebellar signs, severe headache, or rapid progression</li>
+    </ul>
+  </details>
+</div>
+
+<div class="card">
+  <h2>When to Call Neurology</h2>
+  <ul>
+    <li>Acute onset chorea/hemiballismus, new cerebellar syndrome</li>
+    <li>Atypical Parkinsonism red flags</li>
+    <li>Disabling tremor not responding to first-line strategies</li>
+    <li>Concern for seizure-related myoclonus or toxic-metabolic jerks</li>
+  </ul>
+</div>
+
+<p class="footer-note">Neurology Review • Movement Disorders</p>
+</main>
+</body>
+</html>
