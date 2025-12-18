@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Stroke Syndromes & Localization – Clinical Guide</title>
+<style>
+:root{
+  --neuro-main:#4a90e2;
+  --neuro-light:#eef5ff;
+  --neuro-accent:#2f6fb3;
+  --bg:#f7f9fc;
+  --card:#ffffff;
+  --text-main:#1f2933;
+  --text-muted:#52606d;
+  --border:#dce3ee;
+  --radius:14px;
+}
+*{box-sizing:border-box;}
+body{
+  margin:0;
+  font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+  background:var(--bg);
+  color:var(--text-main);
+}
+header{
+  background:linear-gradient(135deg,var(--neuro-main),var(--neuro-accent));
+  color:#fff;
+  padding:20px;
+}
+header h1{margin:0 0 6px 0;font-size:22px;}
+header p{margin:0;font-size:14px;opacity:.95;}
+.nav-buttons{display:flex;gap:10px;margin-top:14px;flex-wrap:wrap;}
+.nav-buttons a{
+  text-decoration:none;
+  background:rgba(255,255,255,0.15);
+  color:#fff;
+  padding:6px 12px;
+  border-radius:999px;
+  font-size:13px;
+}
+main{padding:20px;max-width:900px;margin:0 auto;}
+.card{
+  background:var(--card);
+  border-radius:var(--radius);
+  padding:18px;
+  margin-bottom:18px;
+  border:1px solid var(--border);
+}
+.card h2{margin-top:0;color:var(--neuro-accent);font-size:18px;}
+details{
+  border:1px solid var(--border);
+  border-radius:12px;
+  padding:12px 14px;
+  margin-bottom:12px;
+  background:#fbfdff;
+}
+details summary{
+  cursor:pointer;
+  font-weight:700;
+  color:var(--neuro-accent);
+  list-style:none;
+}
+details summary::-webkit-details-marker{display:none;}
+.step{
+  display:inline-block;
+  font-size:12px;
+  padding:3px 10px;
+  border-radius:999px;
+  background:var(--neuro-light);
+  color:var(--neuro-accent);
+  border:1px solid #d6e7ff;
+  margin-right:8px;
+}
+.kv{
+  display:grid;
+  grid-template-columns:160px 1fr;
+  gap:8px 12px;
+  margin-top:10px;
+}
+.k{color:var(--text-muted);font-weight:700;font-size:13px;}
+.v{font-size:14px;}
+ul{margin:8px 0 10px 18px;}
+.pearl{
+  background:var(--neuro-light);
+  border-left:4px solid var(--neuro-main);
+  padding:10px 12px;
+  border-radius:10px;
+  font-size:14px;
+  margin-top:10px;
+}
+.footer-note{
+  text-align:center;
+  font-size:13px;
+  color:var(--text-muted);
+  margin:30px 0 10px;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <h1>Stroke Syndromes & Localization</h1>
+  <p>From bedside exam to brain territory in under 60 seconds</p>
+  <div class="nav-buttons">
+    <a href="../index.html">Home</a>
+    <a href="../neurology.html">Back to Neurology</a>
+  </div>
+</header>
+
+<main>
+
+<div class="card">
+  <h2>Core Mental Model</h2>
+  <ul>
+    <li><strong>Cortical strokes</strong> → higher functions (language, neglect, vision).</li>
+    <li><strong>Subcortical strokes</strong> → “pure” motor or sensory syndromes.</li>
+    <li><strong>Brainstem strokes</strong> → cranial nerves + long tracts (“crossed findings”).</li>
+  </ul>
+  <div class="pearl">If you can localize, imaging becomes confirmation—not guesswork.</div>
+</div>
+
+<div class="card">
+  <h2>Cortical Stroke Syndromes</h2>
+
+  <details>
+    <summary>Dominant Hemisphere (usually Left)</summary>
+    <div class="kv">
+      <div class="k">Key deficits</div>
+      <div class="v">
+        <ul>
+          <li>Aphasia (naming, repetition, comprehension)</li>
+          <li>Alexia, agraphia</li>
+        </ul>
+      </div>
+      <div class="k">Likely vessels</div>
+      <div class="v">Left MCA &gt; Left ACA</div>
+    </div>
+    <div class="pearl">True aphasia is never “just confusion.” It localizes to cortex.</div>
+  </details>
+
+  <details>
+    <summary>Non-Dominant Hemisphere (usually Right)</summary>
+    <div class="kv">
+      <div class="k">Key deficits</div>
+      <div class="v">
+        <ul>
+          <li>Left-sided neglect</li>
+          <li>Anosognosia</li>
+          <li>Constructional apraxia</li>
+        </ul>
+      </div>
+      <div class="k">Likely vessels</div>
+      <div class="v">Right MCA</div>
+    </div>
+    <div class="pearl">Neglect is more localizing than weakness.</div>
+  </details>
+
+</div>
+
+<div class="card">
+  <h2>Lacunar (Subcortical) Stroke Syndromes</h2>
+
+  <details>
+    <summary>Pure Motor Hemiparesis</summary>
+    <div class="kv">
+      <div class="k">Findings</div>
+      <div class="v">Face, arm, and leg weakness without cortical signs.</div>
+      <div class="k">Lesion</div>
+      <div class="v">Posterior limb of internal capsule.</div>
+      <div class="k">Etiology</div>
+      <div class="v">Small-vessel disease (HTN, diabetes).</div>
+    </div>
+  </details>
+
+  <details>
+    <summary>Pure Sensory Stroke</summary>
+    <div class="kv">
+      <div class="k">Findings</div>
+      <div class="v">Isolated hemisensory loss.</div>
+      <div class="k">Lesion</div>
+      <div class="v">Thalamus.</div>
+    </div>
+  </details>
+
+  <details>
+    <summary>Ataxic Hemiparesis</summary>
+    <div class="kv">
+      <div class="k">Findings</div>
+      <div class="v">Ipsilateral weakness + ataxia.</div>
+      <div class="k">Lesion</div>
+      <div class="v">Internal capsule, pons.</div>
+    </div>
+  </details>
+
+  <details>
+    <summary>Dysarthria–Clumsy Hand</summary>
+    <div class="kv">
+      <div class="k">Findings</div>
+      <div class="v">Slurred speech + hand clumsiness.</div>
+      <div class="k">Lesion</div>
+      <div class="v">Pons or internal capsule.</div>
+    </div>
+  </details>
+
+</div>
+
+<div class="card">
+  <h2>Brainstem Stroke Localization</h2>
+
+  <details>
+    <summary>General Rule</summary>
+    <ul>
+      <li>Cranial nerve deficit on one side</li>
+      <li>Motor/sensory deficit on the opposite side</li>
+    </ul>
+    <div class="pearl">Crossed findings = brainstem until proven otherwise.</div>
+  </details>
+
+  <details>
+    <summary>Lateral Medullary (Wallenberg)</summary>
+    <ul>
+      <li>Dysphagia, hoarseness</li>
+      <li>Vertigo, nystagmus</li>
+      <li>Ipsi face pain/temp + contra body pain/temp</li>
+    </ul>
+    <div class="pearl">PICA stroke → unsafe swallow.</div>
+  </details>
+
+  <details>
+    <summary>Basilar Artery Occlusion</summary>
+    <ul>
+      <li>Coma or fluctuating consciousness</li>
+      <li>Quadriparesis</li>
+      <li>Locked-in syndrome (rare)</li>
+    </ul>
+    <div class="pearl">CTA immediately—this is a neurologic catastrophe.</div>
+  </details>
+
+</div>
+
+<div class="card">
+  <h2>Ultra-Fast Localization Table</h2>
+  <ul>
+    <li><strong>Aphasia</strong> → dominant cortex (MCA)</li>
+    <li><strong>Neglect</strong> → non-dominant cortex</li>
+    <li><strong>Pure motor/sensory</strong> → subcortical (lacunar)</li>
+    <li><strong>Crossed signs</strong> → brainstem</li>
+    <li><strong>Vision only</strong> → PCA</li>
+  </ul>
+</div>
+
+<p class="footer-note">Neurology Review • Stroke Syndromes & Localization</p>
+
+</main>
+</body>
+</html>
