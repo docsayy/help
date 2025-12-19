@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Dizziness & Vertigo – Stepwise Clinical Guide</title>
+<style>
+:root{
+  --neuro-main:#4a90e2;
+  --neuro-light:#eef5ff;
+  --neuro-accent:#2f6fb3;
+  --bg:#f7f9fc;
+  --card:#ffffff;
+  --text-main:#1f2933;
+  --text-muted:#52606d;
+  --border:#dce3ee;
+  --radius:14px;
+}
+*{box-sizing:border-box;}
+body{
+  margin:0;
+  font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+  background:var(--bg);
+  color:var(--text-main);
+}
+header{
+  background:linear-gradient(135deg,var(--neuro-main),var(--neuro-accent));
+  color:#fff;
+  padding:20px;
+}
+header h1{margin:0 0 6px 0;font-size:22px;}
+header p{margin:0;font-size:14px;opacity:.95;}
+.nav-buttons{display:flex;gap:10px;margin-top:14px;flex-wrap:wrap;}
+.nav-buttons a{
+  text-decoration:none;
+  background:rgba(255,255,255,0.15);
+  color:#fff;
+  padding:6px 12px;
+  border-radius:999px;
+  font-size:13px;
+}
+main{padding:20px;max-width:900px;margin:0 auto;}
+.card{
+  background:var(--card);
+  border-radius:var(--radius);
+  padding:18px;
+  margin-bottom:18px;
+  border:1px solid var(--border);
+}
+.card h2{margin-top:0;color:var(--neuro-accent);font-size:18px;}
+.badge{
+  display:inline-block;
+  font-size:12px;
+  padding:4px 10px;
+  border-radius:999px;
+  background:var(--neuro-light);
+  color:var(--neuro-accent);
+  border:1px solid #d6e7ff;
+  margin-left:8px;
+}
+details{
+  border:1px solid var(--border);
+  border-radius:12px;
+  padding:12px 14px;
+  margin-bottom:12px;
+  background:#fbfdff;
+}
+details summary{
+  cursor:pointer;
+  font-weight:700;
+  color:var(--neuro-accent);
+  list-style:none;
+}
+details summary::-webkit-details-marker{display:none;}
+.step{
+  display:inline-block;
+  font-size:12px;
+  padding:3px 10px;
+  border-radius:999px;
+  background:var(--neuro-light);
+  color:var(--neuro-accent);
+  border:1px solid #d6e7ff;
+  margin-right:8px;
+}
+.kv{
+  display:grid;
+  grid-template-columns:160px 1fr;
+  gap:8px 12px;
+  margin-top:10px;
+}
+.k{color:var(--text-muted);font-weight:700;font-size:13px;}
+.v{font-size:14px;}
+ul{margin:8px 0 10px 18px;}
+.pearl{
+  background:var(--neuro-light);
+  border-left:4px solid var(--neuro-main);
+  padding:10px 12px;
+  border-radius:10px;
+  font-size:14px;
+  margin-top:10px;
+}
+.warn{
+  background:#fff5f5;
+  border-left:4px solid #d64545;
+  padding:10px 12px;
+  border-radius:10px;
+  font-size:14px;
+  margin-top:10px;
+}
+.rule{
+  background:#ffffff;
+  border:1px dashed #b7cff0;
+  border-radius:12px;
+  padding:12px 14px;
+  margin-top:12px;
+  font-size:14px;
+}
+.rule strong{color:var(--neuro-accent);}
+.img-slot{
+  margin-top:10px;
+  border:1px dashed #b7cff0;
+  background:#ffffff;
+  border-radius:12px;
+  padding:12px 14px;
+}
+.img-slot .hint{
+  font-size:13px;
+  color:var(--text-muted);
+  margin:0 0 8px 0;
+}
+.img-slot img{
+  width:100%;
+  max-height:340px;
+  object-fit:contain;
+  border-radius:10px;
+  border:1px solid var(--border);
+  background:#fbfdff;
+}
+.footer-note{
+  text-align:center;
+  font-size:13px;
+  color:var(--text-muted);
+  margin:30px 0 10px;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <h1>Dizziness & Vertigo</h1>
+  <p>Define the symptom → classify the syndrome → central vs peripheral → targeted workup</p>
+  <div class="nav-buttons">
+    <a href="../index.html">Home</a>
+    <a href="../neurology.html">Back to Neurology</a>
+  </div>
+</header>
+
+<main>
+
+<div class="card">
+  <h2>a. What is “Dizziness”?</h2>
+  <p>
+    <strong>Dizziness is a symptom, not a diagnosis.</strong> Patients use it to describe abnormal sensations involving
+    balance, spatial perception, cerebral perfusion, or consciousness. The clinician’s job is to translate “dizzy”
+    into a physiologic category so the exam and workup become obvious.
+  </p>
+  <div class="rule">
+    <strong>Core rule:</strong>
+    <span>Do not chase “dizziness.” Classify it first.</span>
+  </div>
+</div>
+
+<div class="card">
+  <h2>2. What Does the Patient Mean by “Dizzy”?</h2>
+
+  <details open>
+    <summary><span class="step">Vertigo</span> (illusion of movement)</summary>
+    <div class="kv">
+      <div class="k">Patient says</div>
+      <div class="v">
+        <ul>
+          <li>“The room is spinning”</li>
+          <li>“I feel like I’m moving”</li>
+          <li>“Things are rotating/tilting”</li>
+        </ul>
+      </div>
+      <div class="k">Implies</div>
+      <div class="v">Vestibular system involvement (peripheral inner ear vs central brainstem/cerebellum).</div>
+    </div>
+  </details>
+
+  <details>
+    <summary><span class="step">Presyncope</span> (near fainting)</summary>
+    <div class="kv">
+      <div class="k">Patient says</div>
+      <div class="v">
+        <ul>
+          <li>“I was going to pass out”</li>
+          <li>“Tunnel vision / blacking out”</li>
+          <li>“Lightheaded when standing”</li>
+        </ul>
+      </div>
+      <div class="k">Implies</div>
+      <div class="v">Global cerebral hypoperfusion (volume, autonomic, cardiac output).</div>
+    </div>
+  </details>
+
+  <details>
+    <summary><span class="step">Syncope</span> (true LOC)</summary>
+    <div class="kv">
+      <div class="k">Patient says</div>
+      <div class="v">
+        <ul>
+          <li>“I passed out”</li>
+          <li>“I lost consciousness”</li>
+          <li>Witnessed collapse</li>
+        </ul>
+      </div>
+      <div class="k">Implies</div>
+      <div class="v">Transient loss of consciousness (cardiac until proven otherwise).</div>
+    </div>
+  </details>
+
+  <details>
+    <summary><span class="step">Disequilibrium</span> (balance / gait problem)</summary>
+    <div class="kv">
+      <div class="k">Patient says</div>
+      <div class="v">
+        <ul>
+          <li>“I’m unsteady when walking”</li>
+          <li>“I drift/veer”</li>
+          <li>“I don’t trust my legs”</li>
+        </ul>
+      </div>
+      <div class="k">Implies</div>
+      <div class="v">Gait/postural control disorder (cerebellum, proprioception, vision, basal ganglia, meds).</div>
+    </div>
+  </details>
+
+</div>
+
+<div class="card">
+  <h2>3. How to Obtain a High-Yield History</h2>
+
+  <details open>
+    <summary><span class="step">Core Questions</span> (fast + high yield)</summary>
+    <ul>
+      <li><strong>Onset:</strong> sudden vs gradual</li>
+      <li><strong>Timing:</strong> continuous vs episodic</li>
+      <li><strong>Duration:</strong> seconds vs minutes vs hours vs days</li>
+      <li><strong>Triggers:</strong> head movement/position, standing, exertion</li>
+      <li><strong>Associated symptoms:</strong> neuro (diplopia, dysarthria, weakness), auditory (hearing loss/tinnitus), cardiac (palpitations/CP)</li>
+      <li><strong>Ability to walk:</strong> normal vs needs support vs cannot stand</li>
+      <li><strong>Risk factors/meds:</strong> stroke/AF, volume depletion, antihypertensives, sedatives, alcohol</li>
+    </ul>
+    <div class="pearl">
+      Pattern recognition wins: <strong>timing + triggers + gait</strong> usually classifies dizziness better than “broad labs.”
+    </div>
+  </details>
+
+</div>
+
+<div class="card">
+  <h2>1. Vertigo <span class="badge">Peripheral vs Central</span></h2>
+
+  <details open>
+    <summary><span class="step">1a</span> Peripheral Vertigo (inner ear)</summary>
+    <div class="kv">
+      <div class="k">Typical</div>
+      <div class="v">
+        <ul>
+          <li>Intense spinning + prominent nausea/vomiting</li>
+          <li>Often worse with head movement</li>
+          <li>May have hearing symptoms (depending on diagnosis)</li>
+          <li>Usually able to ambulate (uncomfortably)</li>
+        </ul>
+      </div>
+      <div class="k">Nystagmus</div>
+      <div class="v">Unidirectional horizontal ± torsional; often suppresses with fixation.</div>
+      <div class="k">Workup</div>
+      <div class="v">Clinical diagnosis; image only if central features/atypical course.</div>
+    </div>
+
+    <details>
+      <summary><span class="step">Dx</span> BPPV</summary>
+      <div class="kv">
+        <div class="k">Story</div>
+        <div class="v">Brief vertigo (seconds) triggered by rolling in bed, looking up, bending.</div>
+        <div class="k">Exam</div>
+        <div class="v">
+          <strong>Dix–Hallpike</strong>
+          (diagnostic positional test: rapidly move from sitting to head-hanging with head turned;
+          provokes vertigo + characteristic nystagmus if posterior canal BPPV).
+        </div>
+        <div class="k">Treatment</div>
+        <div class="v">
+          <strong>Epley maneuver</strong>
+          (canalith repositioning: sequential head/body positions to move displaced otoliths back into the utricle).
+        </div>
+      </div>
+
+    </details>
+
+    <details>
+      <summary><span class="step">Dx</span> Vestibular Neuritis</summary>
+      <div class="kv">
+        <div class="k">Story</div>
+        <div class="v">Acute continuous vertigo (hours–days), severe nausea; often post-viral; no hearing loss.</div>
+        <div class="k">Exam</div>
+        <div class="v">Unidirectional nystagmus + <strong>abnormal</strong> head impulse; no focal neuro deficits.</div>
+        <div class="k">Workup</div>
+        <div class="v">Clinical; consider imaging if any central red flag or atypical features.</div>
+      </div>
+    </details>
+
+    <details>
+      <summary><span class="step">Dx</span> Ménière Disease</summary>
+      <div class="kv">
+        <div class="k">Story</div>
+        <div class="v">Episodic vertigo (minutes–hours) + fluctuating hearing loss + tinnitus/aural fullness.</div>
+        <div class="k">Workup</div>
+        <div class="v">Audiology/ENT; evaluate hearing pattern and recurrence.</div>
+      </div>
+    </details>
+
+    <details>
+      <summary><span class="step">Dx</span> Vestibular Migraine</summary>
+      <div class="kv">
+        <div class="k">Story</div>
+        <div class="v">Episodic vertigo ± headache; photophobia/phonophobia/aura; motion sensitivity.</div>
+        <div class="k">Workup</div>
+        <div class="v">Clinical diagnosis; neuro exam usually normal between attacks; exclude stroke/TIA when indicated.</div>
+      </div>
+    </details>
+
+  </details>
+
+  <details>
+    <summary><span class="step">1b</span> Central Vertigo (brainstem/cerebellum)</summary>
+    <div class="kv">
+      <div class="k">Why dangerous</div>
+      <div class="v">Often posterior circulation stroke; may have subtle neurologic signs and severe gait instability.</div>
+
+      <div class="k">“Subtle brainstem signs”</div>
+      <div class="v">
+        (minor focal findings that are easy to miss): diplopia, dysarthria, dysphagia, facial sensory changes,
+        limb ataxia, direction-changing nystagmus.
+      </div>
+
+      <div class="k">Nystagmus</div>
+      <div class="v">Vertical, direction-changing gaze-evoked, or pure torsional; fixation suppression unreliable.</div>
+    </div>
+
+    <div class="warn">
+      <strong>Central red flags:</strong> focal neuro deficits, <strong>inability to walk</strong>, vertical/direction-changing nystagmus, skew deviation, new severe headache/neck pain.
+    </div>
+
+    <details open>
+      <summary><span class="step">AVS</span> Acute Vestibular Syndrome</summary>
+      <div class="kv">
+        <div class="k">Definition</div>
+        <div class="v">
+          <strong>Acute Vestibular Syndrome</strong>
+          (acute onset of <strong>continuous</strong> vertigo lasting hours–days with nausea/vomiting, spontaneous nystagmus, and gait instability).
+        </div>
+        <div class="k">Main job</div>
+        <div class="v">Differentiate vestibular neuritis vs posterior circulation stroke.</div>
+      </div>
+      <div class="pearl">In true AVS, the bedside eye exam can outperform early CT for posterior stroke suspicion.</div>
+    </details>
+
+    <details>
+      <summary><span class="step">HINTS</span> Exam (only in true AVS)</summary>
+      <div class="kv">
+        <div class="k">Head impulse</div>
+        <div class="v">Normal in true AVS → central concern; abnormal (catch-up saccade) → peripheral.</div>
+        <div class="k">Nystagmus</div>
+        <div class="v">Direction-changing/vertical → central.</div>
+        <div class="k">Test of skew</div>
+        <div class="v">Vertical re-fixation on cover/uncover → central.</div>
+      </div>
+
+    </details>
+
+    <details>
+      <summary><span class="step">Workup</span> (when central suspected)</summary>
+      <ul>
+        <li><strong>MRI brain (DWI)</strong> for posterior fossa infarct</li>
+        <li><strong>CTA head/neck</strong> if dissection/vascular lesion suspected</li>
+        <li><strong>CT head</strong> may be normal early; do not let it end the workup</li>
+      </ul>
+
+    </details>
+
+  </details>
+</div>
+
+<div class="card">
+  <h2>2. Presyncope</h2>
+
+  <details open>
+    <summary><span class="step">Definition</span> (what it means physiologically)</summary>
+    <p>Presyncope is the sensation of impending loss of consciousness due to transient global cerebral hypoperfusion.</p>
+  </details>
+
+  <details>
+    <summary><span class="step">Causes</span> (and the “why”)</summary>
+    <ul>
+      <li><strong>Orthostatic hypotension:</strong> inadequate BP response to standing</li>
+      <li><strong>Arrhythmia:</strong> transient drop in cardiac output</li>
+      <li><strong>Structural heart disease:</strong> fixed obstruction (e.g., AS) limiting output</li>
+      <li><strong>Volume depletion:</strong> low preload</li>
+      <li><strong>Vasovagal:</strong> reflex hypotension/bradycardia</li>
+    </ul>
+  </details>
+
+  <details>
+    <summary><span class="step">Symptoms / Signs</span> (what to look for)</summary>
+    <ul>
+      <li>Lightheadedness, tunnel vision, diaphoresis, nausea</li>
+      <li>Often worse standing, improved supine</li>
+      <li>May have palpitations (arrhythmia) or exertional component (structural)</li>
+    </ul>
+  </details>
+
+  <details>
+    <summary><span class="step">Exam & Workup</span> (rule in / rule out)</summary>
+    <div class="kv">
+      <div class="k">Exam</div>
+      <div class="v">Vitals + orthostatics; cardiac exam; volume status; focused neuro screen.</div>
+      <div class="k">Workup</div>
+      <div class="v">
+        ECG (mandatory), CBC/BMP as indicated, telemetry if high risk, echo if structural concern.
+      </div>
+    </div>
+
+  </details>
+
+</div>
+
+<div class="card">
+  <h2>3. Syncope</h2>
+
+  <details open>
+    <summary><span class="step">Definition</span></summary>
+    <p>Syncope is sudden, transient loss of consciousness with loss of postural tone, followed by spontaneous recovery.</p>
+  </details>
+
+  <details>
+    <summary><span class="step">Causes</span> (high-risk first)</summary>
+    <ul>
+      <li><strong>Cardiac (dangerous):</strong> arrhythmias, aortic stenosis, HCM</li>
+      <li><strong>Reflex:</strong> vasovagal, situational (cough, micturition)</li>
+      <li><strong>Orthostatic:</strong> volume depletion, autonomic dysfunction, meds</li>
+      <li><strong>Neurologic (rare):</strong> seizure, SAH (not typical “syncope”)</li>
+    </ul>
+  </details>
+
+  <details>
+    <summary><span class="step">Symptoms / Signs</span> (clues)</summary>
+    <ul>
+      <li><strong>Exertional or supine syncope</strong> → cardiac until proven otherwise</li>
+      <li>Sudden collapse without prodrome → arrhythmia concern</li>
+      <li>Post-event confusion, tongue bite, prolonged postictal state → seizure concern</li>
+    </ul>
+  </details>
+
+  <details>
+    <summary><span class="step">Exam & Workup</span> (rule in / rule out)</summary>
+    <div class="kv">
+      <div class="k">Exam</div>
+      <div class="v">Vitals/orthostatics; cardiac exam; neuro exam after recovery; check trauma.</div>
+      <div class="k">Workup</div>
+      <div class="v">ECG in all; telemetry; echo if indicated; labs targeted; neuro imaging only if focal deficits/trauma/SAH concern.</div>
+    </div>
+  </details>
+
+</div>
+
+<div class="card">
+  <h2>4. Disequilibrium (Balance / Gait Disorder)</h2>
+
+  <details open>
+    <summary><span class="step">Definition</span></summary>
+    <p>Disequilibrium is imbalance primarily while walking/standing, without a spinning illusion.</p>
+  </details>
+
+  <details>
+    <summary><span class="step">Causes</span></summary>
+    <ul>
+      <li><strong>Cerebellar:</strong> stroke, degenerative, tumor</li>
+      <li><strong>Sensory:</strong> peripheral neuropathy (loss of proprioception), B12 deficiency</li>
+      <li><strong>Basal ganglia:</strong> Parkinsonism</li>
+      <li><strong>Vision:</strong> impaired visual input</li>
+      <li><strong>NPH:</strong> gait + cognitive + urinary symptoms</li>
+      <li><strong>Meds/toxins:</strong> sedatives, anticonvulsants, alcohol</li>
+    </ul>
+  </details>
+
+  <details>
+    <summary><span class="step">Exam</span> (what to do at bedside)</summary>
+    <ul>
+      <li>Observe gait (wide-based? shuffling? sensory “stomping”?)</li>
+      <li>Romberg (sensory vs cerebellar)</li>
+      <li>Proprioception/vibration</li>
+      <li>Cerebellar coordination (finger-nose, heel-shin)</li>
+    </ul>
+  </details>
+
+  <details>
+    <summary><span class="step">Workup & Imaging</span> (how modalities help)</summary>
+    <ul>
+      <li><strong>MRI brain</strong> if cerebellar/central concern</li>
+      <li><strong>Labs</strong> targeted: B12, TSH, CBC/CMP as indicated</li>
+      <li><strong>PT/OT</strong> evaluation for safety and rehab</li>
+      <li><strong>Vision/hearing</strong> assessment when sensory integration suspected</li>
+    </ul>
+
+  </details>
+
+</div>
+
+<div class="card">
+  <h2>Imaging Modalities — How They Help <span class="badge">Quick Reference</span></h2>
+
+  <details open>
+    <summary><span class="step">CT</span> CT Head</summary>
+    <ul>
+      <li>Good for hemorrhage/mass effect when presentation unclear</li>
+      <li>Often insensitive early for posterior circulation ischemia</li>
+    </ul>
+  </details>
+
+  <details>
+    <summary><span class="step">MRI</span> MRI Brain (DWI)</summary>
+    <ul>
+      <li>Best for posterior fossa infarcts when exam suggests central cause</li>
+      <li>Use when AVS + central features or persistent concern</li>
+    </ul>
+  </details>
+
+  <details>
+    <summary><span class="step">CTA</span> CTA Head/Neck</summary>
+    <ul>
+      <li>Evaluates dissection and major vascular pathology</li>
+      <li>Helpful when brainstem symptoms, severe gait inability, or neck pain</li>
+    </ul>
+  </details>
+
+  <details>
+    <summary><span class="step">Audiology</span> Hearing Tests</summary>
+    <ul>
+      <li>Supports peripheral inner ear diagnoses (e.g., Ménière pattern)</li>
+      <li>Helps separate migraine vs Ménière vs other causes</li>
+    </ul>
+  </details>
+
+</div>
+
+<p class="footer-note">Neurology Guide • Dizziness & Vertigo</p>
+
+</main>
+</body>
+</html>
