@@ -1,0 +1,1518 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Fatal Cardiac Arrhythmias – Stepwise Assessment & Management</title>
+
+<style>
+:root{
+  --bg1:#eef7ff;
+  --bg2:#f6fbff;
+  --card:#ffffff;
+  --text:#0f2233;
+  --muted:#4b6478;
+
+  --primary:#0b6aa9;      /* blue */
+  --primarySoft:#d9efff;
+
+  --danger:#c62828;       /* red */
+  --dangerSoft:#ffe3e3;
+
+  --warning:#b76a00;      /* amber */
+  --warningSoft:#fff0d6;
+
+  --success:#1b7f3a;      /* green */
+  --successSoft:#dcf7e6;
+
+  --purple:#6a4bc2;
+  --purpleSoft:#efe9ff;
+
+  --shadow:0 10px 26px rgba(15,34,51,.10);
+  --shadow2:0 6px 16px rgba(15,34,51,.08);
+  --radius:16px;
+  --radius2:22px;
+  --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+}
+
+*{box-sizing:border-box}
+body{
+  margin:0;
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, sans-serif;
+  color:var(--text);
+  background:
+    radial-gradient(circle at 15% 0%, rgba(11,106,169,.18), transparent 35%),
+    radial-gradient(circle at 85% 10%, rgba(106,75,194,.14), transparent 40%),
+    linear-gradient(135deg, var(--bg1), var(--bg2));
+}
+
+header{
+  padding:18px 16px 10px;
+  position:sticky; top:0; z-index:20;
+  backdrop-filter: blur(10px);
+  background: rgba(246,251,255,.75);
+  border-bottom: 1px solid rgba(15,34,51,.08);
+}
+
+.topbar{
+  max-width:1100px; margin:0 auto;
+  display:flex; gap:12px; align-items:center; justify-content:space-between;
+}
+.brand{
+  display:flex; align-items:center; gap:12px;
+}
+.logo{
+  width:44px; height:44px; border-radius:14px;
+  background: linear-gradient(135deg, rgba(11,106,169,1), rgba(106,75,194,1));
+  box-shadow: var(--shadow2);
+  display:grid; place-items:center;
+  color:white; font-weight:800;
+  letter-spacing:.5px;
+}
+h1{
+  margin:0;
+  font-size:18px;
+  line-height:1.15;
+}
+.sub{
+  margin:2px 0 0;
+  color:var(--muted);
+  font-size:12.5px;
+}
+
+.pills{
+  display:flex; flex-wrap:wrap; justify-content:flex-end; gap:8px;
+}
+.pill{
+  border:1px solid rgba(15,34,51,.10);
+  background: white;
+  padding:8px 10px;
+  border-radius:999px;
+  font-size:12px;
+  color:var(--muted);
+  box-shadow: 0 2px 10px rgba(15,34,51,.05);
+  display:flex; align-items:center; gap:8px;
+}
+.pill b{color:var(--text)}
+.pill .dot{
+  width:10px; height:10px; border-radius:50%;
+  background: var(--primary);
+  box-shadow: 0 0 0 3px rgba(11,106,169,.15);
+}
+
+main{
+  max-width:1100px;
+  margin:0 auto;
+  padding:18px 16px 100px;
+}
+
+.grid{
+  display:grid;
+  grid-template-columns: 1.15fr .85fr;
+  gap:16px;
+}
+@media (max-width: 980px){
+  .grid{grid-template-columns:1fr}
+  header{position:static}
+}
+
+.card{
+  background: var(--card);
+  border-radius: var(--radius2);
+  box-shadow: var(--shadow);
+  border: 1px solid rgba(15,34,51,.08);
+  overflow:hidden;
+}
+.cardHeader{
+  padding:14px 16px;
+  background: linear-gradient(135deg, rgba(11,106,169,.10), rgba(106,75,194,.10));
+  border-bottom: 1px solid rgba(15,34,51,.08);
+  display:flex; gap:12px; align-items:flex-start; justify-content:space-between;
+}
+.cardHeader h2{
+  margin:0;
+  font-size:16px;
+}
+.cardHeader p{
+  margin:6px 0 0;
+  color:var(--muted);
+  font-size:13px;
+}
+.cardBody{padding:16px}
+
+.small{
+  font-size:12.5px;
+  color:var(--muted);
+}
+kbd{
+  font-family: var(--mono);
+  font-size:12px;
+  padding:2px 6px;
+  border-radius:8px;
+  border:1px solid rgba(15,34,51,.12);
+  background: rgba(255,255,255,.75);
+}
+
+.notice{
+  background: rgba(198,40,40,.06);
+  border: 1px solid rgba(198,40,40,.18);
+  color:#7a1b1b;
+  padding:12px 12px;
+  border-radius: 14px;
+  display:flex; gap:10px; align-items:flex-start;
+}
+.notice .badge{
+  min-width:30px; height:30px;
+  border-radius:10px;
+  display:grid; place-items:center;
+  background: var(--dangerSoft);
+  border:1px solid rgba(198,40,40,.18);
+  font-weight:900;
+}
+
+.controls{
+  display:flex; flex-wrap:wrap; gap:10px;
+  align-items:center;
+}
+.btn{
+  border:none;
+  cursor:pointer;
+  padding:10px 12px;
+  border-radius: 12px;
+  font-weight:700;
+  background: white;
+  color:var(--text);
+  border:1px solid rgba(15,34,51,.12);
+  box-shadow: 0 6px 14px rgba(15,34,51,.06);
+  transition: transform .06s ease, box-shadow .15s ease, border-color .15s ease;
+}
+.btn:hover{transform: translateY(-1px); box-shadow: 0 10px 18px rgba(15,34,51,.10)}
+.btn:active{transform: translateY(0px); box-shadow: 0 6px 14px rgba(15,34,51,.06)}
+.btnPrimary{
+  background: linear-gradient(135deg, var(--primary), rgba(106,75,194,1));
+  color:white;
+  border-color: rgba(11,106,169,.35);
+}
+.btnDanger{
+  background: linear-gradient(135deg, var(--danger), #8e1616);
+  color:white;
+  border-color: rgba(198,40,40,.35);
+}
+.btnSoft{
+  background: var(--primarySoft);
+  border-color: rgba(11,106,169,.20);
+}
+.btnGhost{
+  background: rgba(255,255,255,.75);
+}
+
+.row{
+  display:grid;
+  grid-template-columns: 1fr 1fr;
+  gap:12px;
+}
+@media (max-width: 700px){
+  .row{grid-template-columns:1fr}
+}
+
+.field{
+  background: rgba(255,255,255,.70);
+  border:1px solid rgba(15,34,51,.10);
+  border-radius: 14px;
+  padding:12px;
+}
+.field label{
+  display:block;
+  font-size:12px;
+  color:var(--muted);
+  margin-bottom:6px;
+  font-weight:700;
+}
+.field input, .field select{
+  width:100%;
+  border:1px solid rgba(15,34,51,.12);
+  border-radius: 12px;
+  padding:10px 10px;
+  font-size:14px;
+  outline:none;
+  background:white;
+}
+.field input:focus, .field select:focus{
+  border-color: rgba(11,106,169,.55);
+  box-shadow: 0 0 0 4px rgba(11,106,169,.12);
+}
+
+.stepper{
+  display:flex; gap:8px; flex-wrap:wrap;
+}
+.stepDot{
+  width:30px; height:30px;
+  border-radius: 12px;
+  display:grid; place-items:center;
+  font-weight:900;
+  border:1px solid rgba(15,34,51,.12);
+  background:white;
+  color:var(--muted);
+  cursor:pointer;
+  user-select:none;
+}
+.stepDot.active{
+  background: linear-gradient(135deg, rgba(11,106,169,1), rgba(106,75,194,1));
+  color:white;
+  border-color: rgba(11,106,169,.35);
+}
+.stepDot.done{
+  background: rgba(27,127,58,.12);
+  color:#1b7f3a;
+  border-color: rgba(27,127,58,.25);
+}
+
+.sectionTitle{
+  display:flex; align-items:center; justify-content:space-between; gap:10px;
+  margin: 6px 0 12px;
+}
+.sectionTitle h3{
+  margin:0;
+  font-size:15px;
+}
+.tag{
+  font-size:12px;
+  padding:6px 10px;
+  border-radius:999px;
+  border:1px solid rgba(15,34,51,.10);
+  background: rgba(255,255,255,.75);
+  color:var(--muted);
+}
+.tag.danger{
+  background: var(--dangerSoft);
+  border-color: rgba(198,40,40,.22);
+  color:#7a1b1b;
+}
+.tag.success{
+  background: var(--successSoft);
+  border-color: rgba(27,127,58,.22);
+  color:#1b7f3a;
+}
+.tag.warn{
+  background: var(--warningSoft);
+  border-color: rgba(183,106,0,.22);
+  color:#7a4a00;
+}
+.tag.purple{
+  background: var(--purpleSoft);
+  border-color: rgba(106,75,194,.22);
+  color:#4b3aa8;
+}
+
+.pathBox{
+  border-radius: 16px;
+  border:1px solid rgba(15,34,51,.10);
+  background: rgba(255,255,255,.70);
+  padding:12px;
+}
+.pathLine{
+  font-family: var(--mono);
+  font-size:12px;
+  color: rgba(15,34,51,.85);
+  line-height:1.35;
+  margin:0;
+  white-space: pre-wrap;
+}
+hr.sep{
+  border:none;
+  height:1px;
+  background: rgba(15,34,51,.10);
+  margin:14px 0;
+}
+
+.panel{
+  border-radius: 16px;
+  padding:12px;
+  border:1px solid rgba(15,34,51,.10);
+  background: rgba(255,255,255,.70);
+}
+.panel.danger{
+  background: rgba(198,40,40,.06);
+  border-color: rgba(198,40,40,.18);
+}
+.panel.success{
+  background: rgba(27,127,58,.06);
+  border-color: rgba(27,127,58,.18);
+}
+.panel.warn{
+  background: rgba(183,106,0,.06);
+  border-color: rgba(183,106,0,.18);
+}
+.panel h4{
+  margin:0 0 8px;
+  font-size:14px;
+}
+.panel ul{
+  margin:0;
+  padding-left:18px;
+  color: var(--text);
+}
+.panel li{
+  margin:6px 0;
+  color: rgba(15,34,51,.92);
+}
+.panel .muted{
+  color: var(--muted);
+  font-size:12.5px;
+}
+
+.footerBar{
+  position:fixed;
+  left:0; right:0; bottom:0;
+  padding:12px 14px;
+  background: rgba(246,251,255,.86);
+  border-top: 1px solid rgba(15,34,51,.10);
+  backdrop-filter: blur(10px);
+  z-index:25;
+}
+.footerInner{
+  max-width:1100px; margin:0 auto;
+  display:flex; gap:10px; justify-content:space-between; align-items:center;
+  flex-wrap:wrap;
+}
+.progress{
+  display:flex; align-items:center; gap:10px;
+  color:var(--muted);
+  font-size:12.5px;
+}
+.progressBar{
+  width:220px; max-width: 60vw;
+  height:10px;
+  border-radius: 999px;
+  background: rgba(15,34,51,.10);
+  overflow:hidden;
+}
+.progressFill{
+  height:100%;
+  width:0%;
+  background: linear-gradient(135deg, var(--primary), rgba(106,75,194,1));
+}
+.copyBox{
+  padding:12px;
+  border-radius: 16px;
+  border:1px solid rgba(15,34,51,.12);
+  background: rgba(255,255,255,.85);
+}
+textarea{
+  width:100%;
+  min-height:110px;
+  border-radius: 14px;
+  border:1px solid rgba(15,34,51,.12);
+  padding:10px;
+  font-family: var(--mono);
+  font-size:12px;
+  outline:none;
+  background:white;
+}
+.toast{
+  position:fixed;
+  top:88px;
+  right:14px;
+  z-index:30;
+  padding:10px 12px;
+  border-radius: 14px;
+  background: rgba(27,127,58,.95);
+  color:white;
+  box-shadow: var(--shadow);
+  display:none;
+  max-width:min(360px, 92vw);
+  font-size:13px;
+}
+.toast.show{display:block}
+a.link{
+  color: var(--primary);
+  text-decoration: none;
+  font-weight:800;
+}
+a.link:hover{text-decoration: underline}
+.details{
+  margin-top:10px;
+  padding:10px;
+  border-radius:14px;
+  border:1px dashed rgba(15,34,51,.18);
+  background: rgba(255,255,255,.65);
+}
+.details summary{
+  cursor:pointer;
+  font-weight:800;
+  color: var(--text);
+}
+.details p{margin:8px 0 0; color:var(--muted); font-size:12.5px; line-height:1.4}
+</style>
+</head>
+
+<body>
+
+<header>
+  <div class="topbar">
+    <div class="brand">
+      <div class="logo">⚡</div>
+      <div>
+        <h1>Fatal Cardiac Arrhythmias – Stepwise Assessment & Management</h1>
+        <div class="sub">Interactive guide for ER / ICU / CCU: ask → decide → act (electricity when unstable).</div>
+      </div>
+    </div>
+
+    <div class="pills">
+      <div class="pill"><span class="dot"></span> <b>Rule:</b> Unstable → electricity</div>
+      <div class="pill"><b>Fork:</b> Pulse vs No pulse</div>
+      <div class="pill"><b>Goal:</b> Fix rhythm + cause</div>
+    </div>
+  </div>
+</header>
+
+<div class="toast" id="toast">Copied.</div>
+
+<main>
+  <div class="grid">
+
+    <!-- LEFT: STEPS -->
+    <section class="card" id="cardSteps">
+      <div class="cardHeader">
+        <div>
+          <h2>Stepwise Navigator</h2>
+          <p>Each step asks you something. Your answers generate the next actions and a copy-ready plan.</p>
+        </div>
+        <div class="stepper" id="stepper"></div>
+      </div>
+
+      <div class="cardBody">
+
+        <div class="notice">
+          <div class="badge">!</div>
+          <div>
+            <div style="font-weight:900;margin-bottom:4px;">Safety note</div>
+            <div class="small">
+              This is an educational guide. Use your local protocols and ACLS. When in doubt: pads on, call for help, prepare for electricity.
+            </div>
+          </div>
+        </div>
+
+        <hr class="sep"/>
+
+        <!-- STEP 1 -->
+        <div class="step" data-step="1">
+          <div class="sectionTitle">
+            <h3>1) Location context</h3>
+            <span class="tag purple">Sets mindset</span>
+          </div>
+
+          <div class="row">
+            <div class="field">
+              <label>Where are you managing this rhythm?</label>
+              <select id="setting">
+                <option value="ER">ER (unknown patient → treat rhythm first)</option>
+                <option value="ICU">ICU (arrhythmia often secondary → fix physiology)</option>
+                <option value="CCU">CCU (ischemia/scar until proven otherwise)</option>
+              </select>
+            </div>
+
+            <div class="field">
+              <label>Primary concern right now</label>
+              <select id="concern">
+                <option value="suddenCollapse">Sudden collapse / peri-arrest</option>
+                <option value="shock">Shock / hypotension</option>
+                <option value="ischemia">Chest pain / ischemia</option>
+                <option value="respFail">Respiratory failure / hypoxia</option>
+                <option value="postROSC">Post-ROSC arrhythmia prevention</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="panel warn" style="margin-top:12px;">
+            <h4>Immediate universal setup (do this early, always)</h4>
+            <ul>
+              <li>Place defib pads + monitor now (don’t wait until you “need them”).</li>
+              <li>Airway/oxygen as needed; IV/IO access; check glucose.</li>
+              <li>Call for help early (team + defib + meds + airway).</li>
+            </ul>
+            <div class="muted" style="margin-top:8px;">
+              ER: shock first, diagnose later. ICU: hunt hypoxia/acidosis/electrolytes/pressor effect. CCU: assume ischemia/reperfusion/scar.
+            </div>
+          </div>
+        </div>
+
+        <!-- STEP 2 -->
+        <div class="step" data-step="2" style="display:none;">
+          <div class="sectionTitle">
+            <h3>2) Pulse check (the universe splits here)</h3>
+            <span class="tag danger">Most important fork</span>
+          </div>
+
+          <div class="row">
+            <div class="field">
+              <label>Pulse present?</label>
+              <select id="pulse">
+                <option value="unknown">Not sure / checking now</option>
+                <option value="present">Yes, pulse present</option>
+                <option value="absent">No pulse (cardiac arrest)</option>
+              </select>
+            </div>
+
+            <div class="field">
+              <label>Rhythm category on monitor (best guess)</label>
+              <select id="rhythmCat">
+                <option value="unknown">Unknown / unclear</option>
+                <option value="vf_pvt">VF / pulseless VT</option>
+                <option value="pea_asys">PEA / Asystole</option>
+                <option value="wide_tachy">Wide-complex tachycardia (with pulse)</option>
+                <option value="narrow_tachy">Narrow-complex tachycardia (with pulse)</option>
+                <option value="brady">Bradycardia / AV block</option>
+                <option value="torsades">Torsades / polymorphic VT</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="panel danger" style="margin-top:12px;">
+            <h4>If NO pulse (cardiac arrest pathway)</h4>
+            <ul>
+              <li>Start high-quality CPR immediately.</li>
+              <li>Defib pads on; analyze rhythm → shock if VF/pVT.</li>
+              <li>Epinephrine every 3–5 min; consider amiodarone for refractory VF/pVT.</li>
+              <li>Actively search reversible causes (H’s & T’s) while running ACLS.</li>
+            </ul>
+            <div class="muted" style="margin-top:8px;">The most time-sensitive intervention in VF/pVT is defibrillation.</div>
+          </div>
+
+          <div class="panel success" style="margin-top:12px;">
+            <h4>If pulse PRESENT (peri-arrest / unstable rhythm pathway)</h4>
+            <ul>
+              <li>Assess instability: hypotension/shock, ischemic chest pain, altered mental status, pulmonary edema/resp failure.</li>
+              <li>Unstable due to rhythm → synchronized cardioversion (or pacing if brady).</li>
+              <li>Stable → meds + underlying cause workup.</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- STEP 3 -->
+        <div class="step" data-step="3" style="display:none;">
+          <div class="sectionTitle">
+            <h3>3) Instability check (does the rhythm explain the patient?)</h3>
+            <span class="tag warn">Electricity threshold</span>
+          </div>
+
+          <div class="row">
+            <div class="field">
+              <label>Is the patient unstable?</label>
+              <select id="unstable">
+                <option value="unknown">Unsure / assessing now</option>
+                <option value="yes">Yes (shock / ischemia / AMS / pulm edema)</option>
+                <option value="no">No (stable enough for meds/workup)</option>
+              </select>
+            </div>
+
+            <div class="field">
+              <label>Do you suspect the instability is caused by the rhythm?</label>
+              <select id="rhythmCause">
+                <option value="yes">Yes (temporal relationship, rate-related)</option>
+                <option value="unclear">Unclear</option>
+                <option value="no">No (likely sepsis/hypoxia/bleeding etc.)</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="panel warn" style="margin-top:12px;">
+            <h4>Unstable + rhythm-caused → act now</h4>
+            <ul>
+              <li><b>Tachyarrhythmia with pulse:</b> synchronized cardioversion.</li>
+              <li><b>Bradyarrhythmia:</b> atropine (if appropriate) + transcutaneous pacing + pressor infusion if needed.</li>
+              <li><b>Unstable torsades/polymorphic VT:</b> defibrillate if needed + give magnesium.</li>
+            </ul>
+            <div class="muted" style="margin-top:8px;">
+              Stable patients get more nuance. Unstable patients get electricity.
+            </div>
+          </div>
+
+          <div class="details">
+            <summary>Show instability checklist</summary>
+            <p><b>Unstable signs:</b> SBP &lt; 90 or shock, altered mental status, ongoing ischemic chest pain, acute pulmonary edema/resp failure, syncope, signs of poor perfusion. If yes → treat as unstable.</p>
+          </div>
+        </div>
+
+        <!-- STEP 4 -->
+        <div class="step" data-step="4" style="display:none;">
+          <div class="sectionTitle">
+            <h3>4) Choose the emergency rhythm track</h3>
+            <span class="tag">Branch to detailed steps</span>
+          </div>
+
+          <div class="row">
+            <div class="field">
+              <label>Select the most likely lethal rhythm scenario</label>
+              <select id="track">
+                <option value="auto">Auto-pick from earlier answers</option>
+                <option value="vf_pvt">VF / Pulseless VT (shockable arrest)</option>
+                <option value="pea_asys">PEA / Asystole (non-shockable arrest)</option>
+                <option value="vt_pulse">Sustained VT with pulse (wide tachy)</option>
+                <option value="torsades">Torsades de Pointes / Polymorphic VT</option>
+                <option value="af_flutter">Rapid AF / Flutter causing shock/ischemia</option>
+                <option value="svt">Regular narrow-complex tachy (SVT) with instability</option>
+                <option value="brady_avb">Severe bradycardia / complete heart block</option>
+                <option value="wpw">AF with WPW suspicion (pre-excited AF)</option>
+              </select>
+            </div>
+
+            <div class="field">
+              <label>Optional: suspected driver (helps ICU/CCU recurrence prevention)</label>
+              <select id="driver">
+                <option value="unknown">Unknown / pending</option>
+                <option value="ischemia">Ischemia / ACS</option>
+                <option value="hypoxia">Hypoxia / resp failure</option>
+                <option value="electrolyte">Electrolytes (K/Mg/Ca)</option>
+                <option value="drug">Drug/toxin (QT prolongers, digoxin, etc.)</option>
+                <option value="sepsis">Sepsis / shock physiology</option>
+                <option value="mechanical">Mechanical (tamponade, tension PTX, PE)</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="panel" style="margin-top:12px;">
+            <h4>Key guardrails (prevent classic mistakes)</h4>
+            <ul>
+              <li><b>Wide + fast + uncertain</b> → treat as VT (avoid AV nodal blockers until sure).</li>
+              <li><b>Torsades</b> → magnesium + remove QT drugs + correct K; electricity if unstable.</li>
+              <li><b>AF with WPW suspicion</b> → avoid AV nodal blockers; use procainamide or electricity if unstable.</li>
+              <li><b>PEA</b> is usually not a rhythm problem; it’s a cause problem.</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- STEP 5 -->
+        <div class="step" data-step="5" style="display:none;">
+          <div class="sectionTitle">
+            <h3>5) Track-specific management (step-by-step)</h3>
+            <span class="tag success">Do this now</span>
+          </div>
+
+          <div id="trackContent"></div>
+
+          <hr class="sep"/>
+
+          <div class="copyBox">
+            <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:8px;">
+              <div style="font-weight:900;">Copy-ready plan (updates as you answer)</div>
+              <button class="btn btnPrimary" id="btnCopy">Copy</button>
+            </div>
+            <textarea id="planText" readonly></textarea>
+            <div class="small" style="margin-top:8px;">
+              Tip: paste into your note or a “team brief” message. Keep it short. The patient wants speed, not poetry.
+            </div>
+          </div>
+        </div>
+
+        <hr class="sep"/>
+
+        <div class="controls">
+          <button class="btn btnGhost" id="btnBack">← Back</button>
+          <button class="btn btnPrimary" id="btnNext">Next →</button>
+          <button class="btn btnSoft" id="btnReset">Reset</button>
+          <button class="btn btnDanger" id="btnJumpFinal" title="Jump to management track">Jump to Track</button>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- RIGHT: QUICK REFERENCE / SUMMARY -->
+    <aside class="card">
+      <div class="cardHeader">
+        <div>
+          <h2>At-a-glance Summary</h2>
+          <p>What your answers imply right now.</p>
+        </div>
+        <span class="tag" id="statusTag">Waiting</span>
+      </div>
+
+      <div class="cardBody">
+
+        <div class="sectionTitle">
+          <h3>Current pathway</h3>
+          <span class="tag" id="settingTag">ER</span>
+        </div>
+
+        <div class="pathBox">
+          <div class="pathLine" id="pathText">Start → pads on → pulse check → ...</div>
+        </div>
+
+        <hr class="sep"/>
+
+        <div class="sectionTitle">
+          <h3>Immediate action</h3>
+          <span class="tag danger" id="actionTag">—</span>
+        </div>
+
+        <div class="panel danger" id="actionPanel">
+          <h4>Not decided yet</h4>
+          <div class="muted">Answer the pulse + instability steps to generate actions.</div>
+        </div>
+
+        <hr class="sep"/>
+
+        <div class="panel warn">
+          <h4>Setting mindset</h4>
+          <ul id="mindsetList">
+            <li>ER: treat rhythm fast; diagnose later.</li>
+            <li>ICU: fix physiology to stop recurrence.</li>
+            <li>CCU: assume ischemia/scar; consider revascularization/pacing.</li>
+          </ul>
+        </div>
+
+        <div class="details">
+          <summary>H’s & T’s (quick memory hook)</summary>
+          <p>
+            <b>H:</b> Hypovolemia, Hypoxia, Hydrogen ion (acidosis), Hypo/Hyperkalemia, Hypothermia (± Hypoglycemia depending on local teaching).<br/>
+            <b>T:</b> Tension pneumothorax, Tamponade, Toxins, Thrombosis (PE), Thrombosis (MI).
+          </p>
+        </div>
+
+      </div>
+    </aside>
+
+  </div>
+</main>
+
+<div class="footerBar">
+  <div class="footerInner">
+    <div class="progress">
+      <div><b>Progress:</b> <span id="progText">Step 1/5</span></div>
+      <div class="progressBar"><div class="progressFill" id="progFill"></div></div>
+      <div class="small">Use <kbd>Next</kbd> / <kbd>Back</kbd> or tap step numbers.</div>
+    </div>
+
+    <div class="controls">
+      <a class="btn btnGhost" href="index.html" title="Home">🏠 Home</a>
+      <button class="btn btnPrimary" id="btnExpandAll">Expand all tracks</button>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ==========
+   Utilities
+========== */
+const $ = (id)=>document.getElementById(id);
+
+function showToast(msg="Copied."){
+  const t = $("toast");
+  t.textContent = msg;
+  t.classList.add("show");
+  clearTimeout(window.__toastTimer);
+  window.__toastTimer = setTimeout(()=>t.classList.remove("show"), 1300);
+}
+
+function safeText(s){ return (s||"").toString().trim(); }
+
+function setTag(el, text, cls){
+  el.textContent = text;
+  el.className = "tag " + (cls||"");
+}
+
+function getSettingMindset(setting){
+  if(setting==="ER") return [
+    "ER: unknown patient → treat rhythm first, diagnosis later.",
+    "Electricity is faster than insight.",
+    "Avoid anchoring: wide+fast = VT until proven otherwise."
+  ];
+  if(setting==="ICU") return [
+    "ICU: arrhythmia often secondary → fix physiology (hypoxia, acidosis, electrolytes, sepsis).",
+    "Check lines/pressors/vent settings; prevent recurrence.",
+    "Electrolytes + oxygenation are antiarrhythmics."
+  ];
+  return [
+    "CCU: assume ischemia/scar-driven arrhythmia until proven otherwise.",
+    "Consider reperfusion, temporary pacing, and antiarrhythmics with myocardial respect.",
+    "VT in structural heart disease is VT unless proven otherwise."
+  ];
+}
+
+function inferAutoTrack(){
+  const pulse = $("pulse").value;
+  const rhythmCat = $("rhythmCat").value;
+  const unstable = $("unstable").value;
+
+  if(pulse==="absent"){
+    if(rhythmCat==="vf_pvt") return "vf_pvt";
+    if(rhythmCat==="pea_asys") return "pea_asys";
+    // unknown arrest → default non-shockable track content will still emphasize "analyze rhythm"
+    return "vf_pvt";
+  }
+
+  // pulse present
+  if(rhythmCat==="torsades") return "torsades";
+  if(rhythmCat==="brady") return "brady_avb";
+  if(rhythmCat==="wide_tachy") return "vt_pulse";
+  if(rhythmCat==="narrow_tachy") return (unstable==="yes" ? "svt" : "af_flutter");
+  return "vt_pulse";
+}
+
+function buildPathText(){
+  const setting = $("setting").value;
+  const pulse = $("pulse").value;
+  const unstable = $("unstable").value;
+  const track = $("track").value === "auto" ? inferAutoTrack() : $("track").value;
+
+  let path = `Setting: ${setting} → Pads/monitor/IV/O2 → Pulse check → `;
+
+  if(pulse==="absent"){
+    path += "NO pulse → CPR/ACLS → ";
+    path += (track==="pea_asys") ? "Non-shockable track" : "Shockable track";
+  } else if(pulse==="present"){
+    path += "Pulse present → ";
+    if(unstable==="yes") path += "Unstable → electricity pathway → ";
+    else if(unstable==="no") path += "Stable → meds/workup → ";
+    else path += "Assess instability → ";
+    path += trackLabel(track);
+  } else {
+    path += "Confirm pulse → decide";
+  }
+  $("pathText").textContent = path;
+}
+
+function trackLabel(t){
+  const map = {
+    vf_pvt: "VF / Pulseless VT",
+    pea_asys: "PEA / Asystole",
+    vt_pulse: "Sustained VT w/ pulse",
+    torsades: "Torsades / Polymorphic VT",
+    af_flutter: "Rapid AF / Flutter (shock/ischemia)",
+    svt: "Regular narrow SVT (unstable)",
+    brady_avb: "Severe brady / complete heart block",
+    wpw: "AF with WPW suspicion"
+  };
+  return map[t] || "Rhythm track";
+}
+
+function setImmediateAction(){
+  const pulse = $("pulse").value;
+  const unstable = $("unstable").value;
+  const rhythmCause = $("rhythmCause").value;
+  const rhythmCat = $("rhythmCat").value;
+
+  if(pulse==="absent"){
+    setTag($("actionTag"), "Cardiac Arrest", "danger");
+    $("actionPanel").className = "panel danger";
+    $("actionPanel").innerHTML = `
+      <h4>Act now</h4>
+      <ul>
+        <li><b>CPR immediately</b> + pads on + rhythm analysis.</li>
+        <li><b>Shock</b> if VF/pVT. If unsure, analyze quickly and follow ACLS.</li>
+        <li>Epinephrine every 3–5 min; consider amiodarone for refractory VF/pVT.</li>
+        <li>Search reversible causes (H’s & T’s) while running the algorithm.</li>
+      </ul>`;
+    setTag($("statusTag"), "Arrest pathway", "danger");
+    return;
+  }
+
+  if(pulse==="present" && unstable==="yes" && rhythmCause!=="no"){
+    setTag($("actionTag"), "Unstable → Electricity", "danger");
+    $("actionPanel").className = "panel danger";
+    let extra = "";
+    if(rhythmCat==="brady"){
+      extra = "<li><b>Brady:</b> pace (TCP) + pressor infusion if needed.</li>";
+    } else if(rhythmCat==="torsades"){
+      extra = "<li><b>Torsades:</b> magnesium now; defib if needed.</li>";
+    } else {
+      extra = "<li><b>Tachy w/ pulse:</b> synchronized cardioversion.</li>";
+    }
+    $("actionPanel").innerHTML = `
+      <h4>Act now</h4>
+      <ul>
+        ${extra}
+        <li>Meanwhile: oxygen/airway, IV/IO, treat reversible drivers (K/Mg/hypoxia/ischemia).</li>
+      </ul>`;
+    setTag($("statusTag"), "Unstable", "danger");
+    return;
+  }
+
+  if(pulse==="present" && unstable==="no"){
+    setTag($("actionTag"), "Stable → Meds/Workup", "success");
+    $("actionPanel").className = "panel success";
+    $("actionPanel").innerHTML = `
+      <h4>Stabilize & prevent escalation</h4>
+      <ul>
+        <li>Confirm rhythm, check QT, electrolytes, ischemia, oxygenation, meds/toxins.</li>
+        <li>Choose rhythm-specific meds; avoid contraindicated blockers in uncertain wide tachy.</li>
+        <li>Prepare for electricity if deterioration occurs.</li>
+      </ul>`;
+    setTag($("statusTag"), "Stable pathway", "success");
+    return;
+  }
+
+  setTag($("actionTag"), "Assess", "warn");
+  $("actionPanel").className = "panel warn";
+  $("actionPanel").innerHTML = `
+    <h4>Not decided yet</h4>
+    <div class="muted">Complete pulse + instability. If unstable, electricity is the fast move.</div>`;
+  setTag($("statusTag"), "Assessing", "warn");
+}
+
+/* ==========
+   Track content
+========== */
+function trackCard(title, tagText, tagClass, stepsHtml, extrasHtml){
+  return `
+    <div class="card" style="margin-bottom:14px;">
+      <div class="cardHeader">
+        <div>
+          <h2 style="margin:0;font-size:15px;">${title}</h2>
+          <p style="margin:6px 0 0;color:var(--muted);font-size:13px;">Answer the prompts → follow the actions in order.</p>
+        </div>
+        <span class="tag ${tagClass}">${tagText}</span>
+      </div>
+      <div class="cardBody">
+        ${stepsHtml}
+        ${extrasHtml ? `<hr class="sep"/>${extrasHtml}` : ``}
+      </div>
+    </div>
+  `;
+}
+
+function buildTrackContent(track){
+  const setting = $("setting").value;
+  const unstable = $("unstable").value;
+  const driver = $("driver").value;
+
+  const commonDriverLine = driver && driver!=="unknown"
+    ? `Likely driver: ${driver.toUpperCase()} → treat in parallel.`
+    : `Driver unknown → check oxygenation, K/Mg/Ca, acid-base, ischemia, meds/toxins, mechanical causes.`;
+
+  const settingFlavor = (setting==="ER")
+    ? "ER emphasis: move fast; assume worst-case rhythm when uncertain."
+    : (setting==="ICU")
+      ? "ICU emphasis: fix physiology and recurrence drivers (hypoxia, acidosis, electrolytes, pressors, lines)."
+      : "CCU emphasis: assume ischemia/reperfusion or scar; consider cath, pacing, antiarrhythmics carefully.";
+
+  const promptBlock = (html)=>`<div class="panel" style="margin-bottom:12px;">${html}</div>`;
+
+  // Small prompt fields used inside tracks
+  const miniFields = `
+    <div class="row">
+      <div class="field">
+        <label>Is the rhythm causing instability right now?</label>
+        <select id="t_instability">
+          <option value="${unstable}">${unstable==="yes"?"Yes (unstable)":"No / unsure"}</option>
+          <option value="yes">Yes</option>
+          <option value="no">No</option>
+          <option value="unknown">Unclear</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>Any clear trigger you can fix immediately?</label>
+        <select id="t_trigger">
+          <option value="${driver}">${driver}</option>
+          <option value="unknown">unknown</option>
+          <option value="ischemia">ischemia</option>
+          <option value="hypoxia">hypoxia</option>
+          <option value="electrolyte">electrolyte</option>
+          <option value="drug">drug/toxin</option>
+          <option value="sepsis">sepsis/shock</option>
+          <option value="mechanical">mechanical</option>
+        </select>
+      </div>
+    </div>
+  `;
+
+  // Track-specific content
+  if(track==="vf_pvt"){
+    const steps = `
+      ${promptBlock(`
+        <h4>Ask: Is there a pulse? (You already answered: <b>${$("pulse").value}</b>)</h4>
+        <ul>
+          <li><b>No pulse + VF/pVT</b> → shockable cardiac arrest.</li>
+          <li>${safeText(settingFlavor)}</li>
+          <li class="muted">${safeText(commonDriverLine)}</li>
+        </ul>
+      `)}
+      ${promptBlock(`
+        <h4>Do now (sequence)</h4>
+        <ul>
+          <li><b>Defibrillate immediately</b> (don’t delay for IV/airway).</li>
+          <li><b>CPR</b> immediately after shock; minimize interruptions.</li>
+          <li><b>Rhythm check</b> every ~2 min; shock again if VF/pVT persists.</li>
+          <li><b>Epinephrine</b> every 3–5 min; consider <b>amiodarone</b> for refractory VF/pVT.</li>
+          <li>Actively treat reversible causes (H’s & T’s): hypoxia, hyperK, tamponade, PE, MI, etc.</li>
+        </ul>
+      `)}
+      ${promptBlock(`
+        <h4>Ask: could this be a “fixable” cause right now?</h4>
+        ${miniFields}
+        <div class="muted" style="margin-top:8px;">
+          Examples: hyperkalemia (calcium + insulin/dextrose), tension PTX (needle decompression), tamponade (pericardiocentesis), STEMI (cath).
+        </div>
+      `)}
+    `;
+    const extras = `
+      <div class="panel warn">
+        <h4>Refractory VF/pVT (quick escalation ideas)</h4>
+        <ul>
+          <li>Ensure pad placement + good contact; consider vector change (AP vs AL).</li>
+          <li>Check for hyperK/QT drugs/ischemia; get K/Mg if possible without slowing care.</li>
+          <li>CCU/ER: consider emergent cath if suspected acute coronary occlusion post-ROSC.</li>
+        </ul>
+      </div>
+    `;
+    return trackCard("VF / Pulseless VT (Shockable Arrest)", "Shockable", "danger", steps, extras);
+  }
+
+  if(track==="pea_asys"){
+    const steps = `
+      ${promptBlock(`
+        <h4>Ask: Is there a pulse? (You answered: <b>${$("pulse").value}</b>)</h4>
+        <ul>
+          <li><b>PEA/Asystole</b> → non-shockable cardiac arrest (usually a cause problem).</li>
+          <li>${safeText(settingFlavor)}</li>
+          <li class="muted">${safeText(commonDriverLine)}</li>
+        </ul>
+      `)}
+      ${promptBlock(`
+        <h4>Do now (sequence)</h4>
+        <ul>
+          <li><b>CPR immediately</b> + high-quality compressions.</li>
+          <li><b>Epinephrine</b> every 3–5 min.</li>
+          <li><b>Rhythm & pulse checks</b> every ~2 min.</li>
+          <li><b>No routine defibrillation</b> unless rhythm becomes VF/pVT.</li>
+          <li>Ultrasound if available to identify tamponade/PE, and to confirm true PEA vs pseudo-PEA.</li>
+        </ul>
+      `)}
+      ${promptBlock(`
+        <h4>Ask: which H’s & T’s fit the story?</h4>
+        ${miniFields}
+        <div class="muted" style="margin-top:8px;">
+          PEA is commonly hypoxia, acidosis, hyperK, massive PE, tamponade, severe hypovolemia, tension PTX.
+        </div>
+      `)}
+    `;
+    const extras = `
+      <div class="panel warn">
+        <h4>“Do not miss” reversible causes</h4>
+        <ul>
+          <li><b>Hyperkalemia:</b> calcium now, shift K (insulin/dextrose), remove K.</li>
+          <li><b>Tamponade:</b> bedside echo clues → pericardiocentesis.</li>
+          <li><b>Tension pneumothorax:</b> decompress immediately if suspected.</li>
+          <li><b>Massive PE:</b> consider thrombolysis if high suspicion and no contraindications.</li>
+        </ul>
+      </div>
+    `;
+    return trackCard("PEA / Asystole (Non-shockable Arrest)", "Non-shockable", "danger", steps, extras);
+  }
+
+  if(track==="vt_pulse"){
+    const steps = `
+      ${promptBlock(`
+        <h4>Ask: Wide-complex tachycardia with pulse — is it VT?</h4>
+        <ul>
+          <li>Default: <b>treat as VT until proven otherwise</b>, especially with structural heart disease.</li>
+          <li>${safeText(settingFlavor)}</li>
+          <li class="muted">${safeText(commonDriverLine)}</li>
+        </ul>
+      `)}
+      ${promptBlock(`
+        <h4>Decision: Unstable?</h4>
+        <ul>
+          <li><b>Unstable</b> (shock/ischemia/AMS/pulm edema) → <b>synchronized cardioversion now</b>.</li>
+          <li><b>Stable</b> → antiarrhythmic (e.g., amiodarone or procainamide per local protocol) + evaluate cause.</li>
+          <li><b>Avoid AV nodal blockers</b> if diagnosis uncertain (don’t “slow” VT into VF).</li>
+        </ul>
+      `)}
+      ${promptBlock(`
+        <h4>Ask: anything you can correct immediately?</h4>
+        ${miniFields}
+        <div class="muted" style="margin-top:8px;">
+          Correct K/Mg, treat ischemia, reduce catecholamine load if possible, check for line irritation.
+        </div>
+      `)}
+    `;
+    const extras = `
+      <div class="panel success">
+        <h4>After conversion / stabilization</h4>
+        <ul>
+          <li>12-lead ECG; check QT; trend troponins if ischemia suspected.</li>
+          <li>Electrolytes (K/Mg/Ca) + ABG if sick; address hypoxia/acidosis.</li>
+          <li>CCU: consider ischemia workup and EP/cardiology input for recurrent VT or storm.</li>
+        </ul>
+      </div>
+    `;
+    return trackCard("Sustained VT with Pulse (Wide-Complex Tachy)", "High risk", "warn", steps, extras);
+  }
+
+  if(track==="torsades"){
+    const steps = `
+      ${promptBlock(`
+        <h4>Ask: Polymorphic VT + prolonged QT?</h4>
+        <ul>
+          <li><b>Torsades de Pointes</b> is commonly a QT problem + trigger (low K/Mg, QT drugs, brady).</li>
+          <li>${safeText(settingFlavor)}</li>
+          <li class="muted">${safeText(commonDriverLine)}</li>
+        </ul>
+      `)}
+      ${promptBlock(`
+        <h4>Do now (sequence)</h4>
+        <ul>
+          <li><b>Unstable or pulseless</b> → defibrillate immediately.</li>
+          <li><b>Magnesium sulfate</b> now (even if Mg “normal”).</li>
+          <li>Stop QT-prolonging meds; correct <b>hypokalemia</b> and <b>hypomagnesemia</b>.</li>
+          <li>If recurrent: consider <b>overdrive pacing</b> or increasing rate (brady-triggered torsades).</li>
+        </ul>
+      `)}
+      ${promptBlock(`
+        <h4>Ask: what’s prolonging the QT?</h4>
+        ${miniFields}
+        <div class="muted" style="margin-top:8px;">
+          Common culprits: antiemetics, antipsychotics, macrolides/fluoroquinolones, methadone, hypokalemia, bradycardia.
+        </div>
+      `)}
+    `;
+    const extras = `
+      <div class="panel warn">
+        <h4>Classic pitfall</h4>
+        <ul>
+          <li>Do not “treat torsades like VT” with QT-prolonging drugs unless guided by protocol — fix QT biology first (Mg/K, remove drugs, increase rate).</li>
+        </ul>
+      </div>
+    `;
+    return trackCard("Torsades de Pointes / Polymorphic VT", "QT emergency", "danger", steps, extras);
+  }
+
+  if(track==="af_flutter"){
+    const steps = `
+      ${promptBlock(`
+        <h4>Ask: Is rapid AF/flutter causing shock/ischemia?</h4>
+        <ul>
+          <li><b>Unstable due to rate</b> → synchronized cardioversion now.</li>
+          <li><b>Stable</b> → rate control strategy + evaluate trigger (sepsis, hypoxia, PE, ischemia, thyrotoxicosis).</li>
+          <li>${safeText(settingFlavor)}</li>
+          <li class="muted">${safeText(commonDriverLine)}</li>
+        </ul>
+      `)}
+      ${promptBlock(`
+        <h4>Do now (sequence)</h4>
+        <ul>
+          <li>Unstable → <b>synchronized cardioversion</b> (don’t wait for anticoagulation when crashing).</li>
+          <li>Support BP/oxygenation; treat driver (infection, hypovolemia, hypoxia, ischemia).</li>
+          <li>Stable → choose rate control per BP/LV function and local practice.</li>
+        </ul>
+      `)}
+      ${promptBlock(`
+        <h4>Ask: is this actually pre-excited AF (WPW)?</h4>
+        <ul>
+          <li>If irregular wide-complex with very rapid rates → consider WPW and <b>avoid AV nodal blockers</b>.</li>
+          <li>If suspected, choose procainamide or electricity if unstable.</li>
+        </ul>
+      `)}
+    `;
+    const extras = `
+      <div class="panel success">
+        <h4>After stabilization</h4>
+        <ul>
+          <li>Think trigger: hypoxia, sepsis, PE, ischemia, alcohol/withdrawal, thyroid.</li>
+          <li>CCU: assess ACS; echo if new HF signs; consider anticoagulation strategy when safe.</li>
+        </ul>
+      </div>
+    `;
+    return trackCard("Rapid AF / Flutter (Causing Shock or Ischemia)", "Often secondary", "warn", steps, extras);
+  }
+
+  if(track==="svt"){
+    const steps = `
+      ${promptBlock(`
+        <h4>Ask: Regular narrow-complex tachycardia with instability?</h4>
+        <ul>
+          <li>Unstable → synchronized cardioversion.</li>
+          <li>Stable → vagal maneuvers; consider adenosine if regular and no contraindications per protocol.</li>
+          <li>${safeText(settingFlavor)}</li>
+        </ul>
+      `)}
+      ${promptBlock(`
+        <h4>Do now (sequence)</h4>
+        <ul>
+          <li>Unstable (shock/ischemia/AMS/pulm edema) → <b>synchronized cardioversion</b>.</li>
+          <li>Stable → vagal maneuvers → adenosine if appropriate.</li>
+          <li>Evaluate drivers: pain, hypovolemia, sepsis, PE, stimulants.</li>
+        </ul>
+      `)}
+    `;
+    const extras = `
+      <div class="panel warn">
+        <h4>Do not mislabel atrial flutter</h4>
+        <ul>
+          <li>Flutter can look “regular SVT” — if rate ~150 with subtle flutter waves, treat accordingly; unstable still gets cardioversion.</li>
+        </ul>
+      </div>
+    `;
+    return trackCard("Regular Narrow-Complex Tachy (SVT) – Emergency Path", "Electricity if unstable", "warn", steps, extras);
+  }
+
+  if(track==="brady_avb"){
+    const steps = `
+      ${promptBlock(`
+        <h4>Ask: Is bradycardia/AV block causing poor perfusion?</h4>
+        <ul>
+          <li>Signs: hypotension/shock, AMS, ischemia, acute pulmonary edema.</li>
+          <li>${safeText(settingFlavor)}</li>
+          <li class="muted">${safeText(commonDriverLine)}</li>
+        </ul>
+      `)}
+      ${promptBlock(`
+        <h4>Do now (sequence)</h4>
+        <ul>
+          <li><b>Unstable</b> → prepare <b>transcutaneous pacing</b> immediately.</li>
+          <li>Consider <b>atropine</b> (often ineffective in infranodal block, but can be tried per protocol).</li>
+          <li>Start <b>epinephrine or dopamine infusion</b> if needed for perfusion.</li>
+          <li>Escalate to <b>transvenous pacing</b> if persistent/high-grade block.</li>
+        </ul>
+      `)}
+      ${promptBlock(`
+        <h4>Ask: is this ischemic AV block?</h4>
+        <ul>
+          <li>Inferior MI block may be transient; anterior MI block is often malignant → pace early.</li>
+          <li>Correct K/Mg, stop AV nodal blockers if contributing.</li>
+        </ul>
+      `)}
+    `;
+    const extras = `
+      <div class="panel success">
+        <h4>After stabilization</h4>
+        <ul>
+          <li>12-lead ECG; check for MI; review meds (beta blocker, CCB, digoxin).</li>
+          <li>Electrolytes, thyroid if appropriate; consider permanent pacer evaluation if high-grade/persistent.</li>
+        </ul>
+      </div>
+    `;
+    return trackCard("Severe Bradycardia / Complete Heart Block", "Pace if unstable", "danger", steps, extras);
+  }
+
+  if(track==="wpw"){
+    const steps = `
+      ${promptBlock(`
+        <h4>Ask: Is this AF with WPW (pre-excited AF)?</h4>
+        <ul>
+          <li>Clues: irregular wide-complex tachycardia, very rapid rates, variable QRS morphologies.</li>
+          <li><b>Danger:</b> AV nodal blockers can accelerate conduction via accessory pathway.</li>
+          <li>${safeText(settingFlavor)}</li>
+        </ul>
+      `)}
+      ${promptBlock(`
+        <h4>Do now (sequence)</h4>
+        <ul>
+          <li><b>Unstable</b> → synchronized cardioversion immediately.</li>
+          <li><b>Stable</b> → use an agent appropriate for accessory pathway conduction per protocol (often procainamide) and consult cardiology/EP.</li>
+          <li><b>Avoid AV nodal blockers</b> (adenosine, diltiazem/verapamil, beta blockers, digoxin) until WPW is excluded.</li>
+        </ul>
+      `)}
+    `;
+    const extras = `
+      <div class="panel warn">
+        <h4>Why it matters</h4>
+        <ul>
+          <li>Blocking the AV node can “force” conduction down the accessory pathway → VF risk.</li>
+        </ul>
+      </div>
+    `;
+    return trackCard("AF with WPW Suspicion (Pre-excited AF)", "High hazard", "danger", steps, extras);
+  }
+
+  // fallback
+  return trackCard("Rhythm Track", "Select a track", "tag", `<div class="panel"><div class="muted">Pick a rhythm track to display stepwise actions.</div></div>`);
+}
+
+function updateTrackArea(){
+  const track = $("track").value === "auto" ? inferAutoTrack() : $("track").value;
+  $("trackContent").innerHTML = buildTrackContent(track);
+}
+
+function buildPlanText(){
+  const setting = $("setting").value;
+  const pulse = $("pulse").value;
+  const unstable = $("unstable").value;
+  const rhythmCat = $("rhythmCat").value;
+  const track = $("track").value === "auto" ? inferAutoTrack() : $("track").value;
+  const driver = $("driver").value;
+
+  const lines = [];
+  lines.push(`FATAL ARRHYTHMIA PLAN (${setting})`);
+  lines.push(`- Universal: pads on + monitor, IV/IO, O2/airway as needed, glucose check, call for help.`);
+
+  if(pulse==="absent"){
+    lines.push(`- Pulse: ABSENT → Cardiac arrest pathway.`);
+    if(track==="pea_asys"){
+      lines.push(`- Rhythm: PEA/Asystole → CPR + epi q3–5 min; no shocks unless VF/pVT; hunt H’s & T’s (echo if available).`);
+    } else {
+      lines.push(`- Rhythm: VF/pVT suspected → defibrillate now; CPR; epi q3–5 min; consider amiodarone if refractory; treat H’s & T’s.`);
+    }
+  } else if(pulse==="present"){
+    lines.push(`- Pulse: PRESENT → assess instability.`);
+    if(unstable==="yes"){
+      lines.push(`- Unstable: YES → electricity pathway (sync cardioversion for tachy; pacing for brady; defib if polymorphic/unstable torsades).`);
+    } else if(unstable==="no"){
+      lines.push(`- Unstable: NO → meds/workup + prepare for electricity if deterioration.`);
+    } else {
+      lines.push(`- Unstable: UNCLEAR → reassess perfusion signs; err toward instability if shock/ischemia/AMS/pulm edema.`);
+    }
+
+    lines.push(`- Track: ${trackLabel(track)}.`);
+    switch(track){
+      case "vt_pulse":
+        lines.push(`  • Wide tachy: treat as VT; unstable → sync cardioversion; stable → antiarrhythmic per protocol; avoid AV nodal blockers if uncertain.`);
+        break;
+      case "torsades":
+        lines.push(`  • Torsades: magnesium now; stop QT drugs; correct K/Mg; defib if unstable/pulseless; consider overdrive pacing if recurrent.`);
+        break;
+      case "af_flutter":
+        lines.push(`  • Rapid AF/flutter: unstable → sync cardioversion; treat trigger (sepsis/hypoxia/PE/ischemia). Consider WPW if irregular wide & very fast.`);
+        break;
+      case "svt":
+        lines.push(`  • Regular narrow SVT: unstable → sync cardioversion; stable → vagal/adenosine per protocol.`);
+        break;
+      case "brady_avb":
+        lines.push(`  • Brady/AV block: TCP pacing + pressor infusion as needed; atropine may help (often not in infranodal); consider transvenous pacing.`);
+        break;
+      case "wpw":
+        lines.push(`  • WPW AF suspicion: unstable → cardioversion; stable → procainamide per protocol; avoid AV nodal blockers until WPW excluded.`);
+        break;
+      default:
+        break;
+    }
+  } else {
+    lines.push(`- Pulse: UNKNOWN → check now; if no pulse start CPR; if pulse assess instability.`);
+  }
+
+  if(driver && driver!=="unknown"){
+    lines.push(`- Suspected driver: ${driver.toUpperCase()} → treat in parallel (oxygenation, electrolytes, ischemia, sepsis, mechanical causes).`);
+  } else {
+    lines.push(`- Driver: UNKNOWN → check oxygenation, K/Mg/Ca, acid-base, ischemia, meds/toxins, mechanical causes (H’s & T’s).`);
+  }
+
+  // setting note
+  const mindset = getSettingMindset(setting);
+  lines.push(`- Mindset: ${mindset[0]}`);
+
+  return lines.join("\n");
+}
+
+/* ==========
+   Stepper logic
+========== */
+const totalSteps = 5;
+let currentStep = 1;
+
+function renderStepper(){
+  const holder = $("stepper");
+  holder.innerHTML = "";
+  for(let i=1;i<=totalSteps;i++){
+    const d = document.createElement("div");
+    d.className = "stepDot" + (i===currentStep ? " active" : (i<currentStep ? " done" : ""));
+    d.textContent = i;
+    d.title = `Go to step ${i}`;
+    d.addEventListener("click", ()=>goToStep(i));
+    holder.appendChild(d);
+  }
+}
+
+function goToStep(n){
+  currentStep = Math.max(1, Math.min(totalSteps, n));
+  document.querySelectorAll(".step").forEach(el=>{
+    el.style.display = (parseInt(el.dataset.step,10)===currentStep) ? "block" : "none";
+  });
+  renderStepper();
+  updateUI();
+  window.scrollTo({top:0, behavior:"smooth"});
+}
+
+function updateProgress(){
+  $("progText").textContent = `Step ${currentStep}/${totalSteps}`;
+  const pct = Math.round((currentStep-1)/(totalSteps-1)*100);
+  $("progFill").style.width = pct + "%";
+}
+
+/* ==========
+   UI updates
+========== */
+function updateUI(){
+  updateProgress();
+
+  const setting = $("setting").value;
+  setTag($("settingTag"), setting, "purple");
+  const mindset = getSettingMindset(setting);
+  const ul = $("mindsetList");
+  ul.innerHTML = mindset.map(x=>`<li>${x}</li>`).join("");
+
+  buildPathText();
+  setImmediateAction();
+
+  // only render track content on step 5 for speed
+  if(currentStep===5){
+    updateTrackArea();
+  }
+
+  // status tag is set by immediate action function, but ensure not empty
+  if(!$("statusTag").textContent.trim()) setTag($("statusTag"), "Assessing", "warn");
+
+  // plan text always updated (even before step 5)
+  $("planText").value = buildPlanText();
+}
+
+/* ==========
+   Events
+========== */
+$("btnNext").addEventListener("click", ()=>{
+  if(currentStep<totalSteps) goToStep(currentStep+1);
+  else goToStep(totalSteps);
+});
+
+$("btnBack").addEventListener("click", ()=>{
+  if(currentStep>1) goToStep(currentStep-1);
+});
+
+$("btnReset").addEventListener("click", ()=>{
+  $("setting").value="ER";
+  $("concern").value="suddenCollapse";
+  $("pulse").value="unknown";
+  $("rhythmCat").value="unknown";
+  $("unstable").value="unknown";
+  $("rhythmCause").value="yes";
+  $("track").value="auto";
+  $("driver").value="unknown";
+  goToStep(1);
+  showToast("Reset.");
+});
+
+$("btnJumpFinal").addEventListener("click", ()=>goToStep(5));
+
+$("btnCopy").addEventListener("click", async ()=>{
+  const txt = $("planText").value;
+  try{
+    await navigator.clipboard.writeText(txt);
+    showToast("Plan copied.");
+  }catch(e){
+    // fallback
+    $("planText").select();
+    document.execCommand("copy");
+    showToast("Copied (fallback).");
+  }
+});
+
+$("btnExpandAll").addEventListener("click", ()=>{
+  // show all tracks inside step 5
+  goToStep(5);
+  const all = ["vf_pvt","pea_asys","vt_pulse","torsades","af_flutter","svt","brady_avb","wpw"];
+  const html = all.map(t=>buildTrackContent(t)).join("");
+  $("trackContent").innerHTML = html;
+  showToast("All tracks expanded.");
+});
+
+["setting","concern","pulse","rhythmCat","unstable","rhythmCause","track","driver"].forEach(id=>{
+  $(id).addEventListener("change", ()=>updateUI());
+});
+
+// Initialize
+renderStepper();
+goToStep(1);
+updateUI();
+</script>
+
+</body>
+</html>
