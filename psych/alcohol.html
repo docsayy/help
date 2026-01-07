@@ -1,0 +1,695 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Alcohol Intake + Intoxication Estimate</title>
+  <style>
+    :root{
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      --bg: #f7fafc;
+      --card: #ffffff;
+      --text: #0f172a;
+      --muted: #475569;
+      --border: rgba(15, 23, 42, .14);
+      --accent: #2563eb;
+      --accentSoft: rgba(37,99,235,.10);
+      --ok: #16a34a;
+      --warn: #d97706;
+      --bad: #dc2626;
+      --shadow: 0 10px 28px rgba(2,6,23,.10);
+    }
+
+    *{ box-sizing:border-box; }
+    body{
+      margin:0;
+      background: radial-gradient(1200px 600px at 20% 0%, #ffffff, var(--bg));
+      color: var(--text);
+    }
+    .wrap{
+      max-width: 980px;
+      margin: 0 auto;
+      padding: 18px;
+    }
+
+    /* Top nav */
+    .topnav{
+      display:flex;
+      gap:12px;
+      flex-wrap:wrap;
+      align-items:center;
+      justify-content:space-between;
+      margin-bottom: 14px;
+    }
+    .titlebox{
+      display:flex;
+      flex-direction:column;
+      gap:4px;
+    }
+    h1{
+      font-size: 18px;
+      margin:0;
+      letter-spacing:.2px;
+    }
+    .subtitle{
+      font-size: 12px;
+      color: var(--muted);
+      margin:0;
+    }
+    .navgroup{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      justify-content:flex-end;
+      align-items:center;
+    }
+    .navbtn{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      text-decoration:none;
+      font-weight:800;
+      padding:14px 16px;
+      border-radius:14px;
+      border:1px solid var(--border);
+      background: var(--card);
+      color: var(--text);
+      box-shadow: var(--shadow);
+      min-width: 170px;
+      user-select:none;
+    }
+    .navbtn.primary{
+      border-color: rgba(37,99,235,.35);
+      box-shadow: 0 10px 28px rgba(37,99,235,.12);
+    }
+    .navbtn:active{ transform: translateY(1px); }
+
+    /* Tabs */
+    .tabs{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      margin-top: 10px;
+    }
+    button.tab{
+      border:1px solid var(--border);
+      background: var(--card);
+      color: var(--text);
+      padding: 14px 16px;
+      border-radius: 14px;
+      cursor:pointer;
+      font-weight:800;
+      box-shadow: 0 6px 18px rgba(2,6,23,.06);
+      min-width: 220px;
+    }
+    button.tab.active{
+      border-color: rgba(37,99,235,.55);
+      box-shadow: 0 0 0 3px var(--accentSoft) inset, 0 8px 20px rgba(37,99,235,.10);
+      color: var(--accent);
+    }
+
+    .card{
+      background: var(--card);
+      border:1px solid var(--border);
+      border-radius: 18px;
+      padding: 16px;
+      box-shadow: var(--shadow);
+      margin-top: 14px;
+    }
+
+    .grid{
+      display:grid;
+      gap:12px;
+      grid-template-columns: repeat(12, 1fr);
+    }
+    .col-12{ grid-column: span 12; }
+    .col-6{ grid-column: span 6; }
+    .col-4{ grid-column: span 4; }
+    .col-3{ grid-column: span 3; }
+
+    @media (max-width: 820px){
+      .col-6,.col-4,.col-3{ grid-column: span 12; }
+      button.tab{ min-width: 100%; }
+      .navbtn{ min-width: 100%; }
+      .topnav{ gap: 10px; }
+      .navgroup{ width:100%; }
+    }
+
+    label{
+      display:block;
+      font-size: 13px;
+      color: var(--muted);
+      margin: 2px 0 6px;
+      font-weight: 700;
+    }
+
+    input, select{
+      width:100%;
+      padding: 14px 14px;         /* bigger */
+      border-radius: 14px;
+      border:1px solid var(--border);
+      background: #ffffff;
+      color: var(--text);
+      outline:none;
+      font-size: 16px;            /* bigger */
+      font-weight: 650;
+    }
+    input:focus, select:focus{
+      border-color: rgba(37,99,235,.55);
+      box-shadow: 0 0 0 4px var(--accentSoft);
+    }
+
+    .row{ display:flex; gap:12px; flex-wrap:wrap; }
+
+    .btn{
+      border:1px solid var(--border);
+      background: var(--card);
+      color: var(--text);
+      padding: 14px 16px;         /* bigger */
+      border-radius: 14px;
+      cursor:pointer;
+      font-weight: 900;
+      box-shadow: 0 8px 20px rgba(2,6,23,.08);
+      min-width: 220px;
+    }
+    .btn.primary{
+      border-color: rgba(37,99,235,.55);
+      box-shadow: 0 10px 24px rgba(37,99,235,.14);
+      color: var(--accent);
+    }
+    .btn:active{ transform: translateY(1px); }
+
+    .muted{
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.45;
+    }
+
+    .pillrow{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      margin-top: 10px;
+    }
+    .pill{
+      border:1px solid var(--border);
+      border-radius: 999px;
+      padding: 10px 12px;
+      background: #ffffff;
+      font-weight: 900;
+      box-shadow: 0 6px 18px rgba(2,6,23,.06);
+    }
+    .pill small{
+      display:block;
+      color: var(--muted);
+      font-weight: 750;
+      margin-top: 3px;
+      font-size: 12px;
+    }
+
+    .banner{
+      border-radius: 16px;
+      padding: 12px 14px;
+      margin-top: 12px;
+      border:1px solid var(--border);
+      background: #ffffff;
+      box-shadow: 0 6px 18px rgba(2,6,23,.06);
+    }
+    .banner.ok{ border-color: rgba(22,163,74,.35); }
+    .banner.warn{ border-color: rgba(217,119,6,.35); }
+    .banner.bad{ border-color: rgba(220,38,38,.35); }
+    .banner strong{ display:block; margin-bottom: 6px; }
+
+    .hr{ height:1px; background: var(--border); margin: 14px 0; }
+    .mono{ font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono","Courier New", monospace; }
+    .hide{ display:none; }
+
+    .footerNote{
+      margin-top: 10px;
+      padding: 12px 14px;
+      border-radius: 16px;
+      border:1px dashed rgba(15,23,42,.20);
+      background: rgba(255,255,255,.7);
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.4;
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <!-- CONFIGURE THESE LINKS FOR YOUR APP -->
+    <div class="topnav">
+      <div class="titlebox">
+        <h1>Alcohol Intake + Intoxication Estimate</h1>
+        <p class="subtitle">Standard drink = 14 g ethanol (US). BAC is an estimate, not a breathalyzer.</p>
+      </div>
+      <div class="navgroup">
+        <!-- Change href paths to match your app structure -->
+        <a class="navbtn primary" id="homeLink" href="../index.html">🏠 Home</a>
+        <a class="navbtn" id="catLink" href="psych.html">↩️ Back to Psych</a>
+      </div>
+    </div>
+
+    <div class="tabs">
+      <button class="tab active" id="tab-intake">Daily/Weekly Intake</button>
+      <button class="tab" id="tab-intox">Could be intoxicated?</button>
+    </div>
+
+    <!-- Drink Builder (shared) -->
+    <div class="card">
+      <div class="grid">
+        <div class="col-3">
+          <label>Number of drinks</label>
+          <input id="qty" type="number" min="0" step="1" value="1" />
+        </div>
+
+        <div class="col-6">
+          <label>Drink type (templates)</label>
+          <select id="drinkType">
+            <!-- Beer sizes -->
+            <option value="beer_12_5">Beer — 12 oz @ 5% (standard can)</option>
+            <option value="beer_16_5">Beer — 16 oz @ 5% (pint)</option>
+            <option value="beer_24_5">Beer — 24 oz @ 5% (tall can)</option>
+            <option value="beer_12_7">Beer — 12 oz @ 7% (IPA/strong)</option>
+            <option value="beer_16_7">Beer — 16 oz @ 7% (IPA/strong pint)</option>
+            <option value="malt_8_7">Malt/strong — 8 oz @ 7% (smaller pour)</option>
+            <option value="malt_9_7">Malt/strong — 9 oz @ 7%</option>
+
+            <!-- Wine -->
+            <option value="wine_5_12">Wine — 5 oz @ 12% (standard)</option>
+            <option value="wine_6_12">Wine — 6 oz @ 12% (large pour)</option>
+            <option value="wine_5_14">Wine — 5 oz @ 14% (strong)</option>
+
+            <!-- Spirits -->
+            <option value="spirit_1p5_40">Spirits — 1.5 oz @ 40% (shot)</option>
+            <option value="spirit_2_40">Spirits — 2.0 oz @ 40% (double/large)</option>
+            <option value="liqueur_1p5_30">Liqueur — 1.5 oz @ 30%</option>
+
+            <!-- Cocktails (approx templates) -->
+            <option value="cocktail_5_20">Cocktail — 5 oz @ 20% (varies)</option>
+            <option value="cocktail_8_12">Mixed drink — 8 oz @ 12% (varies)</option>
+
+            <option value="custom">Custom…</option>
+          </select>
+        </div>
+
+        <div class="col-3">
+          <label>Standard drink</label>
+          <div class="pill">
+            1 std = 14 g ethanol
+            <small>US definition</small>
+          </div>
+        </div>
+
+        <!-- Custom fields -->
+        <div class="col-4 custom hide">
+          <label>Custom volume (fl oz)</label>
+          <input id="cVolOz" type="number" min="0" step="0.1" value="12" />
+        </div>
+        <div class="col-4 custom hide">
+          <label>Custom ABV (%)</label>
+          <input id="cAbv" type="number" min="0" step="0.1" value="5" />
+        </div>
+        <div class="col-4 custom hide">
+          <label>Custom label (optional)</label>
+          <input id="cLabel" type="text" placeholder="e.g., IPA 19 oz @ 6.8%" />
+        </div>
+
+        <div class="col-12">
+          <div class="row">
+            <button class="btn primary" id="addDrink">Add to list</button>
+            <button class="btn" id="clearList">Clear list</button>
+          </div>
+          <div class="muted" style="margin-top:10px;">
+            Build a typical “drink list” for the patient. Both calculators use the same list.
+          </div>
+        </div>
+
+        <div class="col-12">
+          <div class="hr"></div>
+          <div id="list" class="muted">No drinks added yet.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Calculator 1: intake -->
+    <div class="card" id="panel-intake">
+      <div class="grid">
+        <div class="col-12">
+          <div class="muted">
+            Calculates daily and weekly intake as <strong>standard drinks</strong> and <strong>grams ethanol</strong>.
+          </div>
+        </div>
+
+        <div class="col-6">
+          <label>Interpret the drink list as…</label>
+          <select id="freqMode">
+            <option value="daily">A typical DAY of drinking</option>
+            <option value="weekly">A typical WEEK of drinking</option>
+          </select>
+        </div>
+
+        <div class="col-6">
+          <label>Days per week they drink</label>
+          <input id="daysPerWeek" type="number" min="1" max="7" step="1" value="7" />
+        </div>
+
+        <div class="col-12">
+          <button class="btn primary" id="calcIntake">Calculate intake</button>
+        </div>
+
+        <div class="col-12">
+          <div class="pillrow" id="intakeKpi"></div>
+          <div class="banner" id="intakeBanner"></div>
+        </div>
+      </div>
+
+      <div class="footerNote">
+        Tip: If they binge on weekends, you can enter the “typical week” list instead of daily.
+      </div>
+    </div>
+
+    <!-- Calculator 2: intox estimate -->
+    <div class="card hide" id="panel-intox">
+      <div class="grid">
+        <div class="col-12">
+          <div class="muted">
+            Rough BAC estimate (education/counseling). Real BAC depends on absorption, food, meds, tolerance, liver function, etc.
+          </div>
+        </div>
+
+        <div class="col-4">
+          <label>Weight (lb)</label>
+          <input id="wtLb" type="number" min="50" step="1" value="180" />
+        </div>
+
+        <div class="col-4">
+          <label>Sex at birth (for body water estimate)</label>
+          <select id="sex">
+            <option value="male">Male (r = 0.68)</option>
+            <option value="female">Female (r = 0.55)</option>
+          </select>
+        </div>
+
+        <div class="col-4">
+          <label>Hours since first drink</label>
+          <input id="hrs" type="number" min="0" step="0.25" value="2" />
+        </div>
+
+        <div class="col-6">
+          <label>Elimination rate (mg/dL per hour)</label>
+          <input id="elim" type="number" min="5" max="30" step="1" value="15" />
+        </div>
+
+        <div class="col-6">
+          <label>Intoxication threshold (mg/dL)</label>
+          <input id="cutoff" type="number" min="50" max="200" step="5" value="80" />
+        </div>
+
+        <div class="col-12">
+          <button class="btn primary" id="calcBac">Estimate intoxication</button>
+        </div>
+
+        <div class="col-12">
+          <div class="pillrow" id="bacKpi"></div>
+          <div class="banner" id="bacBanner"></div>
+          <div class="muted mono" id="bacDetails" style="margin-top:10px;"></div>
+        </div>
+      </div>
+
+      <div class="footerNote">
+        If the estimate is near the cutoff, treat it as unsafe. This calculator is deliberately conservative in messaging.
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="muted">
+        <strong>Quick notes</strong>
+        <ul style="margin:8px 0 0 18px;">
+          <li>Standard drink uses 14 g ethanol (US).</li>
+          <li>Use “Custom” for unusual pours, craft beers, or cocktails.</li>
+          <li>Legal limits vary by jurisdiction; 80 mg/dL (0.08%) is a common US reference.</li>
+        </ul>
+      </div>
+    </div>
+
+  </div>
+
+<script>
+(() => {
+  // -----------------------------
+  // Optional: Configure nav links
+  // -----------------------------
+  // Change these if you want to set links dynamically:
+  // const HOME_HREF = "../index.html";
+  // const CATEGORY_HREF = "../psych.html";
+  // const CATEGORY_LABEL = "↩️ Back to Psych";
+  // document.getElementById("homeLink").href = HOME_HREF;
+  // const cat = document.getElementById("catLink");
+  // cat.href = CATEGORY_HREF;
+  // cat.textContent = CATEGORY_LABEL;
+
+  // -----------------------------
+  // Constants / helpers
+  // -----------------------------
+  const OZ_TO_ML = 29.5735295625;
+  const ETHANOL_DENSITY = 0.789; // g/mL
+  const STD_GRAMS = 14;
+
+  const $ = (id) => document.getElementById(id);
+
+  function gramsFromVolAbv(volOz, abvPct){
+    const ml = Number(volOz) * OZ_TO_ML;
+    const abv = Number(abvPct) / 100;
+    return ml * abv * ETHANOL_DENSITY;
+  }
+
+  function fmt(n, d=1){
+    if (!isFinite(n)) return "—";
+    return Number(n).toFixed(d);
+  }
+
+  // -----------------------------
+  // Templates (expanded beer sizes)
+  // -----------------------------
+  const templates = {
+    // Beer
+    beer_12_5:   { label: "Beer 12 oz @ 5%", volOz: 12,  abv: 5 },
+    beer_16_5:   { label: "Beer 16 oz @ 5%", volOz: 16,  abv: 5 },
+    beer_24_5:   { label: "Beer 24 oz @ 5%", volOz: 24,  abv: 5 },
+    beer_12_7:   { label: "Beer 12 oz @ 7%", volOz: 12,  abv: 7 },
+    beer_16_7:   { label: "Beer 16 oz @ 7%", volOz: 16,  abv: 7 },
+    malt_8_7:    { label: "Malt/strong 8 oz @ 7%", volOz: 8, abv: 7 },
+    malt_9_7:    { label: "Malt/strong 9 oz @ 7%", volOz: 9, abv: 7 },
+
+    // Wine
+    wine_5_12:   { label: "Wine 5 oz @ 12%", volOz: 5,   abv: 12 },
+    wine_6_12:   { label: "Wine 6 oz @ 12%", volOz: 6,   abv: 12 },
+    wine_5_14:   { label: "Wine 5 oz @ 14%", volOz: 5,   abv: 14 },
+
+    // Spirits
+    spirit_1p5_40: { label: "Spirits 1.5 oz @ 40%", volOz: 1.5, abv: 40 },
+    spirit_2_40:   { label: "Spirits 2.0 oz @ 40%", volOz: 2.0, abv: 40 },
+    liqueur_1p5_30:{ label: "Liqueur 1.5 oz @ 30%", volOz: 1.5, abv: 30 },
+
+    // Cocktails (very approximate templates)
+    cocktail_5_20:  { label: "Cocktail 5 oz @ 20%", volOz: 5, abv: 20 },
+    cocktail_8_12:  { label: "Mixed drink 8 oz @ 12%", volOz: 8, abv: 12 },
+  };
+
+  // -----------------------------
+  // State: session drink list
+  // -----------------------------
+  let sessionItems = []; // {qty, label, gramsTotal}
+
+  function calcSessionTotals(){
+    const grams = sessionItems.reduce((s,it)=>s + it.gramsTotal, 0);
+    const std = grams / STD_GRAMS;
+    return { grams, std };
+  }
+
+  function renderList(){
+    const list = $("list");
+    if (!sessionItems.length){
+      list.textContent = "No drinks added yet.";
+      return;
+    }
+    const lines = sessionItems.map((it, i) => {
+      const std = it.gramsTotal / STD_GRAMS;
+      return `${i+1}. ${it.qty} × ${it.label} → ${fmt(std,2)} std (${fmt(it.gramsTotal,1)} g)`;
+    });
+
+    const totals = calcSessionTotals();
+    list.innerHTML =
+      `<div class="mono">${lines.join("<br>")}</div>
+       <div class="hr"></div>
+       <div><strong>Total list:</strong> ${fmt(totals.std,2)} standard drinks (${fmt(totals.grams,1)} g ethanol)</div>`;
+  }
+
+  function show(el, yes){ el.classList.toggle("hide", !yes); }
+
+  // Custom toggle
+  function updateCustomVisibility(){
+    const isCustom = $("drinkType").value === "custom";
+    document.querySelectorAll(".custom").forEach(el => show(el, isCustom));
+  }
+  $("drinkType").addEventListener("change", updateCustomVisibility);
+  updateCustomVisibility();
+
+  // Add drink
+  $("addDrink").addEventListener("click", () => {
+    const qty = Math.max(0, Math.floor(Number($("qty").value || 0)));
+    if (qty <= 0) return;
+
+    const type = $("drinkType").value;
+
+    let label, volOz, abv;
+    if (type === "custom"){
+      volOz = Number($("cVolOz").value || 0);
+      abv = Number($("cAbv").value || 0);
+      const customLabel = ($("cLabel").value || "").trim();
+      label = customLabel ? customLabel : `Custom ${fmt(volOz,1)} oz @ ${fmt(abv,1)}%`;
+    } else {
+      const t = templates[type];
+      label = t.label;
+      volOz = t.volOz;
+      abv = t.abv;
+    }
+
+    const gramsEach = gramsFromVolAbv(volOz, abv);
+    const gramsTotal = gramsEach * qty;
+
+    sessionItems.push({ qty, label, gramsTotal });
+    renderList();
+  });
+
+  $("clearList").addEventListener("click", () => {
+    sessionItems = [];
+    renderList();
+    $("intakeKpi").innerHTML = "";
+    $("bacKpi").innerHTML = "";
+    $("intakeBanner").className = "banner";
+    $("intakeBanner").innerHTML = "";
+    $("bacBanner").className = "banner";
+    $("bacBanner").innerHTML = "";
+    $("bacDetails").textContent = "";
+  });
+
+  // Tabs
+  function setTab(which){
+    const intake = which === "intake";
+    $("tab-intake").classList.toggle("active", intake);
+    $("tab-intox").classList.toggle("active", !intake);
+    show($("panel-intake"), intake);
+    show($("panel-intox"), !intake);
+  }
+  $("tab-intake").addEventListener("click", ()=>setTab("intake"));
+  $("tab-intox").addEventListener("click", ()=>setTab("intox"));
+
+  // -----------------------------
+  // Calculator 1: Daily/Weekly intake
+  // -----------------------------
+  $("calcIntake").addEventListener("click", () => {
+    const totals = calcSessionTotals();
+    const days = Math.min(7, Math.max(1, Number($("daysPerWeek").value || 7)));
+    const mode = $("freqMode").value;
+
+    let dailyStd, weeklyStd, dailyG, weeklyG;
+
+    if (mode === "daily"){
+      dailyStd = totals.std;
+      dailyG = totals.grams;
+      weeklyStd = dailyStd * days;
+      weeklyG = dailyG * days;
+    } else {
+      weeklyStd = totals.std;
+      weeklyG = totals.grams;
+      dailyStd = weeklyStd / days;
+      dailyG = weeklyG / days;
+    }
+
+    $("intakeKpi").innerHTML = `
+      <div class="pill">Daily: ${fmt(dailyStd,2)} std<small>≈ ${fmt(dailyG,1)} g ethanol</small></div>
+      <div class="pill">Weekly: ${fmt(weeklyStd,2)} std<small>≈ ${fmt(weeklyG,1)} g ethanol</small></div>
+    `;
+
+    const b = $("intakeBanner");
+    b.className = "banner";
+    b.innerHTML = `
+      <strong>Summary</strong>
+      Standard drinks are computed from ethanol grams (14 g per standard drink). Use “Custom” for real-world pours.
+    `;
+  });
+
+  // -----------------------------
+  // Calculator 2: “Could be intoxicated?” (rough BAC)
+  // Widmark-style estimate (very simplified):
+  // BAC (g/dL) ≈ (A_g / (r * W_g)) * 100
+  // Convert to mg/dL: * 1000
+  // Subtract metabolism: elim (mg/dL/hr) * hours
+  // -----------------------------
+  function estimateBacMgDl(gramsAlcohol, weightLb, sex, hours, elimMgDlHr){
+    const r = (sex === "female") ? 0.55 : 0.68;
+    const W_g = Number(weightLb) * 453.59237;
+    if (W_g <= 0) return { bac_now: NaN, bac_peak: NaN };
+
+    const bac_g_dL = (gramsAlcohol / (r * W_g)) * 100;
+    const bac_peak = bac_g_dL * 1000; // mg/dL
+    const metabolized = Math.max(0, Number(elimMgDlHr)) * Math.max(0, Number(hours));
+    const bac_now = Math.max(0, bac_peak - metabolized);
+
+    return { bac_now, bac_peak };
+  }
+
+  $("calcBac").addEventListener("click", () => {
+    const totals = calcSessionTotals();
+    const weight = Number($("wtLb").value || 0);
+    const sex = $("sex").value;
+    const hours = Number($("hrs").value || 0);
+    const elim = Number($("elim").value || 15);
+    const cutoff = Number($("cutoff").value || 80);
+
+    const res = estimateBacMgDl(totals.grams, weight, sex, hours, elim);
+    const now = res.bac_now;
+    const peak = res.bac_peak;
+
+    const bacPctNow = now / 1000;   // 80 mg/dL -> 0.08%
+    const bacPctPeak = peak / 1000;
+
+    $("bacKpi").innerHTML = `
+      <div class="pill">Estimated now: ${fmt(now,0)} mg/dL<small>≈ ${fmt(bacPctNow,3)}%</small></div>
+      <div class="pill">Estimated peak (no metabolism): ${fmt(peak,0)} mg/dL<small>≈ ${fmt(bacPctPeak,3)}%</small></div>
+    `;
+
+    const banner = $("bacBanner");
+    const details = $("bacDetails");
+
+    let cls = "banner ok";
+    let title = "Estimate suggests below cutoff (still may be impaired)";
+    let msg = `Impairment can occur below ${cutoff} mg/dL. If there’s any doubt, assume unsafe to drive.`;
+
+    if (now >= cutoff){
+      cls = "banner bad";
+      title = "Estimate suggests intoxication — do not drive";
+      const hrsToBelow = (now - cutoff) / Math.max(1, elim);
+      msg = `At ${fmt(elim,0)} mg/dL/hr elimination, estimated time to drop below ${cutoff} mg/dL is ~${fmt(hrsToBelow,1)} hours.`;
+    } else if (now >= cutoff * 0.6){
+      cls = "banner warn";
+      title = "Borderline zone (uncertain)";
+      msg = `Given variability, treat this as unsafe for driving, especially with rapid drinking or no food.`;
+    }
+
+    banner.className = cls;
+    banner.innerHTML = `<strong>${title}</strong>${msg}`;
+
+    details.textContent =
+      `Inputs: alcohol=${fmt(totals.grams,1)} g (${fmt(totals.std,2)} std), weight=${fmt(weight,0)} lb, sex=${sex}, hours=${fmt(hours,2)}, elimination=${fmt(elim,0)} mg/dL/hr.`;
+  });
+
+  // Init
+  renderList();
+})();
+</script>
+</body>
+</html>
