@@ -1,0 +1,323 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Smoking History — Pack-Year Calculator</title>
+  <style>
+    :root{
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      --bg: #f7fafc;
+      --card: #ffffff;
+      --text: #0f172a;
+      --muted: #475569;
+      --border: rgba(15, 23, 42, .14);
+      --accent: #2563eb;
+      --accentSoft: rgba(37,99,235,.10);
+      --shadow: 0 10px 28px rgba(2,6,23,.10);
+    }
+    *{ box-sizing:border-box; }
+    body{
+      margin:0;
+      background: radial-gradient(1200px 600px at 20% 0%, #ffffff, var(--bg));
+      color: var(--text);
+    }
+    .wrap{ max-width: 980px; margin: 0 auto; padding: 18px; }
+
+    .topnav{
+      display:flex; gap:12px; flex-wrap:wrap; align-items:center; justify-content:space-between;
+      margin-bottom: 14px;
+    }
+    .titlebox{ display:flex; flex-direction:column; gap:4px; }
+    h1{ font-size: 18px; margin:0; letter-spacing:.2px; }
+    .subtitle{ font-size: 12px; color: var(--muted); margin:0; }
+
+    .navgroup{ display:flex; gap:10px; flex-wrap:wrap; justify-content:flex-end; align-items:center; }
+    .navbtn{
+      display:inline-flex; align-items:center; justify-content:center;
+      text-decoration:none; font-weight:900;
+      padding:14px 16px; border-radius:14px;
+      border:1px solid var(--border);
+      background: var(--card); color: var(--text);
+      box-shadow: var(--shadow);
+      min-width: 170px; user-select:none;
+    }
+    .navbtn.primary{
+      border-color: rgba(37,99,235,.35);
+      box-shadow: 0 10px 28px rgba(37,99,235,.12);
+      color: var(--accent);
+    }
+    .navbtn:active{ transform: translateY(1px); }
+
+    .card{
+      background: var(--card);
+      border:1px solid var(--border);
+      border-radius: 18px;
+      padding: 16px;
+      box-shadow: var(--shadow);
+      margin-top: 14px;
+    }
+
+    .grid{
+      display:grid; gap:12px;
+      grid-template-columns: repeat(12, 1fr);
+    }
+    .col-12{ grid-column: span 12; }
+    .col-6{ grid-column: span 6; }
+    .col-4{ grid-column: span 4; }
+
+    @media (max-width: 820px){
+      .col-6,.col-4{ grid-column: span 12; }
+      .navbtn{ min-width: 100%; }
+      .navgroup{ width:100%; }
+    }
+
+    label{
+      display:block;
+      font-size: 13px;
+      color: var(--muted);
+      margin: 2px 0 6px;
+      font-weight: 800;
+    }
+    input, select{
+      width:100%;
+      padding: 14px 14px;
+      border-radius: 14px;
+      border:1px solid var(--border);
+      background: #ffffff;
+      color: var(--text);
+      outline:none;
+      font-size: 16px;
+      font-weight: 650;
+    }
+    input:focus, select:focus{
+      border-color: rgba(37,99,235,.55);
+      box-shadow: 0 0 0 4px var(--accentSoft);
+    }
+
+    .row{ display:flex; gap:12px; flex-wrap:wrap; }
+    .btn{
+      border:1px solid var(--border);
+      background: var(--card);
+      color: var(--text);
+      padding: 14px 16px;
+      border-radius: 14px;
+      cursor:pointer;
+      font-weight: 900;
+      box-shadow: 0 8px 20px rgba(2,6,23,.08);
+      min-width: 240px;
+    }
+    .btn.primary{
+      border-color: rgba(37,99,235,.55);
+      box-shadow: 0 10px 24px rgba(37,99,235,.14);
+      color: var(--accent);
+    }
+    .btn:active{ transform: translateY(1px); }
+
+    .muted{ color: var(--muted); font-size: 13px; line-height: 1.45; }
+    .pillrow{ display:flex; gap:10px; flex-wrap:wrap; margin-top: 10px; }
+    .pill{
+      border:1px solid var(--border);
+      border-radius: 999px;
+      padding: 10px 12px;
+      background: #ffffff;
+      font-weight: 900;
+      box-shadow: 0 6px 18px rgba(2,6,23,.06);
+    }
+    .pill small{
+      display:block;
+      color: var(--muted);
+      font-weight: 750;
+      margin-top: 3px;
+      font-size: 12px;
+    }
+    .banner{
+      border-radius: 16px;
+      padding: 12px 14px;
+      margin-top: 12px;
+      border:1px solid var(--border);
+      background: #ffffff;
+      box-shadow: 0 6px 18px rgba(2,6,23,.06);
+    }
+    .banner strong{ display:block; margin-bottom: 6px; }
+    .hr{ height:1px; background: var(--border); margin: 14px 0; }
+    .mono{ font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono","Courier New", monospace; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <!-- EDIT THESE LINKS TO MATCH YOUR APP -->
+    <div class="topnav">
+      <div class="titlebox">
+        <h1>Smoking History — Pack-Year Calculator</h1>
+        <p class="subtitle">Assumes 20 cigarettes per pack.</p>
+      </div>
+      <div class="navgroup">
+        <a class="navbtn primary" href="../index.html">🏠 Home</a>
+        <a class="navbtn" href="psych.html">↩️ Back to Psych</a>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="grid">
+        <div class="col-12 muted">
+          Enter smoking amount (cigarettes or packs), choose whether that number is per <strong>day</strong> or per <strong>week</strong>,
+          then duration in years. Output is <strong>pack-years</strong>.
+        </div>
+
+        <div class="col-4">
+          <label>Amount</label>
+          <input id="amt" type="number" min="0" step="0.5" value="10" />
+        </div>
+
+        <div class="col-4">
+          <label>Type</label>
+          <select id="type">
+            <option value="cigs">Cigarettes</option>
+            <option value="packs">Packs</option>
+          </select>
+        </div>
+
+        <div class="col-4">
+          <label>Per</label>
+          <select id="per">
+            <option value="day">Day</option>
+            <option value="week">Week</option>
+          </select>
+        </div>
+
+        <div class="col-6">
+          <label>Duration (years)</label>
+          <input id="years" type="number" min="0" step="0.5" value="20" />
+        </div>
+
+        <div class="col-6">
+          <label>Current smoker?</label>
+          <select id="current">
+            <option value="current">Yes (current)</option>
+            <option value="former">No (former)</option>
+            <option value="never">Never smoker</option>
+          </select>
+        </div>
+
+        <div class="col-12">
+          <div class="row">
+            <button class="btn primary" id="calc">Calculate</button>
+            <button class="btn" id="copy">Copy summary</button>
+            <button class="btn" id="reset">Reset</button>
+          </div>
+          <div class="muted" style="margin-top:10px;">
+            Pack-years = (packs/day) × (years). If you enter per week, it converts to packs/day by dividing by 7.
+          </div>
+        </div>
+
+        <div class="col-12">
+          <div class="pillrow" id="kpi"></div>
+          <div class="banner" id="banner"></div>
+          <div class="hr"></div>
+          <div class="muted mono" id="summary"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="muted">
+        <strong>Tip</strong>
+        <ul style="margin:8px 0 0 18px;">
+          <li>If smoking varied over time (e.g., “2 PPD for 10 yrs, then 0.5 PPD for 15 yrs”), document phases separately.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+<script>
+(() => {
+  const CIGS_PER_PACK = 20;
+  const $ = (id) => document.getElementById(id);
+
+  function fmt(n, d=1){
+    if (!isFinite(n)) return "—";
+    return Number(n).toFixed(d);
+  }
+
+  function calculate(){
+    const amt = Math.max(0, Number($("amt").value || 0));
+    const type = $("type").value;       // cigs | packs
+    const per = $("per").value;         // day | week
+    const years = Math.max(0, Number($("years").value || 0));
+    const current = $("current").value; // current | former | never
+
+    let packsPerDay = 0;
+    let packYears = 0;
+
+    if (current !== "never"){
+      let packs = (type === "packs") ? amt : (amt / CIGS_PER_PACK);
+      if (per === "week") packs = packs / 7;
+      packsPerDay = packs;
+      packYears = packsPerDay * years;
+    }
+
+    // KPI
+    $("kpi").innerHTML = `
+      <div class="pill">Pack-years: ${fmt(packYears,1)}<small>packs/day × years</small></div>
+      <div class="pill">Packs/day: ${fmt(packsPerDay,2)}<small>converted from input</small></div>
+      <div class="pill">Cigs/day: ${fmt(packsPerDay * CIGS_PER_PACK,0)}<small>equivalent</small></div>
+    `;
+
+    // Banner
+    const banner = $("banner");
+    banner.className = "banner";
+    let msg = `Assumes ${CIGS_PER_PACK} cigarettes per pack.`;
+
+    if (current === "never"){
+      msg = "Never smoker selected → pack-years reported as 0.";
+    }
+    banner.innerHTML = `<strong>Result</strong>${msg}`;
+
+    // Summary
+    const statusText = (current === "current") ? "CURRENT" : (current === "former") ? "FORMER" : "NEVER";
+    const unitText = (type === "packs") ? "packs" : "cigarettes";
+    const perText = (per === "day") ? "day" : "week";
+
+    let summary;
+    if (current === "never"){
+      summary = `NEVER — 0 pack-years.`;
+    } else {
+      summary = `${statusText} — ${fmt(amt, type === "packs" ? 2 : 0)} ${unitText}/${perText} for ${fmt(years,1)} years → ${fmt(packYears,1)} pack-years.`;
+    }
+
+    $("summary").textContent = summary;
+    return summary;
+  }
+
+  $("calc").addEventListener("click", () => calculate());
+
+  $("copy").addEventListener("click", async () => {
+    const text = calculate();
+    try{
+      await navigator.clipboard.writeText(text);
+      $("banner").innerHTML = `<strong>Copied</strong>Summary copied to clipboard.`;
+    } catch(e){
+      $("banner").innerHTML = `<strong>Copy failed</strong>Clipboard blocked by browser. Select and copy the summary manually.`;
+    }
+  });
+
+  $("reset").addEventListener("click", () => {
+    $("amt").value = 10;
+    $("type").value = "cigs";
+    $("per").value = "day";
+    $("years").value = 20;
+    $("current").value = "current";
+    $("kpi").innerHTML = "";
+    $("banner").className = "banner";
+    $("banner").innerHTML = "";
+    $("summary").textContent = "";
+    calculate();
+  });
+
+  // initial
+  calculate();
+})();
+</script>
+</body>
+</html>
