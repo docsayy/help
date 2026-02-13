@@ -1,10 +1,10 @@
 <!doctype html>
 <html lang="en">
-en_US
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>AF Management Helper – Rate vs Rhythm</title>
+
   <style>
     :root {
       --bg: #020617;
@@ -17,7 +17,9 @@ en_US
       --pad: 14px;
       color-scheme: dark;
     }
+
     * { box-sizing: border-box; }
+
     body {
       margin: 0;
       min-height: 100vh;
@@ -26,10 +28,42 @@ en_US
       color: #e5e7eb;
       display: flex;
       justify-content: center;
-      padding: 14px;
+      padding: 16px;
     }
+
     main { width: 100%; max-width: 900px; }
-    header { margin-bottom: 14px; }
+
+    /* Shared topbar */
+    .topbar{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      margin-bottom:14px;
+    }
+
+    .navlinks{
+      display:flex;
+      gap:10px;
+    }
+
+    .btn{
+      text-decoration:none;
+      padding:8px 14px;
+      border-radius:999px;
+      font-size:0.8rem;
+      font-weight:600;
+      border:1px solid var(--border);
+      background:rgba(15,23,42,0.9);
+      color:#e5e7eb;
+      transition:all .15s ease;
+    }
+
+    .btn:hover{
+      border-color:var(--accent);
+      background:var(--accent-soft);
+      box-shadow:0 6px 18px rgba(249,115,22,0.35);
+    }
+
     h1 {
       margin: 0 0 4px;
       font-size: 1.4rem;
@@ -37,292 +71,204 @@ en_US
       align-items: center;
       gap: 8px;
     }
-    h1 span.icon { font-size: 1.4rem; }
+
     header p {
       margin: 0;
       font-size: 0.85rem;
       color: var(--muted);
     }
+
     .card {
       background: linear-gradient(135deg, rgba(15,23,42,0.97), rgba(15,23,42,1));
       border-radius: var(--radius);
       padding: var(--pad);
       border: 1px solid var(--border);
       box-shadow: 0 18px 40px rgba(0,0,0,0.75);
-      position: relative;
-      overflow: hidden;
     }
-    .card::before {
-      content: "";
-      position: absolute;
-      inset: -45%;
-      background:
-        radial-gradient(circle at 0 0, rgba(248,113,113,0.2), transparent 55%),
-        radial-gradient(circle at 100% 100%, rgba(96,165,250,0.18), transparent 55%);
-      opacity: 0.9;
-      pointer-events: none;
-    }
-    .card-inner { position: relative; z-index: 1; }
-    h2 {
-      margin: 0 0 6px;
-      font-size: 1.05rem;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 6px;
-    }
-    .badge {
-      font-size: 0.7rem;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-      padding: 3px 7px;
-      border-radius: 999px;
-      background: var(--accent-soft);
-      color: #fed7aa;
-      border: 1px solid rgba(248,250,252,0.07);
-      white-space: nowrap;
-    }
-    .subtitle {
-      margin: 0 0 10px;
-      font-size: 0.8rem;
-      color: var(--muted);
-    }
-    form {
-      display: grid;
-      gap: 8px;
-      margin-bottom: 8px;
-    }
+
     .field {
       display: flex;
       flex-direction: column;
-      font-size: 0.8rem;
+      margin-bottom: 12px;
+      font-size: 0.9rem;
     }
-    label { font-size: 0.8rem; }
+
     select, input[type="number"] {
-      margin-top: 3px;
-      padding: 6px 8px;
-      border-radius: 9px;
+      margin-top: 6px;
+      padding: 10px;
+      border-radius: 10px;
       border: 1px solid rgba(148,163,184,0.45);
       background: rgba(15,23,42,0.96);
       color: #e5e7eb;
-      font-size: 0.85rem;
+      font-size: 1rem;
     }
-    .helper {
-      font-size: 0.72rem;
-      color: var(--muted);
-      margin-top: 2px;
-    }
-    .inline { display: flex; flex-wrap: wrap; gap: 10px; }
-    .btn-row { margin-top: 6px; }
+
     button {
       border-radius: 999px;
       border: none;
-      padding: 7px 13px;
-      font-size: 0.86rem;
-      font-weight: 500;
+      padding: 10px 18px;
+      font-size: 0.95rem;
+      font-weight: 600;
       cursor: pointer;
       background: radial-gradient(circle at 0 0, #fed7aa, #fb923c 40%, #ea580c 100%);
       color: #111827;
       box-shadow: 0 10px 26px rgba(248,113,22,0.55);
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      transition: transform 0.08s ease, box-shadow 0.08s ease, filter 0.08s ease;
+      margin-top: 10px;
     }
-    button:hover {
-      transform: translateY(-1px);
-      filter: brightness(1.05);
-      box-shadow: 0 14px 32px rgba(248,113,22,0.7);
-    }
+
     .result {
-      margin-top: 8px;
-      padding: 8px 9px;
-      border-radius: 11px;
+      margin-top: 16px;
+      padding: 12px;
+      border-radius: 12px;
       border: 1px solid rgba(148,163,184,0.5);
       background: rgba(15,23,42,0.98);
-      font-size: 0.8rem;
+      font-size: 0.9rem;
+      line-height: 1.5;
     }
-    .result-title { font-weight: 600; margin-bottom: 3px; }
+
+    ul { margin: 6px 0 0 18px; }
     .risk-low { color: #4ade80; }
     .risk-int { color: #facc15; }
     .risk-high { color: #f97373; }
-    ul { margin: 4px 0 0 18px; padding: 0; font-size: 0.78rem; }
-    li { margin-bottom: 2px; }
+
     footer {
       margin-top: 12px;
-      font-size: 0.72rem;
+      font-size: 0.75rem;
       color: var(--muted);
     }
   </style>
 </head>
+
 <body>
   <main>
-    <header>
-      <h1><span class="icon">📋</span> AF Management Helper – Rate vs Rhythm</h1>
-      <p>Simple wizard using stability, symptoms, comorbidities to suggest rate vs rhythm focus. Always apply AF guidelines and individual judgement.</p>
+    <header class="topbar">
+      <div>
+        <h1>📋 AF Management Helper – Rate vs Rhythm</h1>
+        <p>Quick guide using stability, symptoms, and comorbidities. Always apply AF guidelines and clinical judgement.</p>
+      </div>
+
+      <div class="navlinks">
+        <a class="btn" href="../index.html">🏠 Home</a>
+        <a class="btn" href="../cardiology.html">↩︎ Back to Cardiology</a>
+      </div>
     </header>
 
     <section class="card">
-      <div class="card-inner">
-        <h2>
-          Patient Profile
-          <span class="badge">AF</span>
-        </h2>
-        <p class="subtitle">For non-valvular AF or flutter. Not for pre-excited AF (WPW) or unstable patients.</p>
+      <div class="field">
+        <label>Age (years)</label>
+        <input id="age" type="number" value="70">
+      </div>
 
-        <form id="af-form">
-          <div class="inline">
-            <div class="field" style="flex:1 1 130px;">
-              <label for="age">Age (years)</label>
-              <input id="age" type="number" min="18" max="110" value="70">
-            </div>
-            <div class="field" style="flex:1 1 150px;">
-              <label for="duration">AF duration (approx)</label>
-              <select id="duration">
-                <option value="new">New-onset (&lt; 48 hours known)</option>
-                <option value="recent">Recent (&lt; 1 week, &gt;48h or uncertain)</option>
-                <option value="persistent">Persistent (&gt;1 week / recurrent)</option>
-              </select>
-            </div>
-          </div>
+      <div class="field">
+        <label>AF duration</label>
+        <select id="duration">
+          <option value="new">New-onset (&lt;48h)</option>
+          <option value="recent">Recent (&lt;1 week)</option>
+          <option value="persistent">Persistent (&gt;1 week)</option>
+        </select>
+      </div>
 
-          <div class="field">
-            <label for="stable">Hemodynamic status</label>
-            <select id="stable">
-              <option value="stable">Stable (no shock, no chest pain, OK BP)</option>
-              <option value="borderline">Borderline (soft BP, mild HF symptoms)</option>
-              <option value="unstable">Unstable (shock, ischemia, severe HF)</option>
-            </select>
-          </div>
+      <div class="field">
+        <label>Hemodynamic status</label>
+        <select id="stable">
+          <option value="stable">Stable</option>
+          <option value="borderline">Borderline</option>
+          <option value="unstable">Unstable</option>
+        </select>
+      </div>
 
-          <div class="field">
-            <label for="symptoms">Symptom burden</label>
-            <select id="symptoms">
-              <option value="minimal">Minimal / incidental</option>
-              <option value="moderate">Moderate (palpitations, exertional limitation)</option>
-              <option value="severe">Severe (significant functional limitation)</option>
-            </select>
-          </div>
+      <div class="field">
+        <label>Symptom burden</label>
+        <select id="symptoms">
+          <option value="minimal">Minimal</option>
+          <option value="moderate">Moderate</option>
+          <option value="severe">Severe</option>
+        </select>
+      </div>
 
-          <div class="field">
-            <label for="hf">Heart failure with reduced EF (HFrEF)?</label>
-            <select id="hf">
-              <option value="no">No / preserved EF</option>
-              <option value="yes">Yes – HFrEF</option>
-            </select>
-          </div>
+      <div class="field">
+        <label>HFrEF?</label>
+        <select id="hf">
+          <option value="no">No</option>
+          <option value="yes">Yes</option>
+        </select>
+      </div>
 
-          <div class="field">
-            <label for="lung">Asthma/COPD where beta-blocker is a concern?</label>
-            <select id="lung">
-              <option value="no">No</option>
-              <option value="yes">Yes – significant reactive airway disease</option>
-            </select>
-          </div>
+      <div class="field">
+        <label>Reactive airway disease?</label>
+        <select id="lung">
+          <option value="no">No</option>
+          <option value="yes">Yes</option>
+        </select>
+      </div>
 
-          <div class="field">
-            <label for="qtc">Baseline prolonged QT or history of torsades?</label>
-            <select id="qtc">
-              <option value="no">No / unknown</option>
-              <option value="yes">Yes – avoid QT-prolonging antiarrhythmics</option>
-            </select>
-          </div>
+      <div class="field">
+        <label>Prolonged QT / torsades history?</label>
+        <select id="qtc">
+          <option value="no">No</option>
+          <option value="yes">Yes</option>
+        </select>
+      </div>
 
-          <div class="field">
-            <label for="structural">Significant structural heart disease (LVH, CAD, prior MI, valve)?</label>
-            <select id="structural">
-              <option value="no">No significant structural disease</option>
-              <option value="yes">Yes / suspected</option>
-            </select>
-          </div>
+      <div class="field">
+        <label>Structural heart disease?</label>
+        <select id="structural">
+          <option value="no">No</option>
+          <option value="yes">Yes</option>
+        </select>
+      </div>
 
-          <div class="btn-row">
-            <button type="submit">Suggest management focus</button>
-          </div>
-        </form>
+      <button onclick="analyzeAF()">Suggest management focus</button>
 
-        <div id="result" class="result" aria-live="polite">
-          <div class="result-title">Result will appear here.</div>
-          <div>Enter patient details and click “Suggest management focus”.</div>
-        </div>
+      <div id="result" class="result">
+        Result will appear here.
       </div>
     </section>
 
     <footer>
-      This tool simplifies AF management concepts (rate vs rhythm, drug classes). It does not replace detailed AF guidelines, EP consultation, or cardiology advice.
+      Educational helper. Not a substitute for cardiology/EP consultation or formal AF guidelines.
     </footer>
   </main>
 
   <script>
-    document.getElementById("af-form").addEventListener("submit", function (e) {
-      e.preventDefault();
-      const age = Number(document.getElementById("age").value || 0);
-      const duration = document.getElementById("duration").value;
+    function analyzeAF(){
       const stable = document.getElementById("stable").value;
       const symptoms = document.getElementById("symptoms").value;
+      const duration = document.getElementById("duration").value;
       const hf = document.getElementById("hf").value === "yes";
-      const lung = document.getElementById("lung").value === "yes";
       const qtc = document.getElementById("qtc").value === "yes";
       const structural = document.getElementById("structural").value === "yes";
 
-      let strategy = "";
-      let meds = [];
-      let notes = [];
+      let msg = "";
       let css = "risk-int";
 
-      if (stable === "unstable") {
+      if(stable === "unstable"){
         css = "risk-high";
-        strategy = "Emergent synchronized cardioversion is typically preferred in hemodynamically unstable AF.";
-        notes.push("Correct reversible causes (ischemia, sepsis, hypoxia, electrolytes).");
-        notes.push("Ensure anticoagulation strategy according to stroke risk and timing.");
+        msg = "Unstable AF → Synchronized cardioversion is usually preferred.";
       } else {
-        // Stable/borderline
-        const highlySymptomatic = symptoms === "severe" || (symptoms === "moderate" && duration !== "persistent");
-        if (highlySymptomatic && duration !== "persistent") {
-          strategy = "Rhythm control strategy may be reasonable to prioritize, especially with troublesome symptoms and relatively recent-onset AF.";
-          css = "risk-int";
-        } else if (highlySymptomatic && duration === "persistent") {
-          strategy = "Consider rhythm control (e.g., cardioversion ± antiarrhythmic) in persistent AF with severe symptoms, alongside good rate control.";
-          css = "risk-int";
+        if((symptoms === "severe" || symptoms === "moderate") && duration !== "persistent"){
+          msg = "Rhythm control strategy is reasonable to prioritize.";
         } else {
-          strategy = "Rate control is usually a reasonable initial focus, with consideration of rhythm control if symptoms persist.";
           css = "risk-low";
+          msg = "Rate control is a reasonable initial focus.";
         }
 
-        // Rate control meds
-        if (hf) {
-          meds.push("Beta-blocker (e.g., metoprolol succinate, carvedilol) – favored in HFrEF for rate control.");
-          meds.push("Digoxin can be added for additional rate control, particularly if hypotensive; adjust for renal function.");
-          notes.push("Avoid non-dihydropyridine CCBs (diltiazem/verapamil) in HFrEF with reduced EF.");
-        } else {
-          if (!lung) {
-            meds.push("Beta-blocker (e.g., metoprolol tartrate/succinate) for rate control.");
-          } else {
-            meds.push("Consider cautious use of cardioselective beta-blocker, or non-dihydropyridine CCB (diltiazem, verapamil) for rate control if EF preserved.");
-          }
+        if(hf){
+          msg += "<ul><li>Favor beta-blocker and/or digoxin for rate control.</li><li>Avoid diltiazem/verapamil in HFrEF.</li></ul>";
         }
 
-        // Rhythm control comments
-        if (strategy.includes("Rhythm control")) {
-          if (qtc) {
-            notes.push("Baseline QT issues – avoid class III agents with significant QT prolongation (e.g., some sotalol, dofetilide uses).");
-          }
-          if (structural || hf) {
-            notes.push("Significant structural heart disease/HFrEF – often favor amiodarone or dofetilide; avoid flecainide/propafenone.");
-          } else {
-            notes.push("No major structural disease – flecainide or propafenone may be acceptable in selected patients (with AV nodal blocker).");
-          }
+        if(qtc){
+          msg += "<ul><li>Avoid QT-prolonging antiarrhythmics.</li></ul>";
+        }
+
+        if(structural){
+          msg += "<ul><li>Avoid flecainide/propafenone. Consider amiodarone/dofetilide.</li></ul>";
         }
       }
 
-      const box = document.getElementById("result");
-      box.innerHTML = `
-        <div class="result-title">Suggested focus</div>
-        <div class="${css}"><strong>${strategy}</strong></div>
-        ${meds.length ? "<p><strong>Rate control options to consider (examples):</strong></p><ul>" + meds.map(m => `<li>${m}</li>`).join("") + "</ul>" : ""}
-        ${notes.length ? "<p><strong>Additional considerations:</strong></p><ul>" + notes.map(n => `<li>${n}</li>`).join("") + "</ul>" : ""}
-      `;
-    });
+      document.getElementById("result").innerHTML =
+        `<div class="${css}"><strong>${msg}</strong></div>`;
+    }
   </script>
 </body>
 </html>
