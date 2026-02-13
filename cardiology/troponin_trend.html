@@ -1,10 +1,10 @@
 <!doctype html>
 <html lang="en">
-en_US
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Troponin I Trend Assistant</title>
+
   <style>
     :root {
       --bg: #020617;
@@ -17,7 +17,9 @@ en_US
       --pad: 14px;
       color-scheme: dark;
     }
+
     * { box-sizing: border-box; }
+
     body {
       margin: 0;
       min-height: 100vh;
@@ -26,10 +28,42 @@ en_US
       color: #e5e7eb;
       display: flex;
       justify-content: center;
-      padding: 14px;
+      padding: 16px;
     }
+
     main { width: 100%; max-width: 900px; }
-    header { margin-bottom: 14px; }
+
+    /* Top navigation */
+    .topbar{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      margin-bottom:14px;
+    }
+
+    .navlinks{
+      display:flex;
+      gap:10px;
+    }
+
+    .btn{
+      text-decoration:none;
+      padding:8px 14px;
+      border-radius:999px;
+      font-size:0.8rem;
+      font-weight:600;
+      border:1px solid var(--border);
+      background:rgba(15,23,42,0.9);
+      color:#e5e7eb;
+      transition:all .15s ease;
+    }
+
+    .btn:hover{
+      border-color:var(--accent);
+      background:var(--accent-soft);
+      box-shadow:0 6px 18px rgba(249,115,22,0.35);
+    }
+
     h1 {
       margin: 0 0 4px;
       font-size: 1.4rem;
@@ -37,11 +71,13 @@ en_US
       align-items: center;
       gap: 8px;
     }
+
     header p {
       margin: 0;
       font-size: 0.85rem;
       color: var(--muted);
     }
+
     .card {
       background: linear-gradient(135deg, rgba(15,23,42,0.97), rgba(15,23,42,1));
       border-radius: var(--radius);
@@ -49,49 +85,63 @@ en_US
       border: 1px solid var(--border);
       box-shadow: 0 18px 40px rgba(0,0,0,0.75);
     }
+
     .field {
       display: flex;
       flex-direction: column;
-      margin-bottom: 10px;
-      font-size: 0.85rem;
+      margin-bottom: 12px;
+      font-size: 0.9rem;
     }
+
     input[type="number"] {
-      margin-top: 4px;
-      padding: 8px;
-      border-radius: 9px;
+      margin-top: 6px;
+      padding: 10px;
+      border-radius: 10px;
       border: 1px solid rgba(148,163,184,0.45);
       background: rgba(15,23,42,0.96);
       color: #e5e7eb;
-      font-size: 0.9rem;
+      font-size: 1rem;
     }
+
     button {
       border-radius: 999px;
       border: none;
-      padding: 8px 16px;
-      font-size: 0.9rem;
-      font-weight: 500;
+      padding: 10px 18px;
+      font-size: 0.95rem;
+      font-weight: 600;
       cursor: pointer;
       background: radial-gradient(circle at 0 0, #fed7aa, #fb923c 40%, #ea580c 100%);
       color: #111827;
       box-shadow: 0 10px 26px rgba(248,113,22,0.55);
-      margin-top: 8px;
+      margin-top: 10px;
     }
+
     .result {
-      margin-top: 14px;
-      padding: 10px;
+      margin-top: 16px;
+      padding: 12px;
       border-radius: 12px;
       border: 1px solid rgba(148,163,184,0.5);
       background: rgba(15,23,42,0.98);
-      font-size: 0.88rem;
+      font-size: 0.9rem;
+      line-height: 1.5;
     }
+
     .muted { color: var(--muted); font-size: 0.8rem; }
   </style>
 </head>
+
 <body>
   <main>
-    <header>
-      <h1>📈 Troponin I Trend Assistant</h1>
-      <p>URL 0.034 ng/mL | NSTEMI > 0.12 ng/mL | Significant delta ≥20%</p>
+    <header class="topbar">
+      <div>
+        <h1>📈 Troponin I Trend Assistant</h1>
+        <p>URL 0.034 ng/mL | NSTEMI &gt; 0.12 ng/mL | Significant delta ≥20%</p>
+      </div>
+
+      <div class="navlinks">
+        <a class="btn" href="../index.html">🏠 Home</a>
+        <a class="btn" href="../cardiology.html">↩︎ Back to Cardiology</a>
+      </div>
     </header>
 
     <section class="card">
@@ -136,12 +186,15 @@ en_US
       const change = curr - prev;
       const percent = (change / prev) * 100;
 
-      let message = `<strong>Previous:</strong> ${prev} (${zone(prev)})<br>
-                     <strong>Current:</strong> ${curr} (${zone(curr)})<br>
-                     <strong>Change:</strong> ${change.toFixed(3)} ng/mL (${percent.toFixed(1)}%)<br><br>`;
+      let message = `
+        <strong>Previous:</strong> ${prev} (${zone(prev)})<br>
+        <strong>Current:</strong> ${curr} (${zone(curr)})<br>
+        <strong>Absolute change:</strong> ${change.toFixed(3)} ng/mL<br>
+        <strong>Percent change:</strong> ${percent.toFixed(1)}%<br><br>
+      `;
 
       if (curr > NSTEMI) {
-        message += "<strong>Troponin now in NSTEMI range (>0.12). Meets NSTEMI criteria.</strong>";
+        message += "<strong>Troponin now in NSTEMI range (&gt;0.12). Meets NSTEMI criteria.</strong>";
       } else if (prev < URL && curr < URL) {
         message += "Both values below URL. No concern. Repeat only if clinically suspicious.";
       } else if (prev < URL && curr >= URL && percent >= 20) {
