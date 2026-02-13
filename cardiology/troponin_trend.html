@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang="en">
+en_US
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Troponin I Trend Assistant</title>
+  <style>
+    :root {
+      --bg: #020617;
+      --card: #0b1120;
+      --accent: #f97316;
+      --accent-soft: rgba(249,115,22,0.18);
+      --muted: #9ca3af;
+      --border: rgba(148,163,184,0.4);
+      --radius: 16px;
+      --pad: 14px;
+      color-scheme: dark;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: radial-gradient(circle at top, rgba(248,113,22,0.25), #020617 55%);
+      color: #e5e7eb;
+      display: flex;
+      justify-content: center;
+      padding: 14px;
+    }
+    main { width: 100%; max-width: 900px; }
+    header { margin-bottom: 14px; }
+    h1 {
+      margin: 0 0 4px;
+      font-size: 1.4rem;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    header p {
+      margin: 0;
+      font-size: 0.85rem;
+      color: var(--muted);
+    }
+    .card {
+      background: linear-gradient(135deg, rgba(15,23,42,0.97), rgba(15,23,42,1));
+      border-radius: var(--radius);
+      padding: var(--pad);
+      border: 1px solid var(--border);
+      box-shadow: 0 18px 40px rgba(0,0,0,0.75);
+    }
+    .field {
+      display: flex;
+      flex-direction: column;
+      margin-bottom: 10px;
+      font-size: 0.85rem;
+    }
+    input[type="number"] {
+      margin-top: 4px;
+      padding: 8px;
+      border-radius: 9px;
+      border: 1px solid rgba(148,163,184,0.45);
+      background: rgba(15,23,42,0.96);
+      color: #e5e7eb;
+      font-size: 0.9rem;
+    }
+    button {
+      border-radius: 999px;
+      border: none;
+      padding: 8px 16px;
+      font-size: 0.9rem;
+      font-weight: 500;
+      cursor: pointer;
+      background: radial-gradient(circle at 0 0, #fed7aa, #fb923c 40%, #ea580c 100%);
+      color: #111827;
+      box-shadow: 0 10px 26px rgba(248,113,22,0.55);
+      margin-top: 8px;
+    }
+    .result {
+      margin-top: 14px;
+      padding: 10px;
+      border-radius: 12px;
+      border: 1px solid rgba(148,163,184,0.5);
+      background: rgba(15,23,42,0.98);
+      font-size: 0.88rem;
+    }
+    .muted { color: var(--muted); font-size: 0.8rem; }
+  </style>
+</head>
+<body>
+  <main>
+    <header>
+      <h1>📈 Troponin I Trend Assistant</h1>
+      <p>URL 0.034 ng/mL | NSTEMI > 0.12 ng/mL | Significant delta ≥20%</p>
+    </header>
+
+    <section class="card">
+      <div class="field">
+        <label>Previous Troponin (ng/mL)</label>
+        <input id="prev" type="number" step="0.001" placeholder="e.g. 0.05">
+      </div>
+
+      <div class="field">
+        <label>Current Troponin (ng/mL)</label>
+        <input id="curr" type="number" step="0.001" placeholder="e.g. 0.07">
+      </div>
+
+      <button onclick="analyzeTroponin()">Analyze</button>
+
+      <div id="result" class="result">
+        Enter two values and click Analyze.
+      </div>
+    </section>
+  </main>
+
+  <script>
+    const URL = 0.034;
+    const NSTEMI = 0.12;
+
+    function zone(val) {
+      if (val < URL) return "Normal";
+      if (val <= NSTEMI) return "Elevated";
+      return "NSTEMI range";
+    }
+
+    function analyzeTroponin() {
+      const prev = parseFloat(document.getElementById("prev").value);
+      const curr = parseFloat(document.getElementById("curr").value);
+      const box = document.getElementById("result");
+
+      if (isNaN(prev) || isNaN(curr)) {
+        box.innerHTML = "Please enter both values.";
+        return;
+      }
+
+      const change = curr - prev;
+      const percent = (change / prev) * 100;
+
+      let message = `<strong>Previous:</strong> ${prev} (${zone(prev)})<br>
+                     <strong>Current:</strong> ${curr} (${zone(curr)})<br>
+                     <strong>Change:</strong> ${change.toFixed(3)} ng/mL (${percent.toFixed(1)}%)<br><br>`;
+
+      if (curr > NSTEMI) {
+        message += "<strong>Troponin now in NSTEMI range (>0.12). Meets NSTEMI criteria.</strong>";
+      } else if (prev < URL && curr < URL) {
+        message += "Both values below URL. No concern. Repeat only if clinically suspicious.";
+      } else if (prev < URL && curr >= URL && percent >= 20) {
+        message += "Significant rise with value now above URL. Concerning upward trend. Continue trending.";
+      } else if (percent >= 20 && (prev >= URL || curr >= URL)) {
+        message += "Rising troponin (≥20% increase with value above URL). Continue trending.";
+      } else if (percent <= -20 && (prev >= URL || curr >= URL)) {
+        message += "Falling troponin (≥20% decrease from prior elevated value). Trend once more to confirm.";
+      } else {
+        message += "Plateaued troponin (≤20% change). Stable/chronic injury pattern. No further trending required.";
+      }
+
+      box.innerHTML = message;
+    }
+  </script>
+</body>
+</html>
