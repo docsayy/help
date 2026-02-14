@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Clinical Medicine – Decision Support & Teaching Guides</title>
 
-<link rel="stylesheet" href="aki-helper.css" />
+<link rel="stylesheet" href="style.css" />
 
 </head>
 
@@ -116,26 +116,10 @@
     </div>
     <a class="main-btn" href="pocus/index.html">POCUS</a>
 </div>
-
 </div>
-
+    
 <footer>
-    <div id="date"></div>
     <div>Created by <strong>Mohammad Sayyar</strong> for educational purposes only.</div>
-    <div>Total Visits: <span id="visitCount"></span></div>
 </footer>
-
-<script>
-    const today = new Date();
-    document.getElementById("date").innerText =
-        "Date: " + today.toLocaleDateString();
-
-    let visits = localStorage.getItem("visitCount");
-    if (!visits) visits = 0;
-    visits++;
-    localStorage.setItem("visitCount", visits);
-    document.getElementById("visitCount").innerText = visits;
-</script>
-
 </body>
 </html>
