@@ -1,0 +1,583 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Hyponatremia Helper</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <style>
+    :root{
+      --bg:#f4f7fb;
+      --card:#ffffff;
+      --accent:#0f766e;
+      --accent-soft:#e0f2f1;
+      --border:#d1d5db;
+      --muted:#6b7280;
+      --danger:#b91c1c;
+      --radius:14px;
+      --pad:14px;
+      --shadow:0 10px 25px rgba(15,118,110,0.10);
+    }
+    *{box-sizing:border-box;}
+    body{
+      margin:0;
+      font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;
+      background:radial-gradient(circle at top left,#e0f2fe,#f4f7fb 40%,#fdfefe 80%);
+      color:#0f172a;
+    }
+    .app{
+      max-width:1100px;
+      margin:0 auto;
+      padding:16px 12px 24px;
+    }
+    header{
+      text-align:center;
+      margin-bottom:16px;
+    }
+    header h1{
+      font-size:1.35rem;
+      margin:0;
+      letter-spacing:0.02em;
+    }
+    header p{
+      margin:4px 0 0;
+      font-size:0.85rem;
+      color:var(--muted);
+    }
+    .grid{
+      display:grid;
+      grid-template-columns:1fr;
+      gap:14px;
+    }
+    @media(min-width:900px){
+      .grid{
+        grid-template-columns:1.1fr 1fr;
+        align-items:flex-start;
+      }
+    }
+    .card{
+      background:var(--card);
+      border-radius:var(--radius);
+      padding:var(--pad);
+      box-shadow:var(--shadow);
+      border:1px solid var(--border);
+    }
+    h2{
+      margin:0 0 8px;
+      font-size:1rem;
+      display:flex;
+      align-items:center;
+      gap:6px;
+    }
+    .badge{
+      font-size:0.65rem;
+      text-transform:uppercase;
+      letter-spacing:0.08em;
+      background:var(--accent-soft);
+      color:var(--accent);
+      padding:2px 8px;
+      border-radius:999px;
+    }
+    .section-note{
+      font-size:0.75rem;
+      color:var(--muted);
+      margin-bottom:6px;
+    }
+    .field-group{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:8px;
+      margin-bottom:8px;
+    }
+    @media(max-width:700px){
+      .field-group{
+        grid-template-columns:1fr;
+      }
+    }
+    .field{
+      display:flex;
+      flex-direction:column;
+      gap:3px;
+    }
+    label{
+      font-size:0.78rem;
+      color:#0f172a;
+    }
+    label span.hint{
+      color:var(--muted);
+      font-size:0.72rem;
+      font-weight:400;
+    }
+    input, select{
+      border-radius:8px;
+      border:1px solid var(--border);
+      padding:6px 8px;
+      font-size:0.8rem;
+      background:#f9fafb;
+    }
+    input:focus, select:focus{
+      outline:none;
+      border-color:var(--accent);
+      box-shadow:0 0 0 1px rgba(15,118,110,0.25);
+      background:#ffffff;
+    }
+    .inline{
+      display:flex;
+      gap:10px;
+      align-items:center;
+      margin-bottom:6px;
+      flex-wrap:wrap;
+    }
+    .inline label{
+      display:flex;
+      align-items:center;
+      gap:4px;
+      font-size:0.78rem;
+      color:var(--muted);
+    }
+    .inline input[type="checkbox"]{
+      width:auto;
+      padding:0;
+    }
+    .btn-row{
+      margin:10px 0 2px;
+      display:flex;
+      flex-wrap:wrap;
+      gap:8px;
+      justify-content:flex-end;
+    }
+    button{
+      border-radius:999px;
+      border:none;
+      padding:8px 16px;
+      font-size:0.8rem;
+      cursor:pointer;
+      display:inline-flex;
+      gap:6px;
+      align-items:center;
+      transition:transform 0.08s ease, box-shadow 0.08s ease, background 0.1s;
+    }
+    .btn-primary{
+      background:var(--accent);
+      color:white;
+      box-shadow:0 6px 16px rgba(15,118,110,0.30);
+    }
+    .btn-primary:hover{
+      transform:translateY(-1px);
+      box-shadow:0 10px 25px rgba(15,118,110,0.45);
+    }
+    .btn-ghost{
+      background:transparent;
+      color:var(--muted);
+      border:1px solid var(--border);
+    }
+    .btn-ghost:hover{
+      background:#f3f4f6;
+    }
+    .result-block{
+      padding:8px 10px;
+      border-radius:10px;
+      background:#f9fafb;
+      border:1px solid #e5e7eb;
+      font-size:0.8rem;
+      margin-bottom:6px;
+    }
+    .result-title{
+      font-weight:600;
+      margin-bottom:2px;
+    }
+    .pill-row{
+      display:flex;
+      flex-wrap:wrap;
+      gap:6px;
+      margin-top:4px;
+    }
+    .pill{
+      padding:2px 8px;
+      font-size:0.72rem;
+      border-radius:999px;
+      background:var(--accent-soft);
+      color:var(--accent);
+    }
+    .pill-danger{
+      background:#fee2e2;
+      color:var(--danger);
+    }
+    .small{
+      font-size:0.75rem;
+      color:var(--muted);
+    }
+    .copy-status{
+      font-size:0.75rem;
+      color:var(--muted);
+      margin-top:4px;
+    }
+  </style>
+</head>
+<body>
+<div class="app">
+  <header>
+    <h1>Hyponatremia Algorithm Helper</h1>
+    <p>Classifies type of hyponatremia and suggests a treatment approach (education only)</p>
+  </header>
+
+  <div class="grid">
+    <div class="card">
+      <h2>
+        Inputs
+        <span class="badge">Labs & Clinical</span>
+      </h2>
+      <p class="section-note">
+        Fill in what is available; the tool will work with partial data when possible.
+      </p>
+
+      <div class="field-group">
+        <div class="field">
+          <label for="na">Serum Na (mEq/L)</label>
+          <input id="na" type="number" step="0.1">
+        </div>
+        <div class="field">
+          <label for="sosm">Serum osmolality (mOsm/kg) <span class="hint">(if available)</span></label>
+          <input id="sosm" type="number" step="1">
+        </div>
+      </div>
+
+      <div class="field-group">
+        <div class="field">
+          <label for="glucose">Serum glucose (mg/dL) <span class="hint">(for hypertonic causes)</span></label>
+          <input id="glucose" type="number" step="1">
+        </div>
+        <div class="field">
+          <label for="uosm">Urine osmolality (mOsm/kg)</label>
+          <input id="uosm" type="number" step="1">
+        </div>
+      </div>
+
+      <div class="field-group">
+        <div class="field">
+          <label for="una">Urine Na (mEq/L)</label>
+          <input id="una" type="number" step="0.1">
+        </div>
+        <div class="field">
+          <label for="volume">Clinical volume status</label>
+          <select id="volume">
+            <option value="">Select</option>
+            <option value="hypo">Hypovolemic</option>
+            <option value="eu">Euvolemic</option>
+            <option value="hyper">Hypervolemic</option>
+            <option value="uncertain">Uncertain / mixed</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="field-group">
+        <div class="field">
+          <label for="tsh">TSH (µIU/mL) <span class="hint">(optional)</span></label>
+          <input id="tsh" type="number" step="0.01">
+        </div>
+
+        <div class="field">
+          <label for="cortisol">AM Cortisol (µg/dL) <span class="hint">(optional)</span></label>
+          <input id="cortisol" type="number" step="0.1">
+        </div>
+      </div>
+
+      <div class="field-group">
+        <div class="field">
+          <label for="symptoms">Symptoms</label>
+          <select id="symptoms">
+            <option value="">Select</option>
+            <option value="mild">Mild / none</option>
+            <option value="moderate">Moderate (nausea, headache)</option>
+            <option value="severe">Severe (seizure, coma, herniation risk)</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="chronicity">Chronicity</label>
+          <select id="chronicity">
+            <option value="">Unknown</option>
+            <option value="acute">&lt; 48 hours (acute)</option>
+            <option value="chronic">&gt; 48 hours / chronic</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="inline">
+        <label>
+          <input id="diuretic" type="checkbox">
+          On thiazide / loop diuretics
+        </label>
+        <label>
+          <input id="low-solute" type="checkbox">
+          Low solute intake (beer potomania / "tea and toast")
+        </label>
+      </div>
+
+      <div class="btn-row">
+        <button class="btn-ghost" type="button" onclick="resetForm()">Clear</button>
+        <button class="btn-primary" type="button" onclick="calculate()">▶︎ Calculate</button>
+      </div>
+
+      <p class="small">
+        This tool is for educational decision support only and does not replace clinical judgment, local protocols, or specialist consultation.
+      </p>
+    </div>
+
+    <div class="card">
+      <h2>
+        Results
+        <span class="badge">Assessment & Plan</span>
+      </h2>
+
+      <div class="result-block">
+        <div class="result-title">Classification</div>
+        <div id="classification">No calculation yet.</div>
+        <div class="pill-row" id="class-pills"></div>
+      </div>
+
+      <div class="result-block">
+        <div class="result-title">Likely Etiology Pattern</div>
+        <div id="etiology">Enter values and click Calculate.</div>
+      </div>
+
+      <div class="result-block">
+        <div class="result-title">Suggested Treatment Approach</div>
+        <ul id="treatment" class="small" style="padding-left:18px;margin:4px 0 0;"></ul>
+      </div>
+
+      <div class="result-block">
+        <div class="result-title">Copy-ready Summary</div>
+        <div id="summary" class="small">No summary yet.</div>
+        <button class="btn-ghost" type="button" onclick="copySummary()">📋 Copy summary</button>
+        <div id="copy-status" class="copy-status"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+function parseNum(id){
+  const v = parseFloat(document.getElementById(id).value);
+  return isNaN(v) ? null : v;
+}
+function round(x,d=1){
+  if(x===null||isNaN(x)) return null;
+  const f=Math.pow(10,d);
+  return Math.round(x*f)/f;
+}
+
+function calculate(){
+  const na = parseNum("na");
+  const sosm = parseNum("sosm");
+  const glucose = parseNum("glucose");
+  const uosm = parseNum("uosm");
+  const una = parseNum("una");
+  const tsh = parseNum("tsh");
+  const cortisol = parseNum("cortisol");
+  const volume = document.getElementById("volume").value;
+  const symptoms = document.getElementById("symptoms").value;
+  const chronicity = document.getElementById("chronicity").value;
+  const diuretic = document.getElementById("diuretic").checked;
+  const lowSolute = document.getElementById("low-solute").checked;
+
+  const classDiv = document.getElementById("classification");
+  const classPills = document.getElementById("class-pills");
+  const etDiv = document.getElementById("etiology");
+  const treatUl = document.getElementById("treatment");
+  const summaryDiv = document.getElementById("summary");
+  const copyStatus = document.getElementById("copy-status");
+
+  classPills.innerHTML = "";
+  treatUl.innerHTML = "";
+  copyStatus.textContent = "";
+
+  if(na === null){
+    classDiv.textContent = "Need serum Na to proceed.";
+    etDiv.textContent = "Enter at least serum Na and clinical volume status.";
+    summaryDiv.textContent = "No summary – Na missing.";
+    return;
+  }
+
+  let classification = [];
+  let typePill = document.createElement("span");
+  typePill.className = "pill";
+
+  // Osmolality classification
+  let tonicity = "Unknown tonicity (serum osmolality not provided).";
+  if(sosm !== null){
+    if(sosm < 275){
+      tonicity = "Hypotonic hyponatremia";
+      typePill.textContent = "Hypotonic";
+    }else if(sosm >= 275 && sosm <= 295){
+      tonicity = "Isotonic / pseudohyponatremia pattern (consider hyperlipidemia / hyperproteinemia).";
+      typePill.textContent = "Isotonic";
+    }else{
+      tonicity = "Hypertonic hyponatremia (consider hyperglycemia / mannitol).";
+      typePill.textContent = "Hypertonic";
+    }
+    classPills.appendChild(typePill);
+  }
+
+  classification.push(`Serum Na ${na} mEq/L.`);
+  classification.push(tonicity);
+
+  if(glucose !== null && sosm !== null && sosm > 295){
+    classification.push("Hypertonic state: check for uncontrolled hyperglycemia, mannitol, or contrast.");
+  }
+
+  // Urine osmolality-based classification
+  if(uosm !== null){
+    if(uosm < 100){
+      classification.push("Urine osmolality <100 mOsm/kg suggests excess free water intake or low solute intake (primary polydipsia, beer potomania).");
+    }else{
+      classification.push("Urine osmolality ≥100 mOsm/kg suggests ADH is active (not pure polydipsia).");
+    }
+  }
+
+  // Volume + urine Na
+  let etiStrings = [];
+  if(sosm !== null && sosm < 275){ // hypotonic
+    if(volume === "hypo"){
+      if(una !== null){
+        if(una < 30){
+          etiStrings.push("Hypovolemic hyponatremia with low urine Na (<30): suggest extrarenal sodium loss (vomiting, diarrhea, third spacing) or prior diuretic use.");
+        }else{
+          etiStrings.push("Hypovolemic hyponatremia with higher urine Na (≥30): suggest renal salt loss (diuretics, mineralocorticoid deficiency, cerebral salt wasting).");
+        }
+      }else{
+        etiStrings.push("Hypovolemic hyponatremia by exam – distinguish renal vs extrarenal loss with urine Na if available.");
+      }
+    }else if(volume === "eu"){
+      if(lowSolute && uosm !== null && uosm < 100){
+        etiStrings.push("Euvolemic hyponatremia with very dilute urine and low solute intake – compatible with beer potomania / low solute hyponatremia.");
+      }else if(uosm !== null && uosm > 100 && una !== null && una > 30){
+        etiStrings.push("Euvolemic hyponatremia with urine osmolality >100 and urine Na >30 – compatible with SIADH (if adrenal and thyroid function normal).");
+      }else{
+        etiStrings.push("Euvolemic hypotonic hyponatremia – consider SIADH, hypothyroidism, glucocorticoid deficiency, primary polydipsia, or low solute intake.");
+      }
+    }else if(volume === "hyper"){
+      etiStrings.push("Hypervolemic hyponatremia – consider CHF, cirrhosis, nephrotic syndrome; typically low urine Na due to secondary hyperaldosteronism.");
+    }else{
+      etiStrings.push("Volume status uncertain – integrate exam, I/O, ultrasound, and hemodynamics to differentiate hypo-, eu-, and hypervolemia.");
+    }
+  }else if(sosm !== null && sosm >= 275 && sosm <= 295){
+    etiStrings.push("Isotonic (pseudo) hyponatremia – consider laboratory artifact from hyperlipidemia / hyperproteinemia.");
+  }else if(sosm !== null && sosm > 295){
+    etiStrings.push("Hypertonic hyponatremia – typically from hyperglycemia or other effective osmoles.");
+  }
+
+  if(diuretic){
+    etiStrings.push("Thiazide or loop diuretics can both cause and confound interpretation of hypovolemic vs SIADH-like patterns.");
+  }
+
+  // Thyroid / adrenal interpretation (informative only)
+  if(tsh !== null){
+    if(tsh > 10){
+      etiStrings.push("Markedly elevated TSH may suggest hypothyroidism contributing to hyponatremia.");
+    }else if(tsh > 4.5){
+      etiStrings.push("Mild TSH elevation noted; clinical significance for hyponatremia depends on free T4 and overall context.");
+    }else{
+      etiStrings.push("TSH not significantly elevated.");
+    }
+  }
+
+  if(cortisol !== null){
+    if(cortisol < 3){
+      etiStrings.push("Very low cortisol raises concern for adrenal insufficiency contributing to hyponatremia.");
+    }else if(cortisol >= 3 && cortisol < 15){
+      etiStrings.push("Indeterminate cortisol level; consider ACTH stimulation testing if adrenal insufficiency suspected.");
+    }else{
+      etiStrings.push("Cortisol level less suggestive of adrenal insufficiency.");
+    }
+  }
+
+  if(etiStrings.length === 0){
+    etiStrings.push("Insufficient data to classify fully; obtain serum osmolality, urine osmolality, and urine Na if not already done.");
+  }
+
+  // Treatment suggestions
+  let tx = [];
+  // Rate limits
+  if(chronicity === "chronic" || chronicity === ""){
+    tx.push("Avoid correcting Na by more than 8–10 mEq/L in 24 hours (slower in high-risk patients) to reduce risk of osmotic demyelination.");
+  }else if(chronicity === "acute"){
+    tx.push("Acute hyponatremia (&lt;48h) may tolerate somewhat faster correction, but rapid shifts still carry risk – follow institutional guidance.");
+  }
+
+  if(symptoms === "severe"){
+    tx.push("Severe symptoms (seizure/coma): consider hypertonic 3% saline bolus (e.g., 100 mL over 10 min, repeat as needed) with ICU-level monitoring and frequent Na checks.");
+  }else if(symptoms === "moderate"){
+    tx.push("Moderate symptoms: consider slower 3% saline infusion or cautious bolus per protocol, with close Na monitoring.");
+  }else{
+    tx.push("Mild / asymptomatic hyponatremia: focus on treating underlying cause and limiting correction rate.");
+  }
+
+  if(sosm !== null && sosm < 275){
+    if(volume === "hypo"){
+      tx.push("Hypovolemic hypotonic hyponatremia: treat with isotonic fluids (e.g., 0.9% NaCl) to restore volume; ADH will fall and Na will correct.");
+    }else if(volume === "eu"){
+      if(lowSolute){
+        tx.push("Low solute intake: increase dietary solute (protein/salt) and restrict free water; consider cautious correction to avoid overly rapid rise in Na.");
+      }else{
+        tx.push("Euvolemic hypotonic hyponatremia (possible SIADH): restrict free water (e.g., &lt;800–1000 mL/day), treat trigger (pain, nausea, meds), and consider salt tablets and/or loop diuretics if needed.");
+      }
+    }else if(volume === "hyper"){
+      tx.push("Hypervolemic hyponatremia: treat underlying CHF/cirrhosis/nephrosis, use loop diuretics, and restrict Na and fluid.");
+    }
+  }
+
+  tx.push("Always confirm adrenal and thyroid status in unexplained hyponatremia and consider nephrology consultation for complex or severe cases.");
+
+  // Put into DOM
+  classDiv.innerHTML = classification.join("<br>");
+  etDiv.textContent = etiStrings.join(" ");
+
+  tx.forEach(t => {
+    const li = document.createElement("li");
+    li.textContent = t;
+    treatUl.appendChild(li);
+  });
+
+  // Summary
+  const summaryParts = [];
+  summaryParts.push(`Hyponatremia: Na ${na} mEq/L.`);
+  if(sosm !== null) summaryParts.push(`Serum osmolality ${sosm} mOsm/kg.`);
+  if(uosm !== null) summaryParts.push(`Urine osmolality ${uosm} mOsm/kg.`);
+  if(una !== null) summaryParts.push(`Urine Na ${una} mEq/L.`);
+  if(tsh !== null) summaryParts.push(`TSH ${tsh} µIU/mL.`);
+  if(cortisol !== null) summaryParts.push(`Cortisol ${cortisol} µg/dL.`);
+  if(volume) summaryParts.push(`Volume status: ${volume}.`);
+  if(symptoms) summaryParts.push(`Symptoms: ${symptoms}.`);
+  summaryParts.push(etiStrings.join(" "));
+  summaryParts.push("Plan: " + tx.join(" "));
+  summaryDiv.textContent = summaryParts.join(" | ");
+}
+
+function resetForm(){
+  ["na","sosm","glucose","uosm","una","tsh","cortisol"].forEach(id=>document.getElementById(id).value="");
+  ["volume","symptoms","chronicity"].forEach(id=>document.getElementById(id).value="");
+  document.getElementById("diuretic").checked=false;
+  document.getElementById("low-solute").checked=false;
+  document.getElementById("classification").textContent="No calculation yet.";
+  document.getElementById("class-pills").innerHTML="";
+  document.getElementById("etiology").textContent="Enter values and click Calculate.";
+  document.getElementById("treatment").innerHTML="";
+  document.getElementById("summary").textContent="No summary yet.";
+  document.getElementById("copy-status").textContent="";
+}
+
+function copySummary(){
+  const text = document.getElementById("summary").textContent || "";
+  const status = document.getElementById("copy-status");
+  if(!navigator.clipboard){
+    status.textContent="Clipboard not available.";
+    return;
+  }
+  navigator.clipboard.writeText(text).then(()=>{
+    status.textContent="Summary copied to clipboard.";
+  }).catch(()=>{
+    status.textContent="Unable to copy.";
+  });
+}
+</script>
+</body>
+</html>
