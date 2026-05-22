@@ -1,0 +1,204 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>RSI + Post-Intubation Medication Helper</title>
+<style>
+body{
+  font-family:Arial,sans-serif;
+  background:#f4f7fb;
+  margin:0;
+  padding:18px;
+  color:#111827;
+}
+.container{
+  max-width:900px;
+  margin:auto;
+  background:white;
+  padding:18px;
+  border-radius:14px;
+  box-shadow:0 8px 24px rgba(0,0,0,0.08);
+}
+h1{margin-top:0;font-size:1.4rem;}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+@media(max-width:800px){.grid{grid-template-columns:1fr;}}
+.field{display:flex;flex-direction:column;gap:5px;}
+label{font-size:0.85rem;font-weight:600;}
+input,select{
+  padding:8px;
+  border-radius:8px;
+  border:1px solid #d1d5db;
+  font-size:0.9rem;
+}
+button{
+  margin-top:14px;
+  width:100%;
+  border:none;
+  background:#0f766e;
+  color:white;
+  padding:10px;
+  border-radius:10px;
+  font-size:0.95rem;
+  cursor:pointer;
+}
+.box{
+  margin-top:14px;
+  padding:12px;
+  border-radius:12px;
+  background:#f9fafb;
+  border:1px solid #e5e7eb;
+}
+.title{
+  font-weight:700;
+  color:#0f766e;
+  margin-bottom:6px;
+}
+.warn{color:#b91c1c;font-weight:600;}
+ul{margin:6px 0;padding-left:18px;}
+.small{font-size:0.85rem;color:#374151;}
+</style>
+</head>
+<body>
+<div class="container">
+
+<h1>RSI + Post-Intubation Medication Helper</h1>
+
+<div class="grid">
+  <div class="field">
+    <label>Weight (kg)</label>
+    <input id="wt" type="number">
+  </div>
+
+  <div class="field">
+    <label>Hemodynamics</label>
+    <select id="hemo">
+      <option value="stable">Stable</option>
+      <option value="borderline">Borderline</option>
+      <option value="shock">Shock</option>
+    </select>
+  </div>
+
+  <div class="field">
+    <label>Bronchospasm / Asthma</label>
+    <select id="bronch">
+      <option value="no">No</option>
+      <option value="yes">Yes</option>
+    </select>
+  </div>
+
+  <div class="field">
+    <label>Hyperkalemia Risk</label>
+    <select id="k">
+      <option value="no">No</option>
+      <option value="yes">Yes</option>
+    </select>
+  </div>
+</div>
+
+<button onclick="calc()">Calculate</button>
+
+<div id="out"></div>
+
+</div>
+
+<script>
+function calc(){
+  const wt = parseFloat(document.getElementById('wt').value);
+  const hemo = document.getElementById('hemo').value;
+  const bronch = document.getElementById('bronch').value;
+  const k = document.getElementById('k').value;
+  const out = document.getElementById('out');
+
+  if(!wt){out.innerHTML='<div class="warn">Enter weight</div>';return;}
+
+  let induction, paralytic, postSed, analgesia, why=[];
+
+  // RSI induction
+  if(hemo==='shock'){
+    induction = {
+      drug:'Etomidate',
+      dose:(0.3*wt).toFixed(1)+' mg IV',
+      calc:'0.3 mg/kg IV',
+      conc:'2 mg/mL (10 mL vial = 20 mg)'
+    };
+    why.push('Preferred in shock due to minimal BP drop');
+  } else {
+    induction = {
+      drug:'Etomidate or Ketamine',
+      dose:'Etomidate 0.2–0.3 mg/kg OR Ketamine 1–2 mg/kg',
+      calc:'weight-based',
+      conc:'Etomidate 2 mg/mL; Ketamine 50 mg/mL typical'
+    };
+  }
+
+  // Paralytic
+  if(k==='yes'){
+    paralytic = {
+      drug:'Rocuronium',
+      dose:(1.2*wt).toFixed(0)+' mg IV',
+      calc:'1.0–1.2 mg/kg',
+      conc:'10 mg/mL (50 mg vial common)'
+    };
+    why.push('Succinylcholine avoided due to hyperkalemia risk');
+  } else {
+    paralytic = {
+      drug:'Succinylcholine',
+      dose:(1.5*wt).toFixed(0)+' mg IV',
+      calc:'1.5 mg/kg',
+      conc:'20 mg/mL (200 mg/10 mL vial)'
+    };
+  }
+
+  // Post sedation
+  if(hemo==='shock'){
+    postSed = 'Ketamine infusion preferred (0.5–2 mg/kg/hr)';
+  } else {
+    postSed = 'Propofol 20–80 mcg/kg/min or Dexmedetomidine 0.2–0.7 mcg/kg/hr';
+  }
+
+  analgesia = 'Fentanyl infusion 25–200 mcg/hr (bolus ~1 mcg/kg)';
+
+  out.innerHTML = `
+    <div class="box">
+      <div class="title">RSI – Induction</div>
+      <ul>
+        <li><b>${induction.drug}</b></li>
+        <li>Dose: ${induction.dose}</li>
+        <li>Calculation: ${induction.calc}</li>
+        <li class="small">Concentration: ${induction.conc}</li>
+      </ul>
+    </div>
+
+    <div class="box">
+      <div class="title">RSI – Paralytic</div>
+      <ul>
+        <li><b>${paralytic.drug}</b></li>
+        <li>Dose: ${paralytic.dose}</li>
+        <li>Calculation: ${paralytic.calc}</li>
+        <li class="small">Concentration: ${paralytic.conc}</li>
+      </ul>
+    </div>
+
+    <div class="box">
+      <div class="title">Post-Intubation Sedation</div>
+      <ul>
+        <li>${postSed}</li>
+        <li>${analgesia}</li>
+      </ul>
+    </div>
+
+    <div class="box">
+      <div class="title">Why these choices?</div>
+      <ul>
+        ${why.map(w=>`<li class="warn">${w}</li>`).join('')}
+        <li>Always ensure analgesia + sedation after paralysis</li>
+        <li>Titrate to clinical response (BP, RASS, ventilation)</li>
+      </ul>
+    </div>
+  `;
+}
+</script>
+
+</body>
+</html>
