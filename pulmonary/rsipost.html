@@ -114,29 +114,19 @@ function calc(){
 
   let why=[];
 
-  // ===== RSI INDUNCTION =====
+  // ===== RSI INDUNCTION (ETOMIDATE ONLY) =====
   let induction;
 
-  if(hemo==='shock'){
-    const dose = 0.3 * wt;
-    induction = {
-      drug:'Etomidate',
-      dose:dose.toFixed(1)+' mg IV',
-      calc:'0.3 mg/kg IV',
-      conc:'2 mg/mL (10 mL = 20 mg vial)',
-      mL:(dose/2).toFixed(1)+' mL'
-    };
-    why.push('Etomidate preferred in shock for hemodynamic stability');
-  } else {
-    const ket = 1.5 * wt;
-    induction = {
-      drug: bronch==='yes' ? 'Ketamine' : 'Etomidate or Ketamine',
-      dose:'Ketamine '+ket.toFixed(1)+' mg IV (if used)',
-      calc:'Ketamine 1–2 mg/kg IV',
-      conc:'Ketamine 50 mg/mL typical',
-      mL:(ket/50).toFixed(1)+' mL'
-    };
-  }
+  const dose = 0.3 * wt;
+  induction = {
+    drug:'Etomidate',
+    dose:dose.toFixed(1)+' mg IV',
+    calc:'0.2–0.3 mg/kg IV',
+    conc:'2 mg/mL (10 mL = 20 mg vial)',
+    mL:(dose/2).toFixed(1)+' mL'
+  };
+
+  why.push('Etomidate used for hemodynamic stability in RSI');
 
   // ===== PARALYTIC =====
   let paralytic;
@@ -167,8 +157,8 @@ function calc(){
   const fentBolus = 1 * wt;
 
   const postSed = hemo==='shock'
-    ? 'Ketamine infusion 0.5–2 mg/kg/hr'
-    : 'Propofol 20–80 mcg/kg/min OR Dexmedetomidine 0.2–0.7 mcg/kg/hr';
+    ? 'Ketamine infusion 0.5–2 mg/kg/hr OR Midazolam infusion (alternative depending on BP and context)'
+    : 'Propofol 20–80 mcg/kg/min AND/OR Dexmedetomidine 0.2–0.7 mcg/kg/hr';
 
   const analgesia = {
     infusion:'Fentanyl 25–200 mcg/hr',
@@ -212,7 +202,7 @@ function calc(){
       <div class="title">Why these choices?</div>
       <ul>
         ${why.map(w=>`<li class="warn">${w}</li>`).join('')}
-        <li>Always ensure sedation + analgesia after paralysis</li>
+        <li>Always ensure sedation AND analgesia after paralysis</li>
         <li>Doses are fully weight-calculated (mg + mL shown)</li>
         <li>Titrate to BP, oxygenation, and clinical response</li>
       </ul>
