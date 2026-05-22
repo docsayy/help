@@ -1,0 +1,241 @@
+```html
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Simple RSI Medication Helper</title>
+<style>
+  body{
+    font-family:Arial,sans-serif;
+    background:#f4f7fb;
+    margin:0;
+    padding:20px;
+    color:#111827;
+  }
+
+  .container{
+    max-width:700px;
+    margin:auto;
+    background:white;
+    padding:20px;
+    border-radius:14px;
+    box-shadow:0 8px 24px rgba(0,0,0,0.08);
+  }
+
+  h1{
+    margin-top:0;
+    font-size:1.4rem;
+  }
+
+  .grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:12px;
+  }
+
+  @media(max-width:700px){
+    .grid{
+      grid-template-columns:1fr;
+    }
+  }
+
+  .field{
+    display:flex;
+    flex-direction:column;
+    gap:5px;
+  }
+
+  label{
+    font-size:0.85rem;
+    font-weight:600;
+  }
+
+  input,select{
+    padding:8px;
+    border-radius:8px;
+    border:1px solid #d1d5db;
+    font-size:0.9rem;
+  }
+
+  button{
+    margin-top:16px;
+    width:100%;
+    border:none;
+    background:#0f766e;
+    color:white;
+    padding:10px;
+    border-radius:10px;
+    font-size:0.95rem;
+    cursor:pointer;
+  }
+
+  .result{
+    margin-top:18px;
+    padding:14px;
+    border-radius:12px;
+    background:#f9fafb;
+    border:1px solid #e5e7eb;
+  }
+
+  .section{
+    margin-bottom:14px;
+  }
+
+  .title{
+    font-weight:700;
+    margin-bottom:5px;
+    color:#0f766e;
+  }
+
+  .warn{
+    color:#b91c1c;
+    font-weight:600;
+  }
+
+  ul{
+    margin:6px 0;
+    padding-left:18px;
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+  <h1>Simple RSI Medication Helper</h1>
+
+  <div class="grid">
+    <div class="field">
+      <label>Weight (kg)</label>
+      <input id="weight" type="number">
+    </div>
+
+    <div class="field">
+      <label>Hemodynamics</label>
+      <select id="hemo">
+        <option value="stable">Stable / Hypertensive</option>
+        <option value="borderline">Borderline BP</option>
+        <option value="shock">Shock / Hypotensive</option>
+      </select>
+    </div>
+
+    <div class="field">
+      <label>Bronchospasm / Asthma?</label>
+      <select id="bronchospasm">
+        <option value="no">No</option>
+        <option value="yes">Yes</option>
+      </select>
+    </div>
+
+    <div class="field">
+      <label>Hyperkalemia Risk?</label>
+      <select id="hyperk">
+        <option value="no">No</option>
+        <option value="yes">Yes</option>
+      </select>
+    </div>
+  </div>
+
+  <button onclick="calculate()">Calculate</button>
+
+  <div class="result" id="result">
+    Enter patient information and click calculate.
+  </div>
+</div>
+
+<script>
+function calculate(){
+  const wt = parseFloat(document.getElementById('weight').value);
+  const hemo = document.getElementById('hemo').value;
+  const bronch = document.getElementById('bronchospasm').value;
+  const hyperk = document.getElementById('hyperk').value;
+
+  const result = document.getElementById('result');
+
+  if(!wt){
+    result.innerHTML = '<span class="warn">Please enter weight.</span>';
+    return;
+  }
+
+  let sedative = '';
+  let sedDose = '';
+  let analgesic = '';
+  let analDose = '';
+  let paralytic = '';
+  let paraDose = '';
+  let warnings = [];
+
+  // Sedative logic
+  if(hemo === 'shock'){
+    if(bronch === 'yes'){
+      sedative = 'Ketamine';
+      sedDose = (wt * 1.5).toFixed(0) + ' mg IV';
+    }else{
+      sedative = 'Etomidate';
+      sedDose = (wt * 0.3).toFixed(1) + ' mg IV';
+    }
+
+    warnings.push('Avoid high-dose propofol in hypotension/shock.');
+  }
+  else if(hemo === 'borderline'){
+    sedative = 'Etomidate';
+    sedDose = (wt * 0.2).toFixed(1) + ' mg IV';
+  }
+  else {
+    sedative = 'Propofol';
+    sedDose = (wt * 1).toFixed(0) + ' mg IV';
+  }
+
+  // Analgesia
+  analgesic = 'Fentanyl';
+  analDose = (wt * 1).toFixed(0) + ' mcg IV';
+
+  // Paralytic
+  if(hyperk === 'yes'){
+    paralytic = 'Rocuronium';
+    paraDose = (wt * 1.2).toFixed(0) + ' mg IV';
+    warnings.push('Avoid succinylcholine due to hyperkalemia risk.');
+  }else{
+    paralytic = 'Succinylcholine';
+    paraDose = (wt * 1.5).toFixed(0) + ' mg IV';
+  }
+
+  result.innerHTML = `
+    <div class="section">
+      <div class="title">Sedative / Induction Agent</div>
+      <ul>
+        <li><strong>${sedative}</strong></li>
+        <li>Dose: ${sedDose}</li>
+      </ul>
+    </div>
+
+    <div class="section">
+      <div class="title">Analgesia</div>
+      <ul>
+        <li><strong>${analgesic}</strong></li>
+        <li>Dose: ${analDose}</li>
+      </ul>
+    </div>
+
+    <div class="section">
+      <div class="title">Paralytic</div>
+      <ul>
+        <li><strong>${paralytic}</strong></li>
+        <li>Dose: ${paraDose}</li>
+      </ul>
+    </div>
+
+    <div class="section">
+      <div class="title">Warnings</div>
+      <ul>
+        ${warnings.map(w => `<li class="warn">${w}</li>`).join('')}
+        <li>Ensure post-intubation sedation after paralysis.</li>
+      </ul>
+    </div>
+  `;
+}
+</script>
+
+</body>
+</html>
+```
